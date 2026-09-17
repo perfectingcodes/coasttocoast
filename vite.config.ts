@@ -12,6 +12,6 @@ export default defineConfig({
     dedupe: ["react", "react-dom"],
   },
   build: { outDir: "dist/public", emptyOutDir: true },
-  server: { port, host: "0.0.0.0" },
+  server: { port, host: "0.0.0.0", allowedHosts: true },
   preview: { port, host: "0.0.0.0" },
 });
