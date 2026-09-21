@@ -11,8 +11,8 @@ import {
   business,
   cleanAndTune,
   generalFaqs,
-
   locations,
+  process,
   services,
   whyUs,
   type Service,
@@ -57,7 +57,7 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <TrustStrip />
-        <AtAGlance />
+        <HowItWorks />
         <ServicesSection />
         <CleanAndTuneSection />
         <WhyUsSection />
@@ -101,28 +101,50 @@ function Hero() {
           </h1>
 
           <p className="mt-7 max-w-lg text-lg leading-relaxed text-white/75">
-            Heating, cooling and mechanical across Lee, Collier and Charlotte
-            counties — flat-rate pricing quoted before work starts, and a real
-            person on the phone at 2am.
+            Home AC repair, replacement and maintenance across Lee, Collier and
+            Charlotte counties. You get a{" "}
+            <span className="font-semibold text-white">
+              flat price in writing before we start
+            </span>{" "}
+            — and a real person answers, day or night.
           </p>
 
-          <div className="mt-9 flex flex-wrap items-center gap-4">
+          <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
             <ButtonLink href="/contact" size="lg">
-              Book My Service
+              Book Service Today
               <ArrowRight className="size-4" aria-hidden="true" />
             </ButtonLink>
+
+            {/* Mascot as the face of the promise, not a sticker on the art. */}
             <a
               href={business.phoneHref}
-              className="group inline-flex items-center gap-2.5 font-display text-base font-extrabold text-white transition-colors hover:text-cyan"
+              className="group flex items-center gap-3"
             >
-              <span className="grid size-10 place-items-center rounded-full ring-1 ring-white/25 transition-colors group-hover:ring-cyan">
-                <Phone className="size-4" aria-hidden="true" />
+              <span className="relative">
+                <img
+                  src="/brand/avatar-husky.webp"
+                  alt=""
+                  width={256}
+                  height={289}
+                  className="size-12 object-contain transition-transform duration-300 group-hover:-translate-y-0.5"
+                />
+                <span
+                  className="absolute -right-0.5 bottom-0.5 size-3 rounded-full bg-cyan ring-2 ring-navy"
+                  aria-hidden="true"
+                />
               </span>
-              {business.phone}
+              <span className="leading-tight">
+                <span className="block font-display text-[0.6rem] font-extrabold uppercase tracking-[0.18em] text-cyan">
+                  A person answers · 24/7
+                </span>
+                <span className="block font-display text-lg font-extrabold text-white transition-colors group-hover:text-cyan">
+                  {business.phone}
+                </span>
+              </span>
             </a>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-7">
             <GoogleBadge onDark />
           </div>
 
@@ -158,16 +180,6 @@ function Hero() {
             lockup — does not repeat the wordmark already in the header. */}
         <div className="relative">
           <img
-            src="/brand/mascot-bust.webp"
-            srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
-            sizes="220px"
-            alt=""
-            width={800}
-            height={849}
-            loading="eager"
-            className="absolute -bottom-4 -left-2 z-10 hidden w-44 drop-shadow-[0_20px_40px_rgb(5_15_38/0.85)] lg:block xl:-left-6 xl:w-52"
-          />
-          <img
             src="/brand/map-florida.webp"
             srcSet="/brand/map-florida-sm.webp 550w, /brand/map-florida.webp 1100w"
             sizes="(min-width: 1024px) 560px, 88vw"
@@ -193,36 +205,48 @@ function Hero() {
  * page by a search snippet or an answer engine. `data-answer` is what the
  * page's speakable schema points at.
  */
-function AtAGlance() {
+/**
+ * What happens after you call. A homeowner with no cooling wants to know the
+ * shape of the next few hours — not a paragraph about the company. The
+ * speakable answer rides on the intro line so the GEO surface survives.
+ */
+function HowItWorks() {
   return (
-    <section className="border-b border-navy/8 bg-white py-9">
-      <div className="shell grid items-center gap-8 lg:grid-cols-[1.35fr_1fr]">
-        {/* Kept tight: one sentence carrying the keywords and the speakable
-            answer, not a five-line block of body copy. */}
-        <p data-answer="" className="text-[0.95rem] leading-relaxed text-navy/70">
-          <strong className="font-display font-extrabold text-navy">
-            {business.name}
-          </strong>{" "}
-          is a licensed, insured HVAC contractor in {business.city}, Florida,
-          serving {locations.length} cities across Lee, Collier and Charlotte
-          counties — heating, cooling, mechanical, commercial HVAC and indoor
-          air quality, under Florida Mechanical Contractor licence #
-          {business.license}.
-        </p>
+    <section className="relative bg-white py-14 md:py-16">
+      <div className="shell">
+        <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
+          <div>
+            <p className="eyebrow">What happens next</p>
+            <h2 className="poster mt-4 text-[clamp(1.75rem,3.6vw,2.6rem)]">
+              Four steps. No surprises.
+            </h2>
+          </div>
+          <p data-answer="" className="max-w-md text-sm leading-relaxed text-navy/60">
+            {business.name} is a licensed, insured HVAC contractor in{" "}
+            {business.city}, Florida, serving {locations.length} cities across
+            Lee, Collier and Charlotte counties under Florida Mechanical
+            Contractor licence #{business.license}.
+          </p>
+        </div>
 
-        {/* The licences themselves, which is the part worth designing. */}
-        <ul className="flex flex-wrap gap-x-8 gap-y-3 lg:justify-end">
-          {business.licenses.map((l) => (
-            <li key={l.number} className="leading-tight">
-              <span className="block font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-navy/40">
-                {l.label}
-              </span>
-              <span className="mt-0.5 block font-mono text-sm font-semibold text-blue">
-                {l.number}
-              </span>
+        <ol className="mt-10 grid gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
+          {process.map((step, i) => (
+            <li key={step.title} className="relative">
+              <div className="flex items-center gap-3">
+                <span className="poster text-2xl text-blue">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="h-px flex-1 bg-navy/12" aria-hidden="true" />
+              </div>
+              <h3 className="mt-4 font-display text-base font-extrabold text-navy">
+                {step.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-navy/60">
+                {step.body}
+              </p>
             </li>
           ))}
-        </ul>
+        </ol>
       </div>
     </section>
   );
@@ -297,7 +321,7 @@ function ServicesSection() {
                 {/* Index numeral, drawn as an outline so it sits behind the
                     content rather than competing with it. */}
                 <span
-                  className="numeral-ghost pointer-events-none absolute -right-1 -top-4 select-none text-[5.5rem] transition-colors duration-300 group-hover:[-webkit-text-stroke-color:rgb(255_255_255/0.2)]"
+                  className="numeral-ghost pointer-events-none absolute -right-1 -top-4 select-none text-[5rem] transition-colors duration-300 group-hover:text-white/15"
                   aria-hidden="true"
                 >
                   {String(i + 1).padStart(2, "0")}
@@ -468,12 +492,12 @@ function WhyUsSection() {
             aria-hidden="true"
           />
           <img
-            src="/brand/photo-condenser.webp"
-            srcSet="/brand/photo-condenser-640.webp 640w, /brand/photo-condenser.webp 1024w"
+            src="/brand/photo-hvac-unit.webp"
+            srcSet="/brand/photo-hvac-unit-760.webp 760w, /brand/photo-hvac-unit.webp 1280w"
             sizes="(min-width: 1024px) 448px, 90vw"
-            alt="A Coast to Coast Air condenser unit installed outside a Southwest Florida home"
-            width={1024}
-            height={688}
+            alt="An outdoor air conditioning condenser installed beside a home"
+            width={1280}
+            height={853}
             loading="lazy"
             className="relative w-full rounded-card object-cover shadow-[0_24px_48px_-16px_rgb(4_16_29/0.7)]"
           />

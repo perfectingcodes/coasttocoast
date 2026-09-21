@@ -383,15 +383,19 @@
   }
 
   /* Oversized numeral behind a heading — depth without another photograph. */
+  /* Index numerals. A hairline outline at this size reads as an artefact;
+     a soft solid fill with tabular figures reads as typography. */
   .numeral-ghost {
     font-family: var(--font-poster);
-    line-height: 0.7;
-    color: transparent;
-    -webkit-text-stroke: 1.5px rgb(10 35 82 / 0.12);
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.05em;
+    line-height: 0.72;
+    color: rgb(10 35 82 / 0.07);
     user-select: none;
   }
   .numeral-ghost-light {
-    -webkit-text-stroke-color: rgb(255 255 255 / 0.16);
+    color: rgb(255 255 255 / 0.12);
   }
 
   /* Lets an element hang past its section into the next one. */
@@ -432,8 +436,8 @@
   .nav-underline::after {
     content: "";
     position: absolute;
-    left: 0.875rem;
-    right: 0.875rem;
+    left: 0.625rem;
+    right: 0.625rem;
     bottom: -0.15rem;
     height: 2px;
     border-radius: 2px;

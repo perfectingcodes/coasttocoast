@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
-import { ChevronDown, Clock, Facebook, Instagram, Menu, Phone, X } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronDown,
+  Clock,
+  Facebook,
+  Instagram,
+  Menu,
+  Phone,
+  X,
+} from "lucide-react";
 import { business, nav, services } from "@/content/site";
-import { buttonClass } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 /** Circled "G" for the Google reviews link — deliberately not Google's mark. */
@@ -119,11 +128,23 @@ export function Navbar() {
           <div className="flex items-center gap-2">
             <a
               href={business.phoneHref}
-              className={cn(buttonClass("primary", "md"), "hidden md:inline-flex")}
+              className="hidden items-center gap-2 pr-1 leading-tight xl:flex"
             >
-              <Phone className="size-4" aria-hidden="true" />
-              {business.phone}
+              <Phone className="size-3.5 shrink-0 text-orange" aria-hidden="true" />
+              <span>
+                <span className="block font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-navy/45">
+                  24/7 · Call now
+                </span>
+                <span className="block font-display text-sm font-extrabold text-navy">
+                  {business.phone}
+                </span>
+              </span>
             </a>
+
+            <ButtonLink href="/contact" className="hidden md:inline-flex">
+              Schedule Service
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </ButtonLink>
 
             <a
               href={business.phoneHref}
@@ -179,13 +200,19 @@ export function Navbar() {
                 </li>
               ))}
             </ul>
-            <a
-              href={business.phoneHref}
-              className="mt-5 flex h-13 items-center justify-center gap-2 rounded-full bg-orange font-display font-bold text-white"
-            >
-              <Phone className="size-4" aria-hidden="true" />
-              {business.phone}
-            </a>
+            <div className="mt-5 grid gap-2.5">
+              <ButtonLink href="/contact" size="lg">
+                Schedule Service
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </ButtonLink>
+              <a
+                href={business.phoneHref}
+                className="flex items-center justify-center gap-2 font-display text-sm font-extrabold text-navy"
+              >
+                <Phone className="size-4 text-orange" aria-hidden="true" />
+                24/7 · {business.phone}
+              </a>
+            </div>
           </nav>
         </div>
       )}
@@ -207,7 +234,7 @@ function NavLink({
       href={href}
       data-active={active}
       className={cn(
-        "nav-underline px-3.5 py-2 font-display text-[0.82rem] font-extrabold uppercase tracking-wide transition-colors xl:text-sm",
+        "nav-underline whitespace-nowrap px-2.5 py-2 font-display text-[0.76rem] font-extrabold uppercase tracking-tight transition-colors xl:px-3 xl:text-[0.82rem]",
         active ? "text-blue" : "text-navy/80 hover:text-blue",
       )}
     >
@@ -224,7 +251,7 @@ function ServicesMenu({ active }: { active: boolean }) {
         href="/services"
         data-active={active}
         className={cn(
-          "nav-underline flex items-center gap-1 px-3.5 py-2 font-display text-[0.82rem] font-extrabold uppercase tracking-wide transition-colors xl:text-sm",
+          "nav-underline flex items-center gap-1 whitespace-nowrap px-2.5 py-2 font-display text-[0.76rem] font-extrabold uppercase tracking-tight transition-colors xl:px-3 xl:text-[0.82rem]",
           active ? "text-blue" : "text-navy/80 hover:text-blue",
         )}
       >

@@ -8,8 +8,23 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="band-navy relative overflow-hidden text-white/70">
-      <PalmBackdrop />
+    <footer className="relative overflow-hidden bg-abyss text-white/70">
+      {/* Commissioned coastal scene, dropped back so type stays legible. */}
+      <picture>
+        <source media="(min-width: 768px)" srcSet="/brand/footer-scene.webp" />
+        <img
+          src="/brand/footer-scene-1000.webp"
+          alt=""
+          width={1600}
+          height={948}
+          loading="lazy"
+          className="pointer-events-none absolute inset-0 size-full object-cover object-top"
+        />
+      </picture>
+      <div
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgb(5_15_38/0.55)_0%,rgb(5_15_38/0.88)_42%,rgb(5_15_38/0.97)_100%)]"
+        aria-hidden="true"
+      />
 
       <div className="shell relative py-14 md:py-18">
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
@@ -168,32 +183,5 @@ function FooterLink({ href, children }: { href: string; children: ReactNode }) {
         {children}
       </Link>
     </li>
-  );
-}
-
-/** Palm silhouettes echoing the logo emblem, very low contrast. */
-function PalmBackdrop() {
-  return (
-    <svg
-      className="pointer-events-none absolute -right-10 bottom-0 h-64 w-auto opacity-[0.07]"
-      viewBox="0 0 200 240"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path d="M96 240V96" stroke="white" strokeWidth="7" strokeLinecap="round" />
-      <g stroke="white" strokeWidth="7" strokeLinecap="round" fill="none">
-        <path d="M96 96C74 74 44 70 24 84" />
-        <path d="M96 96c22-22 52-26 72-12" />
-        <path d="M96 96C82 68 84 38 104 20" />
-        <path d="M96 96c18-12 48-8 62 10" />
-        <path d="M96 96C78 88 50 96 38 118" />
-      </g>
-      <path d="M158 240V140" stroke="white" strokeWidth="5" strokeLinecap="round" />
-      <g stroke="white" strokeWidth="5" strokeLinecap="round" fill="none">
-        <path d="M158 140c-16-16-38-19-53-9" />
-        <path d="M158 140c16-16 38-19 53-9" />
-        <path d="M158 140c-10-20-8-42 6-55" />
-      </g>
-    </svg>
   );
 }

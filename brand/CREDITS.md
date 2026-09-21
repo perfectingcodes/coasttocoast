@@ -19,3 +19,7 @@ brand assets.
 > ⚠️ `photo-van.png` shows **(813) 555-0123** and **CoastToCoastAir.com** on the
 > vehicle wrap. That is the design-comp placeholder, not the real number
 > ((239) 518-5928). Re-render or reshoot before launch.
+
+| `photo-hvac-unit.jpg` | [Unsplash](https://unsplash.com/photos/-nbWCvUiFJA) — residential outdoor condenser | alpha innotec | [Unsplash License](https://unsplash.com/license) — free for commercial use |
+
+`footer-scene.png` is the client's own commissioned artwork.

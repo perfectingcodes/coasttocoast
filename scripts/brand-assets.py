@@ -177,6 +177,7 @@ def main():
         "badge-locally-owned.png", "hero-coast.jpg",
         "mascot-bust.png", "mascot-service.png",
         "avatar-husky.png", "map-florida.png",
+        "photo-hvac-unit.jpg", "footer-scene.png",
         "photo-condenser.png", "photo-van.png",
     )
     missing = [n for n in required if not (SRC / n).exists()]
@@ -214,6 +215,8 @@ def main():
     # Hero runs full-bleed, so it needs a large source; the rest sit in panels.
     emit_photo("hero-coast.jpg", [1920, 1200, 760])
     emit_photo("photo-condenser.png", [1024, 640])
+    emit_photo("photo-hvac-unit.jpg", [1280, 760])
+    emit_photo("footer-scene.png", [1600, 1000], quality=78)
     emit_photo("photo-van.png", [1024, 640])
 
     print("writing icons...")

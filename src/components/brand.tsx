@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "wouter";
-import { ArrowUpRight, MapPin, ShieldCheck, Star, Thermometer, Zap } from "lucide-react";
+import { ArrowUpRight, MapPin, ShieldCheck, Thermometer } from "lucide-react";
 import { business, locations, season } from "@/content/site";
 import { cn } from "@/lib/utils";
 
@@ -206,31 +206,56 @@ export function CityMarquee({ className }: { className?: string }) {
 
 /* -------------------------------------------------------------- trust bar */
 
-const TRUST = [
-  { Icon: ShieldCheck, title: "Licensed & insured", sub: `FL #${business.license}` },
-  { Icon: Zap, title: "24/7 emergency", sub: "Answered by a person" },
-  { Icon: Star, title: "Flat-rate pricing", sub: "Quoted before work starts" },
-  { Icon: MapPin, title: "Locally owned", sub: `${business.city}, FL` },
-];
-
+/**
+ * Credentials, not icon tiles. A row of gradient-circle icons is the single
+ * most recognisable template pattern on a contractor site; this leads with the
+ * licence numbers themselves and uses the seal as the only mark.
+ */
 export function TrustStrip({ className }: { className?: string }) {
   return (
-    <div className={cn("border-y border-navy/8 bg-white", className)}>
-      <ul className="shell grid gap-6 py-7 sm:grid-cols-2 lg:grid-cols-4">
-        {TRUST.map(({ Icon, title, sub }) => (
-          <li key={title} className="flex items-center gap-3.5">
-            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-blue/12 to-cyan/20 text-blue ring-1 ring-blue/15">
-              <Icon className="size-5" aria-hidden="true" />
+    <div className={cn("border-b border-navy/8 bg-foam", className)}>
+      <div className="shell flex flex-wrap items-center gap-x-12 gap-y-6 py-6">
+        <div className="flex items-center gap-3.5">
+          <img
+            src="/brand/badge-locally-owned.webp"
+            alt="Locally owned and operated"
+            width={640}
+            height={632}
+            className="size-14 shrink-0"
+          />
+          <p className="font-display text-[0.68rem] font-extrabold uppercase leading-tight tracking-[0.14em] text-navy">
+            Locally owned
+            <span className="mt-0.5 block font-bold text-navy/45">
+              {business.city}, {business.state}
             </span>
-            <span className="min-w-0">
-              <span className="block font-display text-sm font-extrabold text-navy">
-                {title}
+          </p>
+        </div>
+
+        <span className="hidden h-10 w-px bg-navy/10 md:block" aria-hidden="true" />
+
+        <ul className="flex flex-wrap gap-x-10 gap-y-4">
+          {business.licenses.map((l) => (
+            <li key={l.number} className="leading-tight">
+              <span className="block font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-navy/40">
+                {l.label}
               </span>
-              <span className="block truncate text-xs text-navy/55">{sub}</span>
-            </span>
-          </li>
-        ))}
-      </ul>
+              <span className="mt-1 flex items-center gap-1.5">
+                <span className="h-3 w-[3px] rounded-full bg-gradient-to-b from-cyan to-blue" aria-hidden="true" />
+                <span className="font-mono text-sm font-semibold tracking-tight text-navy">
+                  {l.number}
+                </span>
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        <p className="ml-auto hidden font-display text-[0.62rem] font-extrabold uppercase tracking-[0.16em] text-navy/40 lg:block">
+          Insured · Bonded
+          <span className="mt-0.5 block text-navy/25">
+            Certificates on request
+          </span>
+        </p>
+      </div>
     </div>
   );
 }

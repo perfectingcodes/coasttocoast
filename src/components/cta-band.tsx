@@ -36,7 +36,7 @@ export function CtaBand({
         <SunsetScenery />
       </div>
 
-      <div className="shell relative py-14 md:py-16">
+      <div className={cn("shell relative py-14 md:py-16", mascot && "pb-36 sm:pb-40 md:pb-44")}>
         <div className="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl">
             <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.22em] text-white/80">
@@ -63,20 +63,7 @@ export function CtaBand({
         </div>
       </div>
 
-      {/* Mascot is painted *before* the wave so the water crosses his chest —
-          he reads as surfacing through it rather than pasted on top. */}
-      {mascot && (
-        <img
-          src="/brand/mascot-bust.webp"
-          srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
-          sizes="(min-width: 1280px) 260px, 216px"
-          alt=""
-          width={800}
-          height={849}
-          loading="lazy"
-          className="pointer-events-none absolute bottom-6 left-[53%] z-0 hidden w-44 drop-shadow-[0_18px_34px_rgb(90_32_0/0.5)] xl:block 2xl:w-52"
-        />
-      )}
+      {mascot && <SurfacingMascot />}
 
       {/* Water line into the footer. */}
       <Wave
@@ -120,6 +107,65 @@ function SunsetScenery() {
           <path d="M82 78c-16-11-44-7-57 9" />
         </g>
       </svg>
+    </div>
+  );
+}
+
+
+/**
+ * The mascot surfacing out of the bottom of the band.
+ *
+ * His lower edge is masked into a set of drawn ripples rather than simply
+ * cropped, so he reads as coming *up through* the surface. Centred and sized
+ * by breakpoint, with the band carrying matching bottom padding, so he never
+ * collides with the copy or the button at any width.
+ */
+function SurfacingMascot() {
+  return (
+    <div
+      className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex justify-center"
+      aria-hidden="true"
+    >
+      <div className="relative w-36 sm:w-40 md:w-48 xl:w-56">
+        <img
+          src="/brand/mascot-bust.webp"
+          srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
+          sizes="(min-width: 1280px) 224px, (min-width: 768px) 192px, 144px"
+          alt=""
+          width={800}
+          height={849}
+          loading="lazy"
+          className="w-full drop-shadow-[0_16px_30px_rgb(90_32_0/0.45)]"
+          style={{
+            maskImage:
+              "linear-gradient(to bottom, black 62%, rgba(0,0,0,0.65) 78%, transparent 92%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, black 62%, rgba(0,0,0,0.65) 78%, transparent 92%)",
+          }}
+        />
+
+        {/* Ripples he is rising through. */}
+        <svg
+          viewBox="0 0 240 54"
+          className="absolute inset-x-[-28%] bottom-[2%] w-[156%]"
+          fill="none"
+        >
+          {[
+            { d: "M4 14c26-9 52 9 78 0s52-9 78 0 52 9 76 0", o: 0.9, w: 4 },
+            { d: "M0 29c28-9 56 9 84 0s56-9 84 0 52 9 72 0", o: 0.6, w: 3.5 },
+            { d: "M8 43c24-8 48 8 72 0s48-8 72 0 48 8 88 0", o: 0.35, w: 3 },
+          ].map((l, i) => (
+            <path
+              key={i}
+              d={l.d}
+              stroke="white"
+              strokeOpacity={l.o}
+              strokeWidth={l.w}
+              strokeLinecap="round"
+            />
+          ))}
+        </svg>
+      </div>
     </div>
   );
 }
