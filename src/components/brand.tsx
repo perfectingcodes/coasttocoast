@@ -259,3 +259,46 @@ export function TrustStrip({ className }: { className?: string }) {
     </div>
   );
 }
+
+
+/* ------------------------------------------------------- kinetic wordmark */
+
+/**
+ * Oversized "Coast to Coast" running across the foot of the page.
+ *
+ * Purely typographic and purely decorative — aria-hidden, and it pauses on
+ * hover and under prefers-reduced-motion. The name is already in the footer
+ * as real text, so nothing is lost to a screen reader.
+ */
+export function KineticWordmark({ className }: { className?: string }) {
+  const word = (
+    <>
+      <span className="poster text-[clamp(3rem,9vw,7rem)] text-white/[0.07]">
+        Coast to Coast
+      </span>
+      <span className="poster text-[clamp(3rem,9vw,7rem)] text-cyan/25">
+        Air
+      </span>
+      <span
+        className="size-3 shrink-0 rounded-full bg-orange/50"
+        aria-hidden="true"
+      />
+    </>
+  );
+  return (
+    <div className={cn("kinetic py-2", className)} aria-hidden="true">
+      {[0, 1].map((copy) => (
+        <div className="kinetic-track" key={copy}>
+          {[0, 1].map((n) => (
+            <span
+              key={n}
+              className="flex shrink-0 items-center gap-10 whitespace-nowrap"
+            >
+              {word}
+            </span>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}

@@ -3,12 +3,13 @@ import { Link } from "wouter";
 import { Clock, Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
 import { business, locations, services } from "@/content/site";
 import { GoogleBadge } from "@/components/google-reviews";
+import { KineticWordmark } from "@/components/brand";
 
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden bg-abyss text-white/70">
+    <footer className="band-ocean relative overflow-hidden text-white/75">
       {/* Commissioned coastal scene, dropped back so type stays legible. */}
       <picture>
         <source media="(min-width: 768px)" srcSet="/brand/footer-scene.webp" />
@@ -18,11 +19,11 @@ export function Footer() {
           width={1600}
           height={948}
           loading="lazy"
-          className="pointer-events-none absolute inset-0 size-full object-cover object-top"
+          className="pointer-events-none absolute inset-0 size-full object-cover object-top opacity-45 mix-blend-luminosity"
         />
       </picture>
       <div
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgb(5_15_38/0.55)_0%,rgb(5_15_38/0.88)_42%,rgb(5_15_38/0.97)_100%)]"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgb(13_63_150/0.5)_0%,rgb(10_35_82/0.82)_48%,rgb(7_26_61/0.94)_100%)]"
         aria-hidden="true"
       />
 
@@ -147,7 +148,9 @@ export function Footer() {
           </ul>
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 border-t border-white/12 pt-6 text-xs text-white/55 md:flex-row md:items-center md:justify-between">
+        <KineticWordmark className="mt-12 border-t border-white/12 pt-6" />
+
+        <div className="mt-4 flex flex-col gap-3 border-t border-white/12 pt-6 text-xs text-white/55 md:flex-row md:items-center md:justify-between">
           <p>
             © {year} {business.name}. All rights reserved. · License #{business.license}
           </p>

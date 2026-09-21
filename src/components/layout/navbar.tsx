@@ -58,12 +58,9 @@ export function Navbar() {
       {/* ---------------------------------------------------- utility bar */}
       <div className="bg-navy-deep text-white">
         <div className="shell flex h-10 items-center justify-between gap-4">
-          <a
-            href={business.phoneHref}
-            className="hidden text-xs font-semibold text-white/70 transition-colors hover:text-white sm:block lg:hidden xl:block"
-          >
-            {business.street}, {business.city}, {business.state} {business.zip}
-          </a>
+          <p className="hidden text-xs font-semibold text-white/60 sm:block">
+            Serving Lee, Collier &amp; Charlotte counties
+          </p>
           <div className="flex flex-1 items-center justify-end gap-4">
             <span className="inline-flex items-center gap-2">
               <Clock className="size-3.5 text-orange" aria-hidden="true" />

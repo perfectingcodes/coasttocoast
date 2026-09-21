@@ -87,7 +87,7 @@ export function SiteLayout({
       <div className="band-navy grain grid-lines relative isolate overflow-hidden">
         <HeroBackdrop tone={tone} />
 
-        <div className="shell relative pb-20 pt-10 md:pb-24 md:pt-14">
+        <div className="shell relative pb-20 pt-10 md:pb-24 md:pt-14 lg:pt-20">
           {crumbs && crumbs.length > 0 && (
             <nav aria-label="Breadcrumb" className="mb-6">
               <ol className="flex flex-wrap items-center gap-1 text-sm text-white/55">
