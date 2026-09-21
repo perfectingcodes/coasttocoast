@@ -44,7 +44,7 @@ export function ServiceMap() {
   const focusCities = locations.filter((l) => l.focus);
 
   return (
-    <section className="band-navy grain relative overflow-hidden py-16 md:py-20">
+    <section className="band-navy grain relative overflow-hidden py-14 md:py-16">
       <div className="shell relative">
         <div className="max-w-2xl">
           <p className="eyebrow text-cyan">Where we work</p>
@@ -58,7 +58,7 @@ export function ServiceMap() {
         </div>
 
         {/* Fastest path for the three markets most visitors want. */}
-        <ul className="mt-8 flex flex-wrap gap-3">
+        <ul className="mt-6 flex flex-wrap gap-3">
           {focusCities.map((l) => (
             <li key={l.slug}>
               <Link
@@ -80,7 +80,7 @@ export function ServiceMap() {
           ))}
         </ul>
 
-        <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center">
+        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-center">
           {/* --------------------------------------------------------- map */}
           <div className="relative mx-auto w-full max-w-sm">
             <svg
@@ -218,7 +218,7 @@ export function ServiceMap() {
 
           {/* ------------------------------------------------ detail panel */}
           <div>
-            <div className="glass edge-lit p-6 md:p-7">
+            <div className="glass edge-lit p-5 md:p-6">
               <div className="flex flex-wrap items-center gap-3">
                 {active.focus && (
                   <Pill icon={<MapPin className="size-3.5 text-orange" />}>
@@ -234,8 +234,6 @@ export function ServiceMap() {
                 {active.city}
                 <span className="text-cyan">.</span>
               </h3>
-
-              <p className="mt-4 leading-relaxed text-white/75">{active.intro}</p>
 
 
               <dl className="mt-6 grid gap-4 border-t border-white/12 pt-5 sm:grid-cols-2">
@@ -295,9 +293,9 @@ export function ServiceMap() {
               ))}
             </ul>
 
-            <SeasonCard variant="bar" className="mt-5 w-fit" />
+            <SeasonCard variant="bar" className="mt-4 w-fit" />
 
-            <p className="mt-4 text-xs text-white/40">
+            <p className="mt-3 text-[0.7rem] text-white/35">
               Pin positions are plotted from real coordinates; the coastline is a
               stylisation, not survey data.
             </p>

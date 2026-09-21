@@ -78,13 +78,7 @@ export default function Home() {
 
 function Hero() {
   return (
-    <section className="band-ember sun-rays grain relative isolate overflow-hidden">
-      {/* Warm core the rays emanate from. */}
-      <div
-        className="pointer-events-none absolute -bottom-40 -left-32 -z-10 size-[34rem] rounded-full bg-gold/25 blur-[90px]"
-        aria-hidden="true"
-      />
-
+    <section className="band-ember grain relative isolate overflow-hidden">
       <div className="shell relative grid items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:gap-6 lg:pb-12 lg:pt-24">
         <div className="max-w-xl">
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-display text-[0.68rem] font-extrabold uppercase tracking-[0.24em] text-white">
@@ -167,7 +161,12 @@ function Hero() {
           </div>
         </div>
 
-        <div className="relative">
+        <div className="rays-burst relative">
+          {/* Warm core the rays radiate from, sitting under the artwork. */}
+          <div
+            className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/30 blur-[80px]"
+            aria-hidden="true"
+          />
           <img
             src="/brand/hero-map-mascot.webp"
             srcSet="/brand/hero-map-mascot-sm.webp 600w, /brand/hero-map-mascot.webp 1200w"
@@ -195,9 +194,9 @@ function ServicesSection() {
         <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <div>
             <p className="eyebrow">Our Services</p>
-            <h2 className="poster mt-4 text-[clamp(2.1rem,5vw,3.5rem)]">
-              Complete HVAC solutions
-              <span className="block text-ember">for homes &amp; businesses</span>
+            <h2 className="poster mt-4 text-[clamp(1.75rem,3.4vw,2.5rem)]">
+              HVAC for homes
+              <span className="block text-ember">&amp; businesses</span>
             </h2>
           </div>
           <p className="text-lg leading-relaxed text-navy/65">

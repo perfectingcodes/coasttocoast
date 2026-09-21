@@ -209,44 +209,42 @@
   }
 
   /**
-   * Sunburst anchored off the lower-left of the hero.
+   * Sunburst halo. Fills whatever it is placed on, radiating from that
+   * element's centre — so it can sit behind the artwork rather than behind
+   * the copy, where it competed with the type.
    *
-   * Drawn with conic and radial gradients rather than an SVG illustration:
-   * the rays and rings come out mathematically even, which is what makes it
-   * read as a designed device instead of a doodle. Two layers — hard rays,
-   * then concentric horizon rings — both masked so they dissolve before they
-   * reach the copy.
+   * Conic and radial gradients rather than an SVG: the spacing comes out
+   * mathematically even, which is what makes it read as a device.
    */
-  .sun-rays::before,
-  .sun-rays::after {
+  .rays-burst::before,
+  .rays-burst::after {
     content: "";
     position: absolute;
-    pointer-events: none;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
     aspect-ratio: 1;
+    pointer-events: none;
   }
-  .sun-rays::before {
-    left: -20%;
-    bottom: -62%;
-    width: 86%;
+  .rays-burst::before {
+    width: 146%;
     background: repeating-conic-gradient(
-      from 196deg at 50% 50%,
-      rgb(255 236 190 / 0.17) 0deg 3.2deg,
-      transparent 3.2deg 12deg
+      from 0deg at 50% 50%,
+      rgb(255 240 205 / 0.22) 0deg 2.6deg,
+      transparent 2.6deg 11deg
     );
-    mask-image: radial-gradient(closest-side, black 18%, transparent 74%);
-    -webkit-mask-image: radial-gradient(closest-side, black 18%, transparent 74%);
+    mask-image: radial-gradient(closest-side, transparent 14%, black 34%, transparent 72%);
+    -webkit-mask-image: radial-gradient(closest-side, transparent 14%, black 34%, transparent 72%);
   }
-  .sun-rays::after {
-    left: -14%;
-    bottom: -48%;
-    width: 62%;
+  .rays-burst::after {
+    width: 104%;
     background: repeating-radial-gradient(
       circle at 50% 50%,
-      transparent 0 52px,
-      rgb(255 255 255 / 0.13) 52px 55px
+      transparent 0 44px,
+      rgb(255 255 255 / 0.14) 44px 47px
     );
-    mask-image: radial-gradient(closest-side, black 30%, transparent 82%);
-    -webkit-mask-image: radial-gradient(closest-side, black 30%, transparent 82%);
+    mask-image: radial-gradient(closest-side, transparent 22%, black 46%, transparent 84%);
+    -webkit-mask-image: radial-gradient(closest-side, transparent 22%, black 46%, transparent 84%);
   }
 
   /* Sunset CTA band, straight off the logo's horizon. */
