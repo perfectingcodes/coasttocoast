@@ -856,6 +856,31 @@ export const financing = {
   ],
 } as const;
 
+// ------------------------------------------------------------------ season
+
+/**
+ * Cooling load through the year in Southwest Florida. Used by the hero's
+ * "right now" card, which reads the visitor's current month — real context
+ * computed from the date, not a fabricated live sensor reading.
+ */
+export const season: Record<
+  string,
+  { label: string; load: "Low" | "Moderate" | "High" | "Peak"; note: string }
+> = {
+  Jan: { label: "Dry season", load: "Low", note: "Heat runs a handful of nights" },
+  Feb: { label: "Dry season", load: "Low", note: "Seasonal homes occupied" },
+  Mar: { label: "Pre-season", load: "Moderate", note: "Best month to service before the heat" },
+  Apr: { label: "Season opens", load: "Moderate", note: "Cooling load climbing" },
+  May: { label: "Building", load: "High", note: "Systems running most of the day" },
+  Jun: { label: "Storm season", load: "Peak", note: "Peak load and afternoon storms" },
+  Jul: { label: "Peak summer", load: "Peak", note: "Near-continuous runtime" },
+  Aug: { label: "Peak summer", load: "Peak", note: "Hardest month on equipment" },
+  Sep: { label: "Storm season", load: "High", note: "Humidity still at its heaviest" },
+  Oct: { label: "Post-season", load: "Moderate", note: "Best month to service after the heat" },
+  Nov: { label: "Cooling off", load: "Low", note: "Seasonal homes reopening" },
+  Dec: { label: "Dry season", load: "Low", note: "Heating checks worth doing" },
+};
+
 // --------------------------------------------------------------------- faqs
 
 export const generalFaqs = [

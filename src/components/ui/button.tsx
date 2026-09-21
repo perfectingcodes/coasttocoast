@@ -2,34 +2,53 @@ import { Link } from "wouter";
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "secondary" | "outline" | "onDark" | "ghost";
+type Variant =
+  | "primary"
+  | "secondary"
+  | "outline"
+  | "onDark"
+  | "ghost"
+  | "gold";
 type Size = "sm" | "md" | "lg";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-semibold " +
-  "font-[var(--font-display)] tracking-wide transition-[transform,background-color,box-shadow,color,border-color] " +
-  "duration-200 active:translate-y-px disabled:pointer-events-none disabled:opacity-60";
+  "group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full " +
+  "font-[var(--font-display)] font-extrabold tracking-wide " +
+  "transition-[transform,box-shadow,color,border-color,background-color] duration-200 " +
+  "hover:-translate-y-0.5 active:translate-y-0 disabled:pointer-events-none disabled:opacity-60";
 
 const variants: Record<Variant, string> = {
-  /** Sunset orange — the primary conversion action everywhere on the site. */
+  /** Electric orange — the primary conversion action everywhere on the site. */
   primary:
-    "bg-orange text-white shadow-[var(--shadow-orange)] hover:bg-orange-light",
-  secondary: "bg-blue text-white hover:bg-blue-bright",
-  /** Cyan hairline on dark grounds, as in the hero. */
+    "bg-gradient-to-b from-orange-light to-ember text-white shadow-[var(--shadow-orange)] " +
+    "ring-1 ring-inset ring-white/25 hover:shadow-[0_16px_40px_-8px_rgb(255_106_19/0.7)]",
+  secondary:
+    "bg-gradient-to-b from-blue-bright to-blue text-white shadow-[var(--shadow-cyan)] ring-1 ring-inset ring-white/20",
+  /** Cyan hairline on dark grounds. */
   outline:
-    "border-2 border-cyan/70 text-white hover:bg-cyan/15 hover:border-cyan",
-  onDark: "bg-white text-navy hover:bg-cyan-light",
-  ghost: "text-navy border-2 border-navy/15 hover:border-navy/35 hover:bg-navy/5",
+    "border-2 border-cyan/60 text-white hover:border-cyan hover:bg-cyan/12 hover:shadow-[var(--shadow-cyan)]",
+  onDark: "bg-white text-navy shadow-[0_12px_30px_-12px_rgb(5_15_38/0.7)] hover:bg-cyan-light",
+  ghost: "text-navy border-2 border-navy/15 hover:border-blue/45 hover:bg-blue/5",
+  /** Financing and secondary offers. */
+  gold: "bg-gradient-to-b from-gold to-orange text-navy ring-1 ring-inset ring-white/30 shadow-[0_10px_28px_-10px_rgb(255_176_32/0.7)]",
 };
 
 const sizes: Record<Size, string> = {
-  sm: "h-10 px-4 text-sm",
-  md: "h-12 px-6 text-sm",
-  lg: "h-14 px-8 text-base",
+  sm: "h-10 px-4 text-[0.8rem]",
+  md: "h-12 px-6 text-[0.85rem]",
+  lg: "h-14 px-8 text-[0.95rem]",
 };
 
+/** Sheen that sweeps across a filled button on hover. */
+const SHEEN =
+  "before:absolute before:inset-0 before:-translate-x-full before:bg-gradient-to-r " +
+  "before:from-transparent before:via-white/25 before:to-transparent before:transition-transform " +
+  "before:duration-700 hover:before:translate-x-full motion-reduce:before:hidden";
+
+const FILLED: Variant[] = ["primary", "secondary", "gold", "onDark"];
+
 export function buttonClass(variant: Variant = "primary", size: Size = "md") {
-  return cn(base, variants[variant], sizes[size]);
+  return cn(base, variants[variant], sizes[size], FILLED.includes(variant) && SHEEN);
 }
 
 interface CommonProps {

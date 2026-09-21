@@ -18,38 +18,38 @@ export interface Crumb {
  */
 const TONES = {
   default: {
-    wash: "bg-[linear-gradient(105deg,rgb(4_16_29/0.96)_0%,rgb(9_31_58/0.92)_45%,rgb(13_45_80/0.78)_100%)]",
-    glow: "bg-cyan/12",
+    wash: "bg-[linear-gradient(105deg,rgb(5_15_38/0.94)_0%,rgb(10_35_82/0.9)_45%,rgb(14_47_107/0.8)_100%)]",
+    glow: "bg-cyan/20",
   },
-  /** Heating — sunset warmth over the navy. */
+  /** Heating — sunset warmth over the blue. */
   warm: {
-    wash: "bg-[linear-gradient(105deg,rgb(24_14_6/0.96)_0%,rgb(46_22_8/0.9)_40%,rgb(120_52_16/0.72)_100%)]",
-    glow: "bg-orange/25",
+    wash: "bg-[linear-gradient(105deg,rgb(26_12_4/0.95)_0%,rgb(66_24_6/0.88)_42%,rgb(168_66_14/0.72)_100%)]",
+    glow: "bg-orange/35",
   },
-  /** Cooling — the coldest, bluest treatment on the site. */
+  /** Cooling — the coldest, most electric treatment on the site. */
   cool: {
-    wash: "bg-[linear-gradient(105deg,rgb(3_22_44/0.96)_0%,rgb(6_44_86/0.9)_45%,rgb(12_90_150/0.72)_100%)]",
-    glow: "bg-cyan/30",
+    wash: "bg-[linear-gradient(105deg,rgb(3_20_52/0.95)_0%,rgb(8_52_120/0.88)_45%,rgb(16_110_190/0.7)_100%)]",
+    glow: "bg-cyan/40",
   },
   /** Mechanical — desaturated steel. */
   steel: {
-    wash: "bg-[linear-gradient(105deg,rgb(14_18_24/0.97)_0%,rgb(28_36_48/0.93)_45%,rgb(50_64_82/0.82)_100%)]",
-    glow: "bg-slateish/25",
+    wash: "bg-[linear-gradient(105deg,rgb(12_16_24/0.96)_0%,rgb(28_38_54/0.92)_45%,rgb(56_74_98/0.82)_100%)]",
+    glow: "bg-slateish/35",
   },
-  /** Maintenance — the offer page, warmest accent. */
+  /** Maintenance — the offer page, gold accent. */
   offer: {
-    wash: "bg-[linear-gradient(105deg,rgb(6_21_40/0.96)_0%,rgb(14_40_72/0.9)_45%,rgb(90_48_18/0.7)_100%)]",
-    glow: "bg-gold/25",
+    wash: "bg-[linear-gradient(105deg,rgb(5_15_38/0.95)_0%,rgb(14_47_107/0.88)_42%,rgb(130_70_14/0.7)_100%)]",
+    glow: "bg-gold/35",
   },
   /** Commercial — darkest and flattest, least consumer. */
   deep: {
-    wash: "bg-[linear-gradient(105deg,rgb(3_10_18/0.97)_0%,rgb(6_20_36/0.95)_50%,rgb(10_32_58/0.9)_100%)]",
-    glow: "bg-blue/20",
+    wash: "bg-[linear-gradient(105deg,rgb(3_8_18/0.97)_0%,rgb(6_22_48/0.94)_50%,rgb(12_44_92/0.88)_100%)]",
+    glow: "bg-blue/30",
   },
   /** Air quality — green-leaning aqua. */
   aqua: {
-    wash: "bg-[linear-gradient(105deg,rgb(3_26_32/0.96)_0%,rgb(6_48_58/0.9)_45%,rgb(10_92_104/0.72)_100%)]",
-    glow: "bg-cyan-light/25",
+    wash: "bg-[linear-gradient(105deg,rgb(2_28_36/0.95)_0%,rgb(6_60_74/0.88)_45%,rgb(12_120_136/0.7)_100%)]",
+    glow: "bg-cyan-light/35",
   },
 } as const;
 
@@ -84,7 +84,7 @@ export function SiteLayout({
     <div className="flex min-h-dvh flex-col">
       <Navbar />
 
-      <div className="relative isolate overflow-hidden bg-navy-deep">
+      <div className="band-navy grain grid-lines relative isolate overflow-hidden">
         <HeroBackdrop tone={tone} />
 
         <div className="shell relative pb-20 pt-10 md:pb-24 md:pt-14">
@@ -133,7 +133,7 @@ export function SiteLayout({
           </div>
         </div>
 
-        <Wave fill="white" swell="#22c7f2" height={64} className="relative -mb-px" />
+        <Wave fill="white" swell="#2bd9ff" height={64} className="relative -mb-px" />
       </div>
 
       <main className="flex-1">{children}</main>
@@ -156,7 +156,7 @@ function HeroBackdrop({ tone }: { tone: HeroTone }) {
         <img
           src="/brand/hero-coast-760.webp"
           alt=""
-          className="absolute inset-0 -z-20 size-full object-cover object-center"
+          className="absolute inset-0 -z-20 size-full object-cover object-center opacity-30 mix-blend-luminosity"
         />
       </picture>
       <div className={cn("absolute inset-0 -z-10", t.wash)} aria-hidden="true" />

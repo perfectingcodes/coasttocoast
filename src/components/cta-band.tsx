@@ -50,7 +50,7 @@ export function CtaBand({
       </div>
 
       {/* Water line into the footer. */}
-      <Wave fill="#123a63" swell="#22c7f2" height={56} className="relative" />
+      <Wave fill="#0e2f6b" swell="#2bd9ff" height={56} className="relative" />
     </section>
   );
 }

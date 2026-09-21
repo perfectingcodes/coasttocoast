@@ -1,5 +1,13 @@
 import { Link } from "wouter";
-import { ArrowRight, Check, MapPin, Phone } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Check,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  Zap,
+} from "lucide-react";
 import {
   business,
   cleanAndTune,
@@ -14,7 +22,8 @@ import { Icon } from "@/components/icon";
 import { Wave } from "@/components/wave";
 import { Reveal } from "@/components/reveal";
 import { TestimonialCarousel } from "@/components/testimonial-carousel";
-import { GoogleReviewCard } from "@/components/google-reviews";
+import { GoogleBadge, GoogleReviewCard } from "@/components/google-reviews";
+import { CityMarquee, Pill, SeasonCard, TrustStrip } from "@/components/brand";
 import { CtaBand } from "@/components/cta-band";
 import { FaqList } from "@/components/faq-list";
 import { ButtonLink } from "@/components/ui/button";
@@ -24,10 +33,10 @@ import { Seo, breadcrumbNode, faqNode } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 const accents: Record<Service["accent"], string> = {
-  orange: "bg-orange",
-  cyan: "bg-cyan",
-  slate: "bg-slateish",
-  blue: "bg-blue",
+  orange: "bg-gradient-to-br from-orange-light to-ember",
+  cyan: "bg-gradient-to-br from-cyan to-blue",
+  slate: "bg-gradient-to-br from-slateish to-navy",
+  blue: "bg-gradient-to-br from-blue-bright to-blue",
 };
 
 export default function Home() {
@@ -46,6 +55,7 @@ export default function Home() {
 
       <main className="flex-1">
         <Hero />
+        <TrustStrip />
         <AtAGlance />
         <ServicesSection />
         <CleanAndTuneSection />
@@ -65,10 +75,9 @@ export default function Home() {
 
 function Hero() {
   return (
-    <section className="relative isolate overflow-hidden bg-navy-deep">
-      {/* Gulf-coast photography behind a navy wash, so white type stays legible
-          while the image still reads. Sized down for phones — the hero is the
-          largest asset on the page. */}
+    <section className="band-navy grain grid-lines relative isolate overflow-hidden">
+      {/* Photograph sits under the brand ground, not the other way round —
+          it reads as texture and light, never as stock imagery. */}
       <picture>
         <source media="(min-width: 1024px)" srcSet="/brand/hero-coast.webp" />
         <source media="(min-width: 640px)" srcSet="/brand/hero-coast-1200.webp" />
@@ -76,36 +85,30 @@ function Hero() {
           src="/brand/hero-coast-760.webp"
           alt=""
           fetchPriority="high"
-          className="absolute inset-0 -z-20 size-full object-cover object-center"
+          className="absolute inset-0 -z-20 size-full object-cover object-center opacity-30 mix-blend-luminosity"
         />
       </picture>
-      <div
-        className="absolute inset-0 -z-10 bg-[linear-gradient(100deg,rgb(4_16_29/0.95)_0%,rgb(8_29_54/0.9)_38%,rgb(11_37_69/0.66)_66%,rgb(16_54_94/0.5)_100%)]"
-        aria-hidden="true"
-      />
-      <div
-        className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgb(4_16_29/0.8)_0%,transparent_42%)]"
-        aria-hidden="true"
-      />
 
-      <div className="shell relative grid items-center gap-10 pb-24 pt-14 md:pb-32 md:pt-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
+      <div className="shell relative grid items-center gap-12 pb-10 pt-12 md:pt-16 lg:grid-cols-[1.02fr_0.98fr] lg:gap-8 lg:pb-14">
         <div>
-          <p className="font-display text-[0.72rem] font-bold uppercase tracking-[0.3em] text-cyan md:text-sm">
-            Florida Comfort. Coast to Coast.
-          </p>
+          <Pill icon={<ShieldCheck className="size-3.5 text-cyan" />}>
+            Licensed in Florida · {business.license}
+          </Pill>
 
-          <h1 className="display mt-5 text-[clamp(2.4rem,9.2vw,4.6rem)] text-white drop-shadow-[0_4px_24px_rgb(4_16_29/0.6)]">
+          <h1 className="display mt-6 text-[clamp(2.6rem,9.4vw,5rem)] text-white">
             <span className="block">Heating</span>
             <span className="block text-chill">Cooling</span>
-            <span className="block">Mechanical</span>
+            <span className="block">
+              Mechanical<span className="text-orange">.</span>
+            </span>
           </h1>
 
-          <p className="mt-6 max-w-md text-lg leading-relaxed text-white/85">
-            Trusted HVAC experts keeping Southwest Florida comfortable — from
-            coast to coast.
+          <p className="mt-6 max-w-md text-lg leading-relaxed text-white/80">
+            Trusted HVAC experts keeping Southwest Florida comfortable — from{" "}
+            <span className="swoosh font-semibold text-white">coast to coast</span>.
           </p>
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-9 flex flex-wrap gap-3">
             <ButtonLink href="/contact" size="lg">
               Schedule Service
               <ArrowRight className="size-4" aria-hidden="true" />
@@ -113,41 +116,57 @@ function Hero() {
             <ButtonLink href="/contact#quote" variant="outline" size="lg">
               Get a Free Quote
             </ButtonLink>
+            <ButtonLink href="/financing" variant="gold" size="lg">
+              Financing
+            </ButtonLink>
           </div>
 
-          <ul className="mt-11 flex flex-wrap gap-x-8 gap-y-5">
+          <ul className="mt-9 flex flex-wrap gap-x-7 gap-y-4">
             {heroBadges.map((b) => (
-              <li key={b.title} className="flex items-center gap-3">
-                <span className="grid size-11 shrink-0 place-items-center rounded-full border-2 border-cyan/45 bg-white/8 text-cyan backdrop-blur-sm">
-                  <Icon name={b.icon} className="size-5" />
+              <li key={b.title} className="flex items-center gap-2.5">
+                <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-white/8 text-cyan ring-1 ring-cyan/30">
+                  <Icon name={b.icon} className="size-4" />
                 </span>
-                <span className="font-display text-[0.7rem] font-bold uppercase leading-tight tracking-[0.1em] text-white">
+                <span className="font-display text-[0.68rem] font-extrabold uppercase leading-tight tracking-[0.1em] text-white">
                   {b.title}
-                  <span className="block font-semibold text-white/70">{b.sub}</span>
+                  <span className="block font-bold text-white/55">{b.sub}</span>
                 </span>
               </li>
             ))}
           </ul>
+
+          <div className="mt-7">
+            <GoogleBadge onDark />
+          </div>
         </div>
 
-        {/* ------------------------------------------------- brand lockup */}
+        {/* ------------------------------- lockup with floating data cards */}
         <div className="relative hidden lg:block">
+          <div
+            className="absolute inset-8 -z-10 rounded-full bg-cyan/12 blur-3xl"
+            aria-hidden="true"
+          />
           <img
             src="/brand/logo-mascot.webp"
             alt={`${business.name} — heating, cooling, mechanical and air quality`}
             width={1200}
             height={1034}
             fetchPriority="high"
-            className="mx-auto w-full max-w-xl drop-shadow-[0_24px_48px_rgb(4_16_29/0.7)]"
+            className="mx-auto w-full max-w-lg drop-shadow-[0_28px_56px_rgb(5_15_38/0.75)]"
           />
-          <p className="script -mt-2 text-right text-4xl text-white drop-shadow-[0_3px_10px_rgb(4_16_29/0.8)] xl:text-5xl">
+
+          <SeasonCard className="absolute -right-3 top-2 w-56 xl:w-60" />
+
+          <p className="script mt-1 text-right text-4xl text-white drop-shadow-[0_3px_10px_rgb(5_15_38/0.8)] xl:text-5xl">
             {business.promise}
-            <span className="mt-1 block h-1 w-44 rounded-full bg-gold/90 ml-auto" />
+            <span className="ml-auto mt-1 block h-1 w-44 rounded-full bg-gradient-to-r from-gold to-orange" />
           </p>
         </div>
       </div>
 
-      <Wave fill="white" swell="#22c7f2" height={80} className="relative -mb-px" />
+      <CityMarquee className="relative mt-4 border-t border-white/10 pb-6 pt-4" />
+
+      <Wave fill="white" swell="#2bd9ff" height={80} className="relative -mb-px" />
     </section>
   );
 }
@@ -212,9 +231,9 @@ function ServicesSection() {
         <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <div>
             <p className="eyebrow">Our Services</p>
-            <h2 className="mt-3 text-3xl leading-tight md:text-[2.7rem]">
-              Complete HVAC Solutions
-              <span className="block text-blue-bright">for Homes &amp; Businesses</span>
+            <h2 className="mt-4 text-3xl leading-[1.08] md:text-[2.9rem]">
+              Complete HVAC solutions
+              <span className="block text-ember">for homes &amp; businesses</span>
             </h2>
           </div>
           <p className="text-lg leading-relaxed text-navy/65">
@@ -224,36 +243,75 @@ function ServicesSection() {
           </p>
         </div>
 
-        <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Bento: one tall promise panel, then the six services. */}
+        <div className="mt-12 grid gap-5 lg:grid-cols-3">
+          <Reveal className="lg:row-span-2">
+            <div className="band-navy grain edge-lit relative flex h-full flex-col overflow-hidden rounded-card p-8">
+              <Pill icon={<Zap className="size-3.5 text-gold" />}>The promise</Pill>
+              <h3 className="mt-6 text-3xl leading-[1.05] text-white">
+                Flat price
+                <span className="block text-chill">before we start.</span>
+              </h3>
+              <p className="mt-4 leading-relaxed text-white/70">
+                A technician finds the actual fault and puts the number in
+                writing before anything is opened. It does not move because the
+                job ran long.
+              </p>
+              <ul className="mt-6 space-y-2.5">
+                {[
+                  "No diagnostic surprises",
+                  "No overtime markup",
+                  "Permits pulled on every replacement",
+                ].map((t) => (
+                  <li key={t} className="flex items-start gap-2.5">
+                    <Check className="mt-0.5 size-4 shrink-0 text-cyan" aria-hidden="true" />
+                    <span className="text-sm text-white/80">{t}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-auto pt-8">
+                <ButtonLink href={business.phoneHref} variant="onDark">
+                  <Phone className="size-4" aria-hidden="true" />
+                  {business.phone}
+                </ButtonLink>
+              </div>
+            </div>
+          </Reveal>
+
           {services.map((s, i) => (
-            <li key={s.slug}>
-              <Reveal delay={i * 0.05} className="h-full">
-                <Link
-                  href={`/services/${s.slug}`}
-                  className="card card-hover group flex h-full flex-col p-7 text-center"
+            <Reveal key={s.slug} delay={i * 0.04} className="h-full">
+              <Link
+                href={`/services/${s.slug}`}
+                className="card card-hover group relative flex h-full flex-col overflow-hidden p-6"
+              >
+                {/* accent rail, revealed on hover */}
+                <span
+                  className={cn(
+                    "absolute inset-x-0 top-0 h-1 origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100",
+                    accents[s.accent],
+                  )}
+                  aria-hidden="true"
+                />
+                <span
+                  className={cn(
+                    "grid size-12 place-items-center rounded-2xl text-white shadow-[0_10px_22px_-10px_rgb(10_35_82/0.7)] ring-1 ring-inset ring-white/25",
+                    accents[s.accent],
+                  )}
                 >
-                  <span
-                    className={cn(
-                      "mx-auto grid size-16 place-items-center rounded-full text-white shadow-[0_10px_22px_-10px_rgb(11_37_69/0.6)]",
-                      accents[s.accent],
-                    )}
-                  >
-                    <Icon name={s.icon} className="size-7" />
-                  </span>
-                  <h3 className="mt-5 text-xl">{s.name}</h3>
-                  <p className="mt-3 flex-1 leading-relaxed text-navy/65">{s.blurb}</p>
-                  <span className="mt-5 inline-flex items-center justify-center gap-2 font-display text-xs font-bold uppercase tracking-[0.14em] text-blue">
-                    Learn More
-                    <ArrowRight
-                      className="size-4 transition-transform group-hover:translate-x-1"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </Link>
-              </Reveal>
-            </li>
+                  <Icon name={s.icon} className="size-6" />
+                </span>
+                <h3 className="mt-5 text-lg">{s.name}</h3>
+                <p className="mt-2.5 flex-1 text-sm leading-relaxed text-navy/65">
+                  {s.blurb}
+                </p>
+                <span className="link-arrow mt-5">
+                  Learn more
+                  <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                </span>
+              </Link>
+            </Reveal>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
   );
@@ -311,7 +369,7 @@ function CleanAndTuneSection() {
 function WhyUsSection() {
   return (
     <section className="band-navy relative overflow-hidden">
-      <Wave fill="#f4f8fc" swell="#22c7f2" flip height={56} className="relative -mt-px" />
+      <Wave fill="#f2f7fd" swell="#2bd9ff" flip height={56} className="relative -mt-px" />
 
       <div className="shell relative grid items-center gap-12 py-16 md:py-20 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="relative mx-auto w-full max-w-md">
