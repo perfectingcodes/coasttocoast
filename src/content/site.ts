@@ -521,6 +521,8 @@ export interface Location {
   lat: number;
   lng: number;
   zips: string[];
+  /** Priority markets — surfaced first on the coverage map. */
+  focus?: boolean;
   /** Genuinely local context, drawn from the company's own city pages. */
   intro: string;
   neighborhoods: string[];
@@ -593,6 +595,7 @@ export const locations: Location[] = [
   },
   {
     slug: "naples",
+    focus: true,
     city: "Naples",
     county: "Collier County",
     permitAuthority: "Collier County Growth Management Department",
@@ -645,6 +648,7 @@ export const locations: Location[] = [
   },
   {
     slug: "bonita-springs",
+    focus: true,
     city: "Bonita Springs",
     county: "Lee County",
     permitAuthority: "City of Bonita Springs Building Department",
@@ -671,6 +675,7 @@ export const locations: Location[] = [
   },
   {
     slug: "estero",
+    focus: true,
     city: "Estero",
     county: "Lee County",
     permitAuthority: "Village of Estero Building Department",

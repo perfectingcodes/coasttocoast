@@ -88,14 +88,14 @@ export function Navbar() {
             {/* Badge lockup, no mascot — the mascot has its own moments further
                 down the page and the header reads cleaner without it. */}
             <img
-              src="/brand/logo-badge-sm.webp"
+              src="/brand/logo-badge.webp"
               srcSet="/brand/logo-badge-sm.webp 400w, /brand/logo-badge.webp 1000w"
-              sizes="(min-width: 1024px) 128px, 92px"
+              sizes="(min-width: 1280px) 168px, (min-width: 1024px) 150px, 108px"
               alt={`${business.name} — heating, cooling and mechanical`}
-              width={400}
-              height={369}
+              width={1000}
+              height={922}
               fetchPriority="high"
-              className="h-16 w-auto drop-shadow-[0_4px_10px_rgb(11_37_69/0.18)] sm:h-[4.5rem] lg:h-[5.5rem]"
+              className="h-[4.75rem] w-auto drop-shadow-[0_8px_18px_rgb(11_37_69/0.3)] sm:h-24 lg:h-[8.5rem] lg:-mb-12 lg:drop-shadow-[0_16px_30px_rgb(11_37_69/0.45)] xl:h-[9.5rem] xl:-mb-14"
             />
           </Link>
 
@@ -207,19 +207,13 @@ function NavLink({
   return (
     <Link
       href={href}
+      data-active={active}
       className={cn(
-        "relative px-3.5 py-2 font-display text-[0.82rem] font-bold uppercase tracking-wide transition-colors xl:text-sm",
+        "nav-underline px-3.5 py-2 font-display text-[0.82rem] font-extrabold uppercase tracking-wide transition-colors xl:text-sm",
         active ? "text-blue" : "text-navy/80 hover:text-blue",
       )}
     >
       {children}
-      <span
-        className={cn(
-          "absolute inset-x-3.5 -bottom-0.5 h-0.5 rounded-full bg-blue transition-opacity",
-          active ? "opacity-100" : "opacity-0",
-        )}
-        aria-hidden="true"
-      />
     </Link>
   );
 }
@@ -230,21 +224,15 @@ function ServicesMenu({ active }: { active: boolean }) {
     <div className="group relative">
       <Link
         href="/services"
+        data-active={active}
         className={cn(
-          "relative flex items-center gap-1 px-3.5 py-2 font-display text-[0.82rem] font-bold uppercase tracking-wide transition-colors xl:text-sm",
+          "nav-underline flex items-center gap-1 px-3.5 py-2 font-display text-[0.82rem] font-extrabold uppercase tracking-wide transition-colors xl:text-sm",
           active ? "text-blue" : "text-navy/80 hover:text-blue",
         )}
       >
         Services
         <ChevronDown
           className="size-3.5 transition-transform group-hover:rotate-180"
-          aria-hidden="true"
-        />
-        <span
-          className={cn(
-            "absolute inset-x-3.5 -bottom-0.5 h-0.5 rounded-full bg-blue transition-opacity",
-            active ? "opacity-100" : "opacity-0",
-          )}
           aria-hidden="true"
         />
       </Link>

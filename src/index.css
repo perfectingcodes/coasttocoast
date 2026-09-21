@@ -79,6 +79,41 @@
     text-wrap: balance;
   }
 
+  /* Brand-coloured text selection. A tiny thing that almost no template does,
+     and the first signal that somebody chose the details. */
+  ::selection {
+    background: var(--color-orange);
+    color: white;
+  }
+
+  /* List markers pick up the accent rather than defaulting to body colour. */
+  ::marker {
+    color: var(--color-cyan);
+  }
+
+  /* Scrollbar tuned to the palette on the platforms that allow it. */
+  * {
+    scrollbar-color: color-mix(in oklab, var(--color-navy) 35%, transparent)
+      transparent;
+    scrollbar-width: thin;
+  }
+  ::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+    background-color: color-mix(in oklab, var(--color-navy) 28%, transparent);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in oklab, var(--color-blue) 55%, transparent);
+  }
+
   :focus-visible {
     outline: 3px solid var(--color-cyan);
     outline-offset: 2px;
@@ -388,6 +423,28 @@
     color: var(--color-blue);
     border: 1px solid rgb(22 104 227 / 0.25);
     background: rgb(22 104 227 / 0.07);
+  }
+
+  /* Nav link underline that draws in from the left rather than snapping on. */
+  .nav-underline {
+    position: relative;
+  }
+  .nav-underline::after {
+    content: "";
+    position: absolute;
+    left: 0.875rem;
+    right: 0.875rem;
+    bottom: -0.15rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-blue);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .nav-underline:hover::after,
+  .nav-underline[data-active="true"]::after {
+    transform: scaleX(1);
   }
 
   /* -------------------------------------------------------------- marquee */

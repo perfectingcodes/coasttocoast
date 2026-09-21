@@ -2,6 +2,7 @@ import { ArrowRight, Phone } from "lucide-react";
 import { business } from "@/content/site";
 import { ButtonLink } from "@/components/ui/button";
 import { Wave } from "@/components/wave";
+import { cn } from "@/lib/utils";
 
 /**
  * Full-bleed sunset band that closes every page, lifted from the brand sheet:
@@ -12,15 +13,28 @@ export function CtaBand({
   title = "Let's Get Your Comfort Back on Track.",
   cta = "Schedule Service",
   href = "/contact",
+  mascot = false,
 }: {
   eyebrow?: string;
   title?: string;
   cta?: string;
   href?: string;
+  /** Let the mascot climb out of the bottom edge. One page at a time — it is
+   *  a signature moment, not a motif to repeat on all 76. */
+  mascot?: boolean;
 }) {
   return (
-    <section className="band-sunset relative overflow-hidden">
-      <SunsetScenery />
+    <section
+      className={cn(
+        "band-sunset relative",
+        // The section must stay overflow-visible for the break-out, so the
+        // decorative scenery clips in its own wrapper instead.
+        mascot ? "z-10" : "overflow-hidden",
+      )}
+    >
+      <div className={cn("absolute inset-0", mascot && "overflow-hidden")} aria-hidden="true">
+        <SunsetScenery />
+      </div>
 
       <div className="shell relative py-14 md:py-16">
         <div className="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
@@ -51,6 +65,19 @@ export function CtaBand({
 
       {/* Water line into the footer. */}
       <Wave fill="#0e2f6b" swell="#2bd9ff" height={56} className="relative" />
+
+      {mascot && (
+        <img
+          src="/brand/mascot.webp"
+          srcSet="/brand/mascot-sm.webp 360w, /brand/mascot.webp 900w"
+          sizes="(min-width: 1280px) 300px, 240px"
+          alt=""
+          width={900}
+          height={1513}
+          loading="lazy"
+          className="pointer-events-none absolute -bottom-16 right-6 z-20 hidden w-60 drop-shadow-[0_24px_48px_rgb(90_32_0/0.55)] lg:block xl:-bottom-20 xl:right-12 xl:w-72"
+        />
+      )}
     </section>
   );
 }

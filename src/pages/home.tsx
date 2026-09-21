@@ -3,7 +3,6 @@ import {
   ArrowRight,
   ArrowUpRight,
   Check,
-  MapPin,
   Phone,
   ShieldCheck,
   Zap,
@@ -24,6 +23,7 @@ import { Reveal } from "@/components/reveal";
 import { TestimonialCarousel } from "@/components/testimonial-carousel";
 import { GoogleBadge, GoogleReviewCard } from "@/components/google-reviews";
 import { CityMarquee, Pill, SeasonCard, TrustStrip } from "@/components/brand";
+import { ServiceMap } from "@/components/service-map";
 import { CtaBand } from "@/components/cta-band";
 import { FaqList } from "@/components/faq-list";
 import { ButtonLink } from "@/components/ui/button";
@@ -61,9 +61,9 @@ export default function Home() {
         <CleanAndTuneSection />
         <WhyUsSection />
         <TestimonialsSection />
-        <AreasSection />
+        <ServiceMap />
         <FaqSection />
-        <CtaBand />
+        <CtaBand mascot />
       </main>
 
       <Footer />
@@ -289,30 +289,49 @@ function ServicesSection() {
             <Reveal key={s.slug} delay={i * 0.04} className="h-full">
               <Link
                 href={`/services/${s.slug}`}
-                className="card card-hover group relative flex h-full flex-col overflow-hidden p-6"
+                className={cn(
+                  "group relative flex h-full flex-col overflow-hidden rounded-card border border-navy/10 bg-white p-6",
+                  "transition-[background-color,border-color,transform,box-shadow] duration-300",
+                  "hover:-translate-y-1 hover:border-navy hover:bg-navy hover:shadow-[var(--shadow-lift)]",
+                )}
               >
-                {/* accent rail, revealed on hover */}
+                {/* Index numeral, drawn as an outline so it sits behind the
+                    content rather than competing with it. */}
                 <span
-                  className={cn(
-                    "absolute inset-x-0 top-0 h-1 origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100",
-                    accents[s.accent],
-                  )}
+                  className="numeral-ghost pointer-events-none absolute -right-1 -top-4 select-none text-[5.5rem] transition-colors duration-300 group-hover:[-webkit-text-stroke-color:rgb(255_255_255/0.2)]"
                   aria-hidden="true"
-                />
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+
                 <span
                   className={cn(
-                    "grid size-12 place-items-center rounded-2xl text-white shadow-[0_10px_22px_-10px_rgb(10_35_82/0.7)] ring-1 ring-inset ring-white/25",
-                    accents[s.accent],
+                    "grid size-12 place-items-center rounded-xl ring-1 transition-colors duration-300",
+                    "bg-blue/8 text-blue ring-blue/20",
+                    "group-hover:bg-white/10 group-hover:text-cyan group-hover:ring-cyan/40",
                   )}
                 >
                   <Icon name={s.icon} className="size-6" />
                 </span>
-                <h3 className="mt-5 text-lg">{s.name}</h3>
-                <p className="mt-2.5 flex-1 text-sm leading-relaxed text-navy/65">
+
+                <h3 className="poster mt-6 text-xl leading-[1.05] text-navy transition-colors duration-300 group-hover:text-white">
+                  {s.name}
+                </h3>
+
+                <span
+                  className={cn(
+                    "mt-3.5 block h-[3px] w-9 rounded-full transition-all duration-300 group-hover:w-16",
+                    accents[s.accent],
+                  )}
+                  aria-hidden="true"
+                />
+
+                <p className="mt-4 flex-1 text-sm leading-relaxed text-navy/60 transition-colors duration-300 group-hover:text-white/70">
                   {s.blurb}
                 </p>
-                <span className="link-arrow mt-5">
-                  Learn more
+
+                <span className="link-arrow mt-6 text-blue transition-colors duration-300 group-hover:text-cyan">
+                  {s.short}
                   <ArrowUpRight className="size-3.5" aria-hidden="true" />
                 </span>
               </Link>
@@ -478,41 +497,6 @@ function TestimonialsSection() {
             className="relative mx-auto w-full max-w-md drop-shadow-[0_24px_48px_rgb(10_35_82/0.3)]"
           />
         </div>
-      </div>
-    </section>
-  );
-}
-
-/* ----------------------------------------------------------------- areas */
-
-function AreasSection() {
-  return (
-    <section className="bg-foam py-16 md:py-20">
-      <div className="shell">
-        <div className="text-center">
-          <p className="eyebrow">Areas we serve</p>
-          <h2 className="poster mt-4 text-[clamp(1.9rem,4.2vw,3rem)]">
-            Serving All of Southwest Florida
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl leading-relaxed text-navy/65">
-            Lee, Collier and Charlotte counties — licensed, insured and local to
-            every one of them.
-          </p>
-        </div>
-
-        <ul className="mx-auto mt-10 grid max-w-4xl gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {locations.map((l) => (
-            <li key={l.slug}>
-              <Link
-                href={`/locations/${l.slug}`}
-                className="card card-hover flex items-center gap-2.5 px-4 py-3.5 text-sm font-semibold text-navy transition-colors hover:text-blue"
-              >
-                <MapPin className="size-4 shrink-0 text-cyan" aria-hidden="true" />
-                {l.city}
-              </Link>
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );
