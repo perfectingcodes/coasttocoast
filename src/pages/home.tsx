@@ -14,6 +14,7 @@ import { Icon } from "@/components/icon";
 import { Wave } from "@/components/wave";
 import { Reveal } from "@/components/reveal";
 import { TestimonialCarousel } from "@/components/testimonial-carousel";
+import { GoogleReviewCard } from "@/components/google-reviews";
 import { CtaBand } from "@/components/cta-band";
 import { FaqList } from "@/components/faq-list";
 import { ButtonLink } from "@/components/ui/button";
@@ -382,6 +383,7 @@ function TestimonialsSection() {
           <div className="mt-8">
             <TestimonialCarousel />
           </div>
+          <GoogleReviewCard className="mt-10" />
         </div>
 
         <div className="relative">

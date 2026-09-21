@@ -15,6 +15,9 @@ import { CtaBand } from "@/components/cta-band";
 import { ButtonLink } from "@/components/ui/button";
 import {
   CityMatrix,
+  HeroTrust,
+  ServiceHeroAside,
+  toneFor,
   CredentialBody,
   LifespanBody,
   OfferBody,
@@ -82,14 +85,19 @@ export default function ServicePage({ slug }: { slug: string }) {
         title={service.name}
         lead={service.blurb}
         crumbs={crumbs}
+        tone={toneFor(kind)}
+        aside={<ServiceHeroAside service={service} />}
         hero={
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href={business.phoneHref} variant="onDark">
-              <Phone className="size-4" aria-hidden="true" />
-              {business.phone}
-            </ButtonLink>
-            <ButtonLink href="#quote">{heroCta(kind)}</ButtonLink>
-          </div>
+          <>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <ButtonLink href={business.phoneHref} variant="onDark">
+                <Phone className="size-4" aria-hidden="true" />
+                {business.phone}
+              </ButtonLink>
+              <ButtonLink href="#quote">{heroCta(kind)}</ButtonLink>
+            </div>
+            <HeroTrust />
+          </>
         }
       >
         {kind === "seasonal" && <SeasonalBody {...body} />}

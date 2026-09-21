@@ -139,6 +139,22 @@ Run `pnpm audit:seo` after a build to check the whole output — it fails the bu
 on truncated or duplicated metadata, missing or multiple H1s, unparseable or
 unlinked JSON-LD, and near-duplicate body copy across any generated page set.
 
+### Google reviews
+
+`googleReviews` in [`src/content/site.ts`](src/content/site.ts) drives the trust
+badges in the footer, on every service hero, in the home testimonial section and
+on the contact page.
+
+**`rating` and `count` are deliberately unset.** While they are undefined the
+site shows an honest "Reviews on Google" link and emits **no**
+`aggregateRating` — inventing a star rating is a Google policy violation and a
+manual-action risk. Once the real Google Business Profile is live, fill in
+`profileUrl`, `reviewUrl`, `rating` and `count` in that one place: the stars,
+the review count and the `aggregateRating` markup all switch on together.
+
+The four-colour Google "G" is used only to label links to the company's own
+profile, which is the ordinary sanctioned use.
+
 ### GEO (answer engines)
 
 - `llms.txt` is generated at build time from `site.ts` — business facts,
@@ -184,6 +200,19 @@ question:
 | Repairs & Maintenance | `offer` | The published $89 price card leads, with the 10-point checklist numbered beside it |
 | Commercial HVAC | `segments` | Four property-type panels, then a site-visit request on navy instead of a consumer form |
 | Indoor Air Quality | `symptoms` | A three-column symptom → cause → fix diagnostic table as the centrepiece |
+
+The hero differs too, not just the body. `SiteLayout` takes a `tone` (which
+recolours the wash over the shared coastal photograph) and an `aside` (a panel
+beside the hero copy):
+
+| Service | Tone | Hero aside |
+| --- | --- | --- |
+| Heating | warm — sunset orange | The four idle-system failures, as a checklist |
+| Cooling | cool — deep blue | The four climate stats |
+| Mechanical | steel — desaturated grey | All three DBPR licence numbers |
+| Repairs & Maintenance | offer — gold accent | The $89 price, large |
+| Commercial HVAC | deep — darkest, least consumer | Property-type chips |
+| Indoor Air Quality | aqua — green-leaning | The 45–55% humidity target |
 
 The process strip appears only on heating and cooling, where a first-time caller
 needs to know what happens next; elsewhere the page body *is* the process.

@@ -452,6 +452,38 @@ export const services: Service[] = [
 export const serviceBySlug = (slug: string) =>
   services.find((s) => s.slug === slug);
 
+// ----------------------------------------------------------- google reviews
+
+/**
+ * Google Business Profile.
+ *
+ * `rating` and `count` are deliberately left unset. While they are undefined
+ * the site shows a neutral "Reviews on Google" link and emits **no**
+ * `aggregateRating` in its structured data — inventing a star rating is a
+ * Google policy violation and a manual-action risk.
+ *
+ * ⚠️ CONFIRM — once the real profile is live, set `reviewUrl` to the profile's
+ * own review link and fill in `rating` and `count` from it. Stars, the count
+ * and the `aggregateRating` markup all switch on together, in this one place.
+ */
+export const googleReviews: {
+  /** Public profile — where "read our reviews" points. */
+  profileUrl: string;
+  /** Deep link that opens the write-a-review dialog. */
+  reviewUrl: string;
+  rating?: number;
+  count?: number;
+} = {
+  profileUrl: business.social.google,
+  reviewUrl: business.social.google,
+};
+
+/** True only when the client has supplied real, verifiable review figures. */
+export const hasReviewData = (): boolean =>
+  typeof googleReviews.rating === "number" &&
+  typeof googleReviews.count === "number" &&
+  googleReviews.count > 0;
+
 // ------------------------------------------------------------ featured offer
 
 /** The company's published maintenance offer, verbatim from coastswfl.com. */

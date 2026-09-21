@@ -1,5 +1,13 @@
 import { Head, type HeadTag } from "./head";
-import { business, cleanAndTune, locations, region, services } from "@/content/site";
+import {
+  business,
+  cleanAndTune,
+  googleReviews,
+  hasReviewData,
+  locations,
+  region,
+  services,
+} from "@/content/site";
 
 export interface SeoProps {
   title: string;
@@ -227,6 +235,20 @@ export function businessNode(): Record<string, unknown> {
       business.social.facebook,
       business.social.instagram,
     ],
+    // Emitted only when real Google figures have been supplied in
+    // content/site.ts. Never invent these — fabricated ratings are a Google
+    // policy violation and a manual-action risk.
+    ...(hasReviewData()
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: googleReviews.rating,
+            reviewCount: googleReviews.count,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        }
+      : {}),
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",

@@ -3,6 +3,7 @@ import { business, locations, region } from "@/content/site";
 import { SiteLayout } from "@/components/layout/site-layout";
 import { Section } from "@/components/section";
 import { QuoteForm } from "@/components/quote-form";
+import { GoogleReviewCard } from "@/components/google-reviews";
 import { Seo, breadcrumbNode } from "@/lib/seo";
 
 export default function Contact() {
@@ -67,6 +68,8 @@ export default function Contact() {
 
             <QuoteForm />
           </div>
+
+          <GoogleReviewCard className="mt-12" />
         </Section>
       </SiteLayout>
     </>

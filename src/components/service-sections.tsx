@@ -1,6 +1,8 @@
 import { Link } from "wouter";
 import { ArrowRight, Check, Phone, ShieldCheck } from "lucide-react";
 import { business, cleanAndTune, locations, type Service } from "@/content/site";
+import { GoogleBadge } from "@/components/google-reviews";
+import type { HeroTone } from "@/components/layout/site-layout";
 import { AnswerBlock, FactTable } from "@/components/answer";
 import { QuoteForm } from "@/components/quote-form";
 import { ButtonLink } from "@/components/ui/button";
@@ -88,19 +90,7 @@ export function LifespanBody({ service, answer }: BodyProps) {
 
   return (
     <>
-      {/* Numbers first — this is the page people arrive at asking
-          "how long should this last" and "is mine dying". */}
-      <section className="border-b border-navy/8 bg-white py-10 md:py-12">
-        <dl className="shell grid grid-cols-2 gap-8 lg:grid-cols-4">
-          {d.stats.map((st) => (
-            <div key={st.label}>
-              <dt className="display text-4xl text-blue md:text-5xl">{st.value}</dt>
-              <dd className="mt-2 text-sm leading-snug text-navy/60">{st.label}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-
+      {/* Stats live in the hero on this page. */}
       <section className="shell grid items-start gap-12 py-14 md:py-18 lg:grid-cols-[1.15fr_0.85fr]">
         <div>
           <AnswerBlock>{answer}</AnswerBlock>
@@ -173,24 +163,7 @@ export function CredentialBody({ service, answer }: BodyProps) {
 
   return (
     <>
-      {/* Licences lead, because that is what this page has to establish. */}
-      <section className="border-b border-navy/8 bg-white py-10">
-        <div className="shell flex flex-wrap items-center gap-x-10 gap-y-5">
-          <p className="flex items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.18em] text-blue">
-            <ShieldCheck className="size-4" aria-hidden="true" />
-            Florida licensed
-          </p>
-          {business.licenses.map((l) => (
-            <p key={l.number} className="leading-tight">
-              <span className="block font-display text-lg font-extrabold text-navy">
-                {l.number}
-              </span>
-              <span className="text-xs text-navy/55">{l.label}</span>
-            </p>
-          ))}
-        </div>
-      </section>
-
+      {/* Licences are established in the hero on this page. */}
       <section className="shell max-w-4xl py-14 md:py-18">
         <AnswerBlock>{answer}</AnswerBlock>
         <h2 className="mt-10 text-2xl md:text-3xl">{d.heading}</h2>
@@ -523,5 +496,176 @@ export function CityMatrix({ service }: { service: Service }) {
         ))}
       </ul>
     </section>
+  );
+}
+
+
+/* ------------------------------------------------------------ hero variants */
+
+/** Colour treatment of the hero, one per service. */
+export function toneFor(kind: Service["detail"]["kind"]): HeroTone {
+  switch (kind) {
+    case "seasonal":
+      return "warm";
+    case "lifespan":
+      return "cool";
+    case "credential":
+      return "steel";
+    case "offer":
+      return "offer";
+    case "segments":
+      return "deep";
+    case "symptoms":
+      return "aqua";
+  }
+}
+
+const panel =
+  "rounded-card border border-white/15 bg-white/8 p-6 backdrop-blur-sm";
+
+/**
+ * The panel beside the hero copy. Each service puts something different here —
+ * the stats, the licences, the price, the property types — so the heroes are
+ * not six recolourings of the same block.
+ */
+export function ServiceHeroAside({ service }: { service: Service }) {
+  const d = service.detail;
+
+  if (d.kind === "lifespan") {
+    return (
+      <div className={panel}>
+        <p className="font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
+          Cooling in this climate
+        </p>
+        <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-5">
+          {d.stats.map((st) => (
+            <div key={st.label}>
+              <dt className="display text-3xl text-white">{st.value}</dt>
+              <dd className="mt-1 text-xs leading-snug text-white/60">
+                {st.label}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    );
+  }
+
+  if (d.kind === "credential") {
+    return (
+      <div className={panel}>
+        <p className="flex items-center gap-2 font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
+          <ShieldCheck className="size-3.5" aria-hidden="true" />
+          Florida licensed &amp; insured
+        </p>
+        <ul className="mt-5 space-y-3.5">
+          {business.licenses.map((l) => (
+            <li key={l.number} className="flex items-baseline justify-between gap-4">
+              <span className="text-sm text-white/60">{l.label}</span>
+              <span className="font-display text-base font-extrabold text-white">
+                {l.number}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-5 border-t border-white/15 pt-4 text-xs leading-relaxed text-white/55">
+          Mechanical work is inspected work. We pull the permit and schedule the
+          inspection on every replacement.
+        </p>
+      </div>
+    );
+  }
+
+  if (d.kind === "offer") {
+    return (
+      <div className="rounded-card border border-gold/30 bg-white/10 p-7 text-center backdrop-blur-sm">
+        <p className="font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-gold">
+          Published price
+        </p>
+        <p className="display mt-3 text-6xl text-white">{cleanAndTune.price}</p>
+        <p className="mt-1 text-sm text-white/60">{cleanAndTune.unit}</p>
+        <ul className="mt-5 space-y-1.5 border-t border-white/15 pt-4 text-sm text-white/75">
+          <li>10-point service</li>
+          <li>Recommended twice a year</li>
+          <li>Flat price, no surprises</li>
+        </ul>
+      </div>
+    );
+  }
+
+  if (d.kind === "segments") {
+    return (
+      <div className={panel}>
+        <p className="font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
+          Property types we cover
+        </p>
+        <ul className="mt-5 flex flex-wrap gap-2">
+          {d.segments.map((seg) => (
+            <li
+              key={seg.name}
+              className="rounded-full border border-white/20 px-3.5 py-1.5 text-xs font-semibold text-white/85"
+            >
+              {seg.name}
+            </li>
+          ))}
+        </ul>
+        <p className="mt-5 border-t border-white/15 pt-4 text-xs leading-relaxed text-white/55">
+          Scheduled around your opening hours, with the documentation boards and
+          managers actually need.
+        </p>
+      </div>
+    );
+  }
+
+  if (d.kind === "symptoms") {
+    return (
+      <div className={panel}>
+        <p className="font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
+          Target indoor humidity
+        </p>
+        <p className="display mt-3 text-5xl text-white">45–55%</p>
+        <p className="mt-3 text-sm leading-relaxed text-white/65">
+          Above 60% for any length of time is where mould starts in a Florida
+          home. In this climate the air quality problem is almost always
+          moisture, not dust.
+        </p>
+      </div>
+    );
+  }
+
+  // seasonal — heating
+  if (d.kind === "seasonal") {
+    return (
+      <div className={panel}>
+        <p className="font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-gold">
+          Checked on every maintenance visit
+        </p>
+        <ul className="mt-5 space-y-2.5">
+          {d.items.map((it) => (
+            <li key={it.title} className="flex items-start gap-2.5">
+              <Check className="mt-1 size-3.5 shrink-0 text-gold" aria-hidden="true" />
+              <span className="text-sm leading-snug text-white/80">{it.title}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-5 border-t border-white/15 pt-4 text-xs leading-relaxed text-white/55">
+          All four are visible months before the first cold night.
+        </p>
+      </div>
+    );
+  }
+
+  return null;
+}
+
+/** Trust row under the hero buttons — same on every service page. */
+export function HeroTrust() {
+  return (
+    <div className="mt-6 flex flex-wrap items-center gap-3">
+      <GoogleBadge onDark />
+      <span className="text-xs text-white/55">
+        Licensed #{business.license} · Flat-rate pricing
+      </span>
+    </div>
   );
 }

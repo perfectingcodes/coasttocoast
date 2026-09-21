@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "wouter";
 import { Clock, Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
 import { business, locations, services } from "@/content/site";
+import { GoogleBadge } from "@/components/google-reviews";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -89,7 +90,9 @@ export function Footer() {
               </li>
             </ul>
 
-            <ul className="mt-6 flex items-center gap-3">
+            <GoogleBadge className="mt-6" onDark />
+
+            <ul className="mt-4 flex items-center gap-3">
               {[
                 { href: business.social.facebook, label: "Facebook", Icon: Facebook },
                 { href: business.social.instagram, label: "Instagram", Icon: Instagram },
