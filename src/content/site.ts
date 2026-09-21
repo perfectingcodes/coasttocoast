@@ -752,12 +752,6 @@ export const locationBySlug = (slug: string) =>
 
 // --------------------------------------------------------------------- proof
 
-/** Hero trust strip — matches the three badges in the brand design. */
-export const heroBadges = [
-  { icon: "shield", title: "Licensed", sub: "& Insured" },
-  { icon: "star", title: "5-Star", sub: "Rated" },
-  { icon: "zap", title: "24/7", sub: "Emergency Service" },
-] as const;
 
 export const whyUs = [
   {

@@ -12,7 +12,7 @@ import {
   business,
   cleanAndTune,
   generalFaqs,
-  heroBadges,
+
   locations,
   services,
   whyUs,
@@ -75,9 +75,8 @@ export default function Home() {
 
 function Hero() {
   return (
-    <section className="band-navy grain grid-lines relative isolate overflow-hidden">
-      {/* Photograph sits under the brand ground, not the other way round —
-          it reads as texture and light, never as stock imagery. */}
+    <section className="band-navy grain grid-lines relative isolate z-10">
+      {/* Photograph sits under the brand ground as texture and light. */}
       <picture>
         <source media="(min-width: 1024px)" srcSet="/brand/hero-coast.webp" />
         <source media="(min-width: 640px)" srcSet="/brand/hero-coast-1200.webp" />
@@ -85,88 +84,88 @@ function Hero() {
           src="/brand/hero-coast-760.webp"
           alt=""
           fetchPriority="high"
-          className="absolute inset-0 -z-20 size-full object-cover object-center opacity-30 mix-blend-luminosity"
+          className="absolute inset-0 -z-20 size-full object-cover object-center opacity-25 mix-blend-luminosity"
         />
       </picture>
-
-      <div className="shell relative grid items-center gap-12 pb-10 pt-12 md:pt-16 lg:grid-cols-[1.02fr_0.98fr] lg:gap-8 lg:pb-14">
-        <div>
-          <Pill icon={<ShieldCheck className="size-3.5 text-cyan" />}>
-            Licensed in Florida · {business.license}
-          </Pill>
-
-          <h1 className="display mt-6 text-[clamp(2.6rem,9.4vw,5rem)] text-white">
-            <span className="block">Heating</span>
-            <span className="block text-chill">Cooling</span>
-            <span className="block">
-              Mechanical<span className="text-orange">.</span>
-            </span>
-          </h1>
-
-          <p className="mt-6 max-w-md text-lg leading-relaxed text-white/80">
-            Trusted HVAC experts keeping Southwest Florida comfortable — from{" "}
-            <span className="swoosh font-semibold text-white">coast to coast</span>.
-          </p>
-
-          <div className="mt-9 flex flex-wrap gap-3">
-            <ButtonLink href="/contact" size="lg">
-              Schedule Service
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </ButtonLink>
-            <ButtonLink href="/contact#quote" variant="outline" size="lg">
-              Get a Free Quote
-            </ButtonLink>
-            <ButtonLink href="/financing" variant="gold" size="lg">
-              Financing
-            </ButtonLink>
-          </div>
-
-          <ul className="mt-9 flex flex-wrap gap-x-7 gap-y-4">
-            {heroBadges.map((b) => (
-              <li key={b.title} className="flex items-center gap-2.5">
-                <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-white/8 text-cyan ring-1 ring-cyan/30">
-                  <Icon name={b.icon} className="size-4" />
-                </span>
-                <span className="font-display text-[0.68rem] font-extrabold uppercase leading-tight tracking-[0.1em] text-white">
-                  {b.title}
-                  <span className="block font-bold text-white/55">{b.sub}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-7">
-            <GoogleBadge onDark />
-          </div>
-        </div>
-
-        {/* ------------------------------- lockup with floating data cards */}
-        <div className="relative hidden lg:block">
-          <div
-            className="absolute inset-8 -z-10 rounded-full bg-cyan/12 blur-3xl"
-            aria-hidden="true"
-          />
-          <img
-            src="/brand/logo-mascot.webp"
-            alt={`${business.name} — heating, cooling, mechanical and air quality`}
-            width={1200}
-            height={1034}
-            fetchPriority="high"
-            className="mx-auto w-full max-w-lg drop-shadow-[0_28px_56px_rgb(5_15_38/0.75)]"
-          />
-
-          <SeasonCard className="absolute -right-3 top-2 w-56 xl:w-60" />
-
-          <p className="script mt-1 text-right text-4xl text-white drop-shadow-[0_3px_10px_rgb(5_15_38/0.8)] xl:text-5xl">
-            {business.promise}
-            <span className="ml-auto mt-1 block h-1 w-44 rounded-full bg-gradient-to-r from-gold to-orange" />
-          </p>
-        </div>
+      {/* Ember low-left, cold light high-right — the temperature axis the
+          whole brand runs on. Clipped in their own wrapper: the section itself
+          must stay overflow-visible so the mascot can break out, and without
+          this the blurred circles push the document wider than the viewport. */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+        aria-hidden="true"
+      >
+        <div className="absolute -bottom-32 -left-40 size-[42rem] rounded-full bg-ember/20 blur-[120px]" />
+        <div className="absolute -right-32 -top-40 size-[38rem] rounded-full bg-cyan/20 blur-[120px]" />
       </div>
 
-      <CityMarquee className="relative mt-4 border-t border-white/10 pb-6 pt-4" />
+      <div className="shell relative pt-8 md:pt-10">
+        <Pill icon={<ShieldCheck className="size-3.5 text-cyan" />}>
+          Licensed in Florida · {business.license}
+        </Pill>
+        <SeasonCard className="absolute right-5 top-8 hidden w-56 lg:block xl:w-60 md:right-8" />
 
-      <Wave fill="white" swell="#2bd9ff" height={80} className="relative -mb-px" />
+        {/* Type is sized to feel cropped by the viewport, not centred in it. */}
+        <h1 className="poster mt-5 text-[clamp(3rem,9.4vw,7.25rem)] text-white">
+          <span className="block">Heating</span>
+          <span className="block text-chill">Cooling</span>
+          <span className="block">
+            Mechanical<span className="text-orange">.</span>
+          </span>
+        </h1>
+
+        <div className="mt-7 grid gap-8 lg:grid-cols-[minmax(0,25rem)_1fr] lg:items-end">
+          <div className="relative z-10">
+            <p className="script text-3xl text-gold">{business.promise}</p>
+            <div className="thermal-rule mt-3 w-28" aria-hidden="true" />
+            <p className="mt-5 text-lg leading-relaxed text-white/80">
+              Trusted HVAC experts keeping Southwest Florida comfortable — from{" "}
+              <span className="swoosh font-semibold text-white">coast to coast</span>.
+            </p>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <ButtonLink href="/contact" size="lg">
+                Schedule Service
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </ButtonLink>
+              <ButtonLink href="/contact#quote" variant="outline" size="lg">
+                Free Quote
+              </ButtonLink>
+            </div>
+
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <GoogleBadge onDark />
+              <ButtonLink href="/financing" variant="gold" size="sm">
+                Financing
+              </ButtonLink>
+            </div>
+          </div>
+
+          {/* Mascot hangs past the section edge into the strip below — the
+              one element allowed to break the frame. */}
+          <div className="relative hidden lg:block">
+            <img
+              src="/brand/logo-mascot.webp"
+              alt={`${business.name} — heating, cooling, mechanical and air quality`}
+              width={1200}
+              height={1034}
+              fetchPriority="high"
+              className="break-out relative -mb-20 ml-auto w-full max-w-md drop-shadow-[0_30px_60px_rgb(5_15_38/0.85)] xl:-mb-24 xl:max-w-lg"
+            />
+          </div>
+        </div>
+
+        {/* Mobile keeps the lockup, without the break-out. */}
+        <img
+          src="/brand/logo-mascot-sm.webp"
+          alt=""
+          width={480}
+          height={413}
+          className="mx-auto mt-10 w-full max-w-xs drop-shadow-[0_20px_40px_rgb(5_15_38/0.8)] lg:hidden"
+        />
+      </div>
+
+      <CityMarquee className="relative mt-10 border-t border-white/10 pb-5 pt-4 lg:mt-16" />
     </section>
   );
 }
@@ -231,7 +230,7 @@ function ServicesSection() {
         <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <div>
             <p className="eyebrow">Our Services</p>
-            <h2 className="mt-4 text-3xl leading-[1.08] md:text-[2.9rem]">
+            <h2 className="poster mt-4 text-[clamp(2.1rem,5vw,3.5rem)]">
               Complete HVAC solutions
               <span className="block text-ember">for homes &amp; businesses</span>
             </h2>
@@ -324,7 +323,7 @@ function CleanAndTuneSection() {
     <section className="bg-foam py-16 md:py-20">
       <div className="shell">
         <div className="card overflow-hidden lg:grid lg:grid-cols-[0.85fr_1.15fr]">
-          <div className="band-navy relative flex flex-col justify-center overflow-hidden p-8 text-white md:p-10">
+          <div className="band-navy grain relative flex flex-col justify-center p-8 text-white md:p-10">
             <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.22em] text-cyan">
               Limited-time offer
             </p>
@@ -344,6 +343,17 @@ function CleanAndTuneSection() {
                 <ArrowRight className="size-4" aria-hidden="true" />
               </ButtonLink>
             </div>
+
+            <img
+              src="/brand/mascot-service.webp"
+              srcSet="/brand/mascot-service-sm.webp 450w, /brand/mascot-service.webp 900w"
+              sizes="220px"
+              alt=""
+              width={900}
+              height={890}
+              loading="lazy"
+              className="pointer-events-none absolute -bottom-4 -right-6 hidden w-56 drop-shadow-[0_18px_36px_rgb(5_15_38/0.6)] lg:block"
+            />
           </div>
 
           <div className="p-8 md:p-10">
@@ -401,7 +411,7 @@ function WhyUsSection() {
           <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.24em] text-cyan">
             Why choose {business.name}
           </p>
-          <h2 className="mt-3 text-3xl leading-tight text-white md:text-[2.6rem]">
+          <h2 className="poster mt-4 text-[clamp(2rem,4.6vw,3.25rem)] text-white">
             Florida's HVAC Partner
             <span className="block italic text-cyan">You Can Count On</span>
           </h2>
@@ -435,7 +445,7 @@ function TestimonialsSection() {
       <div className="shell grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
           <p className="eyebrow">What our customers say</p>
-          <h2 className="mt-3 text-3xl leading-tight md:text-[2.6rem]">
+          <h2 className="poster mt-4 text-[clamp(2rem,4.6vw,3.25rem)]">
             Real People. Real Comfort.
           </h2>
           <div className="mt-8">
@@ -450,14 +460,14 @@ function TestimonialsSection() {
             aria-hidden="true"
           />
           <img
-            src="/brand/photo-van.webp"
-            srcSet="/brand/photo-van-640.webp 640w, /brand/photo-van.webp 1024w"
-            sizes="(min-width: 1024px) 520px, 92vw"
-            alt="A wrapped Coast to Coast Air service van on the road in Southwest Florida"
-            width={1024}
-            height={688}
+            src="/brand/mascot-bust.webp"
+            srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
+            sizes="(min-width: 1024px) 460px, 80vw"
+            alt=""
+            width={800}
+            height={800}
             loading="lazy"
-            className="relative w-full rounded-card object-cover shadow-[0_24px_48px_-18px_rgb(11_37_69/0.45)]"
+            className="relative mx-auto w-full max-w-md drop-shadow-[0_24px_48px_rgb(10_35_82/0.3)]"
           />
         </div>
       </div>
@@ -473,7 +483,7 @@ function AreasSection() {
       <div className="shell">
         <div className="text-center">
           <p className="eyebrow">Areas we serve</p>
-          <h2 className="mt-3 text-3xl md:text-[2.4rem]">
+          <h2 className="poster mt-4 text-[clamp(1.9rem,4.2vw,3rem)]">
             Serving All of Southwest Florida
           </h2>
           <p className="mx-auto mt-4 max-w-2xl leading-relaxed text-navy/65">
@@ -508,7 +518,7 @@ function FaqSection() {
       <div className="shell max-w-3xl">
         <div className="text-center">
           <p className="eyebrow">Common questions</p>
-          <h2 className="mt-3 text-3xl md:text-[2.4rem]">Answers Before You Call</h2>
+          <h2 className="poster mt-4 text-[clamp(1.9rem,4.2vw,3rem)]">Answers Before You Call</h2>
         </div>
         <FaqList faqs={generalFaqs} />
         <p className="mt-8 text-center text-navy/65">

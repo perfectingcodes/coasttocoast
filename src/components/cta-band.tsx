@@ -28,7 +28,7 @@ export function CtaBand({
             <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.22em] text-white/80">
               {eyebrow}
             </p>
-            <h2 className="mt-3 text-3xl leading-tight text-white drop-shadow-[0_2px_10px_rgb(120_40_0/0.35)] md:text-[2.6rem]">
+            <h2 className="poster mt-4 text-[clamp(2.1rem,5.2vw,3.75rem)] text-white drop-shadow-[0_3px_14px_rgb(120_40_0/0.4)]">
               {title}
             </h2>
           </div>

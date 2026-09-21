@@ -118,13 +118,16 @@ export function SiteLayout({
                   {eyebrow}
                 </p>
               )}
-              <h1 className="mt-4 text-4xl leading-[1.06] text-white md:text-5xl">
+              <h1 className="poster mt-5 text-[clamp(2.5rem,6.2vw,4.5rem)] text-white">
                 {title}
               </h1>
               {lead && (
-                <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/75">
-                  {lead}
-                </p>
+                <>
+                  <div className="thermal-rule mt-6 w-24" aria-hidden="true" />
+                  <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/80">
+                    {lead}
+                  </p>
+                </>
               )}
               {hero}
             </div>

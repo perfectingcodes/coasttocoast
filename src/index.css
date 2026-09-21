@@ -36,6 +36,10 @@
 
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     sans-serif;
+  /* Anton carries the huge display type — condensed, heavy, and the closest
+     free match to the logo's athletic lettering. Montserrat stays for UI
+     labels and headings where Anton would be too shouty. */
+  --font-poster: "Anton", "Arial Narrow", ui-sans-serif, sans-serif;
   --font-display: "Montserrat", ui-sans-serif, system-ui, sans-serif;
   --font-script: "Caveat", ui-serif, cursive;
 
@@ -241,6 +245,28 @@
     opacity: 0.55;
   }
 
+  /* The site's loudest voice. Deliberately oversized and tightly leaded, so
+     a headline reads as a graphic object rather than as a sentence. */
+  .poster {
+    font-family: var(--font-poster);
+    font-weight: 400;
+    letter-spacing: -0.012em;
+    line-height: 0.82;
+    text-transform: uppercase;
+  }
+
+  /* Outlined variant — used for the word that is *not* the emphasis, so the
+     filled word carries all the weight. */
+  .poster-outline {
+    color: transparent;
+    -webkit-text-stroke: 2px rgb(255 255 255 / 0.45);
+  }
+  @media (min-width: 1024px) {
+    .poster-outline {
+      -webkit-text-stroke-width: 3px;
+    }
+  }
+
   .display {
     font-family: var(--font-display);
     font-weight: 900;
@@ -284,6 +310,54 @@
     border-radius: 999px;
     background: linear-gradient(90deg, var(--color-gold), var(--color-orange));
     transform: rotate(-0.6deg);
+  }
+
+  /* ------------------------------------------------------------ structure */
+
+  /* Angled section edges. Horizontal rules everywhere is what makes a page
+     read as a stack of boxes; a shallow diagonal breaks that without
+     costing legibility. */
+  .cut-b {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 3.5vw), 0 100%);
+  }
+  .cut-t {
+    clip-path: polygon(0 3.5vw, 100% 0, 100% 100%, 0 100%);
+  }
+  .cut-both {
+    clip-path: polygon(0 3.5vw, 100% 0, 100% calc(100% - 3.5vw), 0 100%);
+  }
+
+  /* Hot-to-cold rule. The brand is literally about temperature, so the
+     divider says so. */
+  .thermal-rule {
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(
+      90deg,
+      var(--color-ember) 0%,
+      var(--color-orange) 18%,
+      var(--color-gold) 34%,
+      var(--color-cyan) 66%,
+      var(--color-blue) 100%
+    );
+  }
+
+  /* Oversized numeral behind a heading — depth without another photograph. */
+  .numeral-ghost {
+    font-family: var(--font-poster);
+    line-height: 0.7;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgb(10 35 82 / 0.12);
+    user-select: none;
+  }
+  .numeral-ghost-light {
+    -webkit-text-stroke-color: rgb(255 255 255 / 0.16);
+  }
+
+  /* Lets an element hang past its section into the next one. */
+  .break-out {
+    position: relative;
+    z-index: 20;
   }
 
   /* --------------------------------------------------------------- badges */
