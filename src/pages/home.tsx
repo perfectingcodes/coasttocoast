@@ -4,6 +4,7 @@ import {
   ArrowUpRight,
   Check,
   Phone,
+  Sparkles,
   Zap,
 } from "lucide-react";
 import {
@@ -20,7 +21,7 @@ import { Icon } from "@/components/icon";
 import { Wave } from "@/components/wave";
 import { Reveal } from "@/components/reveal";
 import { TestimonialCarousel } from "@/components/testimonial-carousel";
-import { GoogleReviewCard } from "@/components/google-reviews";
+import { GoogleBadge, GoogleReviewCard } from "@/components/google-reviews";
 import { CityMarquee, Pill, TrustStrip } from "@/components/brand";
 import { ServiceMap } from "@/components/service-map";
 import { CtaBand } from "@/components/cta-band";
@@ -36,6 +37,7 @@ const accents: Record<Service["accent"], string> = {
   cyan: "bg-gradient-to-br from-cyan to-blue",
   slate: "bg-gradient-to-br from-slateish to-navy",
   blue: "bg-gradient-to-br from-blue-bright to-blue",
+  gold: "bg-gradient-to-br from-gold to-orange",
 };
 
 export default function Home() {
@@ -120,8 +122,21 @@ function Hero() {
             </a>
           </div>
 
-          {/* Three quiet proofs on a hairline, not a wall of badges. */}
-          <dl className="mt-12 flex flex-wrap gap-x-10 gap-y-5 border-t border-white/12 pt-7">
+          <div className="mt-6">
+            <GoogleBadge onDark />
+          </div>
+
+          {/* Proof row: the seal anchors it so it reads as credentials rather
+              than as three loose numbers. */}
+          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-6 border-t border-white/12 pt-7">
+            <img
+              src="/brand/badge-locally-owned.webp"
+              alt="Locally owned and operated"
+              width={640}
+              height={632}
+              className="size-20 shrink-0 drop-shadow-[0_10px_22px_rgb(5_15_38/0.7)]"
+            />
+            <dl className="flex flex-wrap gap-x-9 gap-y-5">
             {[
               { v: String(locations.length), k: "Cities served" },
               { v: "24/7", k: "Emergency line" },
@@ -134,13 +149,24 @@ function Hero() {
                 </dd>
               </div>
             ))}
-          </dl>
+            </dl>
+          </div>
         </div>
 
         {/* The coverage illustration anchors the hero. It says "coast to
             coast" literally, names the focus markets, and — unlike the mascot
             lockup — does not repeat the wordmark already in the header. */}
         <div className="relative">
+          <img
+            src="/brand/mascot-bust.webp"
+            srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
+            sizes="220px"
+            alt=""
+            width={800}
+            height={849}
+            loading="eager"
+            className="absolute -bottom-4 -left-2 z-10 hidden w-44 drop-shadow-[0_20px_40px_rgb(5_15_38/0.85)] lg:block xl:-left-6 xl:w-52"
+          />
           <img
             src="/brand/map-florida.webp"
             srcSet="/brand/map-florida-sm.webp 550w, /brand/map-florida.webp 1100w"
@@ -169,42 +195,34 @@ function Hero() {
  */
 function AtAGlance() {
   return (
-    <section className="border-b border-navy/8 bg-white py-10 md:py-12">
-      <div className="shell grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
-        <p data-answer="" className="text-lg leading-relaxed text-navy/80">
+    <section className="border-b border-navy/8 bg-white py-9">
+      <div className="shell grid items-center gap-8 lg:grid-cols-[1.35fr_1fr]">
+        {/* Kept tight: one sentence carrying the keywords and the speakable
+            answer, not a five-line block of body copy. */}
+        <p data-answer="" className="text-[0.95rem] leading-relaxed text-navy/70">
           <strong className="font-display font-extrabold text-navy">
             {business.name}
           </strong>{" "}
-          is a licensed, insured HVAC contractor based in {business.city},
-          Florida, serving {locations.length} cities across Lee, Collier and
-          Charlotte counties. We handle heating, cooling, mechanical, commercial
-          HVAC and indoor air quality, hold Florida Mechanical Contractor licence
-          #{business.license}, quote flat rates before work begins, and answer{" "}
-          {business.emergency.toLowerCase()} at{" "}
-          <a href={business.phoneHref} className="font-semibold text-blue">
-            {business.phone}
-          </a>
-          . Routine maintenance is the {cleanAndTune.price} {cleanAndTune.name},
-          a 10-point service.
+          is a licensed, insured HVAC contractor in {business.city}, Florida,
+          serving {locations.length} cities across Lee, Collier and Charlotte
+          counties — heating, cooling, mechanical, commercial HVAC and indoor
+          air quality, under Florida Mechanical Contractor licence #
+          {business.license}.
         </p>
 
-        <dl className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4 lg:grid-cols-2">
-          {[
-            { k: "Licence", v: `#${business.license}` },
-            { k: "Cities served", v: String(locations.length) },
-            { k: "Clean & Tune", v: cleanAndTune.price },
-            { k: "Emergency", v: "24/7" },
-          ].map((r) => (
-            <div key={r.k}>
-              <dt className="font-display text-[0.65rem] font-bold uppercase tracking-[0.16em] text-navy/45">
-                {r.k}
-              </dt>
-              <dd className="mt-1 font-display text-lg font-extrabold text-blue">
-                {r.v}
-              </dd>
-            </div>
+        {/* The licences themselves, which is the part worth designing. */}
+        <ul className="flex flex-wrap gap-x-8 gap-y-3 lg:justify-end">
+          {business.licenses.map((l) => (
+            <li key={l.number} className="leading-tight">
+              <span className="block font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-navy/40">
+                {l.label}
+              </span>
+              <span className="mt-0.5 block font-mono text-sm font-semibold text-blue">
+                {l.number}
+              </span>
+            </li>
           ))}
-        </dl>
+        </ul>
       </div>
     </section>
   );
@@ -266,7 +284,7 @@ function ServicesSection() {
             </div>
           </Reveal>
 
-          {services.map((s, i) => (
+          {services.filter((x) => x.featured).map((s, i) => (
             <Reveal key={s.slug} delay={i * 0.04} className="h-full">
               <Link
                 href={`/services/${s.slug}`}
@@ -287,9 +305,8 @@ function ServicesSection() {
 
                 <span
                   className={cn(
-                    "grid size-12 place-items-center rounded-xl ring-1 transition-colors duration-300",
-                    "bg-blue/8 text-blue ring-blue/20",
-                    "group-hover:bg-white/10 group-hover:text-cyan group-hover:ring-cyan/40",
+                    "grid size-12 place-items-center rounded-xl text-white shadow-[0_10px_20px_-10px_rgb(10_35_82/0.8)] ring-1 ring-inset ring-white/25 transition-transform duration-300 group-hover:scale-105",
+                    accents[s.accent],
                   )}
                 >
                   <Icon name={s.icon} className="size-6" />
@@ -319,6 +336,33 @@ function ServicesSection() {
             </Reveal>
           ))}
         </div>
+
+        {/* The rest of the catalogue, still linked from the home page. */}
+        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-navy/10 pt-7">
+          <span className="font-display text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-navy/45">
+            Also from us
+          </span>
+          {services
+            .filter((x) => !x.featured)
+            .map((x) => (
+              <Link
+                key={x.slug}
+                href={`/services/${x.slug}`}
+                className="group inline-flex items-center gap-2 font-display text-sm font-extrabold text-navy transition-colors hover:text-blue"
+              >
+                <span className={cn("size-2 rounded-full", accents[x.accent])} aria-hidden="true" />
+                {x.name}
+                <ArrowUpRight
+                  className="size-3.5 text-blue transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  aria-hidden="true"
+                />
+              </Link>
+            ))}
+          <Link href="/services" className="link-arrow ml-auto">
+            All services
+            <ArrowUpRight className="size-3.5" aria-hidden="true" />
+          </Link>
+        </div>
       </div>
     </section>
   );
@@ -328,56 +372,84 @@ function ServicesSection() {
 
 function CleanAndTuneSection() {
   return (
-    <section className="bg-foam py-16 md:py-20">
+    <section className="band-navy grain relative isolate z-10 py-16 md:py-20">
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+        aria-hidden="true"
+      >
+        <div className="absolute -right-32 top-1/4 size-[32rem] rounded-full bg-gold/14 blur-[120px]" />
+      </div>
+
       <div className="shell">
-        <div className="card overflow-hidden lg:grid lg:grid-cols-[0.85fr_1.15fr]">
-          <div className="band-navy grain relative flex flex-col justify-center p-8 text-white md:p-10">
-            <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.22em] text-cyan">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-14">
+          {/* ------------------------------------------------ the offer */}
+          <div className="xl:pl-52">
+            <span className="pill pill-dark border-gold/40 bg-gold/12 text-gold">
+              <Sparkles className="size-3.5" aria-hidden="true" />
               Limited-time offer
-            </p>
-            <p className="mt-4 flex items-baseline gap-2">
-              <span className="display text-6xl text-white md:text-7xl">
+            </span>
+
+            <div className="mt-6 flex items-end gap-3">
+              <span className="poster text-[clamp(3.5rem,9vw,5.5rem)] leading-[0.8] text-white">
                 {cleanAndTune.price}
               </span>
-              <span className="text-sm font-semibold text-white/60">
+              <span className="pb-2 font-display text-sm font-bold text-white/55">
                 {cleanAndTune.unit}
               </span>
+            </div>
+
+            <h2 className="poster mt-3 text-[clamp(1.75rem,3.4vw,2.5rem)] text-white">
+              {cleanAndTune.name}
+            </h2>
+            <div className="thermal-rule mt-5 w-24" aria-hidden="true" />
+            <p className="mt-5 max-w-md leading-relaxed text-white/70">
+              {cleanAndTune.summary}
             </p>
-            <h2 className="mt-3 text-2xl text-white md:text-3xl">{cleanAndTune.name}</h2>
-            <p className="mt-4 leading-relaxed text-white/70">{cleanAndTune.summary}</p>
-            <div className="mt-7">
-              <ButtonLink href="/contact" size="md">
+
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <ButtonLink href="/contact" size="lg">
                 Book a Clean &amp; Tune
                 <ArrowRight className="size-4" aria-hidden="true" />
               </ButtonLink>
+              <a
+                href={business.phoneHref}
+                className="font-display text-sm font-extrabold text-white/75 underline decoration-white/25 underline-offset-4 transition-colors hover:text-cyan hover:decoration-cyan"
+              >
+                or call {business.phone}
+              </a>
             </div>
-
-            <img
-              src="/brand/mascot-service.webp"
-              srcSet="/brand/mascot-service-sm.webp 450w, /brand/mascot-service.webp 900w"
-              sizes="220px"
-              alt=""
-              width={900}
-              height={890}
-              loading="lazy"
-              className="pointer-events-none absolute -bottom-4 -right-6 hidden w-56 drop-shadow-[0_18px_36px_rgb(5_15_38/0.6)] lg:block"
-            />
           </div>
 
-          <div className="p-8 md:p-10">
-            <p className="eyebrow">What's included</p>
-            <h3 className="mt-3 text-xl md:text-2xl">A 10-point service, every visit</h3>
-            <ul className="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-2">
-              {cleanAndTune.checklist.map((item) => (
-                <li key={item} className="flex items-start gap-2.5 text-sm leading-relaxed">
-                  <Check className="mt-0.5 size-4 shrink-0 text-cyan" aria-hidden="true" />
-                  <span className="text-navy/75">{item}</span>
+          {/* --------------------------------------------- the checklist */}
+          <div className="glass edge-lit p-6 md:p-8">
+            <p className="font-display text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+              Every visit · all ten points
+            </p>
+            <ol className="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+              {cleanAndTune.checklist.map((item, i) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-white/10 font-display text-[0.65rem] font-extrabold text-cyan ring-1 ring-cyan/30">
+                    {i + 1}
+                  </span>
+                  <span className="text-sm leading-relaxed text-white/80">{item}</span>
                 </li>
               ))}
-            </ul>
+            </ol>
           </div>
         </div>
       </div>
+
+      {/* Mascot stands on the section edge, whole — not cropped into a corner. */}
+      <img
+        src="/brand/mascot-service.webp"
+        srcSet="/brand/mascot-service-sm.webp 450w, /brand/mascot-service.webp 900w"
+        sizes="200px"
+        alt=""
+        width={900}
+        height={904}
+        loading="lazy"
+        className="pointer-events-none absolute bottom-10 left-[max(1rem,calc((100vw-78rem)/2+2rem))] hidden w-44 drop-shadow-[0_22px_44px_rgb(5_15_38/0.7)] xl:block"
+      />
     </section>
   );
 }

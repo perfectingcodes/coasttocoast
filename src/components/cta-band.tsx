@@ -63,21 +63,28 @@ export function CtaBand({
         </div>
       </div>
 
-      {/* Water line into the footer. */}
-      <Wave fill="#0e2f6b" swell="#2bd9ff" height={56} className="relative" />
-
+      {/* Mascot is painted *before* the wave so the water crosses his chest —
+          he reads as surfacing through it rather than pasted on top. */}
       {mascot && (
         <img
-          src="/brand/mascot.webp"
-          srcSet="/brand/mascot-sm.webp 360w, /brand/mascot.webp 900w"
-          sizes="(min-width: 1280px) 300px, 240px"
+          src="/brand/mascot-bust.webp"
+          srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
+          sizes="(min-width: 1280px) 260px, 216px"
           alt=""
-          width={900}
-          height={1513}
+          width={800}
+          height={849}
           loading="lazy"
-          className="pointer-events-none absolute -bottom-16 right-6 z-20 hidden w-60 drop-shadow-[0_24px_48px_rgb(90_32_0/0.55)] lg:block xl:-bottom-20 xl:right-12 xl:w-72"
+          className="pointer-events-none absolute bottom-6 left-[53%] z-0 hidden w-44 drop-shadow-[0_18px_34px_rgb(90_32_0/0.5)] xl:block 2xl:w-52"
         />
       )}
+
+      {/* Water line into the footer. */}
+      <Wave
+        fill="#0e2f6b"
+        swell="#2bd9ff"
+        height={56}
+        className="relative z-10"
+      />
     </section>
   );
 }

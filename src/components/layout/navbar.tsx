@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { ChevronDown, Clock, Facebook, Instagram, Menu, Phone, X } from "lucide-react";
 import { business, nav, services } from "@/content/site";
+import { buttonClass } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 /** Circled "G" for the Google reviews link — deliberately not Google's mark. */
@@ -118,10 +119,7 @@ export function Navbar() {
           <div className="flex items-center gap-2">
             <a
               href={business.phoneHref}
-              className={cn(
-                "hidden items-center gap-2 rounded-full bg-orange px-5 py-3 font-display text-sm",
-                "font-bold text-white shadow-[var(--shadow-orange)] transition-colors hover:bg-orange-light md:inline-flex",
-              )}
+              className={cn(buttonClass("primary", "md"), "hidden md:inline-flex")}
             >
               <Phone className="size-4" aria-hidden="true" />
               {business.phone}
@@ -130,7 +128,7 @@ export function Navbar() {
             <a
               href={business.phoneHref}
               aria-label={`Call ${business.phone}`}
-              className="grid size-11 place-items-center rounded-full bg-orange text-white md:hidden"
+              className="grid size-11 place-items-center rounded-full bg-gradient-to-b from-orange-light to-ember text-white shadow-[var(--shadow-orange)] ring-1 ring-inset ring-white/25 md:hidden"
             >
               <Phone className="size-5" aria-hidden="true" />
             </a>

@@ -126,13 +126,15 @@ export interface Service {
   seoShort?: string;
   /** Drives which layout this service page renders. */
   detail: ServiceDetail;
+  /** Shown as a card on the home page. The rest are linked below the grid. */
+  featured?: boolean;
   /** One line under the card title. */
   blurb: string;
   /** Two or three sentences opening the service page. */
   intro: string;
   icon: IconName;
   /** Accent treatment on the service card icon. */
-  accent: "orange" | "cyan" | "slate" | "blue";
+  accent: "orange" | "cyan" | "slate" | "blue" | "gold";
   bullets: string[];
   faqs: { q: string; a: string }[];
 }
@@ -140,6 +142,7 @@ export interface Service {
 export const services: Service[] = [
   {
     slug: "heating",
+    featured: true,
     name: "Heating Services",
     short: "Heating",
     blurb:
@@ -190,6 +193,7 @@ export const services: Service[] = [
   },
   {
     slug: "cooling",
+    featured: true,
     name: "Cooling Services",
     short: "Cooling",
     blurb:
@@ -291,6 +295,7 @@ export const services: Service[] = [
   },
   {
     slug: "repairs-maintenance",
+    featured: true,
     name: "Repairs & Maintenance",
     short: "Repairs & Maintenance",
     seoShort: "AC Maintenance",
@@ -390,6 +395,7 @@ export const services: Service[] = [
   },
   {
     slug: "indoor-air-quality",
+    featured: true,
     name: "Indoor Air Quality",
     short: "Air Quality",
     blurb:
@@ -397,7 +403,7 @@ export const services: Service[] = [
     intro:
       "In this climate the real air quality problem is humidity. Coastal moisture clogs condensate drains faster than inland homes and feeds mold growth in ductwork, so we measure humidity and fix the cause — drainage, duct leakage, a system that short-cycles — instead of selling you a filter.",
     icon: "wind",
-    accent: "cyan",
+    accent: "gold",
     detail: {
       kind: "symptoms",
       heading: "Symptom, cause, and what we actually do",
