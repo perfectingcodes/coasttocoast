@@ -496,6 +496,15 @@ export const hasReviewData = (): boolean =>
 export const cleanAndTune = {
   name: "AC Clean & Tune",
   price: "$89",
+  /**
+   * ⚠️ CONFIRM — the standard price this promotion discounts from.
+   *
+   * The site derives a struck-through price and a "save $X" figure from this.
+   * Advertising a saving against a price the business never actually charged
+   * is false advertising, so this must be the real standard rate. Set it to
+   * `undefined` and the sale framing disappears, leaving a plain $89 offer.
+   */
+  regularPrice: "$189" as string | undefined,
   unit: "per visit",
   summary:
     "A 10-point maintenance service that keeps your system efficient, catches failures early and protects your manufacturer warranty.",

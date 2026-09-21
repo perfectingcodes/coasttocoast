@@ -165,6 +165,15 @@
       linear-gradient(180deg, #071a3d 0%, #050f26 100%);
   }
 
+  /* Hero ground: sunset, but deep enough to carry white type and a navy
+     vignette at the edges so it does not glare. */
+  .band-ember {
+    background:
+      radial-gradient(70% 60% at 82% 8%, rgb(255 196 71 / 0.55) 0%, transparent 62%),
+      radial-gradient(60% 55% at 6% 92%, rgb(10 35 82 / 0.55) 0%, transparent 65%),
+      linear-gradient(152deg, #ff7a1a 0%, #f2541a 44%, #c2350c 100%);
+  }
+
   /* Sunset CTA band, straight off the logo's horizon. */
   .band-sunset {
     background:

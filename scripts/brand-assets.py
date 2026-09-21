@@ -176,7 +176,7 @@ def main():
         "logo-mascot.png", "logo-badge.png", "mascot.png",
         "badge-locally-owned.png", "hero-coast.jpg",
         "mascot-bust.png", "mascot-service.png",
-        "avatar-husky.png", "map-florida.png",
+        "avatar-husky.png", "map-florida.png", "hero-map-mascot.png",
         "photo-hvac-unit.jpg", "footer-scene.png",
         "photo-home.jpg", "photo-ac-detail.jpg",
         "photo-condenser.png", "photo-van.png",
@@ -211,6 +211,8 @@ def main():
     emit(knockout(SRC / "avatar-husky.png"), "avatar-husky", 256, png=True)
     emit(knockout(SRC / "map-florida.png"), "map-florida", 1100, png=True)
     emit(knockout(SRC / "map-florida.png"), "map-florida-sm", 550)
+    emit(knockout(SRC / "hero-map-mascot.png"), "hero-map-mascot", 1200, png=True)
+    emit(knockout(SRC / "hero-map-mascot.png"), "hero-map-mascot-sm", 600)
 
     print("writing photography...")
     # Hero runs full-bleed, so it needs a large source; the rest sit in panels.

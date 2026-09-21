@@ -59,10 +59,10 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <TrustStrip />
-        <HowItWorks />
         <ServicesSection />
         <CleanAndTuneSection />
         <WhyUsSection />
+        <HowItWorks />
         <TestimonialsSection />
         <ServiceMap />
         <FaqSection />
@@ -78,31 +78,30 @@ export default function Home() {
 
 function Hero() {
   return (
-    <section className="band-navy grain relative isolate overflow-hidden">
+    <section className="band-ember grain relative isolate overflow-hidden">
       <div
         className="pointer-events-none absolute inset-0 -z-10"
         aria-hidden="true"
       >
-        <div className="absolute -left-40 top-1/3 size-[36rem] rounded-full bg-ember/14 blur-[130px]" />
-        <div className="absolute -right-32 -top-32 size-[38rem] rounded-full bg-cyan/16 blur-[130px]" />
+        <div className="absolute -left-40 bottom-0 size-[34rem] rounded-full bg-navy/35 blur-[130px]" />
       </div>
 
-      <div className="shell relative grid items-center gap-12 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:gap-10 lg:py-20">
+      <div className="shell relative grid items-center gap-10 py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:gap-8 lg:py-16">
         <div className="max-w-xl">
-          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-display text-[0.7rem] font-extrabold uppercase tracking-[0.26em] text-cyan">
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-display text-[0.7rem] font-extrabold uppercase tracking-[0.26em] text-navy">
             Southwest Florida HVAC
-            <span className="h-3 w-px bg-white/25" aria-hidden="true" />
-            <span className="text-white/45">Lic. {business.license}</span>
+            <span className="h-3 w-px bg-navy/30" aria-hidden="true" />
+            <span className="text-white/75">Lic. {business.license}</span>
           </p>
 
-          <h1 className="poster mt-6 text-[clamp(2.9rem,6.4vw,5.1rem)] text-white">
+          <h1 className="poster mt-6 text-[clamp(2.9rem,6.4vw,5.1rem)] text-white drop-shadow-[0_3px_16px_rgb(120_40_0/0.35)]">
             Comfort
             <br />
-            lives <span className="text-chill">here</span>
-            <span className="text-orange">.</span>
+            lives <span className="text-navy">here</span>
+            <span className="text-navy">.</span>
           </h1>
 
-          <p className="mt-7 max-w-lg text-lg leading-relaxed text-white/75">
+          <p className="mt-7 max-w-lg text-lg leading-relaxed text-white/90">
             Home AC repair, replacement and maintenance across Lee, Collier and
             Charlotte counties. You get a{" "}
             <span className="font-semibold text-white">
@@ -112,16 +111,12 @@ function Hero() {
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
-            <ButtonLink href="/contact" size="lg">
+            <ButtonLink href="/contact" variant="secondary" size="lg">
               Book Service Today
               <ArrowRight className="size-4" aria-hidden="true" />
             </ButtonLink>
 
-            {/* Mascot as the face of the promise, not a sticker on the art. */}
-            <a
-              href={business.phoneHref}
-              className="group flex items-center gap-3"
-            >
+            <a href={business.phoneHref} className="group flex items-center gap-3">
               <span className="relative">
                 <img
                   src="/brand/avatar-husky.webp"
@@ -131,15 +126,15 @@ function Hero() {
                   className="size-12 object-contain transition-transform duration-300 group-hover:-translate-y-0.5"
                 />
                 <span
-                  className="absolute -right-0.5 bottom-0.5 size-3 rounded-full bg-cyan ring-2 ring-navy"
+                  className="absolute -right-0.5 bottom-0.5 size-3 rounded-full bg-cyan ring-2 ring-white/70"
                   aria-hidden="true"
                 />
               </span>
               <span className="leading-tight">
-                <span className="block font-display text-[0.6rem] font-extrabold uppercase tracking-[0.18em] text-cyan">
+                <span className="block font-display text-[0.6rem] font-extrabold uppercase tracking-[0.18em] text-navy">
                   A person answers · 24/7
                 </span>
-                <span className="block font-display text-lg font-extrabold text-white transition-colors group-hover:text-cyan">
+                <span className="block font-display text-lg font-extrabold text-white transition-colors group-hover:text-navy">
                   {business.phone}
                 </span>
               </span>
@@ -147,108 +142,101 @@ function Hero() {
           </div>
 
           <div className="mt-7">
-            <GoogleBadge onDark />
+            <GoogleBadge />
           </div>
 
-          {/* Proof row: the seal anchors it so it reads as credentials rather
-              than as three loose numbers. */}
-          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-6 border-t border-white/12 pt-7">
+          <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-6 border-t border-white/25 pt-7">
             <img
               src="/brand/badge-locally-owned.webp"
               alt="Locally owned and operated"
               width={640}
               height={632}
-              className="size-20 shrink-0 drop-shadow-[0_10px_22px_rgb(5_15_38/0.7)]"
+              className="size-20 shrink-0 drop-shadow-[0_10px_22px_rgb(120_40_0/0.45)]"
             />
             <dl className="flex flex-wrap gap-x-9 gap-y-5">
-            {[
-              { v: String(locations.length), k: "Cities served" },
-              { v: "24/7", k: "Emergency line" },
-              { v: cleanAndTune.price, k: "Clean & Tune" },
-            ].map((p) => (
-              <div key={p.k}>
-                <dt className="poster text-2xl text-white">{p.v}</dt>
-                <dd className="mt-1 font-display text-[0.62rem] font-extrabold uppercase tracking-[0.18em] text-white/45">
-                  {p.k}
-                </dd>
-              </div>
-            ))}
+              {[
+                { v: String(locations.length), k: "Cities served" },
+                { v: "24/7", k: "Emergency line" },
+                { v: cleanAndTune.price, k: "Clean & Tune" },
+              ].map((p) => (
+                <div key={p.k}>
+                  <dt className="poster text-2xl text-white">{p.v}</dt>
+                  <dd className="mt-1 font-display text-[0.62rem] font-extrabold uppercase tracking-[0.18em] text-navy/70">
+                    {p.k}
+                  </dd>
+                </div>
+              ))}
             </dl>
           </div>
         </div>
 
-        {/* The coverage illustration anchors the hero. It says "coast to
-            coast" literally, names the focus markets, and — unlike the mascot
-            lockup — does not repeat the wordmark already in the header. */}
         <div className="relative">
           <img
-            src="/brand/map-florida.webp"
-            srcSet="/brand/map-florida-sm.webp 550w, /brand/map-florida.webp 1100w"
-            sizes="(min-width: 1024px) 560px, 88vw"
-            alt="Coast to Coast Air serves Southwest Florida, with focus markets in Estero, Bonita Springs and Naples"
-            width={1100}
-            height={949}
+            src="/brand/hero-map-mascot.webp"
+            srcSet="/brand/hero-map-mascot-sm.webp 600w, /brand/hero-map-mascot.webp 1200w"
+            sizes="(min-width: 1024px) 560px, 92vw"
+            alt="Coast to Coast Air serves Southwest Florida, with focus markets in Naples, Estero and Bonita Springs"
+            width={1200}
+            height={1064}
             fetchPriority="high"
-            className="mx-auto w-full max-w-lg drop-shadow-[0_30px_60px_rgb(5_15_38/0.8)]"
+            className="mx-auto w-full max-w-lg drop-shadow-[0_30px_60px_rgb(120_40_0/0.4)]"
           />
         </div>
       </div>
 
-      <CityMarquee className="relative border-t border-white/10 pb-5 pt-4" />
+      <CityMarquee className="relative border-t border-white/20 pb-5 pt-4" />
     </section>
   );
 }
 
-/* ------------------------------------------------------------- at a glance */
-
 /**
- * One self-contained paragraph stating who we are, what we do, where, under
- * which licence and at what price — written to survive being lifted out of the
- * page by a search snippet or an answer engine. `data-answer` is what the
- * page's speakable schema points at.
- */
-/**
- * What happens after you call. A homeowner with no cooling wants to know the
- * shape of the next few hours — not a paragraph about the company. The
- * speakable answer rides on the intro line so the GEO surface survives.
+ * What happens after you call. Laid out as a run along a single track rather
+ * than four equal boxes — four identical cards in a row is the shape that
+ * reads as filler.
  */
 function HowItWorks() {
   return (
-    <section className="relative bg-white py-14 md:py-16">
-      <div className="shell">
-        <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
-          <div>
-            <p className="eyebrow">What happens next</p>
-            <h2 className="poster mt-4 text-[clamp(1.75rem,3.6vw,2.6rem)]">
-              Four steps. No surprises.
-            </h2>
-          </div>
-          <p data-answer="" className="max-w-md text-sm leading-relaxed text-navy/60">
-            {business.name} is a licensed, insured HVAC contractor in{" "}
-            {business.city}, Florida, serving {locations.length} cities across
-            Lee, Collier and Charlotte counties under Florida Mechanical
-            Contractor licence #{business.license}.
-          </p>
+    <section className="band-abyss grain relative overflow-hidden py-16 md:py-20">
+      <div className="shell relative">
+        <div className="max-w-2xl">
+          <p className="eyebrow text-cyan">What happens next</p>
+          <h2 className="poster mt-4 text-[clamp(2rem,4.4vw,3.1rem)] text-white">
+            From your call to
+            <span className="block text-chill">cold air, in four.</span>
+          </h2>
         </div>
 
-        <ol className="mt-10 grid gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="relative mt-14 grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          {/* The track the steps sit on. */}
+          <span
+            className="pointer-events-none absolute left-0 right-0 top-6 hidden h-px bg-gradient-to-r from-orange via-cyan to-blue opacity-45 lg:block"
+            aria-hidden="true"
+          />
+
           {process.map((step, i) => (
             <li key={step.title} className="relative">
-              <div className="flex items-center gap-3">
-                <span className="poster text-2xl text-blue">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="h-px flex-1 bg-navy/12" aria-hidden="true" />
-              </div>
-              <h3 className="mt-4 font-display text-base font-extrabold text-navy">
+              <span className="relative z-10 flex size-12 items-center justify-center rounded-full bg-navy-deep font-display text-base font-extrabold text-cyan ring-1 ring-cyan/35">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 className="mt-6 font-display text-lg font-extrabold text-white">
                 {step.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-navy/60">
+              <p className="mt-2.5 text-sm leading-relaxed text-white/60">
                 {step.body}
               </p>
             </li>
           ))}
         </ol>
+
+        <p
+          data-answer=""
+          className="mt-14 max-w-3xl border-t border-white/10 pt-7 text-sm leading-relaxed text-white/50"
+        >
+          {business.name} is a licensed, insured HVAC contractor in{" "}
+          {business.city}, Florida, serving {locations.length} cities across Lee,
+          Collier and Charlotte counties under Florida Mechanical Contractor
+          licence #{business.license}.
+        </p>
       </div>
     </section>
   );
@@ -397,23 +385,38 @@ function ServicesSection() {
 /* ----------------------------------------------------------- clean & tune */
 
 function CleanAndTuneSection() {
+  // Derived, never hard-coded, so the sash cannot drift from the prices shown.
+  const savings = (() => {
+    const num = (v?: string) => Number((v ?? "").replace(/[^0-9.]/g, ""));
+    const was = num(cleanAndTune.regularPrice);
+    const now = num(cleanAndTune.price);
+    return was > now ? `$${Math.round(was - now)}` : null;
+  })();
+
   return (
     <section className="relative isolate z-10 bg-white py-16 md:py-20">
       <div className="shell">
         {/* A framed, ribboned panel rather than a flat band — it has to read as
             a promotion, not as another section. */}
-        <div className="band-navy grain relative overflow-hidden rounded-[2rem] px-6 py-12 shadow-[0_40px_80px_-30px_rgb(5_15_38/0.6)] ring-1 ring-white/12 md:px-12 md:py-14">
+        <div className="band-navy grain relative overflow-hidden rounded-[2rem] px-6 pb-12 pt-20 shadow-[0_40px_80px_-30px_rgb(5_15_38/0.6)] ring-1 ring-white/12 md:px-12 md:pb-14 md:pt-24">
           <div
             className="pointer-events-none absolute -right-24 -top-24 size-[28rem] rounded-full bg-gold/16 blur-[110px]"
             aria-hidden="true"
           />
-          {/* Corner ribbon */}
-          <div
-            className="pointer-events-none absolute -right-16 top-7 w-64 rotate-45 bg-gradient-to-r from-orange-light to-ember py-1.5 text-center font-display text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-white shadow-lg"
-            aria-hidden="true"
-          >
-            10-Point Service
-          </div>
+          {/* Sale banner across the full width of the panel, so it reads over
+              both the offer and the checklist rather than clipping one corner. */}
+          {savings && (
+            <div
+              className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-center gap-3 bg-gradient-to-r from-gold via-orange-light to-ember py-2.5 shadow-[0_10px_26px_-10px_rgb(120_40_0/0.8)]"
+              aria-hidden="true"
+            >
+              <Sparkles className="size-3.5 text-white" />
+              <span className="font-display text-[0.7rem] font-extrabold uppercase tracking-[0.22em] text-white sm:text-sm">
+                Limited time · Save {savings}
+              </span>
+              <Sparkles className="size-3.5 text-white" />
+            </div>
+          )}
 
         <div className="relative grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-14">
           {/* ------------------------------------------------ the offer */}
@@ -430,6 +433,11 @@ function CleanAndTuneSection() {
               <span className="pb-2 font-display text-sm font-bold text-white/55">
                 {cleanAndTune.unit}
               </span>
+              {cleanAndTune.regularPrice && (
+                <span className="pb-2.5 font-display text-lg font-bold text-white/40 line-through">
+                  {cleanAndTune.regularPrice}
+                </span>
+              )}
             </div>
 
             <h2 className="poster mt-3 text-[clamp(1.75rem,3.4vw,2.5rem)] text-white">
@@ -608,7 +616,21 @@ function TestimonialsSection() {
           ))}
         </ul>
 
-        <GoogleReviewCard className="mt-6" />
+        <div className="card mt-6 flex flex-col items-center gap-6 overflow-hidden p-6 md:flex-row md:p-0">
+          <img
+            src="/brand/mascot-bust.webp"
+            srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
+            sizes="(min-width: 768px) 200px, 160px"
+            alt=""
+            width={800}
+            height={849}
+            loading="lazy"
+            className="w-40 shrink-0 self-end md:-mb-4 md:ml-6 md:w-48"
+          />
+          <div className="flex-1 md:py-6 md:pr-6">
+            <GoogleReviewCard className="border-0 bg-transparent shadow-none ring-0 !p-0" />
+          </div>
+        </div>
       </div>
     </section>
   );

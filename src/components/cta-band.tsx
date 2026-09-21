@@ -27,16 +27,16 @@ export function CtaBand({
     <section
       className={cn(
         "band-sunset relative",
-        // The section must stay overflow-visible for the break-out, so the
-        // decorative scenery clips in its own wrapper instead.
-        mascot ? "z-10" : "overflow-hidden",
+        // Always clipped: the mascot is meant to be cut by the section edge,
+        // and without this his lower body reappeared over the footer.
+        "overflow-hidden",
       )}
     >
-      <div className={cn("absolute inset-0", mascot && "overflow-hidden")} aria-hidden="true">
+      <div className="absolute inset-0" aria-hidden="true">
         <SunsetScenery />
       </div>
 
-      <div className={cn("shell relative py-14 md:py-16", mascot && "pb-44 sm:pb-48 md:pb-56 xl:pb-64")}>
+      <div className={cn("shell relative py-14 md:py-16", mascot && "pb-52 sm:pb-60 md:pb-64 xl:pb-72")}>
         <div className="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl">
             <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.22em] text-white/80">
@@ -128,12 +128,12 @@ function SurfacingMascot() {
       <img
         src="/brand/mascot-bust.webp"
         srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
-        sizes="(min-width: 1280px) 320px, (min-width: 768px) 272px, 208px"
+        sizes="(min-width: 1280px) 368px, (min-width: 768px) 320px, 240px"
         alt=""
         width={800}
         height={849}
         loading="lazy"
-        className="w-52 translate-y-[6%] sm:w-60 md:w-68 xl:w-80"
+        className="w-60 translate-y-[7%] sm:w-72 md:w-80 xl:w-[23rem]"
       />
     </div>
   );
