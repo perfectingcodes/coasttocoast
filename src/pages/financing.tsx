@@ -5,6 +5,7 @@ import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { CtaBand } from "@/components/cta-band";
 import { ButtonLink } from "@/components/ui/button";
+import { PaymentCalculator } from "@/components/payment-calculator";
 import { Seo, breadcrumbNode } from "@/lib/seo";
 
 export default function Financing() {
@@ -31,6 +32,10 @@ export default function Financing() {
           { name: "Financing", path: "/financing" },
         ]}
       >
+        <section className="shell py-14 md:py-16">
+          <PaymentCalculator />
+        </section>
+
         <Section>
           <ul className="grid gap-6 md:grid-cols-3">
             {financing.points.map((p, i) => (

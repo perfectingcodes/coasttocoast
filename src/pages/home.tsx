@@ -116,8 +116,10 @@ function Hero() {
 
         <div className="mt-7 grid gap-8 lg:grid-cols-[minmax(0,25rem)_1fr] lg:items-end">
           <div className="relative z-10">
-            <p className="script text-3xl text-gold">{business.promise}</p>
-            <div className="thermal-rule mt-3 w-28" aria-hidden="true" />
+            <p className="brandline text-[1.35rem] text-gold md:text-2xl">
+              {business.promise}
+            </p>
+            <div className="thermal-rule mt-3.5 w-28" aria-hidden="true" />
             <p className="mt-5 text-lg leading-relaxed text-white/80">
               Trusted HVAC experts keeping Southwest Florida comfortable — from{" "}
               <span className="swoosh font-semibold text-white">coast to coast</span>.
@@ -125,18 +127,23 @@ function Hero() {
 
             <div className="mt-6 flex flex-wrap gap-3">
               <ButtonLink href="/contact" size="lg">
-                Schedule Service
+                Book My Service
                 <ArrowRight className="size-4" aria-hidden="true" />
               </ButtonLink>
-              <ButtonLink href="/contact#quote" variant="outline" size="lg">
-                Free Quote
+              <ButtonLink href={business.phoneHref} variant="outline" size="lg">
+                <Phone className="size-4" aria-hidden="true" />
+                Call {business.phone}
               </ButtonLink>
             </div>
+
+            <p className="mt-4 text-sm text-white/55">
+              No call centre · No obligation · Permits pulled on every replacement
+            </p>
 
             <div className="mt-5 flex flex-wrap items-center gap-3">
               <GoogleBadge onDark />
               <ButtonLink href="/financing" variant="gold" size="sm">
-                Financing
+                Financing Options
               </ButtonLink>
             </div>
           </div>

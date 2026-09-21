@@ -29,7 +29,8 @@ export function Footer() {
               <span className="block text-cyan">Florida Comfort.</span>
               <span className="block text-white">Coast to Coast.</span>
             </p>
-            <p className="script mt-4 text-2xl text-gold">{business.promise}</p>
+            <p className="brandline mt-5 text-xl text-gold">{business.promise}</p>
+            <div className="thermal-rule mt-3 w-24" aria-hidden="true" />
           </div>
 
           <FooterColumn title="Quick Links">
