@@ -30,9 +30,11 @@ const variants: Record<Variant, string> = {
     "border-2 border-cyan/60 text-white hover:border-cyan hover:bg-cyan/12 hover:shadow-[var(--shadow-cyan)]",
   onDark: "bg-white text-navy shadow-[0_12px_30px_-12px_rgb(5_15_38/0.7)] hover:bg-cyan-light",
   ghost: "text-navy border-2 border-navy/15 hover:border-blue/45 hover:bg-blue/5",
-  /** Bright action for the orange hero — deliberately lighter than
-   *  `secondary`, which bottoms out too dark against ember. */
-  sky: "bg-gradient-to-b from-[#4aa8ff] to-[#1668e3] text-white ring-1 ring-inset ring-white/40 shadow-[0_14px_34px_-10px_rgb(22_104_227/0.9)]",
+  /** The hero action on ember. Flat electric blue, not a gradient: gradients
+   *  bottom out dark against orange and the button stops reading as one
+   *  colour. #1266f0 is the brightest blue that still clears AA for white
+   *  label text at this size. */
+  sky: "bg-[#1266f0] text-white ring-2 ring-inset ring-white/45 shadow-[0_16px_38px_-10px_rgb(10_60_170/0.85)] hover:bg-[#1f7bff]",
   /** Financing and secondary offers. */
   gold: "bg-gradient-to-b from-gold to-orange text-navy ring-1 ring-inset ring-white/30 shadow-[0_10px_28px_-10px_rgb(255_176_32/0.7)]",
 };

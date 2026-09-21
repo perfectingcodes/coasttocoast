@@ -76,6 +76,18 @@ export default function Home() {
 
 /* ------------------------------------------------------------------- hero */
 
+/**
+ * Hero proof points. Every line is a promise the rest of the site already
+ * makes — same-day booking, a written price before work starts, and the
+ * published Clean & Tune rate — so the strip reads as the start of the job,
+ * not as a list of statistics.
+ */
+const HERO_PROOF = [
+  { v: "Same-day", k: "Appointments" },
+  { v: "Flat price", k: "Before we start" },
+  { v: cleanAndTune.price, k: "Clean & Tune" },
+] as const;
+
 function Hero() {
   return (
     <section className="band-ember grain relative isolate overflow-hidden">
@@ -90,8 +102,13 @@ function Hero() {
           <h1 className="poster mt-4 text-[clamp(2.9rem,6.6vw,5.2rem)] text-white drop-shadow-[0_4px_18px_rgb(150_50_0/0.4)]">
             Comfort
             <br />
-            lives <span className="text-ice">here</span>
-            <span className="text-gold">.</span>
+            lives{" "}
+            <span className="text-pop-blue">
+              here
+              {/* The stop inherits the keyline so it reads as part of the
+                  word rather than as a stray gold square beside it. */}
+              <span className="text-gold">.</span>
+            </span>
           </h1>
 
           <p className="mt-5 max-w-lg text-[1.05rem] leading-relaxed text-white/90">
@@ -134,30 +151,36 @@ function Hero() {
             </a>
           </div>
 
-          {/* Proof and social sit on one line so the block stays compact. */}
-          <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-4 border-t border-white/25 pt-5">
+          {/* What a homeowner actually wants to know before they call: how
+              fast, what it costs, and who they are dealing with. Counting
+              cities and counties is a map fact, not a reason to book. */}
+          <div className="mt-7 flex items-center gap-x-5 gap-y-4 border-t border-white/25 pt-5 sm:flex-wrap sm:gap-x-6">
             <img
               src="/brand/badge-locally-owned.webp"
               alt="Locally owned and operated"
               width={640}
               height={632}
-              className="size-16 shrink-0 drop-shadow-[0_8px_18px_rgb(150_50_0/0.45)]"
+              className="size-14 shrink-0 drop-shadow-[0_8px_18px_rgb(150_50_0/0.45)] sm:size-[4.25rem]"
             />
-            <dl className="flex flex-wrap gap-x-7 gap-y-3">
-              {[
-                { v: String(locations.length), k: "Cities" },
-                { v: "24/7", k: "Emergency" },
-                { v: cleanAndTune.price, k: "Clean & Tune" },
-              ].map((p) => (
-                <div key={p.k}>
-                  <dt className="poster text-xl text-white">{p.v}</dt>
-                  <dd className="mt-0.5 font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/70">
-                    {p.k}
-                  </dd>
+            {/* Stacked on a phone, one divided line from `sm` up — three
+                poster numerals side by side do not survive a 375px column. */}
+            <dl className="grid min-w-0 flex-1 gap-y-2 sm:flex sm:flex-none sm:flex-wrap sm:items-center sm:gap-x-5">
+              {HERO_PROOF.map((p, i) => (
+                <div key={p.k} className="flex items-center gap-5">
+                  {i > 0 && (
+                    <span className="hidden h-8 w-px bg-white/30 sm:block" aria-hidden="true" />
+                  )}
+                  <div className="flex items-baseline gap-2.5 sm:block">
+                    <dt className="poster text-[1.2rem] leading-none text-white sm:text-[1.35rem]">
+                      {p.v}
+                    </dt>
+                    <dd className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-gold sm:mt-1">
+                      {p.k}
+                    </dd>
+                  </div>
                 </div>
               ))}
             </dl>
-            <GoogleBadge className="ml-auto" />
           </div>
         </div>
 
@@ -177,6 +200,11 @@ function Hero() {
             fetchPriority="high"
             className="mx-auto w-full max-w-lg drop-shadow-[0_28px_56px_rgb(150_50_0/0.45)]"
           />
+
+          {/* Social proof rides on the artwork rather than in the promise
+              strip: the strip is what we commit to, this is what other people
+              say, and keeping them apart buys the hero a line of height. */}
+          <GoogleBadge className="absolute bottom-0 left-0 shadow-[0_14px_30px_-10px_rgb(90_30_0/0.6)] lg:bottom-4" />
         </div>
       </div>
 
@@ -621,36 +649,114 @@ function FaqSection() {
  * along a single gradient track rather than four equal boxes, which is the
  * shape that reads as filler.
  */
+/**
+ * Four accent stops taken off the brand's thermal rule: the run starts hot
+ * where the customer is (a house that will not cool) and ends cold where the
+ * job does. Each badge borrows the colour of the point it sits at.
+ */
+const STEP_ACCENT = ["#ff6a13", "#ffb020", "#2bd9ff", "#5cb4ff"] as const;
+
+/** Softens both ends of the desktop rail so it reads as a run, not a bar. */
+const RAIL_FADE =
+  "linear-gradient(90deg, transparent 0%, black 9%, black 91%, transparent 100%)";
+
+/**
+ * The four steps, drawn as one hot-to-cold run.
+ *
+ * The heading promises "from your call to cold air", so the line the badges
+ * sit on is that journey: ember under step one, cooling to blue under step
+ * four, with each badge's glow, halo and numeral taken from its own point on
+ * the ramp. Below `lg` the run turns vertical rather than shrinking four
+ * badges into a row — the artwork is the section, so it stays large on a
+ * phone and the copy reads beside it.
+ */
 function HowItWorks() {
   return (
-    <section className="band-abyss grain relative overflow-hidden py-16 md:py-20">
+    <section className="band-abyss grain relative overflow-hidden py-16 md:py-24">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="absolute -left-32 top-1/3 size-[34rem] rounded-full bg-ember/10 blur-[130px]" />
+        <div className="absolute -right-32 top-1/4 size-[34rem] rounded-full bg-cyan/10 blur-[130px]" />
+      </div>
+
       <div className="shell relative">
-        <div className="max-w-2xl">
-          <p className="eyebrow text-cyan">What happens next</p>
-          <h2 className="poster mt-4 text-[clamp(2rem,4.4vw,3.1rem)] text-white">
-            From your call to
-            <span className="block text-chill">cold air, in four.</span>
-          </h2>
+        <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-5">
+          <div className="max-w-xl">
+            <p className="eyebrow text-cyan">What happens next</p>
+            <h2 className="poster mt-4 text-[clamp(1.9rem,4vw,2.9rem)] text-white">
+              From your call to
+              <span className="block text-chill">cold air, in four.</span>
+            </h2>
+          </div>
+          {/* The same ramp the badges sit on, stated once up here. */}
+          <div className="thermal-rule w-40" aria-hidden="true" />
         </div>
 
-        <ol className="relative mt-14 grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+        <ol className="relative mt-12 grid lg:mt-20 lg:grid-cols-4 lg:gap-x-6">
+          {/* Desktop rail. Ends land on the first and last badge centres; the
+              badges are lifted above it, so the line threads behind them. */}
           <span
-            className="pointer-events-none absolute left-0 right-0 top-6 hidden h-px bg-gradient-to-r from-orange via-cyan to-blue opacity-45 lg:block"
+            className="thermal-rule pointer-events-none absolute inset-x-[11.5%] top-20 hidden lg:block"
+            style={{ maskImage: RAIL_FADE, WebkitMaskImage: RAIL_FADE }}
             aria-hidden="true"
           />
-          {process.map((step, i) => (
-            <li key={step.title} className="relative">
-              <span className="relative z-10 flex size-12 items-center justify-center rounded-full bg-navy-deep font-display text-base font-extrabold text-cyan ring-1 ring-cyan/35">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className="mt-6 font-display text-lg font-extrabold text-white">
-                {step.title}
-              </h3>
-              <p className="mt-2.5 text-sm leading-relaxed text-white/60">
-                {step.body}
-              </p>
-            </li>
-          ))}
+
+          {process.map((step, i) => {
+            const accent = STEP_ACCENT[i];
+            const next = STEP_ACCENT[i + 1];
+            return (
+              <li
+                key={step.title}
+                className="group relative flex gap-5 pb-10 last:pb-0 lg:block lg:pb-0 lg:text-center"
+              >
+                {/* Phone rail: one segment per gap, each carrying the slice of
+                    the ramp between its two steps so the run stays continuous. */}
+                {next && (
+                  <span
+                    className="pointer-events-none absolute bottom-0 left-12 top-12 w-[3px] -translate-x-1/2 rounded-full lg:hidden"
+                    style={{ background: `linear-gradient(180deg, ${accent}, ${next})` }}
+                    aria-hidden="true"
+                  />
+                )}
+
+                <div className="relative z-10 w-24 shrink-0 lg:mx-auto lg:w-40">
+                  <span
+                    className="absolute inset-[12%] -z-10 rounded-full opacity-45 blur-2xl transition-opacity duration-500 group-hover:opacity-80"
+                    style={{ background: accent }}
+                    aria-hidden="true"
+                  />
+                  {/* Station halo, just outside the ring of the artwork. */}
+                  <span
+                    className="absolute inset-[7%] rounded-full border opacity-25 transition-all duration-500 group-hover:inset-[3%] group-hover:opacity-70"
+                    style={{ borderColor: accent }}
+                    aria-hidden="true"
+                  />
+                  <img
+                    src={`/brand/${step.image}.webp`}
+                    alt=""
+                    width={480}
+                    height={480}
+                    loading="lazy"
+                    className="w-full drop-shadow-[0_18px_34px_rgb(3_10_28/0.75)] transition-transform duration-500 group-hover:-translate-y-1.5"
+                  />
+                </div>
+
+                <div className="min-w-0 pt-1 lg:mt-6 lg:pt-0">
+                  <p
+                    className="font-display text-[0.68rem] font-extrabold uppercase tracking-[0.3em]"
+                    style={{ color: accent }}
+                  >
+                    Step {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <h3 className="mt-2 font-display text-lg font-extrabold leading-tight text-white lg:mt-3 lg:text-xl">
+                    {step.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/60 lg:mx-auto lg:mt-3 lg:max-w-[17rem]">
+                    {step.body}
+                  </p>
+                </div>
+              </li>
+            );
+          })}
         </ol>
 
         <p

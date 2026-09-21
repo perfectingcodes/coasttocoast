@@ -410,13 +410,16 @@
     background-clip: text;
     color: transparent;
   }
-  /* Key word on the orange ground. Vivid blue end to end — pale cyan went
-     chalky against ember, and navy went dead. */
-  .text-ice {
-    background: linear-gradient(180deg, #5cb4ff 0%, #2f8bff 48%, #0f6fe0 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+  /* Key word on the orange ground. One flat, electric blue — a gradient
+     bottomed out dark and muddied the word against ember. Blue and orange sit
+     close in luminance, so legibility comes from a white keyline rather than
+     from contrast: it is the same construction as the logo art, where every
+     blue shape is cut out with a white outline. */
+  .text-pop-blue {
+    color: #1f7bff;
+    -webkit-text-stroke: 0.055em #fff;
+    paint-order: stroke fill;
+    text-shadow: 0 10px 26px rgb(6 24 64 / 0.3);
   }
 
   .text-ember {

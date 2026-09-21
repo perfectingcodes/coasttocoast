@@ -63,6 +63,57 @@ def knockout(path, thresh=36):
     return out.crop(alpha.getbbox())
 
 
+def fit_ring(img, samples=256):
+    """Locate the cyan ring of a circular badge: returns (cx, cy, r) in pixels.
+
+    The four step badges were drawn separately, so their discs differ by a few
+    percent in size and sit at slightly different heights. Scoring candidate
+    circles against the cyan outline finds the disc itself, which is the thing
+    that has to line up across the row — the ears, wrench and action strokes
+    deliberately break out of it and must not be used for alignment.
+    """
+    import math
+    # Uniform scale, so a circle in the source stays a circle here.
+    k = samples / max(img.width, img.height)
+    sw, sh = max(1, round(img.width * k)), max(1, round(img.height * k))
+    a = np.array(img.convert("RGB").resize((sw, sh), Image.LANCZOS)).astype(int)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    ring = (r < 120) & (g > 120) & (b > 150)
+
+    th = np.linspace(0, 2 * math.pi, 720, endpoint=False)
+    ct, st = np.cos(th), np.sin(th)
+    best = (-1.0, sw // 2, sh // 2, sw // 2)
+    for cx in range(int(sw * 0.38), int(sw * 0.63)):
+        for cy in range(int(sh * 0.36), int(sh * 0.64)):
+            for rad in range(int(sw * 0.34), int(sw * 0.52)):
+                px = np.clip((cx + rad * ct).astype(int), 0, sw - 1)
+                py = np.clip((cy + rad * st).astype(int), 0, sh - 1)
+                score = ring[py, px].mean()
+                if score > best[0]:
+                    best = (score, cx, cy, rad)
+    score, cx, cy, rad = best
+    if score < 0.40:
+        raise SystemExit(f"  ! could not find the badge ring (best {score:.2f})")
+    return (cx / k, cy / k, rad / k)
+
+
+def circle_align(path, canvas=1024, disc=0.74):
+    """Knock out a circular badge and re-frame it so the disc is identical.
+
+    Every badge comes back on the same square canvas with its disc centred and
+    occupying `disc` of the width, so the row lines up perfectly and a number
+    chip can be positioned against the ring in CSS with one set of offsets.
+    """
+    img = knockout(path)
+    cx, cy, r = fit_ring(img)
+    scale = (canvas * disc / 2) / r
+    w, h = round(img.width * scale), round(img.height * scale)
+    img = img.resize((w, h), Image.LANCZOS)
+    out = Image.new("RGBA", (canvas, canvas), (0, 0, 0, 0))
+    out.paste(img, (round(canvas / 2 - cx * scale), round(canvas / 2 - cy * scale)))
+    return out
+
+
 def emit(img, stem, width, png=False):
     """Write a WebP at the given width, plus an optional palette PNG.
 
@@ -177,6 +228,8 @@ def main():
         "badge-locally-owned.png", "hero-coast.jpg",
         "mascot-bust.png", "mascot-service.png",
         "avatar-husky.png", "map-florida.png", "hero-map-mascot.png",
+        "step-1-call.png", "step-2-quote.png", "step-3-work.png",
+        "step-4-followup.png",
         "photo-hvac-unit.jpg", "footer-scene.png",
         "photo-home.jpg", "photo-ac-detail.jpg",
         "photo-condenser.png", "photo-van.png",
@@ -209,6 +262,8 @@ def main():
     emit(knockout(SRC / "mascot-service.png"), "mascot-service", 900, png=True)
     emit(knockout(SRC / "mascot-service.png"), "mascot-service-sm", 450)
     emit(knockout(SRC / "avatar-husky.png"), "avatar-husky", 256, png=True)
+    for n in ("step-1-call", "step-2-quote", "step-3-work", "step-4-followup"):
+        emit(circle_align(SRC / f"{n}.png"), n, 480)
     emit(knockout(SRC / "map-florida.png"), "map-florida", 1100, png=True)
     emit(knockout(SRC / "map-florida.png"), "map-florida-sm", 550)
     emit(knockout(SRC / "hero-map-mascot.png"), "hero-map-mascot", 1200, png=True)

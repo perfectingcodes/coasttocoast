@@ -826,18 +826,22 @@ export const process = [
   {
     title: "Tell us what's happening",
     body: "Two minutes on the phone or the form. We ask what the system is doing, not for your life story.",
+    image: "step-1-call",
   },
   {
     title: "We diagnose and price it",
     body: "A technician finds the actual cause and gives you a flat price in writing before any work begins.",
+    image: "step-2-quote",
   },
   {
     title: "The work gets done right",
     body: "Repairs finish the same visit whenever the part is on the truck, and we leave the space cleaner than we found it.",
+    image: "step-3-work",
   },
   {
     title: "We follow up",
     body: "A check-in after the work, and a reminder when your next Clean & Tune comes due.",
+    image: "step-4-followup",
   },
 ] as const;
 
