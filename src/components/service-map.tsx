@@ -53,12 +53,7 @@ export function ServiceMap() {
             <span className="block text-chill">Three counties.</span>
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-white/75">
-            Our focus markets are{" "}
-            <span className="font-semibold text-white">
-              {focusCities.map((l) => l.city).join(", ")}
-            </span>{" "}
-            — but the same crew, pricing and emergency line cover every city
-            below. Tap a pin to see what changes locally.
+            Same crew, same pricing, same 24/7 line in every one.
           </p>
         </div>
 
@@ -210,14 +205,14 @@ export function ServiceMap() {
 
             {/* The mascot stands in the Gulf, pointing back at the coast. */}
             <img
-              src="/brand/mascot-service.webp"
-              srcSet="/brand/mascot-service-sm.webp 450w, /brand/mascot-service.webp 900w"
-              sizes="180px"
+              src="/brand/mascot.webp"
+              srcSet="/brand/mascot-sm.webp 360w, /brand/mascot.webp 900w"
+              sizes="(min-width: 640px) 168px, 132px"
               alt=""
               width={900}
-              height={890}
+              height={1513}
               loading="lazy"
-              className="pointer-events-none absolute -bottom-3 -left-6 w-36 drop-shadow-[0_18px_36px_rgb(5_15_38/0.8)] sm:w-44"
+              className="pointer-events-none absolute -bottom-6 -left-8 w-32 drop-shadow-[0_18px_36px_rgb(5_15_38/0.85)] sm:-left-10 sm:w-40"
             />
           </div>
 
@@ -242,11 +237,6 @@ export function ServiceMap() {
 
               <p className="mt-4 leading-relaxed text-white/75">{active.intro}</p>
 
-              <p className="mt-5 rounded-xl bg-white/8 px-4 py-3 text-sm text-white/80 ring-1 ring-white/12">
-                <span className="font-semibold text-white">Covered here?</span>{" "}
-                If your ZIP is listed below, yes — same crew, same pricing, same
-                24/7 line.
-              </p>
 
               <dl className="mt-6 grid gap-4 border-t border-white/12 pt-5 sm:grid-cols-2">
                 {[

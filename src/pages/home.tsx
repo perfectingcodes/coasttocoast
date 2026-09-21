@@ -4,7 +4,9 @@ import {
   ArrowUpRight,
   Check,
   Phone,
+  Quote,
   Sparkles,
+  Star,
   Zap,
 } from "lucide-react";
 import {
@@ -13,6 +15,7 @@ import {
   generalFaqs,
   locations,
   process,
+  testimonials,
   services,
   whyUs,
   type Service,
@@ -20,7 +23,6 @@ import {
 import { Icon } from "@/components/icon";
 import { Wave } from "@/components/wave";
 import { Reveal } from "@/components/reveal";
-import { TestimonialCarousel } from "@/components/testimonial-carousel";
 import { GoogleBadge, GoogleReviewCard } from "@/components/google-reviews";
 import { CityMarquee, Pill, TrustStrip } from "@/components/brand";
 import { ServiceMap } from "@/components/service-map";
@@ -396,18 +398,26 @@ function ServicesSection() {
 
 function CleanAndTuneSection() {
   return (
-    <section className="band-navy grain relative isolate z-10 py-16 md:py-20">
-      <div
-        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
-        aria-hidden="true"
-      >
-        <div className="absolute -right-32 top-1/4 size-[32rem] rounded-full bg-gold/14 blur-[120px]" />
-      </div>
-
+    <section className="relative isolate z-10 bg-white py-16 md:py-20">
       <div className="shell">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-14">
+        {/* A framed, ribboned panel rather than a flat band — it has to read as
+            a promotion, not as another section. */}
+        <div className="band-navy grain relative overflow-hidden rounded-[2rem] px-6 py-12 shadow-[0_40px_80px_-30px_rgb(5_15_38/0.6)] ring-1 ring-white/12 md:px-12 md:py-14">
+          <div
+            className="pointer-events-none absolute -right-24 -top-24 size-[28rem] rounded-full bg-gold/16 blur-[110px]"
+            aria-hidden="true"
+          />
+          {/* Corner ribbon */}
+          <div
+            className="pointer-events-none absolute -right-16 top-7 w-64 rotate-45 bg-gradient-to-r from-orange-light to-ember py-1.5 text-center font-display text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-white shadow-lg"
+            aria-hidden="true"
+          >
+            10-Point Service
+          </div>
+
+        <div className="relative grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-14">
           {/* ------------------------------------------------ the offer */}
-          <div className="xl:pl-52">
+          <div>
             <span className="pill pill-dark border-gold/40 bg-gold/12 text-gold">
               <Sparkles className="size-3.5" aria-hidden="true" />
               Limited-time offer
@@ -460,20 +470,9 @@ function CleanAndTuneSection() {
               ))}
             </ol>
           </div>
+          </div>
         </div>
       </div>
-
-      {/* Mascot stands on the section edge, whole — not cropped into a corner. */}
-      <img
-        src="/brand/mascot-service.webp"
-        srcSet="/brand/mascot-service-sm.webp 450w, /brand/mascot-service.webp 900w"
-        sizes="200px"
-        alt=""
-        width={900}
-        height={904}
-        loading="lazy"
-        className="pointer-events-none absolute bottom-10 left-[max(1rem,calc((100vw-78rem)/2+2rem))] hidden w-44 drop-shadow-[0_22px_44px_rgb(5_15_38/0.7)] xl:block"
-      />
     </section>
   );
 }
@@ -482,53 +481,64 @@ function CleanAndTuneSection() {
 
 function WhyUsSection() {
   return (
-    <section className="band-navy relative overflow-hidden">
-      <Wave fill="#f2f7fd" swell="#2bd9ff" flip height={56} className="relative -mt-px" />
+    <section className="band-navy grain relative overflow-hidden">
+      <Wave fill="white" swell="#2bd9ff" flip height={56} className="relative -mt-px" />
 
-      <div className="shell relative grid items-center gap-12 py-16 md:py-20 lg:grid-cols-[0.8fr_1.2fr]">
-        <div className="relative mx-auto w-full max-w-md">
-          <div
-            className="absolute -inset-3 -rotate-2 rounded-card bg-cyan/15"
-            aria-hidden="true"
-          />
-          <img
-            src="/brand/photo-hvac-unit.webp"
-            srcSet="/brand/photo-hvac-unit-760.webp 760w, /brand/photo-hvac-unit.webp 1280w"
-            sizes="(min-width: 1024px) 448px, 90vw"
-            alt="An outdoor air conditioning condenser installed beside a home"
-            width={1280}
-            height={853}
-            loading="lazy"
-            className="relative w-full rounded-card object-cover shadow-[0_24px_48px_-16px_rgb(4_16_29/0.7)]"
-          />
-          <img
-            src="/brand/badge-locally-owned.webp"
-            alt="Locally owned — your neighbors, your comfort, our commitment"
-            width={640}
-            height={636}
-            loading="lazy"
-            className="absolute -bottom-8 -right-4 w-28 drop-shadow-[0_10px_24px_rgb(4_16_29/0.6)] md:-right-8 md:w-36"
-          />
+      <div className="shell relative grid items-center gap-14 py-14 md:py-20 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+        {/* Stacked, overlapping frames — one image was not carrying the space. */}
+        <div className="relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-none">
+          <div className="relative aspect-[5/4]">
+            <img
+              src="/brand/photo-home.webp"
+              srcSet="/brand/photo-home-560.webp 560w, /brand/photo-home.webp 900w"
+              sizes="(min-width: 1024px) 380px, 70vw"
+              alt="A Southwest Florida home"
+              width={900}
+              height={720}
+              loading="lazy"
+              className="absolute left-0 top-0 w-[72%] rotate-[-4deg] rounded-card object-cover shadow-[0_26px_50px_-18px_rgb(5_15_38/0.85)] ring-1 ring-white/15"
+            />
+            <img
+              src="/brand/photo-hvac-unit.webp"
+              srcSet="/brand/photo-hvac-unit-760.webp 760w, /brand/photo-hvac-unit.webp 1280w"
+              sizes="(min-width: 1024px) 340px, 62vw"
+              alt="An outdoor condenser installed beside a home"
+              width={1280}
+              height={853}
+              loading="lazy"
+              className="absolute bottom-0 right-0 w-[64%] rotate-[3deg] rounded-card object-cover shadow-[0_26px_50px_-18px_rgb(5_15_38/0.9)] ring-1 ring-white/15"
+            />
+            <img
+              src="/brand/badge-locally-owned.webp"
+              alt="Locally owned and operated"
+              width={640}
+              height={632}
+              loading="lazy"
+              className="absolute -left-2 bottom-4 w-24 drop-shadow-[0_14px_28px_rgb(5_15_38/0.8)] sm:w-28"
+            />
+          </div>
         </div>
 
         <div>
-          <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.24em] text-cyan">
-            Why choose {business.name}
-          </p>
-          <h2 className="poster mt-4 text-[clamp(2rem,4.6vw,3.25rem)] text-white">
-            Florida's HVAC Partner
-            <span className="block italic text-cyan">You Can Count On</span>
+          <p className="eyebrow text-cyan">Why Coast to Coast</p>
+          <h2 className="poster mt-4 text-[clamp(2rem,4.4vw,3.1rem)] text-white">
+            Built on
+            <span className="block text-chill">second opinions.</span>
           </h2>
 
-          <ul className="mt-10 grid gap-8 sm:grid-cols-2">
+          <ul className="mt-9 space-y-5">
             {whyUs.map((w) => (
-              <li key={w.title} className="flex gap-4">
-                <span className="grid size-12 shrink-0 place-items-center rounded-full bg-white/8 text-cyan ring-1 ring-cyan/25">
-                  <Icon name={w.icon} className="size-5" />
+              <li key={w.title} className="flex gap-4 border-t border-white/10 pt-5">
+                <span className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-lg bg-white/8 text-cyan ring-1 ring-cyan/25">
+                  <Icon name={w.icon} className="size-4" />
                 </span>
                 <div>
-                  <h3 className="text-base text-white">{w.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-white/65">{w.body}</p>
+                  <h3 className="font-display text-base font-extrabold text-white">
+                    {w.title}
+                  </h3>
+                  <p className="mt-1 text-sm leading-relaxed text-white/60">
+                    {w.body}
+                  </p>
                 </div>
               </li>
             ))}
@@ -545,35 +555,60 @@ function WhyUsSection() {
 
 function TestimonialsSection() {
   return (
-    <section className="bg-white py-16 md:py-24">
-      <div className="shell grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-        <div>
-          <p className="eyebrow">What our customers say</p>
-          <h2 className="poster mt-4 text-[clamp(2rem,4.6vw,3.25rem)]">
-            Real People. Real Comfort.
-          </h2>
-          <div className="mt-8">
-            <TestimonialCarousel />
+    <section className="bg-foam py-16 md:py-20">
+      <div className="shell">
+        <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-5">
+          <div>
+            <p className="eyebrow">Reviews</p>
+            <h2 className="poster mt-4 text-[clamp(2rem,4.4vw,3.1rem)]">
+              Real people.
+              <span className="block text-ember">Real comfort.</span>
+            </h2>
           </div>
-          <GoogleReviewCard className="mt-10" />
+          <GoogleBadge />
         </div>
 
-        <div className="relative">
-          <div
-            className="absolute -inset-3 rotate-2 rounded-card bg-gradient-to-br from-blue/12 to-cyan/25"
-            aria-hidden="true"
-          />
-          <img
-            src="/brand/mascot-bust.webp"
-            srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
-            sizes="(min-width: 1024px) 460px, 80vw"
-            alt=""
-            width={800}
-            height={800}
-            loading="lazy"
-            className="relative mx-auto w-full max-w-md drop-shadow-[0_24px_48px_rgb(10_35_82/0.3)]"
-          />
-        </div>
+        {/* Three reviews shown at once. A one-at-a-time carousel meant most of
+            the proof was hidden behind a control nobody presses. */}
+        <ul className="mt-11 grid gap-5 md:grid-cols-3">
+          {testimonials.map((t, i) => (
+            <li key={t.name}>
+              <Reveal delay={i * 0.06} className="h-full">
+                <figure className="card relative flex h-full flex-col p-7">
+                  <Quote
+                    className="absolute right-6 top-6 size-8 text-blue/10"
+                    aria-hidden="true"
+                  />
+                  <div className="flex gap-0.5" aria-label="Rated 5 out of 5">
+                    {Array.from({ length: 5 }, (_, n) => (
+                      <Star
+                        key={n}
+                        className="size-4 fill-gold text-gold"
+                        aria-hidden="true"
+                      />
+                    ))}
+                  </div>
+                  <blockquote className="mt-4 flex-1 text-[0.95rem] leading-relaxed text-navy/75">
+                    &ldquo;{t.quote}&rdquo;
+                  </blockquote>
+                  <figcaption className="mt-6 flex items-center gap-3 border-t border-navy/8 pt-4">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-blue-bright to-blue font-display text-xs font-extrabold text-white">
+                      {t.name.charAt(0)}
+                    </span>
+                    <span className="leading-tight">
+                      <span className="block font-display text-sm font-extrabold text-navy">
+                        {t.name}
+                      </span>
+                      <span className="block text-xs text-navy/50">{t.city}</span>
+                    </span>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            </li>
+          ))}
+        </ul>
+
+        <GoogleReviewCard className="mt-6" />
       </div>
     </section>
   );
@@ -585,9 +620,19 @@ function FaqSection() {
   return (
     <section className="bg-white py-16 md:py-24">
       <div className="shell max-w-3xl">
-        <div className="text-center">
-          <p className="eyebrow">Common questions</p>
-          <h2 className="poster mt-4 text-[clamp(1.9rem,4.2vw,3rem)]">Answers Before You Call</h2>
+        <div className="flex flex-col items-center text-center">
+          <img
+            src="/brand/avatar-husky.webp"
+            alt=""
+            width={256}
+            height={289}
+            loading="lazy"
+            className="size-20 object-contain drop-shadow-[0_12px_24px_rgb(10_35_82/0.25)]"
+          />
+          <p className="eyebrow eyebrow-center mt-5">Common questions</p>
+          <h2 className="poster mt-4 text-[clamp(1.9rem,4.2vw,3rem)]">
+            Answers before you call
+          </h2>
         </div>
         <FaqList faqs={generalFaqs} />
         <p className="mt-8 text-center text-navy/65">

@@ -767,23 +767,23 @@ export const locationBySlug = (slug: string) =>
 export const whyUs = [
   {
     icon: "users",
-    title: "Experienced & Certified Technicians",
-    body: "Licensed mechanical contractors, not subcontracted labor. Every technician who shows up works for us.",
+    title: "Certified technicians",
+    body: "Licensed mechanical contractors on staff — never subcontracted.",
   },
   {
     icon: "shield",
-    title: "Honest, Upfront Pricing",
-    body: "You get a flat price in writing before any work starts, and it does not move because the job ran long.",
+    title: "Flat-rate pricing",
+    body: "The price is in writing before work starts, and it does not move.",
   },
   {
     icon: "handshake",
-    title: "Local & Family Operated",
-    body: "Based in Fort Myers and answering our own phones. No national call center, no dispatch queue in another state.",
+    title: "Locally owned",
+    body: "Fort Myers based. We answer our own phones, day and night.",
   },
   {
     icon: "map",
-    title: "Serving All of Southwest Florida",
-    body: "Lee, Collier and Charlotte counties — from Port Charlotte down through Naples, coast to coast.",
+    title: "All of Southwest Florida",
+    body: "Lee, Collier and Charlotte — Port Charlotte down through Naples.",
   },
 ] as const;
 
