@@ -62,10 +62,10 @@ export default function Home() {
         <ServicesSection />
         <CleanAndTuneSection />
         <WhyUsSection />
-        <HowItWorks />
         <TestimonialsSection />
         <ServiceMap />
         <FaqSection />
+        <HowItWorks />
         <CtaBand mascot />
       </main>
 
@@ -79,94 +79,85 @@ export default function Home() {
 function Hero() {
   return (
     <section className="band-ember grain relative isolate overflow-hidden">
-      <div
-        className="pointer-events-none absolute inset-0 -z-10"
-        aria-hidden="true"
-      >
-        <div className="absolute -left-40 bottom-0 size-[34rem] rounded-full bg-navy/35 blur-[130px]" />
-      </div>
-
-      <div className="shell relative grid items-center gap-10 py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:gap-8 lg:py-16">
+      <div className="shell relative grid items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:gap-6 lg:py-12">
         <div className="max-w-xl">
-          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-display text-[0.7rem] font-extrabold uppercase tracking-[0.26em] text-navy">
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-display text-[0.68rem] font-extrabold uppercase tracking-[0.24em] text-white">
             Southwest Florida HVAC
-            <span className="h-3 w-px bg-navy/30" aria-hidden="true" />
-            <span className="text-white/75">Lic. {business.license}</span>
+            <span className="h-3 w-px bg-white/40" aria-hidden="true" />
+            <span className="text-gold">Lic. {business.license}</span>
           </p>
 
-          <h1 className="poster mt-6 text-[clamp(2.9rem,6.4vw,5.1rem)] text-white drop-shadow-[0_3px_16px_rgb(120_40_0/0.35)]">
+          <h1 className="poster mt-4 text-[clamp(2.9rem,6.6vw,5.2rem)] text-white drop-shadow-[0_4px_18px_rgb(150_50_0/0.4)]">
             Comfort
             <br />
-            lives <span className="text-navy">here</span>
-            <span className="text-navy">.</span>
+            lives <span className="text-ice">here</span>
+            <span className="text-gold">.</span>
           </h1>
 
-          <p className="mt-7 max-w-lg text-lg leading-relaxed text-white/90">
+          <p className="mt-5 max-w-lg text-[1.05rem] leading-relaxed text-white/90">
             Home AC repair, replacement and maintenance across Lee, Collier and
-            Charlotte counties. You get a{" "}
+            Charlotte counties. A{" "}
             <span className="font-semibold text-white">
               flat price in writing before we start
             </span>{" "}
             — and a real person answers, day or night.
           </p>
 
-          <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
-            <ButtonLink href="/contact" variant="secondary" size="lg">
+          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+            <ButtonLink href="/contact" variant="sky" size="lg">
               Book Service Today
               <ArrowRight className="size-4" aria-hidden="true" />
             </ButtonLink>
 
-            <a href={business.phoneHref} className="group flex items-center gap-3">
+            <a href={business.phoneHref} className="group flex items-center gap-2.5">
               <span className="relative">
                 <img
                   src="/brand/avatar-husky.webp"
                   alt=""
                   width={256}
                   height={289}
-                  className="size-12 object-contain transition-transform duration-300 group-hover:-translate-y-0.5"
+                  className="size-11 object-contain transition-transform duration-300 group-hover:-translate-y-0.5"
                 />
                 <span
-                  className="absolute -right-0.5 bottom-0.5 size-3 rounded-full bg-cyan ring-2 ring-white/70"
+                  className="absolute -right-0.5 bottom-0.5 size-2.5 rounded-full bg-cyan ring-2 ring-white/80"
                   aria-hidden="true"
                 />
               </span>
               <span className="leading-tight">
-                <span className="block font-display text-[0.6rem] font-extrabold uppercase tracking-[0.18em] text-navy">
+                <span className="block font-display text-[0.58rem] font-extrabold uppercase tracking-[0.18em] text-gold">
                   A person answers · 24/7
                 </span>
-                <span className="block font-display text-lg font-extrabold text-white transition-colors group-hover:text-navy">
+                <span className="block font-display text-lg font-extrabold text-white transition-colors group-hover:text-cyan-light">
                   {business.phone}
                 </span>
               </span>
             </a>
           </div>
 
-          <div className="mt-7">
-            <GoogleBadge />
-          </div>
-
-          <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-6 border-t border-white/25 pt-7">
+          {/* Proof and social sit on one line so the block stays compact. */}
+          <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-4 border-t border-white/25 pt-5">
             <img
               src="/brand/badge-locally-owned.webp"
               alt="Locally owned and operated"
               width={640}
               height={632}
-              className="size-20 shrink-0 drop-shadow-[0_10px_22px_rgb(120_40_0/0.45)]"
+              className="size-16 shrink-0 drop-shadow-[0_8px_18px_rgb(150_50_0/0.45)]"
             />
-            <dl className="flex flex-wrap gap-x-9 gap-y-5">
+            <dl className="flex flex-wrap gap-x-7 gap-y-3">
               {[
-                { v: String(locations.length), k: "Cities served" },
-                { v: "24/7", k: "Emergency line" },
+                { v: String(locations.length), k: "Cities" },
+                { v: "24/7", k: "Emergency" },
                 { v: cleanAndTune.price, k: "Clean & Tune" },
               ].map((p) => (
                 <div key={p.k}>
-                  <dt className="poster text-2xl text-white">{p.v}</dt>
-                  <dd className="mt-1 font-display text-[0.62rem] font-extrabold uppercase tracking-[0.18em] text-navy/70">
+                  <dt className="poster text-xl text-white">{p.v}</dt>
+                  <dd className="mt-0.5 font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/70">
                     {p.k}
                   </dd>
                 </div>
               ))}
             </dl>
+            <GoogleBadge className="ml-auto" />
           </div>
         </div>
 
@@ -179,65 +170,12 @@ function Hero() {
             width={1200}
             height={1064}
             fetchPriority="high"
-            className="mx-auto w-full max-w-lg drop-shadow-[0_30px_60px_rgb(120_40_0/0.4)]"
+            className="mx-auto w-full max-w-lg drop-shadow-[0_28px_56px_rgb(150_50_0/0.45)]"
           />
         </div>
       </div>
 
-      <CityMarquee className="relative border-t border-white/20 pb-5 pt-4" />
-    </section>
-  );
-}
-
-/**
- * What happens after you call. Laid out as a run along a single track rather
- * than four equal boxes — four identical cards in a row is the shape that
- * reads as filler.
- */
-function HowItWorks() {
-  return (
-    <section className="band-abyss grain relative overflow-hidden py-16 md:py-20">
-      <div className="shell relative">
-        <div className="max-w-2xl">
-          <p className="eyebrow text-cyan">What happens next</p>
-          <h2 className="poster mt-4 text-[clamp(2rem,4.4vw,3.1rem)] text-white">
-            From your call to
-            <span className="block text-chill">cold air, in four.</span>
-          </h2>
-        </div>
-
-        <ol className="relative mt-14 grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-          {/* The track the steps sit on. */}
-          <span
-            className="pointer-events-none absolute left-0 right-0 top-6 hidden h-px bg-gradient-to-r from-orange via-cyan to-blue opacity-45 lg:block"
-            aria-hidden="true"
-          />
-
-          {process.map((step, i) => (
-            <li key={step.title} className="relative">
-              <span className="relative z-10 flex size-12 items-center justify-center rounded-full bg-navy-deep font-display text-base font-extrabold text-cyan ring-1 ring-cyan/35">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className="mt-6 font-display text-lg font-extrabold text-white">
-                {step.title}
-              </h3>
-              <p className="mt-2.5 text-sm leading-relaxed text-white/60">
-                {step.body}
-              </p>
-            </li>
-          ))}
-        </ol>
-
-        <p
-          data-answer=""
-          className="mt-14 max-w-3xl border-t border-white/10 pt-7 text-sm leading-relaxed text-white/50"
-        >
-          {business.name} is a licensed, insured HVAC contractor in{" "}
-          {business.city}, Florida, serving {locations.length} cities across Lee,
-          Collier and Charlotte counties under Florida Mechanical Contractor
-          licence #{business.license}.
-        </p>
-      </div>
+      <CityMarquee className="relative border-t border-white/25 pb-4 pt-3" />
     </section>
   );
 }
@@ -398,23 +336,21 @@ function CleanAndTuneSection() {
       <div className="shell">
         {/* A framed, ribboned panel rather than a flat band — it has to read as
             a promotion, not as another section. */}
-        <div className="band-navy grain relative overflow-hidden rounded-[2rem] px-6 pb-12 pt-20 shadow-[0_40px_80px_-30px_rgb(5_15_38/0.6)] ring-1 ring-white/12 md:px-12 md:pb-14 md:pt-24">
+        <div className="band-navy grain relative overflow-hidden rounded-[2rem] px-6 py-12 shadow-[0_40px_80px_-30px_rgb(5_15_38/0.6)] ring-1 ring-white/12 md:px-12 md:py-14">
           <div
             className="pointer-events-none absolute -right-24 -top-24 size-[28rem] rounded-full bg-gold/16 blur-[110px]"
             aria-hidden="true"
           />
-          {/* Sale banner across the full width of the panel, so it reads over
-              both the offer and the checklist rather than clipping one corner. */}
+          {/* Diagonal sash across the corner — long enough to cross the
+              checklist card and clip the offer card's top edge. */}
           {savings && (
             <div
-              className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-center gap-3 bg-gradient-to-r from-gold via-orange-light to-ember py-2.5 shadow-[0_10px_26px_-10px_rgb(120_40_0/0.8)]"
+              className="pointer-events-none absolute -right-20 top-10 z-20 w-[26rem] rotate-[38deg] bg-gradient-to-r from-gold via-orange-light to-ember py-2.5 text-center shadow-[0_14px_30px_-10px_rgb(120_40_0/0.8)] ring-1 ring-white/30 sm:-right-16 sm:top-12"
               aria-hidden="true"
             >
-              <Sparkles className="size-3.5 text-white" />
-              <span className="font-display text-[0.7rem] font-extrabold uppercase tracking-[0.22em] text-white sm:text-sm">
-                Limited time · Save {savings}
+              <span className="font-display text-xs font-extrabold uppercase tracking-[0.2em] text-white sm:text-sm">
+                Save {savings}
               </span>
-              <Sparkles className="size-3.5 text-white" />
             </div>
           )}
 
@@ -666,6 +602,60 @@ function FaqSection() {
             <Phone className="size-4" aria-hidden="true" />
             {business.phone}
           </a>
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------ how it works */
+
+/**
+ * What happens after you call. Sits after the FAQ: by that point a visitor has
+ * their questions answered and wants to know what actually follows. Laid out
+ * along a single gradient track rather than four equal boxes, which is the
+ * shape that reads as filler.
+ */
+function HowItWorks() {
+  return (
+    <section className="band-abyss grain relative overflow-hidden py-16 md:py-20">
+      <div className="shell relative">
+        <div className="max-w-2xl">
+          <p className="eyebrow text-cyan">What happens next</p>
+          <h2 className="poster mt-4 text-[clamp(2rem,4.4vw,3.1rem)] text-white">
+            From your call to
+            <span className="block text-chill">cold air, in four.</span>
+          </h2>
+        </div>
+
+        <ol className="relative mt-14 grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          <span
+            className="pointer-events-none absolute left-0 right-0 top-6 hidden h-px bg-gradient-to-r from-orange via-cyan to-blue opacity-45 lg:block"
+            aria-hidden="true"
+          />
+          {process.map((step, i) => (
+            <li key={step.title} className="relative">
+              <span className="relative z-10 flex size-12 items-center justify-center rounded-full bg-navy-deep font-display text-base font-extrabold text-cyan ring-1 ring-cyan/35">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 className="mt-6 font-display text-lg font-extrabold text-white">
+                {step.title}
+              </h3>
+              <p className="mt-2.5 text-sm leading-relaxed text-white/60">
+                {step.body}
+              </p>
+            </li>
+          ))}
+        </ol>
+
+        <p
+          data-answer=""
+          className="mt-14 max-w-3xl border-t border-white/10 pt-7 text-sm leading-relaxed text-white/50"
+        >
+          {business.name} is a licensed, insured HVAC contractor in{" "}
+          {business.city}, Florida, serving {locations.length} cities across Lee,
+          Collier and Charlotte counties under Florida Mechanical Contractor
+          licence #{business.license}.
         </p>
       </div>
     </section>

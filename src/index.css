@@ -337,6 +337,15 @@
     background-clip: text;
     color: transparent;
   }
+  /* Bright fill for a key word on the orange ground — stays in the cyan
+     range so it never darkens into navy. */
+  .text-ice {
+    background: linear-gradient(180deg, #ffffff 0%, #a6f1ff 45%, #2bd9ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
   .text-ember {
     background: linear-gradient(180deg, #ffb020 0%, #ff6a13 55%, #ff4d00 100%);
     -webkit-background-clip: text;

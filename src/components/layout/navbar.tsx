@@ -10,7 +10,8 @@ import {
   Phone,
   X,
 } from "lucide-react";
-import { business, nav, services } from "@/content/site";
+import { business, cleanAndTune, locations, nav, services } from "@/content/site";
+import { Icon } from "@/components/icon";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -243,7 +244,14 @@ function NavLink({
   );
 }
 
-/** Hover/focus dropdown — no JS state, so it works before hydration. */
+/**
+ * Services mega-menu.
+ *
+ * Hover- and focus-driven with no JS state, so it works before hydration and
+ * for keyboard users. Two columns of services with their icons and blurbs,
+ * plus the live offer as a featured cell — a plain list of six links was
+ * doing none of the selling the dropdown is well placed to do.
+ */
 function ServicesMenu({ active }: { active: boolean }) {
   return (
     <div className="group relative">
@@ -257,30 +265,107 @@ function ServicesMenu({ active }: { active: boolean }) {
       >
         Services
         <ChevronDown
-          className="size-3.5 transition-transform group-hover:rotate-180"
+          className="size-3.5 transition-transform duration-300 group-hover:rotate-180"
           aria-hidden="true"
         />
       </Link>
 
       <div
         className={cn(
-          "invisible absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-3 opacity-0 transition",
-          "group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100",
+          "invisible absolute left-1/2 top-full z-50 w-[46rem] -translate-x-1/2 translate-y-1 pt-4 opacity-0",
+          "transition-[opacity,transform] duration-200 ease-out",
+          "group-hover:visible group-hover:translate-y-0 group-hover:opacity-100",
+          "group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100",
         )}
       >
-        <ul className="card overflow-hidden p-2">
-          {services.map((s) => (
-            <li key={s.slug}>
-              <Link
-                href={`/services/${s.slug}`}
-                className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-navy/80 transition-colors hover:bg-foam hover:text-blue"
-              >
-                {s.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="overflow-hidden rounded-card border border-navy/10 bg-white shadow-[0_32px_70px_-24px_rgb(5_15_38/0.45)]">
+          {/* Thermal hairline ties the panel to the rest of the system. */}
+          <div className="thermal-rule h-[3px] rounded-none" aria-hidden="true" />
+
+          <div className="grid grid-cols-[1.45fr_1fr]">
+            <ul className="grid grid-cols-2 gap-1 p-3">
+              {services.map((sv) => (
+                <li key={sv.slug}>
+                  <Link
+                    href={`/services/${sv.slug}`}
+                    className="group/item flex gap-3 rounded-xl p-3 transition-colors hover:bg-foam"
+                  >
+                    <span
+                      className={cn(
+                        "mt-0.5 grid size-9 shrink-0 place-items-center rounded-lg text-white shadow-[0_6px_14px_-6px_rgb(10_35_82/0.8)] ring-1 ring-inset ring-white/25",
+                        MENU_ACCENT[sv.accent],
+                      )}
+                    >
+                      <Icon name={sv.icon} className="size-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block font-display text-[0.82rem] font-extrabold text-navy transition-colors group-hover/item:text-blue">
+                        {sv.name}
+                      </span>
+                      <span className="mt-0.5 block text-[0.72rem] leading-snug text-navy/55">
+                        {sv.short}
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            {/* Featured offer */}
+            <Link
+              href="/services/repairs-maintenance"
+              className="band-navy grain group/offer relative flex flex-col justify-center overflow-hidden p-6 text-white"
+            >
+              <span className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.2em] text-gold">
+                Limited-time offer
+              </span>
+              <span className="poster mt-2 text-4xl text-white">
+                {cleanAndTune.price}
+              </span>
+              <span className="mt-1 font-display text-sm font-extrabold text-white">
+                {cleanAndTune.name}
+              </span>
+              <span className="mt-2 text-xs leading-relaxed text-white/60">
+                A 10-point service, twice a year.
+              </span>
+              <span className="mt-4 inline-flex items-center gap-1.5 font-display text-[0.65rem] font-extrabold uppercase tracking-[0.14em] text-cyan">
+                Book a visit
+                <ArrowRight
+                  className="size-3.5 transition-transform group-hover/offer:translate-x-0.5"
+                  aria-hidden="true"
+                />
+              </span>
+              <img
+                src="/brand/mascot-service.webp"
+                srcSet="/brand/mascot-service-sm.webp 450w, /brand/mascot-service.webp 900w"
+                sizes="120px"
+                alt=""
+                width={900}
+                height={904}
+                className="pointer-events-none absolute -bottom-3 -right-4 w-28 opacity-90"
+              />
+            </Link>
+          </div>
+
+          <div className="flex items-center justify-between border-t border-navy/8 bg-foam px-5 py-3">
+            <span className="font-display text-[0.62rem] font-extrabold uppercase tracking-[0.16em] text-navy/45">
+              Serving {locations.length} cities · Lee, Collier &amp; Charlotte
+            </span>
+            <Link href="/services" className="link-arrow">
+              All services
+              <ArrowRight className="size-3.5" aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
+
+const MENU_ACCENT: Record<string, string> = {
+  orange: "bg-gradient-to-br from-orange-light to-ember",
+  cyan: "bg-gradient-to-br from-cyan to-blue",
+  slate: "bg-gradient-to-br from-slateish to-navy",
+  blue: "bg-gradient-to-br from-blue-bright to-blue",
+  gold: "bg-gradient-to-br from-gold to-orange",
+};
