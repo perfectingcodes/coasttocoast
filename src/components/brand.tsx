@@ -58,10 +58,65 @@ const LOAD_TONE = {
  * the real cooling-load context for Southwest Florida — honest, dated
  * information rather than a fake live sensor feed.
  */
-export function SeasonCard({ className }: { className?: string }) {
+export function SeasonCard({
+  className,
+  variant = "card",
+}: {
+  className?: string;
+  /** "bar" is a compact horizontal strip for tight layouts like the hero. */
+  variant?: "card" | "bar";
+}) {
   const key = new Date().toLocaleString("en-US", { month: "short" });
   const s = season[key] ?? season.Jul;
   const bars = { Low: 1, Moderate: 2, High: 3, Peak: 4 }[s.load];
+
+  const meter = (
+    <span className="flex items-center gap-2.5">
+      <span className="flex gap-1" aria-hidden="true">
+        {[1, 2, 3, 4].map((i) => (
+          <span
+            key={i}
+            className={cn(
+              "h-1.5 w-4 rounded-full",
+              i <= bars ? "bg-current" : "bg-white/15",
+              i <= bars && LOAD_TONE[s.load],
+            )}
+          />
+        ))}
+      </span>
+      <span className={cn("font-display text-xs font-extrabold", LOAD_TONE[s.load])}>
+        {s.load}
+      </span>
+    </span>
+  );
+
+  if (variant === "bar") {
+    return (
+      <div
+        className={cn(
+          "glass edge-lit flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3",
+          className,
+        )}
+      >
+        <span className="flex items-center gap-2">
+          <Thermometer className="size-4 text-cyan" aria-hidden="true" />
+          <span className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.18em] text-white/55">
+            Right now · {business.city}
+          </span>
+        </span>
+        <span className="font-display text-sm font-extrabold text-white">
+          {s.label}
+        </span>
+        <span className="hidden h-4 w-px bg-white/20 sm:block" aria-hidden="true" />
+        <span className="flex items-center gap-2.5">
+          <span className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/45">
+            Cooling load
+          </span>
+          {meter}
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div className={cn("glass edge-lit p-5", className)}>
@@ -81,21 +136,7 @@ export function SeasonCard({ className }: { className?: string }) {
         <span className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/50">
           Cooling load
         </span>
-        <span className="flex gap-1" aria-hidden="true">
-          {[1, 2, 3, 4].map((i) => (
-            <span
-              key={i}
-              className={cn(
-                "h-1.5 w-4 rounded-full",
-                i <= bars ? "bg-current" : "bg-white/15",
-                i <= bars && LOAD_TONE[s.load],
-              )}
-            />
-          ))}
-        </span>
-        <span className={cn("font-display text-xs font-extrabold", LOAD_TONE[s.load])}>
-          {s.load}
-        </span>
+        {meter}
       </div>
     </div>
   );

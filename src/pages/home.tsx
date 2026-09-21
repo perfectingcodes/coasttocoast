@@ -75,8 +75,7 @@ export default function Home() {
 
 function Hero() {
   return (
-    <section className="band-navy grain grid-lines relative isolate z-10">
-      {/* Photograph sits under the brand ground as texture and light. */}
+    <section className="band-navy grain grid-lines relative isolate z-10 overflow-x-clip">
       <picture>
         <source media="(min-width: 1024px)" srcSet="/brand/hero-coast.webp" />
         <source media="(min-width: 640px)" srcSet="/brand/hero-coast-1200.webp" />
@@ -84,95 +83,97 @@ function Hero() {
           src="/brand/hero-coast-760.webp"
           alt=""
           fetchPriority="high"
-          className="absolute inset-0 -z-20 size-full object-cover object-center opacity-25 mix-blend-luminosity"
+          className="absolute inset-0 -z-20 size-full object-cover object-center opacity-[0.18] mix-blend-luminosity"
         />
       </picture>
-      {/* Ember low-left, cold light high-right — the temperature axis the
-          whole brand runs on. Clipped in their own wrapper: the section itself
-          must stay overflow-visible so the mascot can break out, and without
-          this the blurred circles push the document wider than the viewport. */}
       <div
         className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
         aria-hidden="true"
       >
-        <div className="absolute -bottom-32 -left-40 size-[42rem] rounded-full bg-ember/20 blur-[120px]" />
-        <div className="absolute -right-32 -top-40 size-[38rem] rounded-full bg-cyan/20 blur-[120px]" />
+        <div className="absolute -bottom-40 -left-40 size-[40rem] rounded-full bg-ember/20 blur-[130px]" />
+        <div className="absolute -right-24 top-0 size-[34rem] rounded-full bg-cyan/20 blur-[130px]" />
       </div>
 
-      <div className="shell relative pt-8 md:pt-10">
-        <Pill icon={<ShieldCheck className="size-3.5 text-cyan" />}>
-          Licensed in Florida · {business.license}
-        </Pill>
-        <SeasonCard className="absolute right-5 top-8 hidden w-56 lg:block xl:w-60 md:right-8" />
+      {/* Two columns that hold their own weight, rather than a full-width type
+          block with a squeezed column beneath it. */}
+      <div className="shell relative grid items-center gap-10 py-12 md:py-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-6 lg:py-16">
+        <div className="relative z-10 max-w-xl">
+          <Pill icon={<ShieldCheck className="size-3.5 text-cyan" />}>
+            Licensed in Florida · {business.license}
+          </Pill>
 
-        {/* Type is sized to feel cropped by the viewport, not centred in it. */}
-        <h1 className="poster mt-5 text-[clamp(3rem,9.4vw,7.25rem)] text-white">
-          <span className="block">Heating</span>
-          <span className="block text-chill">Cooling</span>
-          <span className="block">
-            Mechanical<span className="text-orange">.</span>
-          </span>
-        </h1>
+          {/* The service words stay inside the H1 as a kicker, so the heading
+              still carries the keywords while the brand line does the work. */}
+          <h1 className="mt-6">
+            <span className="block font-display text-[0.78rem] font-extrabold uppercase tracking-[0.34em] text-cyan">
+              Heating · Cooling · Mechanical
+            </span>
+            <span className="poster mt-4 block text-[clamp(2.7rem,5.6vw,4.6rem)] text-white">
+              Comfort
+              <br />
+              lives <span className="text-chill">here</span>
+              <span className="text-orange">.</span>
+            </span>
+          </h1>
 
-        <div className="mt-7 grid gap-8 lg:grid-cols-[minmax(0,25rem)_1fr] lg:items-end">
-          <div className="relative z-10">
-            <p className="brandline text-[1.35rem] text-gold md:text-2xl">
-              {business.promise}
-            </p>
-            <div className="thermal-rule mt-3.5 w-28" aria-hidden="true" />
-            <p className="mt-5 text-lg leading-relaxed text-white/80">
-              Trusted HVAC experts keeping Southwest Florida comfortable — from{" "}
-              <span className="swoosh font-semibold text-white">coast to coast</span>.
-            </p>
+          <div className="thermal-rule mt-7 w-28" aria-hidden="true" />
 
-            <div className="mt-6 flex flex-wrap gap-3">
-              <ButtonLink href="/contact" size="lg">
-                Book My Service
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </ButtonLink>
-              <ButtonLink href={business.phoneHref} variant="outline" size="lg">
-                <Phone className="size-4" aria-hidden="true" />
-                Call {business.phone}
-              </ButtonLink>
-            </div>
+          <p className="mt-6 text-lg leading-relaxed text-white/80">
+            Flat-rate pricing quoted{" "}
+            <span className="font-semibold text-white">before work starts</span>,
+            licensed mechanical contractors across Lee, Collier and Charlotte
+            counties, and a real person on the phone at 2am.
+          </p>
 
-            <p className="mt-4 text-sm text-white/55">
-              No call centre · No obligation · Permits pulled on every replacement
-            </p>
-
-            <div className="mt-5 flex flex-wrap items-center gap-3">
-              <GoogleBadge onDark />
-              <ButtonLink href="/financing" variant="gold" size="sm">
-                Financing Options
-              </ButtonLink>
-            </div>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <ButtonLink href="/contact" size="lg">
+              Book My Service
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </ButtonLink>
+            <ButtonLink href={business.phoneHref} variant="outline" size="lg">
+              <Phone className="size-4" aria-hidden="true" />
+              {business.phone}
+            </ButtonLink>
           </div>
 
-          {/* Mascot hangs past the section edge into the strip below — the
-              one element allowed to break the frame. */}
-          <div className="relative hidden lg:block">
-            <img
-              src="/brand/logo-mascot.webp"
-              alt={`${business.name} — heating, cooling, mechanical and air quality`}
-              width={1200}
-              height={1034}
-              fetchPriority="high"
-              className="break-out relative -mb-20 ml-auto w-full max-w-md drop-shadow-[0_30px_60px_rgb(5_15_38/0.85)] xl:-mb-24 xl:max-w-lg"
-            />
+          <p className="mt-4 text-sm text-white/55">
+            No call centre · No obligation · Permits pulled on every replacement
+          </p>
+
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <GoogleBadge onDark />
+            <ButtonLink href="/financing" variant="gold" size="sm">
+              Financing Options
+            </ButtonLink>
           </div>
+
+          <SeasonCard variant="bar" className="mt-6 w-fit" />
         </div>
 
-        {/* Mobile keeps the lockup, without the break-out. */}
+        {/* Mascot is the anchor, not an afterthought: large, bled off the right
+            edge, with the live card overlapping its top corner. */}
+        <div className="relative hidden lg:block">
+          <img
+            src="/brand/logo-mascot.webp"
+            alt={`${business.name} — heating, cooling, mechanical and air quality`}
+            width={1200}
+            height={1034}
+            fetchPriority="high"
+            className="relative ml-auto w-[106%] max-w-none translate-x-2 drop-shadow-[0_34px_64px_rgb(5_15_38/0.85)] xl:w-[110%] xl:translate-x-4"
+          />
+        </div>
+
+        {/* Mobile keeps the lockup, centred and contained. */}
         <img
           src="/brand/logo-mascot-sm.webp"
           alt=""
           width={480}
           height={413}
-          className="mx-auto mt-10 w-full max-w-xs drop-shadow-[0_20px_40px_rgb(5_15_38/0.8)] lg:hidden"
+          className="mx-auto w-full max-w-sm drop-shadow-[0_20px_40px_rgb(5_15_38/0.8)] lg:hidden"
         />
       </div>
 
-      <CityMarquee className="relative mt-10 border-t border-white/10 pb-5 pt-4 lg:mt-16" />
+      <CityMarquee className="relative border-t border-white/10 pb-5 pt-4" />
     </section>
   );
 }
