@@ -4,7 +4,6 @@ import {
   ArrowUpRight,
   Check,
   Phone,
-  ShieldCheck,
   Zap,
 } from "lucide-react";
 import {
@@ -21,8 +20,8 @@ import { Icon } from "@/components/icon";
 import { Wave } from "@/components/wave";
 import { Reveal } from "@/components/reveal";
 import { TestimonialCarousel } from "@/components/testimonial-carousel";
-import { GoogleBadge, GoogleReviewCard } from "@/components/google-reviews";
-import { CityMarquee, Pill, SeasonCard, TrustStrip } from "@/components/brand";
+import { GoogleReviewCard } from "@/components/google-reviews";
+import { CityMarquee, Pill, TrustStrip } from "@/components/brand";
 import { ServiceMap } from "@/components/service-map";
 import { CtaBand } from "@/components/cta-band";
 import { FaqList } from "@/components/faq-list";
@@ -75,102 +74,84 @@ export default function Home() {
 
 function Hero() {
   return (
-    <section className="band-navy grain grid-lines relative isolate z-10 overflow-x-clip">
-      <picture>
-        <source media="(min-width: 1024px)" srcSet="/brand/hero-coast.webp" />
-        <source media="(min-width: 640px)" srcSet="/brand/hero-coast-1200.webp" />
-        <img
-          src="/brand/hero-coast-760.webp"
-          alt=""
-          fetchPriority="high"
-          className="absolute inset-0 -z-20 size-full object-cover object-center opacity-[0.18] mix-blend-luminosity"
-        />
-      </picture>
+    <section className="band-navy grain relative isolate overflow-hidden">
       <div
-        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+        className="pointer-events-none absolute inset-0 -z-10"
         aria-hidden="true"
       >
-        <div className="absolute -bottom-40 -left-40 size-[40rem] rounded-full bg-ember/20 blur-[130px]" />
-        <div className="absolute -right-24 top-0 size-[34rem] rounded-full bg-cyan/20 blur-[130px]" />
+        <div className="absolute -left-40 top-1/3 size-[36rem] rounded-full bg-ember/14 blur-[130px]" />
+        <div className="absolute -right-32 -top-32 size-[38rem] rounded-full bg-cyan/16 blur-[130px]" />
       </div>
 
-      {/* Two columns that hold their own weight, rather than a full-width type
-          block with a squeezed column beneath it. */}
-      <div className="shell relative grid items-center gap-10 py-12 md:py-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-6 lg:py-16">
-        <div className="relative z-10 max-w-xl">
-          <Pill icon={<ShieldCheck className="size-3.5 text-cyan" />}>
-            Licensed in Florida · {business.license}
-          </Pill>
-
-          {/* The service words stay inside the H1 as a kicker, so the heading
-              still carries the keywords while the brand line does the work. */}
-          <h1 className="mt-6">
-            <span className="block font-display text-[0.78rem] font-extrabold uppercase tracking-[0.34em] text-cyan">
-              Heating · Cooling · Mechanical
-            </span>
-            <span className="poster mt-4 block text-[clamp(2.7rem,5.6vw,4.6rem)] text-white">
-              Comfort
-              <br />
-              lives <span className="text-chill">here</span>
-              <span className="text-orange">.</span>
-            </span>
-          </h1>
-
-          <div className="thermal-rule mt-7 w-28" aria-hidden="true" />
-
-          <p className="mt-6 text-lg leading-relaxed text-white/80">
-            Flat-rate pricing quoted{" "}
-            <span className="font-semibold text-white">before work starts</span>,
-            licensed mechanical contractors across Lee, Collier and Charlotte
-            counties, and a real person on the phone at 2am.
+      <div className="shell relative grid items-center gap-12 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:gap-10 lg:py-20">
+        <div className="max-w-xl">
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-display text-[0.7rem] font-extrabold uppercase tracking-[0.26em] text-cyan">
+            Southwest Florida HVAC
+            <span className="h-3 w-px bg-white/25" aria-hidden="true" />
+            <span className="text-white/45">Lic. {business.license}</span>
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <h1 className="poster mt-6 text-[clamp(2.9rem,6.4vw,5.1rem)] text-white">
+            Comfort
+            <br />
+            lives <span className="text-chill">here</span>
+            <span className="text-orange">.</span>
+          </h1>
+
+          <p className="mt-7 max-w-lg text-lg leading-relaxed text-white/75">
+            Heating, cooling and mechanical across Lee, Collier and Charlotte
+            counties — flat-rate pricing quoted before work starts, and a real
+            person on the phone at 2am.
+          </p>
+
+          <div className="mt-9 flex flex-wrap items-center gap-4">
             <ButtonLink href="/contact" size="lg">
               Book My Service
               <ArrowRight className="size-4" aria-hidden="true" />
             </ButtonLink>
-            <ButtonLink href={business.phoneHref} variant="outline" size="lg">
-              <Phone className="size-4" aria-hidden="true" />
+            <a
+              href={business.phoneHref}
+              className="group inline-flex items-center gap-2.5 font-display text-base font-extrabold text-white transition-colors hover:text-cyan"
+            >
+              <span className="grid size-10 place-items-center rounded-full ring-1 ring-white/25 transition-colors group-hover:ring-cyan">
+                <Phone className="size-4" aria-hidden="true" />
+              </span>
               {business.phone}
-            </ButtonLink>
+            </a>
           </div>
 
-          <p className="mt-4 text-sm text-white/55">
-            No call centre · No obligation · Permits pulled on every replacement
-          </p>
-
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <GoogleBadge onDark />
-            <ButtonLink href="/financing" variant="gold" size="sm">
-              Financing Options
-            </ButtonLink>
-          </div>
-
-          <SeasonCard variant="bar" className="mt-6 w-fit" />
+          {/* Three quiet proofs on a hairline, not a wall of badges. */}
+          <dl className="mt-12 flex flex-wrap gap-x-10 gap-y-5 border-t border-white/12 pt-7">
+            {[
+              { v: String(locations.length), k: "Cities served" },
+              { v: "24/7", k: "Emergency line" },
+              { v: cleanAndTune.price, k: "Clean & Tune" },
+            ].map((p) => (
+              <div key={p.k}>
+                <dt className="poster text-2xl text-white">{p.v}</dt>
+                <dd className="mt-1 font-display text-[0.62rem] font-extrabold uppercase tracking-[0.18em] text-white/45">
+                  {p.k}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
 
-        {/* Mascot is the anchor, not an afterthought: large, bled off the right
-            edge, with the live card overlapping its top corner. */}
-        <div className="relative hidden lg:block">
+        {/* The coverage illustration anchors the hero. It says "coast to
+            coast" literally, names the focus markets, and — unlike the mascot
+            lockup — does not repeat the wordmark already in the header. */}
+        <div className="relative">
           <img
-            src="/brand/logo-mascot.webp"
-            alt={`${business.name} — heating, cooling, mechanical and air quality`}
-            width={1200}
-            height={1034}
+            src="/brand/map-florida.webp"
+            srcSet="/brand/map-florida-sm.webp 550w, /brand/map-florida.webp 1100w"
+            sizes="(min-width: 1024px) 560px, 88vw"
+            alt="Coast to Coast Air serves Southwest Florida, with focus markets in Estero, Bonita Springs and Naples"
+            width={1100}
+            height={949}
             fetchPriority="high"
-            className="relative ml-auto w-[106%] max-w-none translate-x-2 drop-shadow-[0_34px_64px_rgb(5_15_38/0.85)] xl:w-[110%] xl:translate-x-4"
+            className="mx-auto w-full max-w-lg drop-shadow-[0_30px_60px_rgb(5_15_38/0.8)]"
           />
         </div>
-
-        {/* Mobile keeps the lockup, centred and contained. */}
-        <img
-          src="/brand/logo-mascot-sm.webp"
-          alt=""
-          width={480}
-          height={413}
-          className="mx-auto w-full max-w-sm drop-shadow-[0_20px_40px_rgb(5_15_38/0.8)] lg:hidden"
-        />
       </div>
 
       <CityMarquee className="relative border-t border-white/10 pb-5 pt-4" />

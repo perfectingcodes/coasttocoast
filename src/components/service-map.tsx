@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { ArrowUpRight, MapPin, Phone } from "lucide-react";
 import { business, locations, type Location } from "@/content/site";
 import { saltNote } from "@/content/local";
-import { Pill } from "@/components/brand";
+import { Pill, SeasonCard } from "@/components/brand";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -243,6 +243,8 @@ export function ServiceMap() {
                 </li>
               ))}
             </ul>
+
+            <SeasonCard variant="bar" className="mt-5 w-fit" />
 
             <p className="mt-4 text-xs text-white/40">
               Pin positions are plotted from real coordinates; the coastline is a

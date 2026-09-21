@@ -176,6 +176,7 @@ def main():
         "logo-mascot.png", "logo-badge.png", "mascot.png",
         "badge-locally-owned.png", "hero-coast.jpg",
         "mascot-bust.png", "mascot-service.png",
+        "avatar-husky.png", "map-florida.png",
         "photo-condenser.png", "photo-van.png",
     )
     missing = [n for n in required if not (SRC / n).exists()]
@@ -205,6 +206,9 @@ def main():
     emit(knockout(SRC / "mascot-bust.png"), "mascot-bust-sm", 400)
     emit(knockout(SRC / "mascot-service.png"), "mascot-service", 900, png=True)
     emit(knockout(SRC / "mascot-service.png"), "mascot-service-sm", 450)
+    emit(knockout(SRC / "avatar-husky.png"), "avatar-husky", 256, png=True)
+    emit(knockout(SRC / "map-florida.png"), "map-florida", 1100, png=True)
+    emit(knockout(SRC / "map-florida.png"), "map-florida-sm", 550)
 
     print("writing photography...")
     # Hero runs full-bleed, so it needs a large source; the rest sit in panels.

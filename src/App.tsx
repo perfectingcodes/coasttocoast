@@ -1,6 +1,7 @@
-import { Route, Router as WouterRouter, Switch } from "wouter";
+import { Route, Router as WouterRouter, Switch, useLocation } from "wouter";
 import { MotionConfig } from "framer-motion";
 import { ScrollToTop } from "@/components/scroll-to-top";
+import { SupportBot } from "@/components/support-bot";
 import { HeadProvider, type HeadCollector } from "@/lib/head";
 
 import Home from "@/pages/home";
@@ -58,6 +59,13 @@ function Routes() {
   );
 }
 
+/** Public pages only — the internal dashboard has no use for it. */
+function SupportLauncher() {
+  const [location] = useLocation();
+  if (location.startsWith("/admin")) return null;
+  return <SupportBot />;
+}
+
 export default function App({
   head,
   ssrPath,
@@ -71,6 +79,7 @@ export default function App({
         <WouterRouter ssrPath={ssrPath}>
           <ScrollToTop />
           <Routes />
+          <SupportLauncher />
         </WouterRouter>
       </HeadProvider>
     </MotionConfig>
