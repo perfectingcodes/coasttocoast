@@ -62,7 +62,30 @@ export function ServiceMap() {
           </p>
         </div>
 
-        <div className="mt-11 grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center">
+        {/* Fastest path for the three markets most visitors want. */}
+        <ul className="mt-8 flex flex-wrap gap-3">
+          {focusCities.map((l) => (
+            <li key={l.slug}>
+              <Link
+                href={`/locations/${l.slug}`}
+                onMouseEnter={() => setActiveSlug(l.slug)}
+                onFocus={() => setActiveSlug(l.slug)}
+                className="group flex items-center gap-2.5 rounded-full bg-white/10 px-4 py-2.5 ring-1 ring-orange/50 transition-colors hover:bg-white/16"
+              >
+                <MapPin className="size-4 text-orange" aria-hidden="true" />
+                <span className="font-display text-sm font-extrabold text-white">
+                  {l.city}
+                </span>
+                <ArrowUpRight
+                  className="size-3.5 text-white/50 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  aria-hidden="true"
+                />
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center">
           {/* --------------------------------------------------------- map */}
           <div className="relative mx-auto w-full max-w-sm">
             <svg
@@ -112,6 +135,17 @@ export function ServiceMap() {
                 return (
                   <g key={l.slug}>
                     {isActive && <circle cx={x} cy={y} r="46" fill="url(#map-glow)" />}
+                    {l.focus && !isActive && (
+                      <circle
+                        cx={x}
+                        cy={y}
+                        r="17"
+                        fill="none"
+                        stroke="#ff6a13"
+                        strokeOpacity="0.45"
+                        strokeWidth="2"
+                      />
+                    )}
                     <g
                       role="button"
                       tabIndex={0}
@@ -125,7 +159,7 @@ export function ServiceMap() {
                           setActiveSlug(l.slug);
                         }
                       }}
-                      className="cursor-pointer focus:outline-none"
+                      className="cursor-pointer outline-none focus-visible:[&>circle:nth-child(2)]:stroke-white"
                     >
                       {/* generous invisible hit area */}
                       <circle cx={x} cy={y} r="26" fill="transparent" />
@@ -155,6 +189,24 @@ export function ServiceMap() {
                 );
               })}
             </svg>
+
+            <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+              {[
+                { c: "bg-orange", label: "Focus markets" },
+                { c: "bg-cyan", label: "Also covered" },
+              ].map((k) => (
+                <li
+                  key={k.label}
+                  className="flex items-center gap-2 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/45"
+                >
+                  <span className={cn("size-2.5 rounded-full", k.c)} aria-hidden="true" />
+                  {k.label}
+                </li>
+              ))}
+              <li className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/30">
+                Tap a pin
+              </li>
+            </ul>
 
             {/* The mascot stands in the Gulf, pointing back at the coast. */}
             <img
@@ -190,6 +242,12 @@ export function ServiceMap() {
 
               <p className="mt-4 leading-relaxed text-white/75">{active.intro}</p>
 
+              <p className="mt-5 rounded-xl bg-white/8 px-4 py-3 text-sm text-white/80 ring-1 ring-white/12">
+                <span className="font-semibold text-white">Covered here?</span>{" "}
+                If your ZIP is listed below, yes — same crew, same pricing, same
+                24/7 line.
+              </p>
+
               <dl className="mt-6 grid gap-4 border-t border-white/12 pt-5 sm:grid-cols-2">
                 {[
                   ["ZIP codes", active.zips.join(", ")],
@@ -221,7 +279,10 @@ export function ServiceMap() {
             {/* Real links, not buttons: hovering previews the city on the map,
                 clicking goes to its page — so every city stays crawlable from
                 the home page and reachable without a pointer. */}
-            <ul className="mt-5 flex flex-wrap gap-2">
+            <p className="mt-6 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-white/40">
+              Every city we cover
+            </p>
+            <ul className="mt-3 flex flex-wrap gap-2">
               {locations.map((l) => (
                 <li key={l.slug}>
                   <Link
