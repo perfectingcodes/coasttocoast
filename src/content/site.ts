@@ -68,6 +68,54 @@ export type IconName =
   | "building"
   | "wind";
 
+/**
+ * Each service gets a differently shaped detail block, because each service
+ * genuinely answers a different question. Maintenance is sold on a price and a
+ * checklist; commercial is sold on property type; air quality is sold on
+ * symptoms. The page layout switches on `detail.kind` rather than pouring six
+ * different products into one template.
+ */
+export type ServiceDetail =
+  /** Heating — what fails in a system that sits idle eleven months a year. */
+  | {
+      kind: "seasonal";
+      heading: string;
+      lead: string;
+      items: { title: string; body: string }[];
+    }
+  /** Cooling — runtime, lifespan, and the signs a system is going. */
+  | {
+      kind: "lifespan";
+      heading: string;
+      lead: string;
+      stats: { value: string; label: string }[];
+      signsHeading: string;
+      signs: string[];
+    }
+  /** Mechanical — the licensed, code-governed work behind the equipment. */
+  | {
+      kind: "credential";
+      heading: string;
+      lead: string;
+      components: { name: string; body: string }[];
+    }
+  /** Repairs & maintenance — the published offer is the page. */
+  | { kind: "offer" }
+  /** Commercial — segmented by property type, not by equipment. */
+  | {
+      kind: "segments";
+      heading: string;
+      lead: string;
+      segments: { name: string; body: string; points: string[] }[];
+    }
+  /** Air quality — symptom, cause, fix. */
+  | {
+      kind: "symptoms";
+      heading: string;
+      lead: string;
+      rows: { symptom: string; cause: string; fix: string }[];
+    };
+
 export interface Service {
   slug: string;
   name: string;
@@ -76,6 +124,8 @@ export interface Service {
   /** Even shorter label for <title> tags, where ~60 characters is the budget.
    *  Falls back to `short`. */
   seoShort?: string;
+  /** Drives which layout this service page renders. */
+  detail: ServiceDetail;
   /** One line under the card title. */
   blurb: string;
   /** Two or three sentences opening the service page. */
@@ -98,6 +148,29 @@ export const services: Service[] = [
       "Florida winters are short, which is exactly why heating problems go unnoticed until the first cold snap. We service heat pumps, electric strip heat and gas furnaces, and we test heating operation as part of every maintenance visit rather than waiting for January.",
     icon: "flame",
     accent: "orange",
+    detail: {
+      kind: "seasonal",
+      heading: "What fails in a system that sits idle",
+      lead: "Heat runs a handful of nights a year here, so heating faults are almost always discovered on the coldest night rather than during the season. These are the four we find most often, and all four are visible during a maintenance visit months earlier.",
+      items: [
+        {
+          title: "A reversing valve that will not shift",
+          body: "The heat pump cools all summer and then refuses to run backwards in December. The valve or its solenoid has seized after months in one position.",
+        },
+        {
+          title: "Open or corroded heat strips",
+          body: "Electric backup heat sits unused and unprotected. A single open element halves the output without throwing a code, so the house just never quite warms up.",
+        },
+        {
+          title: "A pitted contactor",
+          body: "The same contactor that carried the cooling season is asked to close on a cold start. Pitted contacts either chatter or weld shut.",
+        },
+        {
+          title: "Changeover wired wrong",
+          body: "On a system that has been serviced by several people, the O/B changeover terminal is frequently set for the wrong manufacturer — the system heats when it should cool and the other way round.",
+        },
+      ],
+    },
     bullets: [
       "Heat pump repair, replacement and reversing-valve diagnostics",
       "Electric strip heat and gas furnace service",
@@ -125,6 +198,26 @@ export const services: Service[] = [
       "Air conditioning in Southwest Florida runs close to year-round, and that runtime is why systems here last 10–15 years instead of 20. We diagnose what actually failed, quote it before we touch anything, and size replacements to the home rather than to the box that came out.",
     icon: "snowflake",
     accent: "cyan",
+    detail: {
+      kind: "lifespan",
+      heading: "Runtime is what wears these systems out",
+      lead: "Air conditioning here runs close to year-round, and that is the single biggest difference between a Florida system and the same equipment installed anywhere north of it. It is also why the numbers below look shorter than the manufacturer's brochure.",
+      stats: [
+        { value: "10–15", label: "Years of typical system life in this climate" },
+        { value: "2×", label: "Recommended service visits per year" },
+        { value: "45–55%", label: "Indoor humidity worth targeting" },
+        { value: "All", label: "Major brands serviced, in and out of warranty" },
+      ],
+      signsHeading: "Signs a system needs attention now",
+      signs: [
+        "Air from the vents is cool but never cold",
+        "The system runs continuously and never satisfies the thermostat",
+        "Water pooling near the air handler, or a ceiling stain beneath it",
+        "A breaker that trips when the outdoor unit starts",
+        "Ice forming on the refrigerant line at the condenser",
+        "A burning or musty smell in the first minutes of a cycle",
+      ],
+    },
     bullets: [
       "Air conditioning repair on all major brands",
       "System replacement with permitting handled",
@@ -152,6 +245,33 @@ export const services: Service[] = [
       "Mechanical work is the part of HVAC that sits behind the equipment — ductwork, air handlers, condensate systems, electrical connections and the mounts holding it all down. We hold Florida Mechanical Contractor license CMC1251768 and do this work to code, with documentation.",
     icon: "cog",
     accent: "slate",
+    detail: {
+      kind: "credential",
+      heading: "The work behind the equipment",
+      lead: "Mechanical is the part of an HVAC system nobody photographs, and the part that decides whether new equipment can deliver what it promises. It is also the part governed by code and inspection, which is why it takes a licensed mechanical contractor.",
+      components: [
+        {
+          name: "Ductwork",
+          body: "Repair, replacement and mastic sealing at every joint and boot. Leaky duct in a hot attic wastes a meaningful share of everything the system produces.",
+        },
+        {
+          name: "Air handlers",
+          body: "Cabinet, coil and blower service, plus the return sizing that older homes frequently never had in the first place.",
+        },
+        {
+          name: "Condensate systems",
+          body: "Drain lines, P-traps, pans and chemical treatment — the most common single cause of an emergency call in this climate.",
+        },
+        {
+          name: "Electrical",
+          body: "Whips, disconnects, contactors and amp-draw verification, brought to current code as part of any replacement.",
+        },
+        {
+          name: "Pads and mounts",
+          body: "Hurricane-rated condenser mounts and elevated pads, which is what keeps an outdoor unit where you left it.",
+        },
+      ],
+    },
     bullets: [
       "Ductwork repair, replacement and sealing",
       "Air handler and condensate system service",
@@ -180,6 +300,7 @@ export const services: Service[] = [
       "Twice-yearly maintenance is not upselling in this climate — humidity and near-year-round cooling put more strain on equipment here than almost anywhere else in the country. Our Clean & Tune is a 10-point service, priced flat, and it catches the failures that otherwise strand you in August.",
     icon: "wrench",
     accent: "blue",
+    detail: { kind: "offer" },
     bullets: [
       "10-point Clean & Tune, twice a year",
       "Capacitor readings taken before they fail",
@@ -207,6 +328,49 @@ export const services: Service[] = [
       "For a business, an HVAC failure is lost revenue, not just discomfort. We service light commercial and multi-building properties across Southwest Florida — including HOA communities and assisted living facilities — with scheduled maintenance that keeps equipment out of emergency status.",
     icon: "building",
     accent: "slate",
+    detail: {
+      kind: "segments",
+      heading: "What we cover, by property type",
+      lead: "Commercial work is not residential work at a larger scale — what a restaurant needs from us is nothing like what an HOA board needs. These are the four we are set up for.",
+      segments: [
+        {
+          name: "HOA and multi-building",
+          body: "Scheduled service across a whole community, with the documentation boards actually need.",
+          points: [
+            "One schedule covering every building",
+            "Condition reporting for budgets and reserve studies",
+            "Insurance documentation on request",
+          ],
+        },
+        {
+          name: "Assisted living and senior housing",
+          body: "Facilities where a cooling failure is a resident-safety problem, not an inconvenience.",
+          points: [
+            "Priority response",
+            "Planned maintenance that avoids occupied hours",
+            "Temporary cooling while parts ship",
+          ],
+        },
+        {
+          name: "Restaurants and retail",
+          body: "Kitchens and sales floors carry loads that consumer equipment specs do not anticipate.",
+          points: [
+            "Scheduling around opening hours",
+            "Make-up air and exhaust interaction",
+            "Rooftop unit service",
+          ],
+        },
+        {
+          name: "Medical and professional offices",
+          body: "Spaces where humidity and air quality are part of the operating requirement.",
+          points: [
+            "Humidity held inside a specified band",
+            "Filtration upgrades",
+            "After-hours work",
+          ],
+        },
+      ],
+    },
     bullets: [
       "Light commercial repair, replacement and maintenance",
       "Multi-building and HOA community programs",
@@ -234,6 +398,38 @@ export const services: Service[] = [
       "In this climate the real air quality problem is humidity. Coastal moisture clogs condensate drains faster than inland homes and feeds mold growth in ductwork, so we measure humidity and fix the cause — drainage, duct leakage, a system that short-cycles — instead of selling you a filter.",
     icon: "wind",
     accent: "cyan",
+    detail: {
+      kind: "symptoms",
+      heading: "Symptom, cause, and what we actually do",
+      lead: "Nearly every indoor air quality complaint in this climate traces back to moisture rather than dust. The useful question is never which filter to buy — it is which of these five you are looking at.",
+      rows: [
+        {
+          symptom: "The house feels clammy even at 74°",
+          cause: "An oversized system short-cycling — it hits temperature fast and never runs long enough to dehumidify",
+          fix: "Measure runtime and humidity, right-size at replacement, add dehumidification where the load genuinely calls for it",
+        },
+        {
+          symptom: "A musty smell in the first minutes of a cycle",
+          cause: "Biological growth on a permanently wet evaporator coil or in the drain pan",
+          fix: "Antimicrobial coil clean, drain line vacuum and flush, chemical treatment of the pan",
+        },
+        {
+          symptom: "A ceiling stain below the air handler",
+          cause: "A clogged condensate drain backing water up into the secondary pan",
+          fix: "Vacuum and flush the line, refill the P-trap, treat the pan and verify the float switch",
+        },
+        {
+          symptom: "Dust returns within days of cleaning",
+          cause: "Duct leakage pulling unconditioned attic air, and everything in it, into the supply",
+          fix: "Pressure-test the duct system and seal at joints and boots rather than cleaning it again",
+        },
+        {
+          symptom: "Allergies worse indoors than outdoors",
+          cause: "Return-side leakage and filter bypass, so a share of the air never passes through the filter at all",
+          fix: "Seal the return, correct filter sizing and fit, then discuss media or UV options",
+        },
+      ],
+    },
     bullets: [
       "Humidity measurement and dehumidification",
       "Condensate drain cleaning and chemical treatment",

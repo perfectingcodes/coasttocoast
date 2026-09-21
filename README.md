@@ -166,10 +166,32 @@ with different words:
 | --- | --- |
 | Home | Photo hero, at-a-glance strip, service grid, offer split, navy why-us band, testimonial carousel, areas, FAQ |
 | Service index | Alternating full-width feature rows, no cards |
-| Service | Sticky quote sidebar, numbered process strip on navy, full city matrix |
+| Service | **One layout per service** — see below |
 | Area index | Grouped by county with per-county counts, plus a permitting table |
 | City | Wide service matrix, conditions split, fact table, sticky form |
 | Service × city | Single narrow reading column, answer first, fact table, form at the end |
+
+There is no single service-page template. `Service.detail` is a discriminated
+union, and [`src/components/service-sections.tsx`](src/components/service-sections.tsx)
+renders a different body per `kind`, because each service answers a different
+question:
+
+| Service | `kind` | Layout |
+| --- | --- | --- |
+| Heating | `seasonal` | Single wide column, no sidebar; four idle-system failure modes as a numbered grid on navy |
+| Cooling | `lifespan` | Four-stat strip up top, then copy beside a sunset-headed "signs a system needs attention" checklist |
+| Mechanical | `credential` | Licence bar, then alternating numbered component rows, then a permitting-authority table by city |
+| Repairs & Maintenance | `offer` | The published $89 price card leads, with the 10-point checklist numbered beside it |
+| Commercial HVAC | `segments` | Four property-type panels, then a site-visit request on navy instead of a consumer form |
+| Indoor Air Quality | `symptoms` | A three-column symptom → cause → fix diagnostic table as the centrepiece |
+
+The process strip appears only on heating and cooling, where a first-time caller
+needs to know what happens next; elsewhere the page body *is* the process.
+Commercial skips the consumer cross-sell and closes on a site visit.
+
+Measured across the six service pages, mean pairwise similarity of main content
+fell from 34.0% to 14.0% (max 38.2% to 24.2%) as a result, with median length up
+from 572 to 725 words.
 
 ## Routes
 
