@@ -25,7 +25,9 @@ async function main() {
     path.resolve(publicDir, "index.html"),
     "utf-8",
   );
-  const { render, routes, siteUrl } = await import(pathToFileURL(serverEntry).href);
+  const { render, routes, siteUrl, buildLlmsTxt } = await import(
+    pathToFileURL(serverEntry).href,
+  );
 
   // Override with SITE_URL only for staging/preview deploys.
   const SITE_URL = (process.env.SITE_URL || siteUrl).replace(/\/$/, "");
@@ -76,14 +78,42 @@ ${routes
 `;
   await fs.writeFile(path.resolve(publicDir, "sitemap.xml"), sitemap, "utf-8");
 
+  // Answer-engine crawlers are named explicitly: several of them ignore a
+  // bare `User-agent: *` block, and being listed is what gets the site cited.
+  const aiAgents = [
+    "GPTBot",
+    "OAI-SearchBot",
+    "ChatGPT-User",
+    "ClaudeBot",
+    "Claude-SearchBot",
+    "Claude-User",
+    "PerplexityBot",
+    "Perplexity-User",
+    "Google-Extended",
+    "Applebot-Extended",
+    "Bingbot",
+  ];
   await fs.writeFile(
     path.resolve(publicDir, "robots.txt"),
-    `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`,
+    [
+      "User-agent: *",
+      "Allow: /",
+      "",
+      ...aiAgents.flatMap((a) => [`User-agent: ${a}`, "Allow: /", ""]),
+      `Sitemap: ${SITE_URL}/sitemap.xml`,
+      "",
+    ].join("\n"),
+    "utf-8",
+  );
+
+  await fs.writeFile(
+    path.resolve(publicDir, "llms.txt"),
+    buildLlmsTxt(),
     "utf-8",
   );
 
   console.log(
-    `\n✅ Prerendered ${routes.length} pages + 404.html + sitemap.xml + robots.txt`,
+    `\n✅ Prerendered ${routes.length} pages + 404.html + sitemap.xml + robots.txt + llms.txt`,
   );
 }
 

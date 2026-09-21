@@ -281,13 +281,31 @@ export const cleanAndTune = {
 
 // ----------------------------------------------------------------- locations
 
+export type SaltExposure = "canal" | "gulf" | "inland";
+
 export interface Location {
   slug: string;
   city: string;
   county: string;
+  /** County office that issues the HVAC permit — differs per county. */
+  permitAuthority: string;
+  /** Approximate city-centre coordinates, used for LocalBusiness geo markup. */
+  lat: number;
+  lng: number;
+  zips: string[];
   /** Genuinely local context, drawn from the company's own city pages. */
   intro: string;
   neighborhoods: string[];
+  /** Real conditions that change how equipment is specified and serviced here. */
+  conditions: {
+    salt: SaltExposure;
+    /** One line on the local housing stock. */
+    housing: string;
+    /** Significant share of seasonally occupied homes. */
+    seasonal: boolean;
+    /** Took direct damage in the 2022 Hurricane Ian landfall. */
+    stormImpact: boolean;
+  };
 }
 
 export const locations: Location[] = [
@@ -295,6 +313,10 @@ export const locations: Location[] = [
     slug: "fort-myers",
     city: "Fort Myers",
     county: "Lee County",
+    permitAuthority: "Lee County Department of Community Development",
+    lat: 26.6406,
+    lng: -81.8723,
+    zips: ["33901", "33905", "33907", "33908", "33912", "33913", "33916", "33919", "33966"],
     intro:
       "Fort Myers housing runs from historic homes in the Downtown River District to newer construction south of Daniels Parkway, and the two need very different things from an HVAC system. Older neighborhoods often have original ductwork and undersized returns, which changes what a replacement actually requires.",
     neighborhoods: [
@@ -307,11 +329,22 @@ export const locations: Location[] = [
       "Fort Myers Beach",
       "Centennial Park",
     ],
+    conditions: {
+      salt: "gulf",
+      housing:
+        "a wide split between pre-1970 block homes downtown and post-2000 construction south of Daniels Parkway",
+      seasonal: false,
+      stormImpact: true,
+    },
   },
   {
     slug: "cape-coral",
     city: "Cape Coral",
     county: "Lee County",
+    permitAuthority: "City of Cape Coral Building Division",
+    lat: 26.5629,
+    lng: -81.9495,
+    zips: ["33904", "33909", "33914", "33990", "33991", "33993"],
     intro:
       "With more canal miles than any city in the world, Cape Coral's waterfront homes face humidity and salt exposure that inland Florida homes simply don't. Canal-front humidity accelerates coil corrosion and condensate drain clogs, and many homeowners have since upgraded to hurricane-rated outdoor condenser mounts and elevated pads.",
     neighborhoods: [
@@ -322,11 +355,22 @@ export const locations: Location[] = [
       "Burnt Store",
       "Cape Harbour",
     ],
+    conditions: {
+      salt: "canal",
+      housing:
+        "overwhelmingly single-family homes on canal lots, with condensers sited close to brackish water",
+      seasonal: false,
+      stormImpact: true,
+    },
   },
   {
     slug: "naples",
     city: "Naples",
     county: "Collier County",
+    permitAuthority: "Collier County Growth Management Department",
+    lat: 26.142,
+    lng: -81.7948,
+    zips: ["34102", "34103", "34104", "34105", "34112", "34113"],
     intro:
       "Licensed, insured air conditioning service for Naples homes and businesses — from routine maintenance near the Naples Pier to full system replacement throughout Old Naples and Port Royal. A great many Naples homes also sit empty for months, and an unoccupied house in July is where humidity damage starts.",
     neighborhoods: [
@@ -337,11 +381,22 @@ export const locations: Location[] = [
       "Golden Gate",
       "East Naples",
     ],
+    conditions: {
+      salt: "gulf",
+      housing:
+        "high-value coastal homes, many of them closed up for months at a time",
+      seasonal: true,
+      stormImpact: false,
+    },
   },
   {
     slug: "north-naples",
     city: "North Naples",
     county: "Collier County",
+    permitAuthority: "Collier County Growth Management Department",
+    lat: 26.2637,
+    lng: -81.8009,
+    zips: ["34108", "34109", "34110", "34119"],
     intro:
       "North Naples' mix of high-rise condos along Vanderbilt Beach, established communities like Pelican Bay and Pelican Marsh, and the retail corridor around Mercato all place heavy, near-continuous demand on air conditioning systems. Salt air off Wiggins Pass and Barefoot Beach adds corrosion on top of that load.",
     neighborhoods: [
@@ -352,11 +407,22 @@ export const locations: Location[] = [
       "Tarpon Cove",
       "Wiggins Bay",
     ],
+    conditions: {
+      salt: "gulf",
+      housing:
+        "a mix of beachfront high-rise condos and established gated communities",
+      seasonal: true,
+      stormImpact: false,
+    },
   },
   {
     slug: "bonita-springs",
     city: "Bonita Springs",
     county: "Lee County",
+    permitAuthority: "City of Bonita Springs Building Department",
+    lat: 26.3398,
+    lng: -81.7787,
+    zips: ["34134", "34135"],
     intro:
       "Licensed, insured air conditioning service for Bonita Springs homes and businesses — from routine maintenance near Barefoot Beach Preserve to full system replacement throughout Downtown Bonita Springs and Bonita Beach. Gulf-front humidity means condensate lines here need cleaning more often than inland homes.",
     neighborhoods: [
@@ -367,11 +433,22 @@ export const locations: Location[] = [
       "Village Walk",
       "Worthington",
     ],
+    conditions: {
+      salt: "gulf",
+      housing:
+        "gulf-front homes and inland golf communities within a few miles of each other",
+      seasonal: true,
+      stormImpact: false,
+    },
   },
   {
     slug: "estero",
     city: "Estero",
     county: "Lee County",
+    permitAuthority: "Village of Estero Building Department",
+    lat: 26.4381,
+    lng: -81.8068,
+    zips: ["33928", "33967"],
     intro:
       "Estero's rapid growth around Coconut Point and Miromar Outlets has brought a mix of established communities like The Brooks and Grandezza alongside newer construction in Corkscrew Shores and Copperleaf. Newer builds bring newer equipment, which makes warranty-correct maintenance worth doing properly.",
     neighborhoods: [
@@ -382,11 +459,22 @@ export const locations: Location[] = [
       "Corkscrew Shores",
       "Downtown Estero",
     ],
+    conditions: {
+      salt: "inland",
+      housing:
+        "predominantly post-2000 construction, much of it still inside the manufacturer warranty window",
+      seasonal: false,
+      stormImpact: false,
+    },
   },
   {
     slug: "punta-gorda",
     city: "Punta Gorda",
     county: "Charlotte County",
+    permitAuthority: "Charlotte County Community Development",
+    lat: 26.8979,
+    lng: -82.0454,
+    zips: ["33950", "33955", "33982", "33983"],
     intro:
       "Punta Gorda's waterfront homes along Charlotte Harbor and Punta Gorda Isles, along with the historic homes near Gilchrist Park and downtown, all rely on Coast to Coast for HVAC maintenance, repair, and replacement. Storm seasons have left a lot of systems running on replaced parts rather than replaced equipment.",
     neighborhoods: [
@@ -396,11 +484,22 @@ export const locations: Location[] = [
       "Punta Gorda Heights",
       "Trabue Woods",
     ],
+    conditions: {
+      salt: "canal",
+      housing:
+        "harbour-front and canal homes alongside a historic downtown core",
+      seasonal: false,
+      stormImpact: true,
+    },
   },
   {
     slug: "port-charlotte",
     city: "Port Charlotte",
     county: "Charlotte County",
+    permitAuthority: "Charlotte County Community Development",
+    lat: 26.9762,
+    lng: -82.0906,
+    zips: ["33948", "33952", "33953", "33954", "33980", "33981"],
     intro:
       "Port Charlotte's canal-front homes near Port Charlotte Beach Park, the growing Deep Creek area, and neighborhoods throughout South Port Charlotte and Port Charlotte West all trust Coast to Coast for HVAC maintenance, repair, and replacement. The housing stock skews older, so original air handlers are a common find here.",
     neighborhoods: [
@@ -410,6 +509,13 @@ export const locations: Location[] = [
       "Deep Creek",
       "Harbor Heights",
     ],
+    conditions: {
+      salt: "canal",
+      housing:
+        "an older housing stock where original air handlers and undersized electrical service are common",
+      seasonal: false,
+      stormImpact: true,
+    },
   },
 ];
 

@@ -3,7 +3,7 @@ import { SiteLayout } from "@/components/layout/site-layout";
 import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { CtaBand } from "@/components/cta-band";
-import { Seo, breadcrumbJsonLd, localBusinessJsonLd } from "@/lib/seo";
+import { Seo, breadcrumbNode } from "@/lib/seo";
 
 export default function About() {
   return (
@@ -12,9 +12,8 @@ export default function About() {
         title={`About ${business.formalName} | Locally Owned in ${region}`}
         description={`${business.formalName} is a licensed, insured and locally owned HVAC contractor serving ${region} out of ${business.city} — flat-rate pricing on every job.`}
         path="/about"
-        jsonLd={[
-          localBusinessJsonLd(),
-          breadcrumbJsonLd([
+        nodes={[
+          breadcrumbNode("/about", [
             { name: "Home", path: "/" },
             { name: "About", path: "/about" },
           ]),

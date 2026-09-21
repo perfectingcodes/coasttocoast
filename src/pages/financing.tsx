@@ -5,7 +5,7 @@ import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { CtaBand } from "@/components/cta-band";
 import { ButtonLink } from "@/components/ui/button";
-import { Seo, breadcrumbJsonLd } from "@/lib/seo";
+import { Seo, breadcrumbNode } from "@/lib/seo";
 
 export default function Financing() {
   return (
@@ -14,8 +14,8 @@ export default function Financing() {
         title={`HVAC Financing in ${region} | ${business.name}`}
         description={`Financing options on approved credit for AC replacement and larger repairs across ${region}. Same-day decisions in most cases — call ${business.phone}.`}
         path="/financing"
-        jsonLd={[
-          breadcrumbJsonLd([
+        nodes={[
+          breadcrumbNode("/financing", [
             { name: "Home", path: "/" },
             { name: "Financing", path: "/financing" },
           ]),

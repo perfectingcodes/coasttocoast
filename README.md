@@ -13,6 +13,7 @@ server required — `dist/public/` deploys to any static host.
 pnpm install
 pnpm dev         # dev server on http://localhost:5173
 pnpm typecheck   # tsc --noEmit
+pnpm audit:seo   # post-build SEO/GEO audit of dist/public
 pnpm build       # client build + SSR build + prerender to dist/public
 pnpm serve       # preview the built output
 ```
@@ -84,6 +85,91 @@ brush line). The `.sky`, `.band-navy` and `.band-sunset` grounds plus the
 Swap the hero for real Southwest Florida photography — or a shot of the team or
 a completed job — when the client supplies it. Only the file needs replacing;
 the pipeline and markup stay the same.
+
+## SEO and GEO
+
+### Local content, not templated content
+
+The 48 service × city pages are the whole point of the route tree, and the risk
+with that shape is 48 copies of one page with a city name swapped in — which
+search engines treat as doorway content and answer engines have no reason to
+cite.
+
+[`src/content/local.ts`](src/content/local.ts) derives page copy from facts that
+genuinely differ between these cities: the office that issues the permit,
+whether condensers sit on brackish water, the age of the housing stock, whether
+homes sit empty for months, and whether the area took a direct hit in 2022.
+Nothing there invents a claim — each branch restates a documented condition from
+`Location.conditions`, the county permitting authority, or the company's own
+published service description.
+
+Measured on main-page content with nav and footer stripped:
+
+| Page set | Mean pairwise similarity | Pairs >60% similar | Median words |
+| --- | --- | --- | --- |
+| City landing pages (8) — before | 65.1% | 28 of 28 | 367 |
+| City landing pages (8) — after | 27.7% | 0 of 28 | 704 |
+| Service × city (48) | 24.1% | 0 of 1128 | 678 |
+
+The city landing pages were the real duplicate problem: all eight shared one
+generic FAQ set, so they emitted eight identical `FAQPage` blocks. They now
+carry city-specific questions — permitting office, ZIP coverage, salt cadence —
+and 39 of 39 questions across the eight pages are unique.
+
+### Structured data
+
+Each page emits **one** `<script type="application/ld+json">` containing a
+linked `@graph`, not a pile of disconnected blocks. Nodes reference each other
+by `@id`, so a crawler reads "this Service is provided by that HVACBusiness,
+described on this WebPage, which is part of this WebSite."
+
+- `HVACBusiness` / `LocalBusiness` / `Organization` with `geo`, a 50-mile
+  `GeoCircle`, every city as a `City` node with coordinates, all three counties
+  as `AdministrativeArea`, `hasOfferCatalog` over the six services,
+  `hasCredential` for each DBPR licence, and separate weekday/emergency
+  `openingHoursSpecification`.
+- `Service` nodes on city pages carry `areaServed` as a geocoded `City`
+  `containedInPlace` its county.
+- `WebPage` carries `speakable` pointed at `h1` and `[data-answer]`.
+- **No `aggregateRating`.** The client publishes no review count, and inventing
+  one is both a policy violation and a manual-action risk. Supply a real count
+  and it can be added in one place.
+
+Run `pnpm audit:seo` after a build to check the whole output — it fails the build
+on truncated or duplicated metadata, missing or multiple H1s, unparseable or
+unlinked JSON-LD, and near-duplicate body copy across any generated page set.
+
+### GEO (answer engines)
+
+- `llms.txt` is generated at build time from `site.ts` — business facts,
+  services, every city with its ZIPs and permitting office, and a short "notes"
+  block stating the things an answer engine would otherwise guess at.
+- `robots.txt` names the answer-engine crawlers explicitly (GPTBot,
+  OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended, Applebot-Extended
+  and others); several ignore a bare `User-agent: *`.
+- Every substantial page opens with an `AnswerBlock` — one self-contained
+  paragraph that still makes sense lifted out of the page, carrying
+  `data-answer` so the `speakable` schema can point at it.
+- City pages render a real `<table>` of local facts (county, permit authority,
+  ZIPs, neighborhoods, coastal exposure, licence), which extracts far more
+  cleanly than styled divs.
+- Descriptions are clamped to 158 characters on a word boundary by
+  `clampDescription` in [`src/lib/seo.tsx`](src/lib/seo.tsx), so a long template
+  can never silently ship a truncated snippet.
+
+### Layouts
+
+Each page type has its own structure, so the site does not read as one template
+with different words:
+
+| Page | Layout |
+| --- | --- |
+| Home | Photo hero, at-a-glance strip, service grid, offer split, navy why-us band, testimonial carousel, areas, FAQ |
+| Service index | Alternating full-width feature rows, no cards |
+| Service | Sticky quote sidebar, numbered process strip on navy, full city matrix |
+| Area index | Grouped by county with per-county counts, plus a permitting table |
+| City | Wide service matrix, conditions split, fact table, sticky form |
+| Service × city | Single narrow reading column, answer first, fact table, form at the end |
 
 ## Routes
 

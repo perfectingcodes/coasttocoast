@@ -19,7 +19,7 @@ import { FaqList } from "@/components/faq-list";
 import { ButtonLink } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { Seo, breadcrumbJsonLd, faqJsonLd, localBusinessJsonLd } from "@/lib/seo";
+import { Seo, breadcrumbNode, faqNode } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 const accents: Record<Service["accent"], string> = {
@@ -34,18 +34,18 @@ export default function Home() {
     <div className="flex min-h-dvh flex-col">
       <Seo
         title={`HVAC in Southwest Florida | ${business.name}`}
-        description={`Licensed, insured HVAC service across ${business.city}, Naples, Cape Coral and all of Southwest Florida. Repairs, replacement, ${cleanAndTune.price} Clean & Tune and 24/7 emergency service. Call ${business.phone}.`}
+        description={`Licensed HVAC across ${business.city}, Naples, Cape Coral and all of Southwest Florida. Repair, replacement, ${cleanAndTune.price} Clean & Tune, 24/7 emergency. Call ${business.phone}.`}
         path="/"
-        jsonLd={[
-          localBusinessJsonLd(),
-          faqJsonLd(generalFaqs),
-          breadcrumbJsonLd([{ name: "Home", path: "/" }]),
+        nodes={[
+          faqNode("/", generalFaqs),
+          breadcrumbNode("/", [{ name: "Home", path: "/" }]),
         ]}
       />
       <Navbar />
 
       <main className="flex-1">
         <Hero />
+        <AtAGlance />
         <ServicesSection />
         <CleanAndTuneSection />
         <WhyUsSection />
@@ -147,6 +147,57 @@ function Hero() {
       </div>
 
       <Wave fill="white" swell="#22c7f2" height={80} className="relative -mb-px" />
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------- at a glance */
+
+/**
+ * One self-contained paragraph stating who we are, what we do, where, under
+ * which licence and at what price — written to survive being lifted out of the
+ * page by a search snippet or an answer engine. `data-answer` is what the
+ * page's speakable schema points at.
+ */
+function AtAGlance() {
+  return (
+    <section className="border-b border-navy/8 bg-white py-10 md:py-12">
+      <div className="shell grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+        <p data-answer="" className="text-lg leading-relaxed text-navy/80">
+          <strong className="font-display font-extrabold text-navy">
+            {business.name}
+          </strong>{" "}
+          is a licensed, insured HVAC contractor based in {business.city},
+          Florida, serving {locations.length} cities across Lee, Collier and
+          Charlotte counties. We handle heating, cooling, mechanical, commercial
+          HVAC and indoor air quality, hold Florida Mechanical Contractor licence
+          #{business.license}, quote flat rates before work begins, and answer{" "}
+          {business.emergency.toLowerCase()} at{" "}
+          <a href={business.phoneHref} className="font-semibold text-blue">
+            {business.phone}
+          </a>
+          . Routine maintenance is the {cleanAndTune.price} {cleanAndTune.name},
+          a 10-point service.
+        </p>
+
+        <dl className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4 lg:grid-cols-2">
+          {[
+            { k: "Licence", v: `#${business.license}` },
+            { k: "Cities served", v: String(locations.length) },
+            { k: "Clean & Tune", v: cleanAndTune.price },
+            { k: "Emergency", v: "24/7" },
+          ].map((r) => (
+            <div key={r.k}>
+              <dt className="font-display text-[0.65rem] font-bold uppercase tracking-[0.16em] text-navy/45">
+                {r.k}
+              </dt>
+              <dd className="mt-1 font-display text-lg font-extrabold text-blue">
+                {r.v}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
     </section>
   );
 }

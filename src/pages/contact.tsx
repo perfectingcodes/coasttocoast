@@ -3,7 +3,7 @@ import { business, locations, region } from "@/content/site";
 import { SiteLayout } from "@/components/layout/site-layout";
 import { Section } from "@/components/section";
 import { QuoteForm } from "@/components/quote-form";
-import { Seo, breadcrumbJsonLd, localBusinessJsonLd } from "@/lib/seo";
+import { Seo, breadcrumbNode } from "@/lib/seo";
 
 export default function Contact() {
   return (
@@ -12,9 +12,8 @@ export default function Contact() {
         title={`Contact ${business.name} | Free Quotes in ${region}`}
         description={`Call ${business.phone} or send a request. Same-day appointments across ${region}, with 24/7 emergency service.`}
         path="/contact"
-        jsonLd={[
-          localBusinessJsonLd(),
-          breadcrumbJsonLd([
+        nodes={[
+          breadcrumbNode("/contact", [
             { name: "Home", path: "/" },
             { name: "Contact", path: "/contact" },
           ]),
