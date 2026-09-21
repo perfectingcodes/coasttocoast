@@ -82,18 +82,18 @@ export function Navbar() {
 
       {/* ------------------------------------------------------- main bar */}
       <div className="bg-white shadow-[0_1px_0_rgb(11_37_69/0.08),0_8px_24px_-16px_rgb(11_37_69/0.35)]">
-        <div className="shell flex h-20 items-center justify-between gap-4 lg:h-22">
+        <div className="shell flex h-24 items-center justify-between gap-4 lg:h-26">
           {/* The lockup deliberately overhangs the bar, as in the brand sheet. */}
           <Link href="/" aria-label={`${business.name} — home`} className="shrink-0">
             <img
               src="/brand/logo-mascot-sm.webp"
               srcSet="/brand/logo-mascot-sm.webp 480w, /brand/logo-mascot.webp 1200w"
-              sizes="(min-width: 1024px) 112px, 72px"
+              sizes="(min-width: 1280px) 168px, (min-width: 1024px) 150px, 96px"
               alt={`${business.name} — heating, cooling and mechanical`}
               width={480}
               height={413}
               fetchPriority="high"
-              className="h-14 w-auto sm:h-16 lg:h-24 lg:-mb-6 lg:drop-shadow-[0_10px_18px_rgb(11_37_69/0.22)]"
+              className="h-[4.5rem] w-auto drop-shadow-[0_6px_14px_rgb(11_37_69/0.25)] sm:h-24 lg:h-32 lg:-mb-9 lg:drop-shadow-[0_14px_26px_rgb(11_37_69/0.35)] xl:h-36 xl:-mb-11"
             />
           </Link>
 

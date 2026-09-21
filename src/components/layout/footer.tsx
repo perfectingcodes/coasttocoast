@@ -16,11 +16,13 @@ export function Footer() {
           {/* ------------------------------------------------ brand block */}
           <div>
             <img
-              src="/brand/logo-mascot-sm.webp"
+              src="/brand/logo-mascot.webp"
+              srcSet="/brand/logo-mascot-sm.webp 480w, /brand/logo-mascot.webp 1200w"
+              sizes="288px"
               alt={business.name}
-              width={480}
-              height={413}
-              className="h-28 w-auto"
+              width={1200}
+              height={1034}
+              className="h-36 w-auto drop-shadow-[0_14px_28px_rgb(4_16_29/0.5)] md:h-40"
               loading="lazy"
             />
             <p className="mt-5 font-display text-lg font-extrabold leading-tight">

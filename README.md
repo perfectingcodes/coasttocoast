@@ -233,6 +233,46 @@ from 572 to 725 words.
 | `/about`, `/financing`, `/contact` | Company pages |
 | `/privacy`, `/terms` | Legal (noindex) |
 
+## Admin dashboard
+
+An internal marketing dashboard lives at `/admin`:
+
+| Route | Contents |
+| --- | --- |
+| `/admin` | **Home Base** — what is live, what is blocked, seasonal demand, objectives |
+| `/admin/seo` | **Measured** SEO/GEO data read from `seo-report.json`, plus schema and keyword plan |
+| `/admin/marketing` | Channels, budgets, owners, content calendar, geographic priority |
+| `/admin/campaigns` | Planned campaigns across Google, Meta and email |
+| `/admin/google` | Business Profile, reviews, Ads/LSA, Search Console |
+| `/admin/tracking` | Analytics, pixels, call tracking — and the order to set them up in |
+
+### ⚠️ There is no login
+
+This is a static build with no server, so the dashboard has **no
+authentication**. Those routes are noindexed, `Disallow`ed in `robots.txt`,
+excluded from `sitemap.xml` and absent from `llms.txt` — but anyone with the
+URL can open them. A persistent banner in the UI says so.
+
+**Keep credentials, customer data and financials out of it** until there is a
+real backend with logins. If the client needs that, the honest next step is a
+server, a database and OAuth to Meta/Google — a different hosting model from
+the static deploy this currently is.
+
+### Real data vs. planned data
+
+The SEO panel is **real**: `pnpm audit:seo` writes `seo-report.json` (to
+`dist/public/` for the deploy and `public/` so the dev server serves it too),
+and the dashboard reads it. Page counts, duplicate-metadata counts, audit
+problems and content-similarity figures are all measured from the built output.
+If the file is missing the panel says so rather than inventing numbers.
+
+Everything on the Meta, Google Ads and tracking panels is **planned, not
+live** — no account is connected, so those panels show explicit "not connected"
+states with the steps to change that. The marketing plan in
+[`src/content/marketing.ts`](src/content/marketing.ts) is a first draft written
+from the site's own content; **every budget and target in it is an assumption
+for the client to confirm**, not a commitment.
+
 ## Configuration
 
 | Env var | Used by | Purpose |

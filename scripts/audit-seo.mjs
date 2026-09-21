@@ -24,6 +24,7 @@ const SIMILARITY_MAX = 0.6;
 
 const problems = [];
 const notes = [];
+const similarity = {};
 
 function decode(s) {
   return s
@@ -92,6 +93,13 @@ function similarityReport(label, pages) {
   const words = pages
     .map((p) => p.text.split(" ").length)
     .sort((a, b) => a - b);
+  similarity[label] = {
+    pages: pages.length,
+    meanSimilarity: Number((sum / total).toFixed(4)),
+    maxSimilarity: Number(worst.toFixed(4)),
+    pairsOverThreshold: over,
+    medianWords: words[words.length >> 1],
+  };
   notes.push(
     `  ${label.padEnd(22)} ${String(pages.length).padStart(3)} pages | ` +
       `mean ${(sum / total * 100).toFixed(1).padStart(5)}% | ` +
@@ -114,7 +122,11 @@ async function main() {
   for (const file of files) {
     const rel = path.relative(dist, file);
     const html = await fs.readFile(file, "utf-8");
-    const isLegal = /^(404\.html|privacy|terms)/.test(rel);
+    // Pages that deliberately opt out of search: legal boilerplate and the
+    // internal dashboard. They are held to the title/H1 checks but not to the
+    // ones that only make sense for indexable pages.
+    const noindex = /<meta name="robots" content="noindex/.test(html);
+    const isInternal = /^(404\.html|privacy|terms|admin)/.test(rel) || noindex;
 
     const title = grab(html, /<title>([\s\S]*?)<\/title>/);
     const desc = grab(html, /<meta name="description" content="([\s\S]*?)"/);
@@ -131,11 +143,12 @@ async function main() {
     else if (desc.length > DESC_MAX)
       problems.push(`${rel}: description ${desc.length} chars (max ${DESC_MAX})`);
 
-    if (!canonical && !isLegal) problems.push(`${rel}: missing canonical`);
+    if (!canonical && !isInternal) problems.push(`${rel}: missing canonical`);
     if (h1.length !== 1) problems.push(`${rel}: ${h1.length} <h1> elements`);
 
-    if (title) titles.set(title, [...(titles.get(title) || []), rel]);
-    if (desc && !isLegal) descs.set(desc, [...(descs.get(desc) || []), rel]);
+    if (title && !isInternal)
+      titles.set(title, [...(titles.get(title) || []), rel]);
+    if (desc && !isInternal) descs.set(desc, [...(descs.get(desc) || []), rel]);
 
     // JSON-LD: must parse, and internal @id references must resolve.
     const blocks = [
@@ -143,7 +156,7 @@ async function main() {
         /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
       ),
     ];
-    if (!isLegal && blocks.length === 0) {
+    if (!isInternal && blocks.length === 0) {
       problems.push(`${rel}: no JSON-LD`);
     } else if (blocks.length > 1) {
       problems.push(`${rel}: ${blocks.length} JSON-LD blocks (expected 1 @graph)`);
@@ -174,7 +187,9 @@ async function main() {
       // services/<slug>/index.html             -> 3
       const depth = rel.split("/").length;
       const page = { rel, text: mainText(html) };
-      if (rel.startsWith("locations/") && depth === 4) sets["service x city"].push(page);
+      if (isInternal) {
+        // not part of any public page set
+      } else if (rel.startsWith("locations/") && depth === 4) sets["service x city"].push(page);
       else if (rel.startsWith("locations/") && depth === 3) sets.city.push(page);
       else if (rel.startsWith("services/") && depth === 3) sets.service.push(page);
       else sets.other.push(page);
@@ -194,7 +209,29 @@ async function main() {
   similarityReport("city", sets.city);
   similarityReport("service", sets.service);
 
+  const report = {
+    generatedAt: new Date().toISOString(),
+    pages: files.length,
+    problems,
+    similarity,
+    titles: {
+      total: titles.size,
+      duplicates: [...titles.values()].filter((v) => v.length > 1).length,
+    },
+    descriptions: {
+      total: descs.size,
+      duplicates: [...descs.values()].filter((v) => v.length > 1).length,
+    },
+    limits: { titleMax: TITLE_MAX, descMin: DESC_MIN, descMax: DESC_MAX },
+  };
+  const json = JSON.stringify(report, null, 2);
+  // dist/ is what deploys; public/ is what the dev server serves, so the admin
+  // dashboard shows the same figures in development as in production.
+  await fs.writeFile(path.resolve(dist, "seo-report.json"), json, "utf-8");
+  await fs.writeFile(path.resolve(root, "public/seo-report.json"), json, "utf-8");
+
   console.log(`Audited ${files.length} pages in dist/public`);
+  console.log("Wrote seo-report.json to dist/public/ and public/");
   console.log(notes.join("\n"));
 
   if (problems.length) {

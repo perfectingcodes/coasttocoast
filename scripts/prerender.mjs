@@ -25,7 +25,7 @@ async function main() {
     path.resolve(publicDir, "index.html"),
     "utf-8",
   );
-  const { render, routes, siteUrl, buildLlmsTxt } = await import(
+  const { render, routes, publicRoutes, siteUrl, buildLlmsTxt } = await import(
     pathToFileURL(serverEntry).href,
   );
 
@@ -64,7 +64,7 @@ async function main() {
   const today = new Date().toISOString().slice(0, 10);
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${routes
+${publicRoutes
   .map(
     (u) => `  <url>
     <loc>${SITE_URL}${u}</loc>
@@ -98,8 +98,14 @@ ${routes
     [
       "User-agent: *",
       "Allow: /",
+      "Disallow: /admin",
       "",
-      ...aiAgents.flatMap((a) => [`User-agent: ${a}`, "Allow: /", ""]),
+      ...aiAgents.flatMap((a) => [
+        `User-agent: ${a}`,
+        "Allow: /",
+        "Disallow: /admin",
+        "",
+      ]),
       `Sitemap: ${SITE_URL}/sitemap.xml`,
       "",
     ].join("\n"),
@@ -113,7 +119,7 @@ ${routes
   );
 
   console.log(
-    `\n✅ Prerendered ${routes.length} pages + 404.html + sitemap.xml + robots.txt + llms.txt`,
+    `\n✅ Prerendered ${routes.length} pages (${publicRoutes.length} public + ${routes.length - publicRoutes.length} admin) + 404.html + sitemap.xml + robots.txt + llms.txt`,
   );
 }
 

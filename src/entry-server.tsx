@@ -11,8 +11,8 @@ export interface RenderResult {
   head: string;
 }
 
-/** Every public route that gets prerendered to static HTML. */
-export const routes: string[] = [
+/** Public routes — these are prerendered AND listed in the sitemap. */
+export const publicRoutes: string[] = [
   "/",
   "/services",
   ...services.map((s) => `/services/${s.slug}`),
@@ -26,6 +26,24 @@ export const routes: string[] = [
   "/privacy",
   "/terms",
 ];
+
+/**
+ * Internal dashboard routes. Prerendered so they exist as real pages, but
+ * deliberately kept out of the sitemap and disallowed in robots.txt. They
+ * carry noindex via the Seo component. There is no authentication on this
+ * static build — see components/admin/shell.tsx.
+ */
+export const adminRoutes: string[] = [
+  "/admin",
+  "/admin/seo",
+  "/admin/marketing",
+  "/admin/campaigns",
+  "/admin/google",
+  "/admin/tracking",
+];
+
+/** Everything that gets written to disk. */
+export const routes: string[] = [...publicRoutes, ...adminRoutes];
 
 /**
  * llms.txt — the emerging convention for handing answer engines a clean,

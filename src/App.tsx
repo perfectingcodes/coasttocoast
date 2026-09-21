@@ -15,6 +15,13 @@ import Financing from "@/pages/financing";
 import LegalPage from "@/pages/legal";
 import NotFound from "@/pages/not-found";
 
+import AdminHome from "@/pages/admin/index";
+import AdminSeo from "@/pages/admin/seo";
+import AdminMarketing from "@/pages/admin/marketing";
+import AdminCampaigns from "@/pages/admin/campaigns";
+import AdminGoogle from "@/pages/admin/google";
+import AdminTracking from "@/pages/admin/tracking";
+
 function Routes() {
   return (
     <Switch>
@@ -35,6 +42,15 @@ function Routes() {
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/financing" component={Financing} />
+      {/* Internal dashboard. No auth — static build. Noindexed, disallowed
+          in robots.txt and excluded from the sitemap. */}
+      <Route path="/admin" component={AdminHome} />
+      <Route path="/admin/seo" component={AdminSeo} />
+      <Route path="/admin/marketing" component={AdminMarketing} />
+      <Route path="/admin/campaigns" component={AdminCampaigns} />
+      <Route path="/admin/google" component={AdminGoogle} />
+      <Route path="/admin/tracking" component={AdminTracking} />
+
       <Route path="/privacy">{() => <LegalPage slug="privacy" />}</Route>
       <Route path="/terms">{() => <LegalPage slug="terms" />}</Route>
       <Route component={NotFound} />

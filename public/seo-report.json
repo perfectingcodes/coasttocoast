@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-09-21T19:56:38.044Z",
+  "pages": 77,
+  "problems": [],
+  "similarity": {
+    "service x city": {
+      "pages": 48,
+      "meanSimilarity": 0.2413,
+      "maxSimilarity": 0.5548,
+      "pairsOverThreshold": 0,
+      "medianWords": 678
+    },
+    "city": {
+      "pages": 8,
+      "meanSimilarity": 0.2767,
+      "maxSimilarity": 0.4345,
+      "pairsOverThreshold": 0,
+      "medianWords": 704
+    },
+    "service": {
+      "pages": 6,
+      "meanSimilarity": 0.1418,
+      "maxSimilarity": 0.2479,
+      "pairsOverThreshold": 0,
+      "medianWords": 708
+    }
+  },
+  "titles": {
+    "total": 68,
+    "duplicates": 0
+  },
+  "descriptions": {
+    "total": 68,
+    "duplicates": 0
+  },
+  "limits": {
+    "titleMax": 62,
+    "descMin": 70,
+    "descMax": 158
+  }
+}
