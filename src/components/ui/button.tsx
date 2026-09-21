@@ -32,7 +32,7 @@ const variants: Record<Variant, string> = {
   ghost: "text-navy border-2 border-navy/15 hover:border-blue/45 hover:bg-blue/5",
   /** Bright action for the orange hero — deliberately lighter than
    *  `secondary`, which bottoms out too dark against ember. */
-  sky: "bg-gradient-to-b from-cyan-light to-cyan text-navy ring-1 ring-inset ring-white/50 shadow-[0_14px_34px_-10px_rgb(43_217_255/0.85)]",
+  sky: "bg-gradient-to-b from-[#4aa8ff] to-[#1668e3] text-white ring-1 ring-inset ring-white/40 shadow-[0_14px_34px_-10px_rgb(22_104_227/0.9)]",
   /** Financing and secondary offers. */
   gold: "bg-gradient-to-b from-gold to-orange text-navy ring-1 ring-inset ring-white/30 shadow-[0_10px_28px_-10px_rgb(255_176_32/0.7)]",
 };

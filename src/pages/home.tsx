@@ -78,25 +78,12 @@ export default function Home() {
 
 function Hero() {
   return (
-    <section className="band-ember sun-bands grain relative isolate overflow-hidden">
+    <section className="band-ember sun-rays grain relative isolate overflow-hidden">
+      {/* Warm core the rays emanate from. */}
       <div
-        className="pointer-events-none absolute -bottom-24 -left-20 -z-10 size-[30rem] rounded-full border-[14px] border-gold/25 sm:-bottom-28 sm:-left-24"
+        className="pointer-events-none absolute -bottom-40 -left-32 -z-10 size-[34rem] rounded-full bg-gold/25 blur-[90px]"
         aria-hidden="true"
       />
-      <svg
-        className="pointer-events-none absolute -left-6 bottom-0 -z-10 h-44 w-auto opacity-25 sm:h-56"
-        viewBox="0 0 160 200"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path d="M78 200V78" stroke="#7a2c05" strokeWidth="7" strokeLinecap="round" />
-        <g stroke="#7a2c05" strokeWidth="7" strokeLinecap="round">
-          <path d="M78 78C58 58 30 55 12 68" />
-          <path d="M78 78c20-20 48-23 66-10" />
-          <path d="M78 78C65 52 67 25 85 8" />
-          <path d="M78 78c16-11 44-7 57 9" />
-        </g>
-      </svg>
 
       <div className="shell relative grid items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:gap-6 lg:pb-12 lg:pt-24">
         <div className="max-w-xl">
