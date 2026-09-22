@@ -45,115 +45,140 @@ export function SeasonScrubber({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "glass edge-lit relative overflow-hidden px-5 pb-4 pt-4",
+        "glass edge-lit relative overflow-hidden px-5 py-3.5",
         className,
       )}
     >
-      <div className="flex items-center justify-between gap-4">
-        <span className="flex items-center gap-2">
-          <Thermometer className="size-4 shrink-0 text-cyan" aria-hidden="true" />
-          <span className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.18em] text-white/55">
-            Cooling year · {business.city}
-          </span>
-        </span>
+      {/* Two columns from `sm`: the reading on the left, the control on the
+          right. Stacked it was tall enough to cover the artwork behind it. */}
+      <div className="flex flex-col gap-3.5 sm:flex-row sm:items-center sm:gap-6">
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between gap-3">
+            <span className="flex items-center gap-2">
+              <Thermometer
+                className="size-3.5 shrink-0 text-cyan"
+                aria-hidden="true"
+              />
+              <span className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.18em] text-white/55">
+                Cooling year · {business.city}
+              </span>
+            </span>
 
-        {isToday ? (
-          <span className="rounded-full bg-cyan/15 px-2.5 py-1 font-display text-[0.55rem] font-extrabold uppercase tracking-[0.16em] text-cyan ring-1 ring-cyan/30">
-            Today
-          </span>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setMonth(today)}
-            className="flex items-center gap-1.5 rounded-full px-2.5 py-1 font-display text-[0.55rem] font-extrabold uppercase tracking-[0.16em] text-white/60 ring-1 ring-white/20 transition-colors hover:text-white hover:ring-white/40"
-          >
-            <RotateCcw className="size-3" aria-hidden="true" />
-            Today
-          </button>
-        )}
-      </div>
+            {isToday ? (
+              <span className="shrink-0 rounded-full bg-cyan/15 px-2 py-0.5 font-display text-[0.52rem] font-extrabold uppercase tracking-[0.16em] text-cyan ring-1 ring-cyan/30 sm:hidden">
+                Today
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setMonth(today)}
+                className="flex shrink-0 items-center gap-1.5 rounded-full px-2 py-0.5 font-display text-[0.52rem] font-extrabold uppercase tracking-[0.16em] text-white/60 ring-1 ring-white/20 transition-colors hover:text-white hover:ring-white/40 sm:hidden"
+              >
+                <RotateCcw className="size-2.5" aria-hidden="true" />
+                Today
+              </button>
+            )}
+          </div>
 
-      <p className="mt-2.5 font-display text-lg font-extrabold leading-tight text-white">
-        {s.label}
-        <span className="ml-2 align-middle font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/40">
-          {MONTHS[month]}
-        </span>
-      </p>
-      <p className="mt-0.5 text-[0.78rem] leading-snug text-white/60">{s.note}</p>
+          <p className="mt-1.5 font-display text-base font-extrabold leading-tight text-white">
+            {s.label}
+            <span className="ml-2 align-middle font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/40">
+              {MONTHS[month]}
+            </span>
+          </p>
+          <p className="mt-0.5 text-[0.74rem] leading-snug text-white/55">
+            {s.note}
+          </p>
+        </div>
 
-      {/* The year's profile, drawn behind the control it belongs to. */}
-      <div className="relative mt-3">
-        <div
-          className="flex h-9 items-end gap-[3px]"
-          aria-hidden="true"
-        >
-          {MONTHS.map((m, i) => {
-            const ms = season[m] ?? season.Jul;
-            return (
+        <div className="sm:w-[14.5rem] sm:shrink-0">
+          {/* The year's profile, doubling as the face of the control. */}
+          <div className="relative">
+            <div className="flex h-8 items-end gap-[3px]" aria-hidden="true">
+              {MONTHS.map((m, i) => {
+                const ms = season[m] ?? season.Jul;
+                return (
+                  <span
+                    key={m}
+                    className={cn(
+                      "flex-1 rounded-t-[3px] transition-all duration-300",
+                      i === month
+                        ? cn("bg-current", LOAD_TONE[ms.load])
+                        : "bg-white/18",
+                    )}
+                    style={{ height: `${LOAD_HEIGHT[ms.load] * 100}%` }}
+                  />
+                );
+              })}
+            </div>
+
+            <label htmlFor={id} className="sr-only">
+              Month
+            </label>
+            <input
+              id={id}
+              type="range"
+              min={0}
+              max={11}
+              step={1}
+              value={month}
+              onChange={(e) => setMonth(Number(e.target.value))}
+              aria-valuetext={`${MONTHS[month]} — ${s.label}, ${s.load} cooling load`}
+              className="range-ghost absolute inset-x-0 bottom-0 h-8 w-full cursor-ew-resize"
+            />
+          </div>
+
+          <div className="mt-1 flex gap-[3px]" aria-hidden="true">
+            {MONTHS.map((m, i) => (
               <span
                 key={m}
                 className={cn(
-                  "flex-1 rounded-t-[3px] transition-all duration-300",
-                  i === month
-                    ? cn("bg-current", LOAD_TONE[ms.load])
-                    : "bg-white/18",
+                  "flex-1 text-center font-display text-[0.5rem] font-extrabold uppercase transition-colors",
+                  i === month ? "text-white" : "text-white/30",
                 )}
-                style={{ height: `${LOAD_HEIGHT[ms.load] * 100}%` }}
-              />
-            );
-          })}
-        </div>
+              >
+                {m[0]}
+              </span>
+            ))}
+          </div>
 
-        <label htmlFor={id} className="sr-only">
-          Month
-        </label>
-        <input
-          id={id}
-          type="range"
-          min={0}
-          max={11}
-          step={1}
-          value={month}
-          onChange={(e) => setMonth(Number(e.target.value))}
-          aria-valuetext={`${MONTHS[month]} — ${s.label}, ${s.load} cooling load`}
-          className="range-ghost absolute inset-x-0 -bottom-1 h-9 w-full cursor-ew-resize"
-        />
-      </div>
-
-      <div className="mt-1.5 flex gap-[3px]" aria-hidden="true">
-        {MONTHS.map((m, i) => (
-          <span
-            key={m}
-            className={cn(
-              "flex-1 text-center font-display text-[0.55rem] font-extrabold uppercase transition-colors",
-              i === month ? "text-white" : "text-white/30",
-            )}
-          >
-            {m[0]}
-          </span>
-        ))}
-      </div>
-
-      <div className="mt-3 flex items-center gap-2.5 border-t border-white/12 pt-3">
-        <span className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/45">
-          Cooling load
-        </span>
-        <span className="flex gap-1" aria-hidden="true">
-          {[1, 2, 3, 4].map((i) => (
+          <div className="mt-2 flex items-center gap-2">
+            <span className="flex gap-1" aria-hidden="true">
+              {[1, 2, 3, 4].map((i) => (
+                <span
+                  key={i}
+                  className={cn(
+                    "h-1.5 w-3.5 rounded-full transition-colors",
+                    i <= bars ? cn("bg-current", LOAD_TONE[s.load]) : "bg-white/15",
+                  )}
+                />
+              ))}
+            </span>
             <span
-              key={i}
               className={cn(
-                "h-1.5 w-4 rounded-full transition-colors",
-                i <= bars ? cn("bg-current", LOAD_TONE[s.load]) : "bg-white/15",
+                "font-display text-[0.7rem] font-extrabold",
+                LOAD_TONE[s.load],
               )}
-            />
-          ))}
-        </span>
-        <span
-          className={cn("font-display text-xs font-extrabold", LOAD_TONE[s.load])}
-        >
-          {s.load}
-        </span>
+            >
+              {s.load}
+            </span>
+
+            {isToday ? (
+              <span className="ml-auto hidden rounded-full bg-cyan/15 px-2 py-0.5 font-display text-[0.52rem] font-extrabold uppercase tracking-[0.16em] text-cyan ring-1 ring-cyan/30 sm:block">
+                Today
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setMonth(today)}
+                className="ml-auto hidden items-center gap-1.5 rounded-full px-2 py-0.5 font-display text-[0.52rem] font-extrabold uppercase tracking-[0.16em] text-white/60 ring-1 ring-white/20 transition-colors hover:text-white hover:ring-white/40 sm:flex"
+              >
+                <RotateCcw className="size-2.5" aria-hidden="true" />
+                Today
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

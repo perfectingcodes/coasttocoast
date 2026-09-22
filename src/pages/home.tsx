@@ -208,9 +208,9 @@ function Hero() {
         </div>
 
         <div className="relative">
-          <SeasonScrubber className="mb-5 w-full max-w-sm lg:absolute lg:-left-10 lg:top-2 lg:z-20 lg:mb-0 lg:w-[18.5rem]" />
+          <SeasonScrubber className="mb-5 w-full" />
 
-          <div className="rays-burst relative lg:pt-10">
+          <div className="rays-burst relative">
           {/* Warm core the rays radiate from, sitting under the artwork. */}
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange/35 blur-[80px]"
@@ -224,7 +224,7 @@ function Hero() {
             width={1200}
             height={1026}
             fetchPriority="high"
-            className="mx-auto w-full max-w-lg drop-shadow-[0_28px_56px_rgb(3_18_48/0.55)] lg:mr-0"
+            className="mx-auto w-full max-w-lg drop-shadow-[0_28px_56px_rgb(3_18_48/0.55)]"
           />
 
           {/* Social proof rides on the artwork rather than in the promise
