@@ -42,6 +42,15 @@ import { Footer } from "@/components/layout/footer";
 import { Seo, breadcrumbNode, faqNode } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
+/** Matching flat colours, for marks that cannot carry a gradient. */
+const ACCENT_TEXT: Record<Service["accent"], string> = {
+  orange: "text-ember",
+  cyan: "text-cyan",
+  slate: "text-slateish",
+  blue: "text-blue",
+  gold: "text-gold",
+};
+
 const accents: Record<Service["accent"], string> = {
   orange: "bg-gradient-to-br from-orange-light to-ember",
   cyan: "bg-gradient-to-br from-cyan to-blue",
@@ -255,8 +264,19 @@ function Hero() {
 
 function ServicesSection() {
   return (
-    <section className="bg-white py-16 md:py-24" id="services">
-      <div className="shell">
+    <section
+      className="grid-lines-light relative overflow-hidden bg-white py-16 md:py-24"
+      id="services"
+    >
+      {/* The hero's two blooms, at light-ground strength: the section is the
+          warm end of the site meeting the cold end, which is the whole
+          business. */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="absolute -right-40 -top-40 size-[34rem] rounded-full bg-cyan/12 blur-[130px]" />
+        <div className="absolute -bottom-48 -left-40 size-[32rem] rounded-full bg-orange/10 blur-[130px]" />
+      </div>
+
+      <div className="shell relative">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <div>
             <SectionEyebrow index={1}>Our Services</SectionEyebrow>
@@ -264,11 +284,15 @@ function ServicesSection() {
               HVAC for homes
               <span className="block text-ember">&amp; businesses</span>
             </h2>
+            <div className="thermal-rule mt-5 w-24" aria-hidden="true" />
           </div>
           <p className="leading-relaxed text-navy/65 md:text-lg">
-            Whether you need a new system, a fast repair, or routine maintenance,{" "}
-            {business.name} delivers reliable HVAC solutions backed by exceptional
-            service and Florida values.
+            Six services, one crew, and a{" "}
+            <span className="font-semibold text-navy">
+              flat price in writing
+            </span>{" "}
+            before anything is opened. Repairs finish the same visit whenever
+            the part is on the truck.
           </p>
         </div>
 
@@ -298,12 +322,26 @@ function ServicesSection() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-auto pt-8">
+              <div className="relative z-10 mt-auto pt-8">
                 <ButtonLink href={business.phoneHref} variant="onDark">
                   <Phone className="size-4" aria-hidden="true" />
                   {business.phone}
                 </ButtonLink>
               </div>
+
+              {/* He leans in from the corner the card has spare. Clipped by the
+                  panel edge, so he reads as part of the card rather than as a
+                  sticker dropped on it. */}
+              <img
+                src="/brand/mascot-bust.webp"
+                srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
+                sizes="200px"
+                alt=""
+                width={800}
+                height={849}
+                loading="lazy"
+                className="pointer-events-none absolute -bottom-8 -right-2 hidden w-40 opacity-95 drop-shadow-[0_18px_36px_rgb(3_18_48/0.6)] sm:block lg:hidden xl:block xl:w-[9.5rem]"
+              />
             </div>
           </Reveal>
 
@@ -312,46 +350,76 @@ function ServicesSection() {
               <Link
                 href={`/services/${s.slug}`}
                 className={cn(
-                  "group relative flex h-full flex-col overflow-hidden rounded-card border border-navy/10 bg-white p-6",
+                  "group relative flex h-full flex-col overflow-hidden rounded-card border border-navy/10 bg-white p-6 pt-7",
                   "transition-[background-color,border-color,transform,box-shadow] duration-300",
                   "hover:-translate-y-1 hover:border-navy hover:bg-navy hover:shadow-[var(--shadow-lift)]",
                 )}
               >
+                {/* Each card wears its own point on the hot-to-cold ramp, as a
+                    rule across the top edge. Read as a set, the four of them
+                    are the thermal rule broken into pieces. */}
+                <span
+                  className={cn(
+                    "absolute inset-x-0 top-0 h-[3px] origin-left scale-x-[0.35] transition-transform duration-500 group-hover:scale-x-100",
+                    accents[s.accent],
+                  )}
+                  aria-hidden="true"
+                />
+
                 {/* Index numeral, drawn as an outline so it sits behind the
                     content rather than competing with it. */}
                 <span
-                  className="numeral-ghost pointer-events-none absolute right-4 top-2 select-none text-[4.25rem] transition-colors duration-300 group-hover:text-white/15 sm:text-[5rem]"
+                  className="numeral-ghost pointer-events-none absolute right-4 top-3 select-none text-[4.25rem] transition-colors duration-300 group-hover:text-white/15 sm:text-[5rem]"
                   aria-hidden="true"
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>
 
-                <span
-                  className={cn(
-                    "grid size-12 place-items-center rounded-xl text-white shadow-[0_10px_20px_-10px_rgb(10_35_82/0.8)] ring-1 ring-inset ring-white/25 transition-transform duration-300 group-hover:scale-105",
-                    accents[s.accent],
-                  )}
-                >
-                  <Icon name={s.icon} className="size-6" />
+                <span className="relative w-fit">
+                  {/* Glow under the chip, so the icon reads as lit rather than
+                      as a coloured square. */}
+                  <span
+                    className={cn(
+                      "absolute inset-1 -z-10 rounded-xl opacity-0 blur-lg transition-opacity duration-300 group-hover:opacity-70",
+                      accents[s.accent],
+                    )}
+                    aria-hidden="true"
+                  />
+                  <span
+                    className={cn(
+                      "grid size-12 place-items-center rounded-xl text-white shadow-[0_10px_20px_-10px_rgb(10_35_82/0.8)] ring-1 ring-inset ring-white/25 transition-transform duration-300 group-hover:scale-105",
+                      accents[s.accent],
+                    )}
+                  >
+                    <Icon name={s.icon} className="size-6" />
+                  </span>
                 </span>
 
                 <h3 className="poster mt-6 text-xl leading-[1.05] text-navy transition-colors duration-300 group-hover:text-white">
                   {s.name}
                 </h3>
 
-                <span
-                  className={cn(
-                    "mt-3.5 block h-[3px] w-9 rounded-full transition-all duration-300 group-hover:w-16",
-                    accents[s.accent],
-                  )}
-                  aria-hidden="true"
-                />
-
-                <p className="mt-4 flex-1 text-sm leading-relaxed text-navy/60 transition-colors duration-300 group-hover:text-white/70">
+                <p className="mt-3.5 flex-1 text-sm leading-relaxed text-navy/60 transition-colors duration-300 group-hover:text-white/70">
                   {s.blurb}
                 </p>
 
-                <span className="link-arrow mt-6 text-blue transition-colors duration-300 group-hover:text-cyan">
+                {/* One real line off the service page. Generic blurbs make six
+                    cards look like one card six times; this is the part that
+                    differs. */}
+                <p className="mt-4 flex items-start gap-2.5 border-t border-navy/8 pt-4 transition-colors duration-300 group-hover:border-white/15">
+                  <Check
+                    className={cn(
+                      "mt-0.5 size-4 shrink-0 transition-colors duration-300 group-hover:text-cyan",
+                      ACCENT_TEXT[s.accent],
+                    )}
+                    aria-hidden="true"
+                  />
+                  <span className="text-[0.8rem] leading-snug text-navy/55 transition-colors duration-300 group-hover:text-white/60">
+                    {s.bullets[0]}
+                  </span>
+                </p>
+
+                <span className="link-arrow mt-5 text-blue transition-colors duration-300 group-hover:text-cyan">
                   {s.short}
                   <ArrowUpRight className="size-3.5" aria-hidden="true" />
                 </span>

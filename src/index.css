@@ -274,6 +274,21 @@
   }
 
   /* Engineering grid — a quiet nod to mechanical drawings. */
+  /* Same blueprint grid on a light ground. Navy at 4% is the most it can
+     carry before it starts competing with the cards sitting on it. */
+  .grid-lines-light::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgb(10 35 82 / 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(10 35 82 / 0.045) 1px, transparent 1px);
+    background-size: 68px 68px;
+    mask-image: radial-gradient(75% 65% at 50% 40%, black, transparent 80%);
+    -webkit-mask-image: radial-gradient(75% 65% at 50% 40%, black, transparent 80%);
+  }
+
   .grid-lines::before {
     content: "";
     position: absolute;
