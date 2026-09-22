@@ -953,6 +953,22 @@ export const season: Record<
   Dec: { label: "Dry season", load: "Low", note: "Heating checks worth doing" },
 };
 
+/**
+ * The two shoulder months, read off `season` rather than written down twice.
+ * They are the months whose note already calls them the right time to service,
+ * which is the honest answer to "when should I book the tune-up?".
+ */
+export const bestServiceMonths = (() => {
+  const full: Record<string, string> = {
+    Jan: "January", Feb: "February", Mar: "March", Apr: "April",
+    May: "May", Jun: "June", Jul: "July", Aug: "August",
+    Sep: "September", Oct: "October", Nov: "November", Dec: "December",
+  };
+  return Object.entries(season)
+    .filter(([, v]) => v.note.startsWith("Best month to service"))
+    .map(([k]) => full[k]);
+})();
+
 // --------------------------------------------------------------------- faqs
 
 export const generalFaqs = [

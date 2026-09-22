@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import {
   ArrowRight,
   ArrowUpRight,
+  CalendarCheck,
   Check,
   Phone,
   Quote,
@@ -10,6 +11,7 @@ import {
   Zap,
 } from "lucide-react";
 import {
+  bestServiceMonths,
   business,
   cleanAndTune,
   countyList,
@@ -461,6 +463,14 @@ function ServicesSection() {
 
 /* ----------------------------------------------------------- clean & tune */
 
+/**
+ * A promotion drawn as the thing it is: a ticket.
+ *
+ * The brand is built out of badges and plates, so the offer gets the same
+ * treatment — two halves divided by a perforation, notched where the card
+ * would tear, with the price struck in gold on navy. A flat panel with a
+ * price on it is a price list; this is an offer.
+ */
 function CleanAndTuneSection() {
   // Derived, never hard-coded, so the sash cannot drift from the prices shown.
   const savings = (() => {
@@ -473,31 +483,33 @@ function CleanAndTuneSection() {
   return (
     <section className="relative isolate z-10 bg-white py-16 md:py-20">
       <div className="shell">
-        {/* A framed, ribboned panel rather than a flat band — it has to read as
-            a promotion, not as another section. */}
-        <div className="band-navy grain relative overflow-hidden rounded-[2rem] px-6 py-12 shadow-[0_40px_80px_-30px_rgb(5_15_38/0.6)] ring-1 ring-white/12 md:px-12 md:py-14">
+        <div className="band-navy grain relative overflow-hidden rounded-[2rem] shadow-[0_40px_80px_-30px_rgb(5_15_38/0.6)] ring-1 ring-white/12">
+          {/* Warm light behind the price, cool light behind the checklist. */}
           <div
-            className="pointer-events-none absolute -right-24 -top-24 size-[28rem] rounded-full bg-gold/16 blur-[110px]"
+            className="pointer-events-none absolute -left-32 -top-40 size-[34rem] rounded-full bg-gold/20 blur-[120px]"
             aria-hidden="true"
           />
-          {/* Diagonal sash across the corner — long enough to cross the
-              checklist card and clip the offer card's top edge. */}
+          <div
+            className="pointer-events-none absolute -bottom-40 -right-32 size-[30rem] rounded-full bg-cyan/12 blur-[120px]"
+            aria-hidden="true"
+          />
+
           {savings && (
             <>
               {/* Phone: a compact corner flag. The long sash is 26rem wide —
                   on a 327px card it crossed the pill, the price and the
                   heading instead of an empty corner. */}
               <div
-                className="pointer-events-none absolute -right-12 top-4 z-20 w-44 rotate-45 bg-gradient-to-r from-gold via-orange-light to-ember py-1.5 text-center shadow-[0_10px_22px_-8px_rgb(120_40_0/0.8)] ring-1 ring-white/30 sm:hidden"
+                className="pointer-events-none absolute -right-12 top-4 z-30 w-44 rotate-45 bg-gradient-to-r from-gold via-orange-light to-ember py-1.5 text-center shadow-[0_10px_22px_-8px_rgb(120_40_0/0.8)] ring-1 ring-white/30 sm:hidden"
                 aria-hidden="true"
               >
                 <span className="font-display text-[0.62rem] font-extrabold uppercase tracking-[0.18em] text-white">
                   Save {savings}
                 </span>
               </div>
-              {/* Desktop: the long sash that crosses both cards. */}
+              {/* Desktop: the long sash that crosses both halves. */}
               <div
-                className="pointer-events-none absolute -right-16 top-12 z-20 hidden w-[26rem] rotate-[38deg] bg-gradient-to-r from-gold via-orange-light to-ember py-2.5 text-center shadow-[0_14px_30px_-10px_rgb(120_40_0/0.8)] ring-1 ring-white/30 sm:block"
+                className="pointer-events-none absolute -right-16 top-12 z-30 hidden w-[26rem] rotate-[38deg] bg-gradient-to-r from-gold via-orange-light to-ember py-2.5 text-center shadow-[0_14px_30px_-10px_rgb(120_40_0/0.8)] ring-1 ring-white/30 sm:block"
                 aria-hidden="true"
               >
                 <span className="font-display text-sm font-extrabold uppercase tracking-[0.2em] text-white">
@@ -507,70 +519,128 @@ function CleanAndTuneSection() {
             </>
           )}
 
-        <div className="relative grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-14">
-          {/* ------------------------------------------------ the offer */}
-          <div>
-            <span className="pill pill-dark border-gold/40 bg-gold/12 text-gold">
-              <Sparkles className="size-3.5" aria-hidden="true" />
-              Limited-time offer
-            </span>
+          <div className="relative grid lg:grid-cols-[minmax(0,0.94fr)_auto_minmax(0,1.06fr)]">
+            {/* ---------------------------------------------- the offer */}
+            <div className="px-6 pb-10 pt-10 md:px-10 md:pb-12 md:pt-12 lg:py-14">
+              <span className="pill pill-dark border-gold/40 bg-gold/12 text-gold">
+                <Sparkles className="size-3.5" aria-hidden="true" />
+                Limited-time offer
+              </span>
 
-            <div className="mt-6 flex items-end gap-3">
-              <span className="poster text-[clamp(3.5rem,9vw,5.5rem)] leading-[0.8] text-white">
-                {cleanAndTune.price}
-              </span>
-              <span className="pb-2 font-display text-sm font-bold text-white/55">
-                {cleanAndTune.unit}
-              </span>
-              {cleanAndTune.regularPrice && (
-                <span className="pb-2.5 font-display text-lg font-bold text-white/40 line-through">
-                  {cleanAndTune.regularPrice}
+              <div className="mt-6 flex items-end gap-3">
+                <span className="poster text-bullion text-[clamp(4rem,10vw,6.5rem)] leading-[0.78] drop-shadow-[0_10px_30px_rgb(255_140_20/0.28)]">
+                  {cleanAndTune.price}
                 </span>
-              )}
-            </div>
-
-            <h2 className="poster mt-3 text-[clamp(1.75rem,3.4vw,2.5rem)] text-white">
-              {cleanAndTune.name}
-            </h2>
-            <div className="thermal-rule mt-5 w-24" aria-hidden="true" />
-            <p className="mt-5 max-w-md leading-relaxed text-white/70">
-              {cleanAndTune.summary}
-            </p>
-
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <ButtonLink href="/contact" size="lg">
-                Book a Clean &amp; Tune
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </ButtonLink>
-              <a
-                href={business.phoneHref}
-                className="flex min-h-11 items-center font-display text-sm font-extrabold text-white/75 underline decoration-white/25 underline-offset-4 transition-colors hover:text-cyan hover:decoration-cyan"
-              >
-                or call {business.phone}
-              </a>
-            </div>
-          </div>
-
-          {/* --------------------------------------------- the checklist */}
-          <div className="glass edge-lit p-6 md:p-8">
-            <p className="font-display text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
-              Every visit · all ten points
-            </p>
-            <ol className="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
-              {cleanAndTune.checklist.map((item, i) => (
-                <li key={item} className="flex items-start gap-3">
-                  <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-white/10 font-display text-[0.65rem] font-extrabold text-cyan ring-1 ring-cyan/30">
-                    {i + 1}
+                <span className="pb-3 font-display text-sm font-bold text-white/55">
+                  {cleanAndTune.unit}
+                </span>
+                {cleanAndTune.regularPrice && (
+                  <span className="pb-3.5 font-display text-lg font-bold text-white/40 line-through decoration-ember/70 decoration-2">
+                    {cleanAndTune.regularPrice}
                   </span>
-                  <span className="text-sm leading-relaxed text-white/80">{item}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
+                )}
+              </div>
+
+              <h2 className="poster mt-3 text-[clamp(1.75rem,3.4vw,2.5rem)] text-white">
+                {cleanAndTune.name}
+              </h2>
+              <div className="thermal-rule mt-5 w-24" aria-hidden="true" />
+              <p className="mt-5 max-w-md leading-relaxed text-white/70">
+                {cleanAndTune.summary}
+              </p>
+
+              {/* Which months, taken off the same seasonal table the hero
+                  reads. The shoulder months either side of the heat are the
+                  answer to "when should I book it?". */}
+              {bestServiceMonths.length === 2 && (
+                <p className="mt-5 flex items-start gap-2.5 text-sm leading-relaxed text-white/60">
+                  <CalendarCheck
+                    className="mt-0.5 size-4 shrink-0 text-cyan"
+                    aria-hidden="true"
+                  />
+                  <span>
+                    Best booked in{" "}
+                    <span className="font-semibold text-white">
+                      {bestServiceMonths[0]}
+                    </span>{" "}
+                    or{" "}
+                    <span className="font-semibold text-white">
+                      {bestServiceMonths[1]}
+                    </span>{" "}
+                    — the two months either side of the heat.
+                  </span>
+                </p>
+              )}
+
+              <div className="mt-8 flex flex-wrap items-center gap-4">
+                <ButtonLink href="/contact" size="lg">
+                  Book a Clean &amp; Tune
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </ButtonLink>
+                <a
+                  href={business.phoneHref}
+                  className="flex min-h-11 items-center font-display text-sm font-extrabold text-white/75 underline decoration-white/25 underline-offset-4 transition-colors hover:text-cyan hover:decoration-cyan"
+                >
+                  or call {business.phone}
+                </a>
+              </div>
+
+              <p className="mt-8 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-white/30">
+                10 points · twice a year · {locations.length} cities
+              </p>
+            </div>
+
+            <Perforation />
+
+            {/* ------------------------------------------- the checklist */}
+            <div className="px-6 pb-10 pt-9 md:px-10 md:pb-12 md:pt-10 lg:py-14 lg:pl-12">
+              <p className="font-display text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+                Every visit · all ten points
+              </p>
+              <ol className="mt-6 grid gap-x-8 sm:grid-cols-2">
+                {cleanAndTune.checklist.map((item, i) => (
+                  <li
+                    key={item}
+                    className="flex items-start gap-3 border-t border-white/10 py-3 first:border-t-0 sm:[&:nth-child(2)]:border-t-0"
+                  >
+                    <span className="mt-px font-mono text-[0.7rem] font-semibold tabular-nums text-cyan/80">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="text-sm leading-relaxed text-white/80">
+                      {item}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * The tear line. A dashed rule with a notch bitten out of the card at each
+ * end — vertical between the two halves on a wide screen, horizontal between
+ * them when they stack. The notches are discs in the page's own white,
+ * clipped in half by the card's `overflow-hidden`.
+ */
+function Perforation() {
+  const notch =
+    "absolute size-8 rounded-full bg-white";
+  return (
+    <div className="relative lg:w-px" aria-hidden="true">
+      {/* Stacked: a horizontal tear. */}
+      <span className="absolute inset-x-6 top-0 h-px -translate-y-1/2 bg-[repeating-linear-gradient(90deg,rgb(255_255_255/0.3)_0_6px,transparent_6px_14px)] md:inset-x-10 lg:hidden" />
+      <span className={cn(notch, "left-0 top-0 -translate-x-1/2 -translate-y-1/2 lg:hidden")} />
+      <span className={cn(notch, "left-full top-0 -translate-x-1/2 -translate-y-1/2 lg:hidden")} />
+
+      {/* Side by side: a vertical tear. */}
+      <span className="absolute inset-y-12 left-1/2 hidden w-px -translate-x-1/2 bg-[repeating-linear-gradient(180deg,rgb(255_255_255/0.3)_0_6px,transparent_6px_14px)] lg:block" />
+      <span className={cn(notch, "left-1/2 top-0 hidden -translate-x-1/2 -translate-y-1/2 lg:block")} />
+      <span className={cn(notch, "left-1/2 top-full hidden -translate-x-1/2 -translate-y-1/2 lg:block")} />
+    </div>
   );
 }
 

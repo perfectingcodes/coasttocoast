@@ -445,6 +445,15 @@
     text-shadow: 0 5px 22px rgb(3 18 48 / 0.45);
   }
 
+  /* The offer price. Gold falling to orange reads as struck metal on the navy
+     panel, where a flat colour reads as text. */
+  .text-bullion {
+    background: linear-gradient(180deg, #ffe08a 0%, #ffb020 44%, #ff6a13 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
   .text-ember {
     background: linear-gradient(180deg, #ffb020 0%, #ff6a13 55%, #ff4d00 100%);
     -webkit-background-clip: text;
