@@ -646,44 +646,81 @@ function Perforation() {
 
 /* ----------------------------------------------------------------- why us */
 
+/**
+ * Why us, laid out as a plate and a spec sheet.
+ *
+ * The photographs used to be two tilted frames — the polaroid stack every
+ * contractor site has. They are square now, one overlapping the other, with
+ * the seal breaking the frame at the corner and the licence stated on the
+ * picture rather than somewhere underneath it. The reasons on the right read
+ * as a spec sheet, because the claims are specific enough to survive being
+ * set that way.
+ */
 function WhyUsSection() {
   return (
     <section className="band-navy grain relative overflow-hidden">
       <Wave fill="white" swell="#2bd9ff" flip height={56} className="relative -mt-px" />
 
-      <div className="shell relative grid items-center gap-14 py-14 md:py-20 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-        {/* Stacked, overlapping frames — one image was not carrying the space. */}
+      <div className="shell relative grid items-center gap-14 py-14 md:py-20 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
         <div className="relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-none">
-          <div className="relative aspect-[5/4]">
+          <div className="relative">
+            {/* Registration marks. Two hairline corners, the way a plate is
+                positioned on a press sheet. */}
+            <span
+              className="pointer-events-none absolute -left-3 -top-3 size-6 border-l border-t border-cyan/40"
+              aria-hidden="true"
+            />
+            <span
+              className="pointer-events-none absolute -bottom-3 -right-3 size-6 border-b border-r border-cyan/40"
+              aria-hidden="true"
+            />
+
             <img
               src="/brand/photo-home.webp"
-              srcSet="/brand/photo-home-560.webp 560w, /brand/photo-home.webp 900w"
-              sizes="(min-width: 1024px) 380px, 70vw"
-              alt="A Southwest Florida home"
-              width={900}
-              height={720}
+              srcSet="/brand/photo-home-700.webp 700w, /brand/photo-home.webp 1100w"
+              sizes="(min-width: 1024px) 420px, 82vw"
+              alt="A Southwest Florida home with a shaded porch and palms"
+              width={1100}
+              height={1375}
               loading="lazy"
-              className="absolute left-0 top-0 w-[72%] rotate-[-4deg] rounded-card object-cover shadow-[0_26px_50px_-18px_rgb(5_15_38/0.85)] ring-1 ring-white/15"
+              className="w-[86%] rounded-card object-cover shadow-[0_30px_60px_-20px_rgb(3_12_32/0.9)] ring-1 ring-white/15"
             />
+
+            {/* The equipment, overlapping the house it sits beside. */}
             <img
               src="/brand/photo-hvac-unit.webp"
               srcSet="/brand/photo-hvac-unit-760.webp 760w, /brand/photo-hvac-unit.webp 1280w"
-              sizes="(min-width: 1024px) 340px, 62vw"
+              sizes="(min-width: 1024px) 280px, 52vw"
               alt="An outdoor condenser installed beside a home"
               width={1280}
               height={853}
               loading="lazy"
-              className="absolute bottom-0 right-0 w-[64%] rotate-[3deg] rounded-card object-cover shadow-[0_26px_50px_-18px_rgb(5_15_38/0.9)] ring-1 ring-white/15"
+              className="absolute -bottom-5 -right-2 w-[48%] rounded-card object-cover shadow-[0_26px_50px_-18px_rgb(3_12_32/0.95)] ring-1 ring-white/20"
             />
+
+            {/* Licence, stated on the picture rather than under it. */}
+            <div className="absolute left-4 top-4 hidden rounded-xl bg-navy-deep/85 px-3.5 py-2 ring-1 ring-white/20 backdrop-blur-sm sm:block">
+              <p className="font-mono text-[0.6rem] uppercase tracking-[0.12em] text-white/50">
+                FL Mechanical
+              </p>
+              <p className="font-mono text-[0.72rem] font-semibold tracking-[0.08em] text-white">
+                #{business.license}
+              </p>
+            </div>
+
             <img
               src="/brand/badge-locally-owned.webp"
               alt="Locally owned and operated"
               width={640}
               height={632}
               loading="lazy"
-              className="absolute -left-2 bottom-4 w-24 drop-shadow-[0_14px_28px_rgb(5_15_38/0.8)] sm:w-28"
+              className="absolute -bottom-6 -left-5 w-28 drop-shadow-[0_16px_32px_rgb(3_12_32/0.9)] sm:-bottom-8 sm:-left-8 sm:w-36 lg:w-40"
             />
           </div>
+
+          <p className="mt-10 pl-1 font-mono text-[0.62rem] uppercase tracking-[0.16em] text-white/30 sm:mt-12">
+            {business.city}, {business.state} · Licensed &amp; insured
+          </p>
         </div>
 
         <div>
@@ -692,14 +729,23 @@ function WhyUsSection() {
             Built on
             <span className="block text-chill">second opinions.</span>
           </h2>
+          <div className="thermal-rule mt-6 w-24" aria-hidden="true" />
 
-          <ul className="mt-9 space-y-5">
-            {whyUs.map((w) => (
-              <li key={w.title} className="flex gap-4 border-t border-white/10 pt-5">
-                <span className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-lg bg-white/8 text-cyan ring-1 ring-cyan/25">
-                  <Icon name={w.icon} className="size-4" />
+          <p className="mt-6 max-w-md leading-relaxed text-white/65">
+            Most of our work starts as somebody else&rsquo;s quote. We find the
+            actual fault, price it in writing, and let the homeowner decide.
+          </p>
+
+          <ul className="mt-9">
+            {whyUs.map((w, i) => (
+              <li
+                key={w.title}
+                className="group grid grid-cols-[auto_1fr_auto] items-baseline gap-x-4 border-t border-white/10 py-5 last:border-b last:border-white/10"
+              >
+                <span className="font-mono text-[0.7rem] tabular-nums text-cyan/60 transition-colors duration-300 group-hover:text-cyan">
+                  {String(i + 1).padStart(2, "0")}
                 </span>
-                <div>
+                <div className="min-w-0">
                   <h3 className="font-display text-base font-extrabold text-white">
                     {w.title}
                   </h3>
@@ -707,6 +753,9 @@ function WhyUsSection() {
                     {w.body}
                   </p>
                 </div>
+                <span className="hidden whitespace-nowrap font-mono text-[0.62rem] uppercase tracking-[0.12em] text-white/35 sm:block">
+                  {w.tag}
+                </span>
               </li>
             ))}
           </ul>
@@ -717,8 +766,6 @@ function WhyUsSection() {
     </section>
   );
 }
-
-/* ---------------------------------------------------------- testimonials */
 
 function TestimonialsSection() {
   return (

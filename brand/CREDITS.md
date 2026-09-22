@@ -23,7 +23,7 @@ brand assets.
 | `photo-hvac-unit.jpg` | [Unsplash](https://unsplash.com/photos/-nbWCvUiFJA) — residential outdoor condenser | alpha innotec | [Unsplash License](https://unsplash.com/license) — free for commercial use |
 
 `footer-scene.png` is the client's own commissioned artwork.
-| `photo-home.jpg` | [Unsplash](https://unsplash.com/photos/SILeB6CB8f0) — house with palms | Brian Zajac | [Unsplash License](https://unsplash.com/license) |
+| `photo-home.jpg` | [Unsplash](https://unsplash.com/photos/a-blue-house-with-palm-trees-in-front-of-it-NIgOBV07nXs) — Florida house with palms, Tampa Bay FL. Cropped to 4:5. | Sean Foster | [Unsplash License](https://unsplash.com/license) |
 | `photo-ac-detail.jpg` | [Unsplash](https://unsplash.com/photos/Q4f_0gKTMEk) — outdoor AC unit | Zulki Jrzt | [Unsplash License](https://unsplash.com/license) |
 
 All photography above was checked to be free Unsplash License, not Getty/premium.

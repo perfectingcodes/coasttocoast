@@ -827,25 +827,26 @@ export const countyList = (() => {
 // --------------------------------------------------------------------- proof
 
 
+/** `tag` is the same claim as `body`, compressed to a spec-sheet value. */
 export const whyUs = [
   {
-    icon: "users",
     title: "Certified technicians",
+    tag: "On staff",
     body: "Licensed mechanical contractors on staff — never subcontracted.",
   },
   {
-    icon: "shield",
     title: "Flat-rate pricing",
+    tag: "In writing",
     body: "The price is in writing before work starts, and it does not move.",
   },
   {
-    icon: "handshake",
     title: "Locally owned",
+    tag: `${business.city} based`,
     body: "Fort Myers based. We answer our own phones, day and night.",
   },
   {
-    icon: "map",
     title: "All of Southwest Florida",
+    tag: `${locations.length} cities`,
     body: `${countyList} counties — Venice down through Naples.`,
   },
 ] as const;

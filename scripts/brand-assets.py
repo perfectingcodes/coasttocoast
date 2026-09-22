@@ -286,7 +286,7 @@ def main():
     emit_photo("hero-coast.jpg", [1920, 1200, 760])
     emit_photo("photo-condenser.png", [1024, 640])
     emit_photo("photo-hvac-unit.jpg", [1280, 760])
-    emit_photo("photo-home.jpg", [900, 560])
+    emit_photo("photo-home.jpg", [1100, 700])
     emit_photo("photo-ac-detail.jpg", [900, 560])
     emit_photo("footer-scene.png", [1600, 1000], quality=78)
     emit_photo("photo-van.png", [1024, 640])
