@@ -37,7 +37,7 @@ export function ArrowLink({
   className?: string;
 }) {
   return (
-    <Link href={href} className={cn("link-arrow", className)}>
+    <Link href={href} className={cn("link-arrow min-h-9", className)}>
       {children}
       <ArrowUpRight className="size-3.5" aria-hidden="true" />
     </Link>

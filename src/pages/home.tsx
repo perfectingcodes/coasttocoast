@@ -29,6 +29,7 @@ import { Reveal } from "@/components/reveal";
 import { PaymentTeaser } from "@/components/payment-teaser";
 import { GoogleBadge, GoogleReviewCard } from "@/components/google-reviews";
 import {
+  ArrowLink,
   CityMarquee,
   Pill,
   SectionEyebrow,
@@ -647,31 +648,96 @@ function Perforation() {
 /* ----------------------------------------------------------------- why us */
 
 /**
- * Why us, laid out as a plate and a spec sheet.
+ * Why us.
  *
- * The photographs used to be two tilted frames — the polaroid stack every
- * contractor site has. They are square now, one overlapping the other, with
- * the seal breaking the frame at the corner and the licence stated on the
- * picture rather than somewhere underneath it. The reasons on the right read
- * as a spec sheet, because the claims are specific enough to survive being
- * set that way.
+ * Every previous version was a photograph on the left and a list of bullets on
+ * the right, which is the most template-shaped layout there is. This one is
+ * built around its own sentence: the statement runs at display size across the
+ * space, the seal sits up with the heading as the mark that backs it, and the
+ * four reasons run as a wide band of columns underneath rather than as a stack
+ * of rows beside a picture.
+ *
+ * It was also the one band on the page with no warmth in it at all — navy and
+ * cyan throughout — so the ember accents that carry the rest of the site come
+ * back here.
  */
 function WhyUsSection() {
   return (
-    <section className="band-navy grain relative overflow-hidden">
+    <section className="band-navy grain grid-lines relative overflow-hidden">
       <Wave fill="white" swell="#2bd9ff" flip height={56} className="relative -mt-px" />
 
-      <div className="shell relative grid items-center gap-14 py-14 md:py-20 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
-        <div className="relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-none">
-          <div className="relative">
-            {/* Registration marks. Two hairline corners, the way a plate is
-                positioned on a press sheet. */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="absolute -bottom-40 -left-32 size-[34rem] rounded-full bg-orange/12 blur-[130px]" />
+        <div className="absolute -right-32 top-0 size-[30rem] rounded-full bg-cyan/12 blur-[130px]" />
+      </div>
+
+      <div className="shell relative py-14 md:py-20">
+        {/* ------------------------------------------------- heading + seal */}
+        <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-8">
+          <div>
+            <SectionEyebrow index={3} className="text-cyan">
+              Why Coast to Coast
+            </SectionEyebrow>
+            <h2 className="poster mt-4 text-[clamp(2rem,4.6vw,3.25rem)] text-white">
+              Built on
+              <span className="block text-chill">second opinions.</span>
+            </h2>
+          </div>
+
+          <div className="relative shrink-0">
             <span
-              className="pointer-events-none absolute -left-3 -top-3 size-6 border-l border-t border-cyan/40"
+              className="absolute inset-4 -z-10 rounded-full bg-cyan/25 blur-2xl"
+              aria-hidden="true"
+            />
+            <img
+              src="/brand/badge-locally-owned.webp"
+              alt="Locally owned and operated"
+              width={640}
+              height={632}
+              loading="lazy"
+              className="w-28 drop-shadow-[0_16px_32px_rgb(3_12_32/0.9)] sm:w-36 lg:w-[9.5rem]"
+            />
+          </div>
+        </div>
+
+        <div className="thermal-rule mt-10 w-full opacity-70" aria-hidden="true" />
+
+        {/* -------------------------------------------- statement + picture */}
+        <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-center lg:gap-14">
+          <div>
+            <p className="font-display text-[0.62rem] font-extrabold uppercase tracking-[0.24em] text-ember">
+              How the work starts
+            </p>
+            <p className="mt-5 font-display text-[clamp(1.4rem,2.6vw,2rem)] font-extrabold leading-[1.22] text-white">
+              Most of our work starts as somebody else&rsquo;s quote. We find the
+              actual fault,{" "}
+              <span className="text-chill">put a price in writing</span>, and let
+              you decide what happens next.
+            </p>
+
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <ArrowLink href="/about" className="text-cyan">
+                About the company
+              </ArrowLink>
+              <a
+                href={business.phoneHref}
+                className="flex min-h-11 items-center gap-2 font-display text-sm font-extrabold text-white/70 transition-colors hover:text-white"
+              >
+                <Phone className="size-4 text-ember" aria-hidden="true" />
+                {business.phone}
+              </a>
+            </div>
+          </div>
+
+          <div className="relative mx-auto w-full max-w-sm lg:mx-0 lg:max-w-none">
+            {/* Registration marks, the way a plate is positioned on a press
+                sheet. */}
+            <span
+              className="pointer-events-none absolute -left-3 -top-3 size-6 border-l border-t border-ember/50"
               aria-hidden="true"
             />
             <span
-              className="pointer-events-none absolute -bottom-3 -right-3 size-6 border-b border-r border-cyan/40"
+              className="pointer-events-none absolute -bottom-3 -right-3 size-6 border-b border-r border-ember/50"
               aria-hidden="true"
             />
 
@@ -683,83 +749,59 @@ function WhyUsSection() {
               width={1100}
               height={1375}
               loading="lazy"
-              className="w-[86%] rounded-card object-cover shadow-[0_30px_60px_-20px_rgb(3_12_32/0.9)] ring-1 ring-white/15"
+              className="aspect-[5/4] w-full rounded-card object-cover object-[50%_64%] shadow-[0_30px_60px_-20px_rgb(3_12_32/0.9)] ring-1 ring-white/15"
             />
 
-            {/* The equipment, overlapping the house it sits beside. */}
-            <img
-              src="/brand/photo-hvac-unit.webp"
-              srcSet="/brand/photo-hvac-unit-760.webp 760w, /brand/photo-hvac-unit.webp 1280w"
-              sizes="(min-width: 1024px) 280px, 52vw"
-              alt="An outdoor condenser installed beside a home"
-              width={1280}
-              height={853}
-              loading="lazy"
-              className="absolute -bottom-5 -right-2 w-[48%] rounded-card object-cover shadow-[0_26px_50px_-18px_rgb(3_12_32/0.95)] ring-1 ring-white/20"
-            />
-
-            {/* Licence, stated on the picture rather than under it. */}
-            <div className="absolute left-4 top-4 hidden rounded-xl bg-navy-deep/85 px-3.5 py-2 ring-1 ring-white/20 backdrop-blur-sm sm:block">
-              <p className="font-mono text-[0.6rem] uppercase tracking-[0.12em] text-white/50">
+            {/* The licence, stated on the picture rather than under it. */}
+            <div className="absolute bottom-4 left-4 rounded-xl bg-navy-deep/85 px-3.5 py-2 ring-1 ring-white/20 backdrop-blur-sm">
+              <p className="font-mono text-[0.58rem] uppercase tracking-[0.12em] text-white/50">
                 FL Mechanical
               </p>
               <p className="font-mono text-[0.72rem] font-semibold tracking-[0.08em] text-white">
                 #{business.license}
               </p>
             </div>
-
-            <img
-              src="/brand/badge-locally-owned.webp"
-              alt="Locally owned and operated"
-              width={640}
-              height={632}
-              loading="lazy"
-              className="absolute -bottom-6 -left-5 w-28 drop-shadow-[0_16px_32px_rgb(3_12_32/0.9)] sm:-bottom-8 sm:-left-8 sm:w-36 lg:w-40"
-            />
           </div>
-
-          <p className="mt-10 pl-1 font-mono text-[0.62rem] uppercase tracking-[0.16em] text-white/30 sm:mt-12">
-            {business.city}, {business.state} · Licensed &amp; insured
-          </p>
         </div>
 
-        <div>
-          <SectionEyebrow index={3} className="text-cyan">Why Coast to Coast</SectionEyebrow>
-          <h2 className="poster mt-4 text-[clamp(2rem,4.4vw,3.1rem)] text-white">
-            Built on
-            <span className="block text-chill">second opinions.</span>
-          </h2>
-          <div className="thermal-rule mt-6 w-24" aria-hidden="true" />
+        {/* ------------------------------------------------------- the four */}
+        <ul className="mt-14 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+          {whyUs.map((w, i) => (
+            <li key={w.title} className="group relative pt-5">
+              <span
+                className="absolute inset-x-0 top-0 h-px bg-white/15"
+                aria-hidden="true"
+              />
+              {/* Short ember segment on the rule: the tick that says this
+                  column starts here. */}
+              <span
+                className="absolute left-0 top-0 h-px w-10 bg-ember transition-all duration-500 group-hover:w-20"
+                aria-hidden="true"
+              />
 
-          <p className="mt-6 max-w-md leading-relaxed text-white/65">
-            Most of our work starts as somebody else&rsquo;s quote. We find the
-            actual fault, price it in writing, and let the homeowner decide.
-          </p>
-
-          <ul className="mt-9">
-            {whyUs.map((w, i) => (
-              <li
-                key={w.title}
-                className="group grid grid-cols-[auto_1fr_auto] items-baseline gap-x-4 border-t border-white/10 py-5 last:border-b last:border-white/10"
-              >
-                <span className="font-mono text-[0.7rem] tabular-nums text-cyan/60 transition-colors duration-300 group-hover:text-cyan">
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="font-mono text-[0.7rem] tabular-nums text-ember">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <div className="min-w-0">
-                  <h3 className="font-display text-base font-extrabold text-white">
-                    {w.title}
-                  </h3>
-                  <p className="mt-1 text-sm leading-relaxed text-white/60">
-                    {w.body}
-                  </p>
-                </div>
-                <span className="hidden whitespace-nowrap font-mono text-[0.62rem] uppercase tracking-[0.12em] text-white/35 sm:block">
+                <span className="whitespace-nowrap font-mono text-[0.6rem] uppercase tracking-[0.12em] text-white/35">
                   {w.tag}
                 </span>
-              </li>
-            ))}
-          </ul>
-        </div>
+              </div>
+
+              <h3 className="mt-3 font-display text-base font-extrabold leading-tight text-white">
+                {w.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-white/60">
+                {w.body}
+              </p>
+            </li>
+          ))}
+        </ul>
+
+        <p className="mt-12 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-white/25">
+          {business.city}, {business.state} · Licensed &amp; insured ·
+          Certificates on request
+        </p>
       </div>
 
       <Wave fill="white" height={56} className="relative -mb-px" />
