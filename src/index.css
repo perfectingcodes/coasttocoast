@@ -539,6 +539,75 @@
     outline-offset: 4px;
   }
 
+  /* An invisible range laid over its own visualisation: the chart below is
+     the control's face, so the input itself only needs to carry the drag,
+     the keyboard and the focus ring. */
+  .range-ghost {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    border-radius: 6px;
+  }
+  .range-ghost::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 44px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.9);
+    box-shadow: 0 4px 14px -2px rgb(3 18 48 / 0.8);
+    cursor: ew-resize;
+  }
+  .range-ghost::-moz-range-thumb {
+    width: 14px;
+    height: 44px;
+    border: 0;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.9);
+    box-shadow: 0 4px 14px -2px rgb(3 18 48 / 0.8);
+    cursor: ew-resize;
+  }
+  .range-ghost:focus-visible {
+    outline: 3px solid var(--color-cyan);
+    outline-offset: 3px;
+  }
+
+  /* Scroll cue: a hairline with a dot that runs down it and resets. */
+  .scroll-rail {
+    position: relative;
+    display: block;
+    width: 1px;
+    height: 2.75rem;
+    background: linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.35),
+      rgb(255 255 255 / 0.05)
+    );
+  }
+  .scroll-rail::after {
+    content: "";
+    position: absolute;
+    left: -2px;
+    top: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--color-orange-light);
+    box-shadow: 0 0 10px 1px rgb(255 122 31 / 0.8);
+    animation: scroll-dot 2.6s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+  }
+  @keyframes scroll-dot {
+    0% { transform: translateY(0); opacity: 0; }
+    18% { opacity: 1; }
+    72% { opacity: 1; }
+    100% { transform: translateY(2.4rem); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-rail::after {
+      animation: none;
+    }
+  }
+
   /* Lets an element hang past its section into the next one. */
   .break-out {
     position: relative;

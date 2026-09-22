@@ -163,16 +163,16 @@ export function businessNode(): Record<string, unknown> {
     },
     geo: {
       "@type": "GeoCoordinates",
-      latitude: 26.5628,
-      longitude: -81.8226,
+      latitude: business.lat,
+      longitude: business.lng,
     },
     areaServed: [
       {
         "@type": "GeoCircle",
         geoMidpoint: {
           "@type": "GeoCoordinates",
-          latitude: 26.5628,
-          longitude: -81.8226,
+          latitude: business.lat,
+          longitude: business.lng,
         },
         geoRadius: SERVICE_RADIUS_M,
       },

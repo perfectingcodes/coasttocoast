@@ -29,10 +29,10 @@ import { GoogleBadge, GoogleReviewCard } from "@/components/google-reviews";
 import {
   CityMarquee,
   Pill,
-  SeasonCard,
   SectionEyebrow,
   TrustStrip,
 } from "@/components/brand";
+import { SeasonScrubber } from "@/components/season-scrubber";
 import { ServiceMap } from "@/components/service-map";
 import { CtaBand } from "@/components/cta-band";
 import { FaqList } from "@/components/faq-list";
@@ -101,6 +101,10 @@ function Hero() {
   return (
     <section className="band-azure grain grid-lines relative isolate overflow-hidden">
       <div className="shell relative grid items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:gap-6 lg:pb-12 lg:pt-24">
+        <span
+          className="pointer-events-none absolute inset-y-24 left-[calc(50%-0.75rem)] hidden w-px bg-gradient-to-b from-transparent via-white/18 to-transparent lg:block"
+          aria-hidden="true"
+        />
         <div className="max-w-xl">
           {/* The divider only appears once both halves are on one line —
               wrapped, it left a pipe hanging off the end of the first line. */}
@@ -194,15 +198,19 @@ function Hero() {
               ))}
             </dl>
           </div>
+
+          <div className="mt-8 hidden items-center gap-3 lg:flex" aria-hidden="true">
+            <span className="scroll-rail" />
+            <span className="font-display text-[0.55rem] font-extrabold uppercase tracking-[0.22em] text-white/40">
+              Scroll
+            </span>
+          </div>
         </div>
 
         <div className="relative">
-          <SeasonCard
-            variant="bar"
-            className="mb-4 hidden w-fit lg:ml-auto lg:flex"
-          />
+          <SeasonScrubber className="mb-5 w-full max-w-sm lg:absolute lg:-left-10 lg:top-2 lg:z-20 lg:mb-0 lg:w-[18.5rem]" />
 
-          <div className="rays-burst relative">
+          <div className="rays-burst relative lg:pt-10">
           {/* Warm core the rays radiate from, sitting under the artwork. */}
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange/35 blur-[80px]"
@@ -216,7 +224,7 @@ function Hero() {
             width={1200}
             height={1026}
             fetchPriority="high"
-            className="mx-auto w-full max-w-lg drop-shadow-[0_28px_56px_rgb(3_18_48/0.55)]"
+            className="mx-auto w-full max-w-lg drop-shadow-[0_28px_56px_rgb(3_18_48/0.55)] lg:mr-0"
           />
 
           {/* Social proof rides on the artwork rather than in the promise
@@ -228,6 +236,12 @@ function Hero() {
           <div className="mt-4 flex justify-center sm:absolute sm:bottom-0 sm:left-0 sm:mt-0 sm:block lg:bottom-4">
             <GoogleBadge className="shadow-[0_14px_30px_-10px_rgb(3_18_48/0.65)]" />
           </div>
+
+          {/* Where the trucks actually leave from. */}
+          <p className="mt-4 hidden text-right font-mono text-[0.62rem] uppercase tracking-[0.14em] text-white/35 lg:block">
+            {business.city}, {business.state} · {business.lat.toFixed(4)}° N{" "}
+            {Math.abs(business.lng).toFixed(4)}° W
+          </p>
           </div>
         </div>
       </div>

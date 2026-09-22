@@ -24,6 +24,10 @@ export const business = {
   city: "Fort Myers",
   state: "FL",
   zip: "33912",
+  /** Office coordinates. One source for the schema.org geo block and for the
+   *  readout under the hero map, so the two cannot disagree. */
+  lat: 26.5628,
+  lng: -81.8226,
   hours: "Mon–Fri, 8am–5pm",
   emergency: "24/7 emergency service",
   /** Florida Mechanical Contractor license — the one that covers HVAC work. */
