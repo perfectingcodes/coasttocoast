@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { ArrowRight, CircleAlert, Gauge, Globe, Megaphone, Target } from "lucide-react";
-import { business, cleanAndTune, locations, services } from "@/content/site";
+import { business, cleanAndTune, counties, locations, services } from "@/content/site";
 import {
   channels,
   objectives,
@@ -34,7 +34,7 @@ export default function AdminHome() {
           value={locations.length * services.length + locations.length + services.length + 7}
           hint="Prerendered static HTML"
         />
-        <StatCard label="Cities covered" value={locations.length} hint="Across three counties" />
+        <StatCard label="Cities covered" value={locations.length} hint={`Across ${counties.length} counties`} />
         <StatCard
           label="Channels blocked"
           value={blocked.length}

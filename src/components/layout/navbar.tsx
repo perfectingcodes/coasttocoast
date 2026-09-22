@@ -10,7 +10,14 @@ import {
   Phone,
   X,
 } from "lucide-react";
-import { business, cleanAndTune, locations, nav, services } from "@/content/site";
+import {
+  business,
+  cleanAndTune,
+  countyList,
+  locations,
+  nav,
+  services,
+} from "@/content/site";
 import { Icon } from "@/components/icon";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -59,7 +66,7 @@ export function Navbar() {
       <div className="bg-navy-deep text-white">
         <div className="shell flex h-10 items-center justify-between gap-4">
           <p className="hidden text-xs font-semibold text-white/60 sm:block">
-            Serving Lee, Collier &amp; Charlotte counties
+            Serving {countyList} counties
           </p>
           <div className="flex flex-1 items-center justify-end gap-4">
             <span className="inline-flex items-center gap-2">
@@ -387,7 +394,7 @@ function ServicesMenu({ active }: { active: boolean }) {
 
           <div className="flex items-center justify-between border-t border-navy/8 bg-foam px-5 py-3">
             <span className="font-display text-[0.62rem] font-extrabold uppercase tracking-[0.16em] text-navy/45">
-              Serving {locations.length} cities · Lee, Collier &amp; Charlotte
+              Serving {locations.length} cities · {countyList}
             </span>
             <Link href="/services" className="link-arrow">
               All services

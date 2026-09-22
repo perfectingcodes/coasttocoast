@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "wouter";
 import { ArrowUpRight, MapPin, ShieldCheck, Thermometer } from "lucide-react";
-import { business, locations, season } from "@/content/site";
+import { business, counties, locations, season } from "@/content/site";
 import { cn } from "@/lib/utils";
 
 /* ---------------------------------------------------------------- pill */
@@ -94,7 +94,7 @@ export function SeasonCard({
     return (
       <div
         className={cn(
-          "glass edge-lit flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3",
+          "glass edge-lit flex flex-wrap items-center gap-x-4 gap-y-1.5 px-4 py-2.5",
           className,
         )}
       >
@@ -107,7 +107,6 @@ export function SeasonCard({
         <span className="font-display text-sm font-extrabold text-white">
           {s.label}
         </span>
-        <span className="hidden h-4 w-px bg-white/20 sm:block" aria-hidden="true" />
         <span className="flex items-center gap-2.5">
           <span className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/45">
             Cooling load
@@ -165,7 +164,9 @@ export function LicenceCard({ className }: { className?: string }) {
           <dt className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/45">
             Counties
           </dt>
-          <dd className="mt-0.5 font-display text-base font-extrabold text-white">3</dd>
+          <dd className="mt-0.5 font-display text-base font-extrabold text-white">
+            {counties.length}
+          </dd>
         </div>
         <div>
           <dt className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/45">
@@ -300,5 +301,37 @@ export function KineticWordmark({ className }: { className?: string }) {
         </div>
       ))}
     </div>
+  );
+}
+
+/**
+ * Section eyebrow with a running index.
+ *
+ * The home page is a sequence — what we do, what it costs, who we are, where
+ * we work, what happens when you call — and numbering the sections says so.
+ * It is the cheapest way to make a long page read as one journey rather than
+ * as a stack of unrelated bands.
+ */
+export function SectionEyebrow({
+  index,
+  children,
+  className,
+}: {
+  /** 1-based position in the page's narrative. */
+  index: number;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <p className={cn("eyebrow eyebrow-indexed", className)}>
+      <span className="tabular-nums opacity-70">
+        {String(index).padStart(2, "0")}
+      </span>
+      <span
+        className="h-[2px] w-7 shrink-0 rounded-sm bg-current opacity-45"
+        aria-hidden="true"
+      />
+      {children}
+    </p>
   );
 }

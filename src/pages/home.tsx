@@ -12,19 +12,27 @@ import {
 import {
   business,
   cleanAndTune,
+  countyList,
   generalFaqs,
   locations,
   process,
-  testimonials,
   services,
+  testimonials,
   whyUs,
   type Service,
 } from "@/content/site";
 import { Icon } from "@/components/icon";
 import { Wave } from "@/components/wave";
 import { Reveal } from "@/components/reveal";
+import { PaymentTeaser } from "@/components/payment-teaser";
 import { GoogleBadge, GoogleReviewCard } from "@/components/google-reviews";
-import { CityMarquee, Pill, TrustStrip } from "@/components/brand";
+import {
+  CityMarquee,
+  Pill,
+  SeasonCard,
+  SectionEyebrow,
+  TrustStrip,
+} from "@/components/brand";
 import { ServiceMap } from "@/components/service-map";
 import { CtaBand } from "@/components/cta-band";
 import { FaqList } from "@/components/faq-list";
@@ -61,6 +69,7 @@ export default function Home() {
         <TrustStrip />
         <ServicesSection />
         <CleanAndTuneSection />
+        <FinancingSection />
         <WhyUsSection />
         <TestimonialsSection />
         <ServiceMap />
@@ -90,7 +99,7 @@ const HERO_PROOF = [
 
 function Hero() {
   return (
-    <section className="band-azure grain relative isolate overflow-hidden">
+    <section className="band-azure grain grid-lines relative isolate overflow-hidden">
       <div className="shell relative grid items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:gap-6 lg:pb-12 lg:pt-24">
         <div className="max-w-xl">
           {/* The divider only appears once both halves are on one line —
@@ -100,8 +109,9 @@ function Hero() {
             <span className="mx-3 hidden h-3 w-px align-middle sm:inline-block sm:bg-white/40" aria-hidden="true" />
             <span className="block text-orange-light sm:inline">Lic. {business.license}</span>
           </p>
+          <div className="thermal-rule mt-5 w-20" aria-hidden="true" />
 
-          <h1 className="poster mt-4 text-[clamp(2.9rem,6.6vw,5.2rem)] text-white drop-shadow-[0_4px_18px_rgb(3_18_48/0.45)]">
+          <h1 className="poster mt-5 text-[clamp(2.9rem,6.6vw,5.2rem)] text-white drop-shadow-[0_4px_18px_rgb(3_18_48/0.45)]">
             Comfort
             <br />
             lives{" "}
@@ -111,8 +121,8 @@ function Hero() {
           </h1>
 
           <p className="mt-5 max-w-lg text-[1.05rem] leading-relaxed text-white/90">
-            Home AC repair, replacement and maintenance across Lee, Collier and
-            Charlotte counties. A{" "}
+            Home AC repair, replacement and maintenance across {countyList}{" "}
+            counties. A{" "}
             <span className="font-semibold text-white">
               flat price in writing before we start
             </span>{" "}
@@ -186,7 +196,13 @@ function Hero() {
           </div>
         </div>
 
-        <div className="rays-burst relative">
+        <div className="relative">
+          <SeasonCard
+            variant="bar"
+            className="mb-4 hidden w-fit lg:ml-auto lg:flex"
+          />
+
+          <div className="rays-burst relative">
           {/* Warm core the rays radiate from, sitting under the artwork. */}
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange/35 blur-[80px]"
@@ -212,6 +228,7 @@ function Hero() {
           <div className="mt-4 flex justify-center sm:absolute sm:bottom-0 sm:left-0 sm:mt-0 sm:block lg:bottom-4">
             <GoogleBadge className="shadow-[0_14px_30px_-10px_rgb(3_18_48/0.65)]" />
           </div>
+          </div>
         </div>
       </div>
 
@@ -228,7 +245,7 @@ function ServicesSection() {
       <div className="shell">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <div>
-            <p className="eyebrow">Our Services</p>
+            <SectionEyebrow index={1}>Our Services</SectionEyebrow>
             <h2 className="poster mt-4 text-[clamp(1.75rem,3.4vw,2.5rem)]">
               HVAC for homes
               <span className="block text-ember">&amp; businesses</span>
@@ -518,7 +535,7 @@ function WhyUsSection() {
         </div>
 
         <div>
-          <p className="eyebrow text-cyan">Why Coast to Coast</p>
+          <SectionEyebrow index={3} className="text-cyan">Why Coast to Coast</SectionEyebrow>
           <h2 className="poster mt-4 text-[clamp(2rem,4.4vw,3.1rem)] text-white">
             Built on
             <span className="block text-chill">second opinions.</span>
@@ -557,7 +574,7 @@ function TestimonialsSection() {
       <div className="shell">
         <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-5">
           <div>
-            <p className="eyebrow">Reviews</p>
+            <SectionEyebrow index={4}>Reviews</SectionEyebrow>
             <h2 className="poster mt-4 text-[clamp(2rem,4.4vw,3.1rem)]">
               Real people.
               <span className="block text-ember">Real comfort.</span>
@@ -626,6 +643,20 @@ function TestimonialsSection() {
   );
 }
 
+/* ------------------------------------------------------------- financing */
+
+/** A replacement is the big-ticket decision on this page, so the number that
+ *  actually governs it gets a section rather than a footnote. */
+function FinancingSection() {
+  return (
+    <section className="bg-foam py-14 md:py-20">
+      <div className="shell">
+        <PaymentTeaser />
+      </div>
+    </section>
+  );
+}
+
 /* ------------------------------------------------------------------- faq */
 
 function FaqSection() {
@@ -641,7 +672,7 @@ function FaqSection() {
             loading="lazy"
             className="size-20 object-contain drop-shadow-[0_12px_24px_rgb(10_35_82/0.25)]"
           />
-          <p className="eyebrow eyebrow-center mt-5">Common questions</p>
+          <SectionEyebrow index={6} className="mt-5">Common questions</SectionEyebrow>
           <h2 className="poster mt-4 text-[clamp(1.9rem,4.2vw,3rem)]">
             Answers before you call
           </h2>
@@ -702,7 +733,7 @@ function HowItWorks() {
       <div className="shell relative">
         <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-5">
           <div className="max-w-xl">
-            <p className="eyebrow text-cyan">What happens next</p>
+            <SectionEyebrow index={7} className="text-cyan">What happens next</SectionEyebrow>
             <h2 className="poster mt-4 text-[clamp(1.9rem,4vw,2.9rem)] text-white">
               From your call to
               <span className="block text-chill">cold air, in four.</span>

@@ -2,14 +2,14 @@
  * Marketing plan — first draft.
  *
  * Written from what the site already establishes: six services, eight cities
- * across three counties, the published $89 Clean & Tune, Florida Mechanical
+ * across four counties, the published $89 Clean & Tune, Florida Mechanical
  * Contractor #CMC1251768, and the seasonal demand curve of a Gulf Coast HVAC
  * business. Budgets and targets are marked as proposals, not commitments.
  *
  * ⚠️ Every number below is a starting assumption for the client to confirm or
  * replace. Nothing here is drawn from their actual ad accounts or books.
  */
-import { business, cleanAndTune, locations, services } from "./site";
+import { business, cleanAndTune, countyList, locations, services } from "./site";
 
 export type Status = "live" | "ready" | "draft" | "blocked" | "not-connected";
 export type Channel = "seo" | "google" | "meta" | "local" | "email" | "reviews";
@@ -26,7 +26,7 @@ export const planMeta = {
 export const objectives = [
   {
     title: "Own local search in all eight cities",
-    body: `Rank in the Google local pack for "AC repair" and "HVAC" in ${locations.length} cities across Lee, Collier and Charlotte counties. The ${locations.length * services.length} service × city pages already exist to support this.`,
+    body: `Rank in the Google local pack for "AC repair" and "HVAC" in ${locations.length} cities across ${countyList} counties. The ${locations.length * services.length} service × city pages already exist to support this.`,
     metric: "Local pack presence",
     target: "Top 3 in 5 of 8 cities",
     horizon: "6 months",
@@ -199,7 +199,7 @@ export const campaigns: {
     platform: "Google LSA",
     status: "blocked",
     objective: "Top-of-page placement with the verified badge",
-    audience: "Lee, Collier and Charlotte counties",
+    audience: `${countyList} counties`,
     budget: "$800 / mo",
     window: "Year-round",
     kpi: "Cost per lead",

@@ -158,9 +158,21 @@ def vertical_gradient(size, top, bottom):
 
 
 def build_favicon(badge):
-    """Crop the circular sunset emblem out of the badge and set it on navy."""
-    w, h = badge.size
-    emblem = badge.crop((int(w * 0.17), int(h * 0.02), int(w * 0.66), int(h * 0.50)))
+    """Crop the circular sunset emblem out of the badge and set it on navy.
+
+    The crop is measured off the badge's own cyan ring rather than written as
+    fractions of the canvas, so re-cutting the logo art does not silently
+    produce a favicon with the emblem half out of frame.
+    """
+    cx, cy, r = fit_ring(badge)
+    # A square a little inside the disc, lifted so the scene fills it and the
+    # wordmark across the bottom of the circle stays out.
+    half = r * 0.56
+    cy -= r * 0.4
+    emblem = badge.crop((
+        max(0, round(cx - half)), max(0, round(cy - half)),
+        min(badge.width, round(cx + half)), min(badge.height, round(cy + half)),
+    ))
 
     size, pad = 512, 30
     mask = Image.new("L", (size, size), 0)

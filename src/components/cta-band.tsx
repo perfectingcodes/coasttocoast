@@ -76,41 +76,38 @@ export function CtaBand({
   );
 }
 
-/** Low-contrast sun + palm silhouettes, drawn rather than photographed. */
+/**
+ * The ground under the closing band.
+ *
+ * Drawn palms read as clip art at any size, so this is the sun on the horizon,
+ * a fine chevron field standing in for moving air, and a light sweep off the
+ * top-left corner — three flat gradients, no illustration.
+ */
 function SunsetScenery() {
   return (
-    <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-      <div className="absolute bottom-0 left-1/2 size-72 -translate-x-1/2 translate-y-1/3 rounded-full bg-gold/45 blur-2xl" />
-      <svg
-        className="absolute -left-6 bottom-0 h-44 w-auto opacity-25 md:h-56"
-        viewBox="0 0 160 200"
-        fill="none"
-      >
-        <path d="M78 200V78" stroke="#7a2c05" strokeWidth="7" strokeLinecap="round" />
-        <g stroke="#7a2c05" strokeWidth="7" strokeLinecap="round">
-          <path d="M78 78C58 58 30 55 12 68" />
-          <path d="M78 78c20-20 48-23 66-10" />
-          <path d="M78 78C65 52 67 25 85 8" />
-          <path d="M78 78c16-11 44-7 57 9" />
-        </g>
-      </svg>
-      <svg
-        className="absolute -right-4 bottom-0 h-52 w-auto opacity-25 md:h-64"
-        viewBox="0 0 160 200"
-        fill="none"
-      >
-        <path d="M82 200V78" stroke="#7a2c05" strokeWidth="7" strokeLinecap="round" />
-        <g stroke="#7a2c05" strokeWidth="7" strokeLinecap="round">
-          <path d="M82 78c20-20 48-23 66-10" />
-          <path d="M82 78C62 58 34 55 16 68" />
-          <path d="M82 78C69 52 71 25 89 8" />
-          <path d="M82 78c-16-11-44-7-57 9" />
-        </g>
-      </svg>
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      {/* Sun, sitting on the bottom edge behind the mascot. */}
+      <div className="absolute bottom-0 left-1/2 size-[30rem] -translate-x-1/2 translate-y-1/2 rounded-full bg-gold/45 blur-[90px]" />
+      <div className="absolute bottom-0 left-1/2 size-56 -translate-x-1/2 translate-y-1/2 rounded-full bg-[#ffd98a]/45 blur-2xl" />
+
+      {/* Airflow: one repeating chevron field, masked so it fades inward. */}
+      <div
+        className="absolute inset-0 opacity-[0.16]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(115deg, rgb(255 255 255 / 0.9) 0 2px, transparent 2px 22px)",
+          maskImage:
+            "radial-gradient(120% 90% at 8% 0%, black 0%, transparent 62%)",
+          WebkitMaskImage:
+            "radial-gradient(120% 90% at 8% 0%, black 0%, transparent 62%)",
+        }}
+      />
+
+      {/* Light sweep, so the band is not a flat sheet of orange. */}
+      <div className="absolute -left-1/4 -top-1/2 h-[140%] w-2/3 rotate-12 bg-gradient-to-r from-white/12 to-transparent blur-2xl" />
     </div>
   );
 }
-
 
 /**
  * The mascot rising out of the bottom of the band.

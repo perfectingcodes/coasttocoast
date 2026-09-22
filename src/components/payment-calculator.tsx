@@ -20,14 +20,14 @@ import { cn } from "@/lib/utils";
 const TERMS = [24, 36, 60, 84, 120] as const;
 
 /** Standard amortised payment. Returns principal/term when the rate is zero. */
-function monthlyPayment(principal: number, annualRatePct: number, months: number) {
+export function monthlyPayment(principal: number, annualRatePct: number, months: number) {
   if (principal <= 0 || months <= 0) return 0;
   const r = annualRatePct / 100 / 12;
   if (r === 0) return principal / months;
   return (principal * r) / (1 - Math.pow(1 + r, -months));
 }
 
-const money = (n: number, dp = 0) =>
+export const money = (n: number, dp = 0) =>
   n.toLocaleString("en-US", {
     style: "currency",
     currency: "USD",

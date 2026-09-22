@@ -3,6 +3,7 @@ import { Phone } from "lucide-react";
 import {
   business,
   cleanAndTune,
+  countyList,
   locations,
   process,
   region,
@@ -45,7 +46,7 @@ export default function ServicePage({ slug }: { slug: string }) {
   const answer = `${business.name} provides ${service.name.toLowerCase()} across ${region} — ${locations
     .map((l) => l.city)
     .slice(0, 4)
-    .join(", ")} and the rest of Lee, Collier and Charlotte counties. ${service.blurb} We hold Florida Mechanical Contractor licence #${business.license}, quote flat rates in writing before work begins, and answer 24/7 at ${business.phone}.`;
+    .join(", ")} and the rest of ${countyList} counties. ${service.blurb} We hold Florida Mechanical Contractor licence #${business.license}, quote flat rates in writing before work begins, and answer 24/7 at ${business.phone}.`;
 
   const crumbs = [
     { name: "Home", path: "/" },

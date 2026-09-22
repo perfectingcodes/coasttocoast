@@ -774,10 +774,51 @@ export const locations: Location[] = [
       stormImpact: true,
     },
   },
+  {
+    slug: "venice",
+    city: "Venice",
+    county: "Sarasota County",
+    permitAuthority: "City of Venice Building Department",
+    lat: 27.0998,
+    lng: -82.4543,
+    zips: ["34285", "34292", "34293"],
+    intro:
+      "Venice runs from the island itself — where Gulf-front condos and mid-century block homes sit a few hundred feet from open water — inland through Venice Gardens, South Venice and the newer construction out toward Wellen Park. The island and the inland neighborhoods are effectively two different service problems, and a condenser that lasts fifteen years east of the Trail will not last that long west of it.",
+    neighborhoods: [
+      "Venice Island",
+      "Venice Gardens",
+      "South Venice",
+      "Jacaranda",
+      "Plantation",
+      "Laurel",
+    ],
+    conditions: {
+      salt: "gulf",
+      housing:
+        "a large share of 1970s and 1980s construction alongside newer inland development, so original ductwork and modern equipment often end up on the same system",
+      seasonal: true,
+      stormImpact: false,
+    },
+  },
 ];
 
 export const locationBySlug = (slug: string) =>
   locations.find((l) => l.slug === slug);
+
+/** Every county we hold work in, in the order the cities are listed. */
+export const counties = [...new Set(locations.map((l) => l.county))];
+
+/**
+ * "Lee, Collier, Charlotte and Sarasota" — derived rather than written out, so
+ * adding a city in a new county cannot leave a stale list somewhere on the
+ * site. `counties` already carries the word "County" on each entry.
+ */
+export const countyList = (() => {
+  const names = counties.map((c) => c.replace(/ County$/, ""));
+  return names.length < 2
+    ? names.join("")
+    : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+})();
 
 // --------------------------------------------------------------------- proof
 
@@ -801,7 +842,7 @@ export const whyUs = [
   {
     icon: "map",
     title: "All of Southwest Florida",
-    body: "Lee, Collier and Charlotte — Port Charlotte down through Naples.",
+    body: `${countyList} counties — Venice down through Naples.`,
   },
 ] as const;
 
@@ -913,7 +954,7 @@ export const season: Record<
 export const generalFaqs = [
   {
     q: "What areas do you serve?",
-    a: `All of ${region} — Lee, Collier and Charlotte counties, including ${locations
+    a: `All of ${region} — ${countyList} counties, including ${locations
       .map((l) => l.city)
       .slice(0, 4)
       .join(", ")} and everywhere between.`,

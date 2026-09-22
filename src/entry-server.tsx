@@ -1,7 +1,7 @@
 import { renderToString } from "react-dom/server";
 import App from "./App";
 import { renderHeadToString, type HeadCollector } from "./lib/head";
-import { business, cleanAndTune, locations, region, services } from "./content/site";
+import { business, cleanAndTune, countyList, locations, region, services } from "./content/site";
 
 /** Canonical origin, so the prerender step and the pages agree on one host. */
 export const siteUrl: string = business.url.replace(/\/$/, "");
@@ -54,7 +54,7 @@ export function buildLlmsTxt(): string {
   const url = siteUrl;
   return `# ${business.name}
 
-> Licensed, insured HVAC contractor serving ${region}. Heating, cooling, mechanical, commercial HVAC and indoor air quality across Lee, Collier and Charlotte counties.
+> Licensed, insured HVAC contractor serving ${region}. Heating, cooling, mechanical, commercial HVAC and indoor air quality across ${countyList} counties.
 
 ## Business facts
 

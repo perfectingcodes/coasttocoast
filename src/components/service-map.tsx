@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { ArrowUpRight, MapPin, Phone } from "lucide-react";
-import { business, locations, type Location } from "@/content/site";
+import { business, countyList, locations, type Location } from "@/content/site";
 import { saltNote } from "@/content/local";
-import { Pill, SeasonCard } from "@/components/brand";
+import { Pill, SeasonCard, SectionEyebrow } from "@/components/brand";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
  * sounds are left out — which is what the panel says.
  */
 
-const BOUNDS = { minLat: 25.85, maxLat: 27.05, minLng: -82.45, maxLng: -81.55 };
+const BOUNDS = { minLat: 25.85, maxLat: 27.2, minLng: -82.58, maxLng: -81.55 };
 
 /** Projection width. The canvas is wider than the projection so a city label
  *  has room to sit east of its pin without being clipped at the edge. */
@@ -61,13 +61,18 @@ function project(loc: Location) {
  * piece of inland water worth drawing at this size.
  */
 const GULF_SHORE: [number, number][] = [
-  [27.05, -82.44], // Manasota Key
-  [26.99, -82.39], // Englewood Beach
-  [26.94, -82.36], // Stump Pass
-  [26.88, -82.335],
-  [26.83, -82.305],
-  [26.775, -82.28],
-  [26.735, -82.268], // Gasparilla Island
+  [27.2, -82.52], // Casey Key
+  [27.16, -82.495],
+  [27.12, -82.47], // Nokomis Beach
+  [27.085, -82.458], // Venice Beach
+  [27.04, -82.432], // Caspersen Beach
+  [26.99, -82.405], // Manasota Key, north end
+  [26.95, -82.378],
+  [26.905, -82.355], // Englewood Beach
+  [26.865, -82.34], // Stump Pass
+  [26.82, -82.315],
+  [26.775, -82.29],
+  [26.735, -82.272], // Gasparilla Island
   [26.715, -82.255], // Boca Grande Pass
   // -- north-west shore of Charlotte Harbor, running inland --
   [26.762, -82.236], // Cape Haze
@@ -126,9 +131,14 @@ const CALOOSAHATCHEE: [number, number][] = [
 
 /** County lines, as latitudes. Both run close enough to east-west at this
  *  scale to draw as one. */
-const COUNTY_LINES = [
-  { lat: 26.785, name: "Charlotte" },
-  { lat: 26.322, name: "Lee" },
+const COUNTY_LINES = [26.945, 26.785, 26.322];
+
+/** Where each county's name sits, as the latitude of the middle of its band. */
+const COUNTY_LABELS = [
+  { lat: 27.09, name: "SARASOTA" },
+  { lat: 26.87, name: "CHARLOTTE" },
+  { lat: 26.56, name: "LEE" },
+  { lat: 26.15, name: "COLLIER" },
 ] as const;
 
 function polyline(points: [number, number][]) {
@@ -158,7 +168,7 @@ export function ServiceMap() {
     <section className="band-navy grain relative overflow-hidden py-14 md:py-16">
       <div className="shell relative">
         <div className="max-w-2xl">
-          <p className="eyebrow text-cyan">Where we work</p>
+          <SectionEyebrow index={5} className="text-cyan">Where we work</SectionEyebrow>
           <h2 className="poster mt-4 text-[clamp(1.9rem,4.2vw,2.9rem)] text-white">
             We work
             <span className="block text-chill">where you live.</span>
@@ -199,7 +209,7 @@ export function ServiceMap() {
               viewBox={`0 0 ${VIEW_W} ${H}`}
               className="w-full"
               role="img"
-              aria-label={`Coverage map of ${locations.length} Southwest Florida cities across Charlotte, Lee and Collier counties, from Port Charlotte down to Naples`}
+              aria-label={`Coverage map of ${locations.length} Southwest Florida cities across ${countyList} counties, from Venice down to Naples`}
             >
               <defs>
                 <linearGradient id="map-land" x1="0" y1="0" x2="1" y2="1">
@@ -234,11 +244,11 @@ export function ServiceMap() {
               {/* County lines, clipped to the land so they stop at the shore
                   rather than running out over the Gulf. */}
               <g clipPath="url(#map-land-clip)">
-                {COUNTY_LINES.map((c) => {
-                  const { y } = px(c.lat, 0);
+                {COUNTY_LINES.map((lat) => {
+                  const { y } = px(lat, 0);
                   return (
                     <line
-                      key={c.name}
+                      key={lat}
                       x1="0"
                       x2={VIEW_W}
                       y1={y}
@@ -289,15 +299,11 @@ export function ServiceMap() {
                 style={{ fontFamily: "Archivo, sans-serif" }}
                 className="select-none"
               >
-                <text x={VIEW_W - 14} y={px(26.9, 0).y} textAnchor="end">
-                  CHARLOTTE
-                </text>
-                <text x={VIEW_W - 14} y={px(26.55, 0).y} textAnchor="end">
-                  LEE
-                </text>
-                <text x={VIEW_W - 14} y={px(26.15, 0).y} textAnchor="end">
-                  COLLIER
-                </text>
+                {COUNTY_LABELS.map((c) => (
+                  <text key={c.name} x={VIEW_W - 14} y={px(c.lat, 0).y} textAnchor="end">
+                    {c.name}
+                  </text>
+                ))}
               </g>
 
               {/* Pins */}

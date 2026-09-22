@@ -207,10 +207,11 @@
     background:
       /* Warm bloom the artwork sits in. The graphic is drawn in the brand's
          blues, so it needs a complementary ground or it sinks into the band. */
-      radial-gradient(56% 62% at 79% 44%, rgb(255 138 40 / 0.42) 0%, transparent 64%),
-      radial-gradient(76% 56% at 88% 2%, rgb(92 196 255 / 0.55) 0%, transparent 62%),
-      radial-gradient(58% 52% at 0% 100%, rgb(255 106 19 / 0.26) 0%, transparent 66%),
-      linear-gradient(158deg, #1a86ff 0%, #0f5ed6 46%, #0a3a94 100%);
+      radial-gradient(54% 60% at 79% 44%, rgb(255 122 31 / 0.4) 0%, transparent 64%),
+      radial-gradient(70% 54% at 88% 0%, rgb(43 217 255 / 0.32) 0%, transparent 62%),
+      radial-gradient(56% 50% at 0% 100%, rgb(255 106 19 / 0.22) 0%, transparent 66%),
+      /* The site's blue, the same ramp the footer runs on. */
+      linear-gradient(162deg, #1668e3 0%, #0d3f96 48%, #0a2352 100%);
   }
 
   /**
@@ -358,6 +359,11 @@
     background: currentColor;
     opacity: 0.55;
   }
+  /* An indexed eyebrow draws its own rule between the numeral and the label,
+     so the number leads. */
+  .eyebrow-indexed::before {
+    display: none;
+  }
   .eyebrow-center::after {
     content: "";
     width: 1.75rem;
@@ -492,6 +498,45 @@
   }
   .numeral-ghost-light {
     color: rgb(255 255 255 / 0.12);
+  }
+
+  /* Brand range input. The track fills to the thumb in ember so the control
+     reads as part of the system rather than as the browser's default. */
+  .range-brand {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(
+      90deg,
+      var(--color-orange) 0%,
+      var(--color-orange-light) var(--pct, 50%),
+      rgb(255 255 255 / 0.18) var(--pct, 50%),
+      rgb(255 255 255 / 0.18) 100%
+    );
+    cursor: pointer;
+  }
+  .range-brand::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: #fff;
+    border: 5px solid var(--color-ember);
+    box-shadow: 0 6px 16px -4px rgb(255 77 0 / 0.75);
+  }
+  .range-brand::-moz-range-thumb {
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: #fff;
+    border: 5px solid var(--color-ember);
+    box-shadow: 0 6px 16px -4px rgb(255 77 0 / 0.75);
+  }
+  .range-brand:focus-visible {
+    outline: 3px solid var(--color-cyan);
+    outline-offset: 4px;
   }
 
   /* Lets an element hang past its section into the next one. */

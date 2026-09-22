@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { ArrowRight, MapPin } from "lucide-react";
-import { business, locations, region, services } from "@/content/site";
+import { business, countyList, locations, region, services } from "@/content/site";
 import { saltNote } from "@/content/local";
 import { SiteLayout } from "@/components/layout/site-layout";
 import { AnswerBlock, FactTable } from "@/components/answer";
@@ -30,7 +30,7 @@ export default function LocationsIndex() {
         title={`HVAC Service Areas in ${region} | ${business.name}`}
         description={`${business.name} covers ${locations
           .map((l) => l.city)
-          .join(", ")} across Lee, Collier and Charlotte counties. Licensed #${business.license}, 24/7 emergency service.`}
+          .join(", ")} across ${countyList} counties. Licensed #${business.license}, 24/7 emergency service.`}
         path={path}
         nodes={[
           faqNode(
@@ -47,7 +47,7 @@ export default function LocationsIndex() {
       <SiteLayout
         eyebrow="Service areas"
         title="Coast to coast, county to county"
-        lead="Trucks run daily through Lee, Collier and Charlotte counties. If you are near any of these, you are in range."
+        lead={`Trucks run daily through ${countyList} counties. If you are near any of these, you are in range.`}
         crumbs={crumbs}
       >
         <section className="shell py-14 md:py-16">
