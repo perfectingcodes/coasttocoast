@@ -141,6 +141,29 @@ const COUNTY_LABELS = [
   { lat: 26.15, name: "COLLIER" },
 ] as const;
 
+/** Great-circle distance in statute miles. */
+function milesBetween(
+  aLat: number, aLng: number, bLat: number, bLng: number,
+) {
+  const R = 3958.8;
+  const rad = (d: number) => (d * Math.PI) / 180;
+  const dLat = rad(bLat - aLat);
+  const dLng = rad(bLng - aLng);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(rad(aLat)) * Math.cos(rad(bLat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+/**
+ * Straight-line distance from the shop to a city, rounded to the nearest mile.
+ * Deliberately not a drive time: the projection is real but the roads are not
+ * in it, and quoting a duration we have not measured would be a promise.
+ */
+function milesFromShop(loc: Location) {
+  return Math.round(milesBetween(business.lat, business.lng, loc.lat, loc.lng));
+}
+
 function polyline(points: [number, number][]) {
   return points
     .map(([lat, lng], i) => {
@@ -319,10 +342,70 @@ export function ServiceMap() {
                 strokeWidth="2"
               />
 
+              {/* The run from the shop to the city being looked at. Both
+                  ends are real coordinates, so the line is the actual bearing
+                  — which is the point of drawing it at all. */}
+              {(() => {
+                const from = px(business.lat, business.lng);
+                const to = project(active);
+                return (
+                  <g>
+                    <line
+                      x1={from.x}
+                      y1={from.y}
+                      x2={to.x}
+                      y2={to.y}
+                      stroke="#ff6a13"
+                      strokeOpacity="0.28"
+                      strokeWidth="6"
+                      strokeLinecap="round"
+                    />
+                    <line
+                      x1={from.x}
+                      y1={from.y}
+                      x2={to.x}
+                      y2={to.y}
+                      stroke="#ff9d4d"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeDasharray="10 8"
+                      className="map-run"
+                    />
+                  </g>
+                );
+              })()}
+
+              {/* The shop itself. Everything on this map is measured from it,
+                  so it is the one marker that is never a city. */}
+              {(() => {
+                const { x, y } = px(business.lat, business.lng);
+                return (
+                  <g className="pointer-events-none">
+                    <circle cx={x} cy={y} r="15" fill="#ff6a13" fillOpacity="0.18" />
+                    <circle
+                      cx={x}
+                      cy={y}
+                      r="7.5"
+                      fill="#ff6a13"
+                      stroke="#fff"
+                      strokeWidth="3"
+                    />
+                  </g>
+                );
+              })()}
+
               {/* Pins */}
               {locations.map((l) => {
                 const { x, y } = project(l);
                 const isActive = l.slug === activeSlug;
+                // Cape Coral sits at the shop's own latitude, so its label ran
+                // straight through the shop marker. Anything that close flips
+                // to the seaward side, which is open water here.
+                const shop = px(business.lat, business.lng);
+                const flip =
+                  x < shop.x &&
+                  Math.abs(x - shop.x) < 80 &&
+                  Math.abs(y - shop.y) < 26;
                 return (
                   <g key={l.slug}>
                     {isActive && <circle cx={x} cy={y} r="46" fill="url(#map-glow)" />}
@@ -365,11 +448,18 @@ export function ServiceMap() {
                         style={{ transform: isActive ? "scale(1.25)" : undefined, transformOrigin: `${x}px ${y}px` }}
                       />
                       <text
-                        x={x + (l.focus ? 18 : 15)}
+                        x={x + (flip ? -1 : 1) * (l.focus ? 18 : 15)}
                         y={y + 5}
-                        fill={isActive ? "#ffffff" : "rgba(255,255,255,0.62)"}
+                        textAnchor={flip ? "end" : "start"}
+                        fill={isActive ? "#ffffff" : "rgba(255,255,255,0.72)"}
                         fontSize="19"
                         fontWeight={l.focus ? 800 : 600}
+                        /* A dark keyline under the type so a label crossing a
+                           pin, a county rule or the run stays readable. */
+                        stroke="#04102a"
+                        strokeWidth="4"
+                        strokeOpacity="0.85"
+                        paintOrder="stroke"
                         className="pointer-events-none select-none"
                         style={{ fontFamily: "Archivo, sans-serif" }}
                       >
@@ -383,6 +473,7 @@ export function ServiceMap() {
 
             <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:mt-5 lg:pl-24">
               {[
+                { c: "bg-orange ring-2 ring-white/70", label: "Our shop" },
                 { c: "bg-orange", label: "Focus markets" },
                 { c: "bg-cyan", label: "Also covered" },
               ].map((k) => (
@@ -408,7 +499,7 @@ export function ServiceMap() {
               width={900}
               height={1513}
               loading="lazy"
-              className="pointer-events-none absolute -bottom-3 left-0 hidden w-28 drop-shadow-[0_18px_36px_rgb(5_15_38/0.85)] lg:block xl:w-32"
+              className="pointer-events-none absolute -bottom-10 -left-14 hidden w-36 drop-shadow-[0_18px_36px_rgb(5_15_38/0.85)] lg:block xl:-left-20 xl:w-44"
             />
           </div>
 
@@ -426,11 +517,21 @@ export function ServiceMap() {
                 </span>
               </div>
 
-              <h3 className="poster mt-3 text-[1.75rem] text-white sm:text-3xl">
-                {active.city}
-                <span className="text-cyan">.</span>
-              </h3>
-
+              <div className="mt-3 flex flex-wrap items-end justify-between gap-x-5 gap-y-2">
+                <h3 className="poster text-[1.75rem] text-white sm:text-3xl">
+                  {active.city}
+                  <span className="text-cyan">.</span>
+                </h3>
+                <p className="text-right">
+                  <span className="poster text-[1.6rem] leading-none text-orange-light">
+                    {milesFromShop(active)}
+                    <span className="ml-1 font-display text-sm font-bold">mi</span>
+                  </span>
+                  <span className="mt-1 block font-mono text-[0.58rem] uppercase tracking-[0.12em] text-white/50">
+                    From our shop
+                  </span>
+                </p>
+              </div>
 
               <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3.5 border-t border-white/12 pt-4">
                 {[

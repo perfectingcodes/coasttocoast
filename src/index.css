@@ -646,6 +646,21 @@
     }
   }
 
+  /* The dashed run on the coverage map, travelling shop → city. */
+  .map-run {
+    animation: map-run 1.4s linear infinite;
+  }
+  @keyframes map-run {
+    to {
+      stroke-dashoffset: -18;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .map-run {
+      animation: none;
+    }
+  }
+
   /* Lets an element hang past its section into the next one. */
   .break-out {
     position: relative;

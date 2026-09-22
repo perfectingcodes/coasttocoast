@@ -984,8 +984,19 @@ export const bestServiceMonths = (() => {
 
 // --------------------------------------------------------------------- faqs
 
+/**
+ * Grouped, because six flat questions is a list and nine grouped ones is an
+ * index. `group` is only used for presentation — the JSON-LD FAQPage and the
+ * support bot both read q/a and ignore it.
+ *
+ * Every answer restates something the site already asserts elsewhere: the
+ * licences, the published Clean & Tune price, same-day booking, the 24/7 line,
+ * the flat price in writing, all-major-brands repair, and permits on every
+ * replacement. Nothing new is claimed here.
+ */
 export const generalFaqs = [
   {
+    group: "Coverage & credentials",
     q: "What areas do you serve?",
     a: `All of ${region} — ${countyList} counties, including ${locations
       .map((l) => l.city)
@@ -993,22 +1004,42 @@ export const generalFaqs = [
       .join(", ")} and everywhere between.`,
   },
   {
+    group: "Coverage & credentials",
     q: "Are you licensed and insured?",
     a: `Yes. Coast to Coast holds Florida Mechanical Contractor license ${business.license}, along with CRC1335475 and CCC1336116, and carries liability and workers' compensation coverage. Certificates are available on request.`,
   },
   {
+    group: "Coverage & credentials",
+    q: "How quickly can someone get out to me?",
+    a: `Same-day appointments across ${region} in most cases, and the line is answered by a person around the clock — ${business.emergency.toLowerCase()} is not an answering machine taking a message until Monday.`,
+  },
+  {
+    group: "What it costs",
+    q: "How will I know the price before you start?",
+    a: "A technician diagnoses the actual fault and puts a flat price in writing before anything is opened. It does not move because the job ran long, and there is no overtime markup.",
+  },
+  {
+    group: "What it costs",
     q: "How much does AC maintenance cost?",
     a: `Our AC Clean & Tune maintenance visit is ${cleanAndTune.price} ${cleanAndTune.unit}. It's a 10-point inspection and service covering the thermostat, filter, condensate drains, capacitor, coils and a full system diagnostic.`,
   },
   {
-    q: "How often should I service my AC?",
-    a: "Twice a year. Southwest Florida's humidity and near-year-round cooling season put more strain on AC systems than cooler climates, so regular maintenance matters more here than it would up north.",
-  },
-  {
+    group: "What it costs",
     q: "Do you offer financing?",
-    a: "Yes, on system replacements and larger repairs, with decisions in most cases the same day. Call us and we'll walk through the options.",
+    a: "Yes, on system replacements and larger repairs, with decisions in most cases the same day and no prepayment penalty. Call us and we'll walk through the options.",
   },
   {
+    group: "Service & equipment",
+    q: "How often should I service my AC?",
+    a: "Twice a year. Southwest Florida's humidity and near-year-round cooling season put more strain on AC systems than cooler climates, so regular maintenance matters more here than it would up north. March and October — either side of the heat — are the two best months to book it.",
+  },
+  {
+    group: "Service & equipment",
+    q: "Do you work on every brand?",
+    a: "We repair all major brands, in and out of warranty. If a system is still under manufacturer warranty we will tell you before quoting a replacement part.",
+  },
+  {
+    group: "Service & equipment",
     q: "Do I need a permit to replace my AC system?",
     a: "Yes — Florida building code requires a permit for HVAC system replacement. We handle permitting as part of every replacement we install.",
   },

@@ -953,35 +953,66 @@ function FinancingSection() {
 
 /* ------------------------------------------------------------------- faq */
 
+/**
+ * Answers before you call.
+ *
+ * Nine questions grouped into three headings rather than six in a flat stack:
+ * at that length a list needs an index, and the groups are the three things a
+ * homeowner is actually deciding between — whether we cover them, what it
+ * costs, and what happens to the equipment.
+ *
+ * The heading column stays put while the questions scroll past it, and the
+ * card at its foot is the fallback for whatever the list did not answer.
+ */
 function FaqSection() {
   return (
-    <section className="bg-white py-16 md:py-24">
-      <div className="shell max-w-3xl">
-        <div className="flex flex-col items-center text-center">
-          <img
-            src="/brand/avatar-husky.webp"
-            alt=""
-            width={256}
-            height={289}
-            loading="lazy"
-            className="size-20 object-contain drop-shadow-[0_12px_24px_rgb(10_35_82/0.25)]"
-          />
-          <SectionEyebrow index={6} className="mt-5">Common questions</SectionEyebrow>
-          <h2 className="poster mt-4 text-[clamp(1.9rem,4.2vw,3rem)]">
-            Answers before you call
+    <section className="grid-lines-light relative overflow-hidden bg-white py-16 md:py-24">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="absolute -right-40 top-10 size-[32rem] rounded-full bg-cyan/12 blur-[130px]" />
+        <div className="absolute -bottom-40 -left-32 size-[28rem] rounded-full bg-orange/10 blur-[130px]" />
+      </div>
+
+      <div className="shell relative grid gap-12 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-16">
+        <div className="lg:sticky lg:top-32 lg:self-start">
+          <SectionEyebrow index={6}>Common questions</SectionEyebrow>
+          <h2 className="poster mt-4 text-[clamp(1.9rem,4.2vw,2.9rem)]">
+            Answers
+            <span className="block text-ember">before you call.</span>
           </h2>
+          <div className="thermal-rule mt-6 w-24" aria-hidden="true" />
+
+          {/* The fallback, with the mascot's head over its top edge — the same
+              move the reviews card makes, at a quarter of the size. */}
+          <div className="card relative mt-14 p-6 pt-12">
+            <img
+              src="/brand/avatar-husky.webp"
+              alt=""
+              width={256}
+              height={289}
+              loading="lazy"
+              className="pointer-events-none absolute -top-9 left-6 size-[4.5rem] object-contain drop-shadow-[0_12px_24px_rgb(10_35_82/0.3)]"
+            />
+            <p className="font-display text-base font-extrabold text-navy">
+              Still have a question?
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-navy/65">
+              Ask Coast in the corner searches these answers, or talk to
+              somebody who actually works here.
+            </p>
+            <a
+              href={business.phoneHref}
+              className="mt-4 flex min-h-11 items-center gap-2 font-display text-base font-extrabold text-blue transition-colors hover:text-navy"
+            >
+              <Phone className="size-4 text-ember" aria-hidden="true" />
+              {business.phone}
+            </a>
+            <p className="mt-1 font-mono text-[0.6rem] uppercase tracking-[0.14em] text-navy/45">
+              {business.emergency}
+            </p>
+          </div>
         </div>
-        <FaqList faqs={generalFaqs} />
-        <p className="mt-8 text-center text-navy/65">
-          Still have a question?{" "}
-          <a
-            href={business.phoneHref}
-            className="inline-flex items-center gap-1.5 font-semibold text-blue underline underline-offset-4"
-          >
-            <Phone className="size-4" aria-hidden="true" />
-            {business.phone}
-          </a>
-        </p>
+
+        <FaqList faqs={generalFaqs} className="mt-0" />
       </div>
     </section>
   );
