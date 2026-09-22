@@ -118,7 +118,7 @@ export function PaymentCalculator({ className }: { className?: string }) {
                     onClick={() => setTerm(t)}
                     aria-pressed={term === t}
                     className={cn(
-                      "rounded-full px-4 py-2 font-display text-xs font-bold transition-colors",
+                      "min-h-10 rounded-full px-4 py-2 font-display text-xs font-bold transition-colors",
                       term === t
                         ? "bg-navy text-white"
                         : "text-navy/70 ring-1 ring-navy/15 hover:ring-navy/40",
@@ -172,12 +172,14 @@ export function PaymentCalculator({ className }: { className?: string }) {
             </p>
           </div>
 
+          {/* `flex-1` is a main-axis basis: stacked, it collapsed both buttons
+              to the height of their label. Full width below `sm` instead. */}
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/contact" className="flex-1">
+            <ButtonLink href="/contact" className="w-full sm:flex-1">
               Get a real quote
               <ArrowRight className="size-4" aria-hidden="true" />
             </ButtonLink>
-            <ButtonLink href={business.phoneHref} variant="outline" className="flex-1">
+            <ButtonLink href={business.phoneHref} variant="outline" className="w-full sm:flex-1">
               <Phone className="size-4" aria-hidden="true" />
               Talk it through
             </ButtonLink>

@@ -54,7 +54,7 @@ export function Navbar() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50">
+    <header className="sticky top-0 z-[70]">
       {/* ---------------------------------------------------- utility bar */}
       <div className="bg-navy-deep text-white">
         <div className="shell flex h-10 items-center justify-between gap-4">
@@ -167,7 +167,10 @@ export function Navbar() {
 
       {/* ----------------------------------------------------- mobile menu */}
       {open && (
-        <div className="max-h-[calc(100dvh-7.5rem)] overflow-y-auto border-t border-navy/10 bg-white lg:hidden">
+        <div className="max-h-[calc(100dvh-7.5rem)] overflow-y-auto bg-white lg:hidden">
+          {/* Same thermal hairline that caps the desktop mega-menu. */}
+          <div className="thermal-rule h-[3px] rounded-none" aria-hidden="true" />
+
           <nav className="shell py-4" aria-label="Mobile">
             <ul className="divide-y divide-navy/8">
               {nav.map((item) => (
@@ -175,21 +178,44 @@ export function Navbar() {
                   <Link
                     href={item.href}
                     className={cn(
-                      "block py-3.5 font-display font-bold",
+                      "flex min-h-12 items-center justify-between font-display font-extrabold",
                       isActive(location, item.href) ? "text-blue" : "text-navy",
                     )}
                   >
                     {item.label}
+                    <ArrowRight
+                      className="size-4 text-navy/25"
+                      aria-hidden="true"
+                    />
                   </Link>
+
+                  {/* The services list is the reason most people open this
+                      sheet, so it gets the icon chips off the desktop panel
+                      rather than an indented run of plain text links. */}
                   {item.href === "/services" && (
-                    <ul className="pb-3 pl-4">
-                      {services.map((s) => (
-                        <li key={s.slug}>
+                    <ul className="grid gap-1 pb-3">
+                      {services.map((sv) => (
+                        <li key={sv.slug}>
                           <Link
-                            href={`/services/${s.slug}`}
-                            className="block py-2 text-sm font-medium text-navy/65"
+                            href={`/services/${sv.slug}`}
+                            className="flex min-h-12 items-center gap-3 rounded-xl px-2 py-2 transition-colors active:bg-foam"
                           >
-                            {s.name}
+                            <span
+                              className={cn(
+                                "grid size-9 shrink-0 place-items-center rounded-lg text-white shadow-[0_6px_14px_-6px_rgb(10_35_82/0.8)] ring-1 ring-inset ring-white/25",
+                                MENU_ACCENT[sv.accent],
+                              )}
+                            >
+                              <Icon name={sv.icon} className="size-4" />
+                            </span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block font-display text-[0.85rem] font-extrabold text-navy">
+                                {sv.name}
+                              </span>
+                              <span className="mt-0.5 block text-[0.72rem] leading-snug text-navy/55">
+                                {sv.menuLine}
+                              </span>
+                            </span>
                           </Link>
                         </li>
                       ))}
@@ -198,18 +224,33 @@ export function Navbar() {
                 </li>
               ))}
             </ul>
-            <div className="mt-5 grid gap-2.5">
+
+            {/* The live offer, carried over from the desktop panel. */}
+            <Link
+              href="/services/repairs-maintenance"
+              className="band-navy grain mt-5 flex items-center gap-4 overflow-hidden rounded-card p-4 text-white"
+            >
+              <span className="poster shrink-0 text-3xl">{cleanAndTune.price}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-display text-[0.55rem] font-extrabold uppercase tracking-[0.2em] text-gold">
+                  Limited-time offer
+                </span>
+                <span className="mt-0.5 block font-display text-sm font-extrabold">
+                  {cleanAndTune.name}
+                </span>
+              </span>
+              <ArrowRight className="size-4 shrink-0 text-cyan" aria-hidden="true" />
+            </Link>
+
+            <div className="mt-4 grid gap-2.5 pb-2">
               <ButtonLink href="/contact" size="lg">
                 Schedule Service
                 <ArrowRight className="size-4" aria-hidden="true" />
               </ButtonLink>
-              <a
-                href={business.phoneHref}
-                className="flex items-center justify-center gap-2 font-display text-sm font-extrabold text-navy"
-              >
+              <ButtonLink href={business.phoneHref} variant="ghost" size="lg">
                 <Phone className="size-4 text-orange" aria-hidden="true" />
                 24/7 · {business.phone}
-              </a>
+              </ButtonLink>
             </div>
           </nav>
         </div>
@@ -300,7 +341,7 @@ function ServicesMenu({ active }: { active: boolean }) {
                         {sv.name}
                       </span>
                       <span className="mt-0.5 block text-[0.72rem] leading-snug text-navy/55">
-                        {sv.short}
+                        {sv.menuLine}
                       </span>
                     </span>
                   </Link>

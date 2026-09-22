@@ -48,12 +48,13 @@ export function ServiceMap() {
       <div className="shell relative">
         <div className="max-w-2xl">
           <p className="eyebrow text-cyan">Where we work</p>
-          <h2 className="poster mt-4 text-[clamp(2rem,4.6vw,3.25rem)] text-white">
-            {locations.length} cities.
-            <span className="block text-chill">Three counties.</span>
+          <h2 className="poster mt-4 text-[clamp(1.9rem,4.2vw,2.9rem)] text-white">
+            We work
+            <span className="block text-chill">where you live.</span>
           </h2>
-          <p className="mt-5 text-lg leading-relaxed text-white/75">
-            Same crew, same pricing, same 24/7 line in every one.
+          <p className="mt-4 leading-relaxed text-white/75 md:text-lg">
+            Fort Myers based, {locations.length} towns on the route. Same crew,
+            same pricing and the same 24/7 line in every one of them.
           </p>
         </div>
 
@@ -212,7 +213,7 @@ export function ServiceMap() {
               width={900}
               height={1513}
               loading="lazy"
-              className="pointer-events-none absolute -bottom-6 -left-8 w-32 drop-shadow-[0_18px_36px_rgb(5_15_38/0.85)] sm:-left-10 sm:w-40"
+              className="pointer-events-none absolute -bottom-6 -left-10 hidden w-32 drop-shadow-[0_18px_36px_rgb(5_15_38/0.85)] sm:block sm:w-40"
             />
           </div>
 
@@ -230,13 +231,13 @@ export function ServiceMap() {
                 </span>
               </div>
 
-              <h3 className="poster mt-4 text-3xl text-white">
+              <h3 className="poster mt-3 text-[1.75rem] text-white sm:text-3xl">
                 {active.city}
                 <span className="text-cyan">.</span>
               </h3>
 
 
-              <dl className="mt-6 grid gap-4 border-t border-white/12 pt-5 sm:grid-cols-2">
+              <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3.5 border-t border-white/12 pt-4">
                 {[
                   ["ZIP codes", active.zips.join(", ")],
                   ["Permits issued by", active.permitAuthority],
@@ -244,15 +245,15 @@ export function ServiceMap() {
                   ["Neighborhoods", active.neighborhoods.slice(0, 3).join(", ")],
                 ].map(([k, v]) => (
                   <div key={k}>
-                    <dt className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/45">
+                    <dt className="font-display text-[0.55rem] font-extrabold uppercase tracking-[0.16em] text-white/45 sm:text-[0.6rem]">
                       {k}
                     </dt>
-                    <dd className="mt-1 text-sm leading-snug text-white/85">{v}</dd>
+                    <dd className="mt-1 text-[0.8rem] leading-snug text-white/85 sm:text-sm">{v}</dd>
                   </div>
                 ))}
               </dl>
 
-              <div className="mt-7 flex flex-wrap gap-3">
+              <div className="mt-6 flex flex-wrap gap-3">
                 <ButtonLink href={`/locations/${active.slug}`}>
                   {active.city} services
                   <ArrowUpRight className="size-4" aria-hidden="true" />
@@ -279,7 +280,7 @@ export function ServiceMap() {
                     onFocus={() => setActiveSlug(l.slug)}
                     aria-current={l.slug === activeSlug ? "true" : undefined}
                     className={cn(
-                      "block rounded-full px-3.5 py-1.5 font-display text-xs font-extrabold transition-colors",
+                      "flex min-h-9 items-center rounded-full px-3.5 py-2 font-display text-xs font-extrabold transition-colors",
                       l.slug === activeSlug
                         ? "bg-white text-navy"
                         : l.focus

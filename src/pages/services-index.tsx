@@ -82,7 +82,7 @@ export default function ServicesIndex() {
                       </div>
 
                       <div>
-                        <p className="text-lg leading-relaxed text-navy/80">
+                        <p className="leading-relaxed text-navy/80 md:text-lg">
                           {s.intro}
                         </p>
                         <ul className="mt-5 grid gap-2 sm:grid-cols-2">
@@ -101,7 +101,7 @@ export default function ServicesIndex() {
                         <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
                           <Link
                             href={`/services/${s.slug}`}
-                            className="inline-flex items-center gap-1.5 font-display text-sm font-bold uppercase tracking-wide text-blue"
+                            className="inline-flex min-h-10 items-center gap-1.5 font-display text-sm font-bold uppercase tracking-wide text-blue"
                           >
                             {s.short} details
                             <ArrowRight className="size-4" aria-hidden="true" />

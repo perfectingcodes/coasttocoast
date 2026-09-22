@@ -95,9 +95,12 @@ export function SiteLayout({
                   <li key={c.path} className="flex items-center gap-1">
                     {i > 0 && <ChevronRight className="size-3.5" aria-hidden="true" />}
                     {i === crumbs.length - 1 ? (
-                      <span className="text-white/90">{c.name}</span>
+                      <span className="flex min-h-9 items-center text-white/90">{c.name}</span>
                     ) : (
-                      <Link href={c.path} className="transition-colors hover:text-cyan">
+                      <Link
+                        href={c.path}
+                        className="flex min-h-9 items-center transition-colors hover:text-cyan"
+                      >
                         {c.name}
                       </Link>
                     )}
@@ -124,7 +127,7 @@ export function SiteLayout({
               {lead && (
                 <>
                   <div className="thermal-rule mt-6 w-24" aria-hidden="true" />
-                  <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/80">
+                  <p className="mt-5 max-w-2xl leading-relaxed text-white/80 md:text-lg">
                     {lead}
                   </p>
                 </>

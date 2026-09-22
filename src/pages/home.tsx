@@ -93,10 +93,12 @@ function Hero() {
     <section className="band-ember grain relative isolate overflow-hidden">
       <div className="shell relative grid items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:gap-6 lg:pb-12 lg:pt-24">
         <div className="max-w-xl">
-          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-display text-[0.68rem] font-extrabold uppercase tracking-[0.24em] text-white">
+          {/* The divider only appears once both halves are on one line —
+              wrapped, it left a pipe hanging off the end of the first line. */}
+          <p className="font-display text-[0.68rem] font-extrabold uppercase tracking-[0.24em] text-white">
             Southwest Florida HVAC
-            <span className="h-3 w-px bg-white/40" aria-hidden="true" />
-            <span className="text-gold">Lic. {business.license}</span>
+            <span className="mx-3 hidden h-3 w-px align-middle sm:inline-block sm:bg-white/40" aria-hidden="true" />
+            <span className="block text-white/85 sm:inline">Lic. {business.license}</span>
           </p>
 
           <h1 className="poster mt-4 text-[clamp(2.9rem,6.6vw,5.2rem)] text-white drop-shadow-[0_4px_18px_rgb(150_50_0/0.4)]">
@@ -141,7 +143,7 @@ function Hero() {
                 />
               </span>
               <span className="leading-tight">
-                <span className="block font-display text-[0.58rem] font-extrabold uppercase tracking-[0.18em] text-gold">
+                <span className="block font-display text-[0.58rem] font-extrabold uppercase tracking-[0.18em] text-white/80">
                   A person answers · 24/7
                 </span>
                 <span className="block font-display text-lg font-extrabold text-white transition-colors group-hover:text-cyan-light">
@@ -164,17 +166,20 @@ function Hero() {
             />
             {/* Stacked on a phone, one divided line from `sm` up — three
                 poster numerals side by side do not survive a 375px column. */}
-            <dl className="grid min-w-0 flex-1 gap-y-2 sm:flex sm:flex-none sm:flex-wrap sm:items-center sm:gap-x-5">
+            {/* `contents` lets the terms and definitions become cells of the
+                phone grid, so the labels line up in a column instead of
+                starting wherever the value above them happened to end. */}
+            <dl className="grid min-w-0 flex-1 grid-cols-[max-content_1fr] items-baseline gap-x-3 gap-y-2 sm:flex sm:flex-none sm:flex-wrap sm:items-center sm:gap-x-5">
               {HERO_PROOF.map((p, i) => (
-                <div key={p.k} className="flex items-center gap-5">
+                <div key={p.k} className="contents sm:flex sm:items-center sm:gap-5">
                   {i > 0 && (
                     <span className="hidden h-8 w-px bg-white/30 sm:block" aria-hidden="true" />
                   )}
-                  <div className="flex items-baseline gap-2.5 sm:block">
-                    <dt className="poster text-[1.2rem] leading-none text-white sm:text-[1.35rem]">
+                  <div className="contents sm:block">
+                    <dt className="poster text-[1.15rem] leading-none text-white sm:text-[1.35rem]">
                       {p.v}
                     </dt>
-                    <dd className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-gold sm:mt-1">
+                    <dd className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/75 sm:mt-1 sm:text-gold">
                       {p.k}
                     </dd>
                   </div>
@@ -204,7 +209,12 @@ function Hero() {
           {/* Social proof rides on the artwork rather than in the promise
               strip: the strip is what we commit to, this is what other people
               say, and keeping them apart buys the hero a line of height. */}
-          <GoogleBadge className="absolute bottom-0 left-0 shadow-[0_14px_30px_-10px_rgb(90_30_0/0.6)] lg:bottom-4" />
+          {/* Pinned to the artwork where there is room beside it; on a phone
+              the artwork is full-bleed, so the chip sits under it instead of
+              on top of the coastline. */}
+          <div className="mt-4 flex justify-center sm:absolute sm:bottom-0 sm:left-0 sm:mt-0 sm:block lg:bottom-4">
+            <GoogleBadge className="shadow-[0_14px_30px_-10px_rgb(90_30_0/0.6)]" />
+          </div>
         </div>
       </div>
 
@@ -227,7 +237,7 @@ function ServicesSection() {
               <span className="block text-ember">&amp; businesses</span>
             </h2>
           </div>
-          <p className="text-lg leading-relaxed text-navy/65">
+          <p className="leading-relaxed text-navy/65 md:text-lg">
             Whether you need a new system, a fast repair, or routine maintenance,{" "}
             {business.name} delivers reliable HVAC solutions backed by exceptional
             service and Florida values.
@@ -282,7 +292,7 @@ function ServicesSection() {
                 {/* Index numeral, drawn as an outline so it sits behind the
                     content rather than competing with it. */}
                 <span
-                  className="numeral-ghost pointer-events-none absolute -right-1 -top-4 select-none text-[5rem] transition-colors duration-300 group-hover:text-white/15"
+                  className="numeral-ghost pointer-events-none absolute right-4 top-2 select-none text-[4.25rem] transition-colors duration-300 group-hover:text-white/15 sm:text-[5rem]"
                   aria-hidden="true"
                 >
                   {String(i + 1).padStart(2, "0")}
@@ -323,7 +333,7 @@ function ServicesSection() {
         </div>
 
         {/* The rest of the catalogue, still linked from the home page. */}
-        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-navy/10 pt-7">
+        <div className="mt-8 flex flex-col items-start gap-3 border-t border-navy/10 pt-7 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6">
           <span className="font-display text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-navy/45">
             Also from us
           </span>
@@ -333,7 +343,7 @@ function ServicesSection() {
               <Link
                 key={x.slug}
                 href={`/services/${x.slug}`}
-                className="group inline-flex items-center gap-2 font-display text-sm font-extrabold text-navy transition-colors hover:text-blue"
+                className="group inline-flex min-h-9 items-center gap-2 font-display text-sm font-extrabold text-navy transition-colors hover:text-blue"
               >
                 <span className={cn("size-2 rounded-full", accents[x.accent])} aria-hidden="true" />
                 {x.name}
@@ -343,7 +353,7 @@ function ServicesSection() {
                 />
               </Link>
             ))}
-          <Link href="/services" className="link-arrow ml-auto">
+          <Link href="/services" className="link-arrow sm:ml-auto">
             All services
             <ArrowUpRight className="size-3.5" aria-hidden="true" />
           </Link>
@@ -377,14 +387,28 @@ function CleanAndTuneSection() {
           {/* Diagonal sash across the corner — long enough to cross the
               checklist card and clip the offer card's top edge. */}
           {savings && (
-            <div
-              className="pointer-events-none absolute -right-20 top-10 z-20 w-[26rem] rotate-[38deg] bg-gradient-to-r from-gold via-orange-light to-ember py-2.5 text-center shadow-[0_14px_30px_-10px_rgb(120_40_0/0.8)] ring-1 ring-white/30 sm:-right-16 sm:top-12"
-              aria-hidden="true"
-            >
-              <span className="font-display text-xs font-extrabold uppercase tracking-[0.2em] text-white sm:text-sm">
-                Save {savings}
-              </span>
-            </div>
+            <>
+              {/* Phone: a compact corner flag. The long sash is 26rem wide —
+                  on a 327px card it crossed the pill, the price and the
+                  heading instead of an empty corner. */}
+              <div
+                className="pointer-events-none absolute -right-12 top-4 z-20 w-44 rotate-45 bg-gradient-to-r from-gold via-orange-light to-ember py-1.5 text-center shadow-[0_10px_22px_-8px_rgb(120_40_0/0.8)] ring-1 ring-white/30 sm:hidden"
+                aria-hidden="true"
+              >
+                <span className="font-display text-[0.62rem] font-extrabold uppercase tracking-[0.18em] text-white">
+                  Save {savings}
+                </span>
+              </div>
+              {/* Desktop: the long sash that crosses both cards. */}
+              <div
+                className="pointer-events-none absolute -right-16 top-12 z-20 hidden w-[26rem] rotate-[38deg] bg-gradient-to-r from-gold via-orange-light to-ember py-2.5 text-center shadow-[0_14px_30px_-10px_rgb(120_40_0/0.8)] ring-1 ring-white/30 sm:block"
+                aria-hidden="true"
+              >
+                <span className="font-display text-sm font-extrabold uppercase tracking-[0.2em] text-white">
+                  Save {savings}
+                </span>
+              </div>
+            </>
           )}
 
         <div className="relative grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-14">
@@ -424,7 +448,7 @@ function CleanAndTuneSection() {
               </ButtonLink>
               <a
                 href={business.phoneHref}
-                className="font-display text-sm font-extrabold text-white/75 underline decoration-white/25 underline-offset-4 transition-colors hover:text-cyan hover:decoration-cyan"
+                className="flex min-h-11 items-center font-display text-sm font-extrabold text-white/75 underline decoration-white/25 underline-offset-4 transition-colors hover:text-cyan hover:decoration-cyan"
               >
                 or call {business.phone}
               </a>
@@ -594,7 +618,7 @@ function TestimonialsSection() {
             width={800}
             height={849}
             loading="lazy"
-            className="w-40 shrink-0 self-end md:-mb-4 md:ml-6 md:w-48"
+            className="w-32 shrink-0 self-center sm:w-40 md:-mb-4 md:ml-6 md:w-48 md:self-end"
           />
           <div className="flex-1 md:py-6 md:pr-6">
             <GoogleReviewCard className="border-0 bg-transparent shadow-none ring-0 !p-0" />

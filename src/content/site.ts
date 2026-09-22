@@ -130,6 +130,9 @@ export interface Service {
   featured?: boolean;
   /** One line under the card title. */
   blurb: string;
+  /** Three or four words for a menu row. A restatement of `blurb`, never a
+   *  new claim — the navigation is not the place to introduce one. */
+  menuLine: string;
   /** Two or three sentences opening the service page. */
   intro: string;
   icon: IconName;
@@ -145,6 +148,7 @@ export const services: Service[] = [
     featured: true,
     name: "Heating Services",
     short: "Heating",
+    menuLine: "Installation, repair and maintenance",
     blurb:
       "Stay warm and comfortable all season long with expert heating installation, repair, and maintenance.",
     intro:
@@ -196,6 +200,7 @@ export const services: Service[] = [
     featured: true,
     name: "Cooling Services",
     short: "Cooling",
+    menuLine: "AC systems and fast service",
     blurb:
       "Keep your home or business cool with high-performance AC systems and fast, reliable service.",
     intro:
@@ -243,6 +248,7 @@ export const services: Service[] = [
     slug: "mechanical",
     name: "Mechanical Services",
     short: "Mechanical",
+    menuLine: "Commercial and residential systems",
     blurb:
       "Expert mechanical solutions for commercial and residential systems.",
     intro:
@@ -299,6 +305,7 @@ export const services: Service[] = [
     name: "Repairs & Maintenance",
     short: "Repairs & Maintenance",
     seoShort: "AC Maintenance",
+    menuLine: "Routine maintenance and fast repairs",
     blurb:
       "Prevent costly breakdowns with routine maintenance and fast, professional repairs.",
     intro:
@@ -327,6 +334,7 @@ export const services: Service[] = [
     slug: "commercial-hvac",
     name: "Commercial HVAC",
     short: "Commercial",
+    menuLine: "Keeping your doors open",
     blurb:
       "Reliable commercial HVAC service that keeps your doors open and your customers comfortable.",
     intro:
@@ -398,6 +406,7 @@ export const services: Service[] = [
     featured: true,
     name: "Indoor Air Quality",
     short: "Air Quality",
+    menuLine: "Humidity, dust and allergens",
     blurb:
       "Control humidity, dust and allergens with air quality solutions built for the Gulf Coast.",
     intro:

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "wouter";
-import { ArrowUpRight, MessageCircle, Phone, Search, X } from "lucide-react";
+import { ArrowUpRight, Phone, Search, X } from "lucide-react";
 import {
   business,
   cleanAndTune,
@@ -257,7 +257,7 @@ export function SupportBot() {
         aria-controls="ask-coast-panel"
         aria-label={open ? "Close Ask Coast" : "Open Ask Coast — get answers"}
         className={cn(
-          "group flex items-center gap-2.5 rounded-full py-2 pl-2 pr-4 transition-all duration-300",
+          "group flex items-center gap-2.5 rounded-full p-2 transition-all duration-300 sm:py-2 sm:pl-2 sm:pr-4",
           "bg-navy text-white shadow-[0_16px_40px_-12px_rgb(5_15_38/0.7)] ring-1 ring-white/15",
           "hover:-translate-y-0.5 hover:bg-navy-soft",
         )}
@@ -280,9 +280,7 @@ export function SupportBot() {
         <span className="hidden font-display text-sm font-extrabold sm:block">
           {open ? "Close" : "Ask Coast"}
         </span>
-        {!open && (
-          <MessageCircle className="size-4 text-cyan sm:hidden" aria-hidden="true" />
-        )}
+
       </button>
     </div>
   );

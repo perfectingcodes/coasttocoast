@@ -37,7 +37,7 @@ export function SeasonalBody({ service, answer }: BodyProps) {
           four failure modes, so nothing competes with them. */}
       <section className="shell max-w-4xl py-14 md:py-18">
         <AnswerBlock>{answer}</AnswerBlock>
-        <p className="mt-8 text-lg leading-relaxed text-navy/80">{service.intro}</p>
+        <p className="mt-8 leading-relaxed text-navy/80 md:text-lg">{service.intro}</p>
       </section>
 
       <section className="band-navy py-14 text-white md:py-18">
@@ -95,7 +95,7 @@ export function LifespanBody({ service, answer }: BodyProps) {
         <div>
           <AnswerBlock>{answer}</AnswerBlock>
           <h2 className="mt-10 text-2xl">{d.heading}</h2>
-          <p className="mt-4 text-lg leading-relaxed text-navy/80">{d.lead}</p>
+          <p className="mt-4 leading-relaxed text-navy/80 md:text-lg">{d.lead}</p>
           <p className="mt-4 leading-relaxed text-navy/75">{service.intro}</p>
 
           <h3 className="mt-10 font-display text-lg font-extrabold">
@@ -167,7 +167,7 @@ export function CredentialBody({ service, answer }: BodyProps) {
       <section className="shell max-w-4xl py-14 md:py-18">
         <AnswerBlock>{answer}</AnswerBlock>
         <h2 className="mt-10 text-2xl md:text-3xl">{d.heading}</h2>
-        <p className="mt-4 text-lg leading-relaxed text-navy/80">{d.lead}</p>
+        <p className="mt-4 leading-relaxed text-navy/80 md:text-lg">{d.lead}</p>
       </section>
 
       {/* Alternating rows, one per component — visually unlike the card grids
@@ -281,7 +281,7 @@ export function OfferBody({ service, answer }: BodyProps) {
       <section className="bg-foam py-14 md:py-18">
         <div className="shell max-w-4xl">
           <AnswerBlock className="bg-white">{answer}</AnswerBlock>
-          <p className="mt-8 text-lg leading-relaxed text-navy/80">
+          <p className="mt-8 leading-relaxed text-navy/80 md:text-lg">
             {service.intro}
           </p>
           <ul className="mt-8 grid gap-2.5 sm:grid-cols-2">
@@ -317,7 +317,7 @@ export function SegmentsBody({ service, answer }: BodyProps) {
       <section className="shell max-w-4xl py-14 md:py-16">
         <AnswerBlock>{answer}</AnswerBlock>
         <h2 className="mt-10 text-2xl md:text-3xl">{d.heading}</h2>
-        <p className="mt-4 text-lg leading-relaxed text-navy/80">{d.lead}</p>
+        <p className="mt-4 leading-relaxed text-navy/80 md:text-lg">{d.lead}</p>
       </section>
 
       {/* Two wide segment panels per row, each with its own bullet list —
@@ -347,7 +347,7 @@ export function SegmentsBody({ service, answer }: BodyProps) {
       </section>
 
       <section className="shell max-w-4xl py-14 md:py-18">
-        <p className="text-lg leading-relaxed text-navy/80">{service.intro}</p>
+        <p className="leading-relaxed text-navy/80 md:text-lg">{service.intro}</p>
         <h2 className="mt-10 text-2xl">Common questions</h2>
         <FaqList faqs={service.faqs} />
       </section>
@@ -385,7 +385,7 @@ export function SymptomsBody({ service, answer }: BodyProps) {
       <section className="shell max-w-4xl py-14 md:py-16">
         <AnswerBlock>{answer}</AnswerBlock>
         <h2 className="mt-10 text-2xl md:text-3xl">{d.heading}</h2>
-        <p className="mt-4 text-lg leading-relaxed text-navy/80">{d.lead}</p>
+        <p className="mt-4 leading-relaxed text-navy/80 md:text-lg">{d.lead}</p>
       </section>
 
       {/* A genuine three-column diagnostic table — the centrepiece of the
@@ -437,7 +437,7 @@ export function SymptomsBody({ service, answer }: BodyProps) {
       <section className="bg-foam py-14 md:py-18">
         <div className="shell grid items-start gap-12 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-            <p className="text-lg leading-relaxed text-navy/80">
+            <p className="leading-relaxed text-navy/80 md:text-lg">
               {service.intro}
             </p>
             <ul className="mt-7 grid gap-2.5 sm:grid-cols-2">

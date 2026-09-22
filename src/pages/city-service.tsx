@@ -95,7 +95,7 @@ export default function CityServicePage({
           <h2 className="mt-12 text-2xl">
             {service.short} in {loc.city}, specifically
           </h2>
-          <p className="mt-4 text-lg leading-relaxed text-navy/80">{angle}</p>
+          <p className="mt-4 leading-relaxed text-navy/80 md:text-lg">{angle}</p>
 
           <h2 className="mt-12 text-2xl">What the visit includes</h2>
           <ul className="mt-5 space-y-2.5">

@@ -28,7 +28,7 @@ export function Footer() {
       />
 
       <div className="shell relative py-14 md:py-18">
-        <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
           {/* ------------------------------------------------ brand block */}
           <div>
             <img
@@ -49,6 +49,7 @@ export function Footer() {
             <div className="thermal-rule mt-3 w-24" aria-hidden="true" />
           </div>
 
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:contents">
           <FooterColumn title="Quick Links">
             <FooterLink href="/">Home</FooterLink>
             <FooterLink href="/services">Services</FooterLink>
@@ -65,6 +66,7 @@ export function Footer() {
               </FooterLink>
             ))}
           </FooterColumn>
+          </div>
 
           {/* ----------------------------------------------------- contact */}
           <div>
@@ -76,7 +78,7 @@ export function Footer() {
                 <Phone className="mt-0.5 size-4 shrink-0 text-cyan" aria-hidden="true" />
                 <a
                   href={business.phoneHref}
-                  className="font-display text-base font-bold text-white transition-colors hover:text-cyan"
+                  className="flex min-h-9 items-center font-display text-base font-bold text-white transition-colors hover:text-cyan"
                 >
                   {business.phone}
                 </a>
@@ -85,7 +87,7 @@ export function Footer() {
                 <Mail className="mt-0.5 size-4 shrink-0 text-cyan" aria-hidden="true" />
                 <a
                   href={`mailto:${business.email}`}
-                  className="transition-colors hover:text-white"
+                  className="flex min-h-9 items-center transition-colors hover:text-white"
                 >
                   {business.email}
                 </a>
@@ -137,10 +139,13 @@ export function Footer() {
           <p className="font-display text-xs font-bold uppercase tracking-[0.18em] text-cyan">
             Areas We Serve
           </p>
-          <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+          <ul className="mt-3 flex flex-wrap gap-2 text-sm">
             {locations.map((l) => (
               <li key={l.slug}>
-                <Link href={`/locations/${l.slug}`} className="transition-colors hover:text-white">
+                <Link
+                  href={`/locations/${l.slug}`}
+                  className="flex min-h-9 items-center rounded-full px-3 ring-1 ring-white/15 transition-colors hover:bg-white/10 hover:text-white sm:px-3.5"
+                >
                   {l.city}
                 </Link>
               </li>
@@ -155,10 +160,10 @@ export function Footer() {
             © {year} {business.name}. All rights reserved. · License #{business.license}
           </p>
           <p className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <Link href="/privacy" className="hover:text-white">
+            <Link href="/privacy" className="flex min-h-9 items-center hover:text-white">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="hover:text-white">
+            <Link href="/terms" className="flex min-h-9 items-center hover:text-white">
               Terms of Service
             </Link>
           </p>
@@ -174,7 +179,7 @@ function FooterColumn({ title, children }: { title: string; children: ReactNode 
       <p className="font-display text-xs font-bold uppercase tracking-[0.18em] text-cyan">
         {title}
       </p>
-      <ul className="mt-5 space-y-2.5 text-sm">{children}</ul>
+      <ul className="mt-3 text-sm">{children}</ul>
     </div>
   );
 }
@@ -182,7 +187,11 @@ function FooterColumn({ title, children }: { title: string; children: ReactNode 
 function FooterLink({ href, children }: { href: string; children: ReactNode }) {
   return (
     <li>
-      <Link href={href} className="transition-colors hover:text-white">
+      {/* Tall enough to hit with a thumb; the old 20px rows were not. */}
+      <Link
+        href={href}
+        className="flex min-h-9 items-center transition-colors hover:text-white"
+      >
         {children}
       </Link>
     </li>
