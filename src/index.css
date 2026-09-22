@@ -410,16 +410,13 @@
     background-clip: text;
     color: transparent;
   }
-  /* Key word on the orange ground. One flat, electric blue — a gradient
-     bottomed out dark and muddied the word against ember. Blue and orange sit
-     close in luminance, so legibility comes from a white keyline rather than
-     from contrast: it is the same construction as the logo art, where every
-     blue shape is cut out with a white outline. */
+  /* Key word on the orange ground. The same electric cyan that carries
+     "second opinions" on navy, so both headlines read as one voice — flat,
+     with a soft shadow doing the separating. A keyline made the word look
+     like a different, chunkier typeface than the rest of the site. */
   .text-pop-blue {
-    color: #1f7bff;
-    -webkit-text-stroke: 0.055em #fff;
-    paint-order: stroke fill;
-    text-shadow: 0 10px 26px rgb(6 24 64 / 0.3);
+    color: #2bd9ff;
+    text-shadow: 0 5px 22px rgb(6 24 64 / 0.4);
   }
 
   .text-ember {

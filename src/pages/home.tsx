@@ -106,10 +106,7 @@ function Hero() {
             <br />
             lives{" "}
             <span className="text-pop-blue">
-              here
-              {/* The stop inherits the keyline so it reads as part of the
-                  word rather than as a stray gold square beside it. */}
-              <span className="text-gold">.</span>
+              here<span className="text-white">.</span>
             </span>
           </h1>
 
@@ -199,9 +196,9 @@ function Hero() {
             src="/brand/hero-map-mascot.webp"
             srcSet="/brand/hero-map-mascot-sm.webp 600w, /brand/hero-map-mascot.webp 1200w"
             sizes="(min-width: 1024px) 560px, 92vw"
-            alt="Coast to Coast Air serves Southwest Florida, with focus markets in Naples, Estero and Bonita Springs"
+            alt="Coast to Coast Air covers Florida coast to coast from Fort Myers, with focus markets in Naples, Estero and Bonita Springs"
             width={1200}
-            height={1064}
+            height={1026}
             fetchPriority="high"
             className="mx-auto w-full max-w-lg drop-shadow-[0_28px_56px_rgb(150_50_0/0.45)]"
           />
