@@ -540,6 +540,16 @@
     );
     cursor: pointer;
   }
+  .range-brand-light {
+    background: linear-gradient(
+      90deg,
+      var(--color-ember) 0%,
+      var(--color-orange) var(--pct, 50%),
+      rgb(10 35 82 / 0.12) var(--pct, 50%),
+      rgb(10 35 82 / 0.12) 100%
+    );
+  }
+
   .range-brand::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
