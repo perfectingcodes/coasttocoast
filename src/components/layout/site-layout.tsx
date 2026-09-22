@@ -18,38 +18,38 @@ export interface Crumb {
  */
 const TONES = {
   default: {
-    wash: "bg-[linear-gradient(105deg,rgb(5_15_38/0.94)_0%,rgb(10_35_82/0.9)_45%,rgb(14_47_107/0.8)_100%)]",
-    glow: "bg-cyan/20",
+    wash: "bg-[linear-gradient(105deg,rgb(10_44_107/0.92)_0%,rgb(16_74_174/0.86)_45%,rgb(22_104_227/0.74)_100%)]",
+    glow: "bg-cyan/28",
   },
   /** Heating — sunset warmth over the blue. */
   warm: {
-    wash: "bg-[linear-gradient(105deg,rgb(26_12_4/0.95)_0%,rgb(66_24_6/0.88)_42%,rgb(168_66_14/0.72)_100%)]",
-    glow: "bg-orange/35",
+    wash: "bg-[linear-gradient(105deg,rgb(74_28_8/0.94)_0%,rgb(134_50_12/0.88)_42%,rgb(190_76_16/0.74)_100%)]",
+    glow: "bg-orange/42",
   },
   /** Cooling — the coldest, most electric treatment on the site. */
   cool: {
-    wash: "bg-[linear-gradient(105deg,rgb(3_20_52/0.95)_0%,rgb(8_52_120/0.88)_45%,rgb(16_110_190/0.7)_100%)]",
-    glow: "bg-cyan/40",
+    wash: "bg-[linear-gradient(105deg,rgb(8_48_120/0.93)_0%,rgb(14_84_186/0.86)_45%,rgb(28_128_226/0.72)_100%)]",
+    glow: "bg-cyan/45",
   },
   /** Mechanical — desaturated steel. */
   steel: {
-    wash: "bg-[linear-gradient(105deg,rgb(12_16_24/0.96)_0%,rgb(28_38_54/0.92)_45%,rgb(56_74_98/0.82)_100%)]",
-    glow: "bg-slateish/35",
+    wash: "bg-[linear-gradient(105deg,rgb(30_44_70/0.94)_0%,rgb(50_74_114/0.9)_45%,rgb(76_106_152/0.8)_100%)]",
+    glow: "bg-slateish/45",
   },
   /** Maintenance — the offer page, gold accent. */
   offer: {
-    wash: "bg-[linear-gradient(105deg,rgb(5_15_38/0.95)_0%,rgb(14_47_107/0.88)_42%,rgb(130_70_14/0.7)_100%)]",
-    glow: "bg-gold/35",
+    wash: "bg-[linear-gradient(105deg,rgb(12_46_110/0.93)_0%,rgb(24_78_168/0.86)_42%,rgb(160_96_22/0.72)_100%)]",
+    glow: "bg-gold/42",
   },
   /** Commercial — darkest and flattest, least consumer. */
   deep: {
-    wash: "bg-[linear-gradient(105deg,rgb(3_8_18/0.97)_0%,rgb(6_22_48/0.94)_50%,rgb(12_44_92/0.88)_100%)]",
-    glow: "bg-blue/30",
+    wash: "bg-[linear-gradient(105deg,rgb(6_26_62/0.95)_0%,rgb(10_46_106/0.92)_50%,rgb(18_74_152/0.86)_100%)]",
+    glow: "bg-blue/38",
   },
   /** Air quality — green-leaning aqua. */
   aqua: {
-    wash: "bg-[linear-gradient(105deg,rgb(2_28_36/0.95)_0%,rgb(6_60_74/0.88)_45%,rgb(12_120_136/0.7)_100%)]",
-    glow: "bg-cyan-light/35",
+    wash: "bg-[linear-gradient(105deg,rgb(6_62_82/0.93)_0%,rgb(10_96_118/0.86)_45%,rgb(12_116_132/0.74)_100%)]",
+    glow: "bg-cyan-light/45",
   },
 } as const;
 

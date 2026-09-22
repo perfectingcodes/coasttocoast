@@ -213,7 +213,7 @@ function Hero() {
 
           <div className="mt-8 hidden items-center gap-3 lg:flex" aria-hidden="true">
             <span className="scroll-rail" />
-            <span className="font-display text-[0.55rem] font-extrabold uppercase tracking-[0.22em] text-white/40">
+            <span className="font-display text-[0.55rem] font-extrabold uppercase tracking-[0.22em] text-white/55">
               Scroll
             </span>
           </div>
@@ -250,7 +250,7 @@ function Hero() {
           </div>
 
           {/* Where the trucks actually leave from. */}
-          <p className="mt-4 hidden text-right font-mono text-[0.62rem] uppercase tracking-[0.14em] text-white/35 lg:block">
+          <p className="mt-4 hidden text-right font-mono text-[0.62rem] uppercase tracking-[0.14em] text-white/52 lg:block">
             {business.city}, {business.state} · {business.lat.toFixed(4)}° N{" "}
             {Math.abs(business.lng).toFixed(4)}° W
           </p>
@@ -536,7 +536,7 @@ function CleanAndTuneSection() {
                   {cleanAndTune.unit}
                 </span>
                 {cleanAndTune.regularPrice && (
-                  <span className="pb-3.5 font-display text-lg font-bold text-white/40 line-through decoration-ember/70 decoration-2">
+                  <span className="pb-3.5 font-display text-lg font-bold text-white/55 line-through decoration-ember/70 decoration-2">
                     {cleanAndTune.regularPrice}
                   </span>
                 )}
@@ -554,7 +554,7 @@ function CleanAndTuneSection() {
                   reads. The shoulder months either side of the heat are the
                   answer to "when should I book it?". */}
               {bestServiceMonths.length === 2 && (
-                <p className="mt-5 flex items-start gap-2.5 text-sm leading-relaxed text-white/60">
+                <p className="mt-5 flex items-start gap-2.5 text-sm leading-relaxed text-white/72">
                   <CalendarCheck
                     className="mt-0.5 size-4 shrink-0 text-cyan"
                     aria-hidden="true"
@@ -586,7 +586,7 @@ function CleanAndTuneSection() {
                 </a>
               </div>
 
-              <p className="mt-8 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-white/30">
+              <p className="mt-8 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-white/48">
                 10 points · twice a year · {locations.length} cities
               </p>
             </div>
@@ -783,7 +783,7 @@ function WhyUsSection() {
                 <span className="font-mono text-[0.7rem] tabular-nums text-ember">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="whitespace-nowrap font-mono text-[0.6rem] uppercase tracking-[0.12em] text-white/35">
+                <span className="whitespace-nowrap font-mono text-[0.6rem] uppercase tracking-[0.12em] text-white/52">
                   {w.tag}
                 </span>
               </div>
@@ -791,14 +791,14 @@ function WhyUsSection() {
               <h3 className="mt-3 font-display text-base font-extrabold leading-tight text-white">
                 {w.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/60">
+              <p className="mt-2 text-sm leading-relaxed text-white/72">
                 {w.body}
               </p>
             </li>
           ))}
         </ul>
 
-        <p className="mt-12 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-white/25">
+        <p className="mt-12 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-white/58">
           {business.city}, {business.state} · Licensed &amp; insured ·
           Certificates on request
         </p>
@@ -1043,7 +1043,7 @@ function HowItWorks() {
                   <h3 className="mt-2 font-display text-lg font-extrabold leading-tight text-white lg:mt-3 lg:text-xl">
                     {step.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/60 lg:mx-auto lg:mt-3 lg:max-w-[17rem]">
+                  <p className="mt-2 text-sm leading-relaxed text-white/72 lg:mx-auto lg:mt-3 lg:max-w-[17rem]">
                     {step.body}
                   </p>
                 </div>

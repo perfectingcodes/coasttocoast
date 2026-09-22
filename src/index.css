@@ -149,14 +149,16 @@
 
   /* ------------------------------------------------------------- grounds */
 
-  /* The signature dark ground: deep ocean blue with an orange ember low and
-     a cyan light high, so it never reads as flat navy. */
+  /* The signature ground. It runs on the same ramp as the hero rather than on
+     a near-black navy: the brand's blue at the top, cooling to a deep — not
+     black — blue at the bottom, with an orange ember low and a cyan light
+     high. White body copy clears AA at every point on it. */
   .band-navy {
     position: relative;
     background:
-      radial-gradient(68% 58% at 82% 6%, rgb(43 217 255 / 0.22) 0%, transparent 62%),
-      radial-gradient(52% 46% at 8% 96%, rgb(255 106 19 / 0.2) 0%, transparent 64%),
-      linear-gradient(162deg, #0e2f6b 0%, #0a2352 46%, #050f26 100%);
+      radial-gradient(68% 58% at 82% 6%, rgb(43 217 255 / 0.28) 0%, transparent 62%),
+      radial-gradient(52% 46% at 8% 96%, rgb(255 106 19 / 0.24) 0%, transparent 64%),
+      linear-gradient(162deg, #1668e3 0%, #0f4aae 48%, #0a2c6b 100%);
   }
 
   /* Footer ground: a bright, saturated ocean blue rather than a washed pale
@@ -165,7 +167,7 @@
     background:
       radial-gradient(60% 55% at 84% 0%, rgb(43 217 255 / 0.3) 0%, transparent 62%),
       radial-gradient(50% 45% at 6% 100%, rgb(255 106 19 / 0.16) 0%, transparent 62%),
-      linear-gradient(168deg, #1668e3 0%, #0d3f96 48%, #0a2352 100%);
+      linear-gradient(168deg, #1668e3 0%, #1150bd 48%, #0a2c6b 100%);
   }
 
   /* Oversized kinetic wordmark. Two tracks so the loop is seamless. */
@@ -193,10 +195,12 @@
     }
   }
 
+  /* Still the deepest band on the page — the step badges need somewhere dark
+     to sit — but a blue deep, not a black one. */
   .band-abyss {
     background:
-      radial-gradient(60% 50% at 50% 0%, rgb(22 104 227 / 0.28) 0%, transparent 65%),
-      linear-gradient(180deg, #071a3d 0%, #050f26 100%);
+      radial-gradient(64% 54% at 50% 0%, rgb(22 104 227 / 0.45) 0%, transparent 66%),
+      linear-gradient(180deg, #0b3479 0%, #071f4d 100%);
   }
 
   /* Hero ground: bright electric blue, lit from the top right so the artwork

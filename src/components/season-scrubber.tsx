@@ -82,7 +82,7 @@ export function SeasonScrubber({ className }: { className?: string }) {
 
           <p className="mt-1.5 font-display text-base font-extrabold leading-tight text-white">
             {s.label}
-            <span className="ml-2 align-middle font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/40">
+            <span className="ml-2 align-middle font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/55">
               {MONTHS[month]}
             </span>
           </p>
@@ -134,7 +134,7 @@ export function SeasonScrubber({ className }: { className?: string }) {
                 key={m}
                 className={cn(
                   "flex-1 text-center font-display text-[0.5rem] font-extrabold uppercase transition-colors",
-                  i === month ? "text-white" : "text-white/30",
+                  i === month ? "text-white" : "text-white/48",
                 )}
               >
                 {m[0]}

@@ -108,7 +108,7 @@ export function SeasonCard({
           {s.label}
         </span>
         <span className="flex items-center gap-2.5">
-          <span className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/45">
+          <span className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/58">
             Cooling load
           </span>
           {meter}
@@ -161,7 +161,7 @@ export function LicenceCard({ className }: { className?: string }) {
       </div>
       <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-white/12 pt-3.5">
         <div>
-          <dt className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/45">
+          <dt className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/58">
             Counties
           </dt>
           <dd className="mt-0.5 font-display text-base font-extrabold text-white">
@@ -169,7 +169,7 @@ export function LicenceCard({ className }: { className?: string }) {
           </dd>
         </div>
         <div>
-          <dt className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/45">
+          <dt className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/58">
             Cities
           </dt>
           <dd className="mt-0.5 font-display text-base font-extrabold text-white">
@@ -193,7 +193,7 @@ export function CityMarquee({ className }: { className?: string }) {
           {items.map((l, i) => (
             <span
               key={`${copy}-${l.slug}-${i}`}
-              className="flex shrink-0 items-center gap-2.5 font-display text-[0.7rem] font-extrabold uppercase tracking-[0.22em] text-white/35"
+              className="flex shrink-0 items-center gap-2.5 font-display text-[0.7rem] font-extrabold uppercase tracking-[0.22em] text-white/52"
             >
               <MapPin className="size-3 text-cyan/60" />
               {l.city}

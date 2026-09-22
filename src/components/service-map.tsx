@@ -306,6 +306,19 @@ export function ServiceMap() {
                 ))}
               </g>
 
+              {/* Frame, so the panel has an edge against the brighter band. */}
+              <rect
+                x="1"
+                y="1"
+                width={VIEW_W - 2}
+                height={H - 2}
+                rx="17"
+                fill="none"
+                stroke="#2bd9ff"
+                strokeOpacity="0.22"
+                strokeWidth="2"
+              />
+
               {/* Pins */}
               {locations.map((l) => {
                 const { x, y } = project(l);
@@ -375,13 +388,13 @@ export function ServiceMap() {
               ].map((k) => (
                 <li
                   key={k.label}
-                  className="flex items-center gap-2 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/45"
+                  className="flex items-center gap-2 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/58"
                 >
                   <span className={cn("size-2.5 rounded-full", k.c)} aria-hidden="true" />
                   {k.label}
                 </li>
               ))}
-              <li className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/30">
+              <li className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/48">
                 Tap a pin
               </li>
             </ul>
@@ -427,7 +440,7 @@ export function ServiceMap() {
                   ["Neighborhoods", active.neighborhoods.slice(0, 3).join(", ")],
                 ].map(([k, v]) => (
                   <div key={k}>
-                    <dt className="font-display text-[0.55rem] font-extrabold uppercase tracking-[0.16em] text-white/45 sm:text-[0.6rem]">
+                    <dt className="font-display text-[0.55rem] font-extrabold uppercase tracking-[0.16em] text-white/58 sm:text-[0.6rem]">
                       {k}
                     </dt>
                     <dd className="mt-1 text-[0.8rem] leading-snug text-white/85 sm:text-sm">{v}</dd>
@@ -450,7 +463,7 @@ export function ServiceMap() {
             {/* Real links, not buttons: hovering previews the city on the map,
                 clicking goes to its page — so every city stays crawlable from
                 the home page and reachable without a pointer. */}
-            <p className="mt-6 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-white/40">
+            <p className="mt-6 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-white/55">
               Every city we cover
             </p>
             <ul className="mt-3 flex flex-wrap gap-2">
@@ -478,7 +491,7 @@ export function ServiceMap() {
 
             <SeasonCard variant="bar" className="mt-4 w-fit" />
 
-            <p className="mt-3 text-[0.7rem] text-white/35">
+            <p className="mt-3 text-[0.7rem] text-white/52">
               Cities and coastline are plotted from real coordinates. The shore is
               simplified for legibility and the county lines are approximate — it
               is a coverage map, not a survey.

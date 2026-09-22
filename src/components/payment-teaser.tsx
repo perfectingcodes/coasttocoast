@@ -163,7 +163,7 @@ export function PaymentTeaser({ className }: { className?: string }) {
             </p>
             <p className="poster text-bullion mt-2 text-[clamp(2.8rem,6.5vw,4rem)] leading-[0.85] drop-shadow-[0_10px_28px_rgb(255_140_20/0.25)]">
               {money(payment)}
-              <span className="ml-1.5 align-middle font-display text-sm font-bold text-white/45">
+              <span className="ml-1.5 align-middle font-display text-sm font-bold text-white/58">
                 /mo
               </span>
             </p>
@@ -178,7 +178,7 @@ export function PaymentTeaser({ className }: { className?: string }) {
                   key={k}
                   className="flex items-baseline justify-between gap-4 border-b border-white/8 py-1.5 last:border-b-0"
                 >
-                  <dt className="text-white/40">{k}</dt>
+                  <dt className="text-white/55">{k}</dt>
                   <dd className="text-white/85">{v}</dd>
                 </div>
               ))}
