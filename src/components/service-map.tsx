@@ -10,31 +10,142 @@ import { cn } from "@/lib/utils";
 /**
  * Coverage map.
  *
- * Pins are positioned from the real coordinates in content/site.ts by a plain
- * equirectangular projection, so their positions relative to one another are
- * accurate. The coastline behind them is a deliberate stylisation rather than
- * survey data — it exists to orient the eye, which is why the panel says so.
+ * Pins and coastline share one equirectangular projection, so the shape of the
+ * coast, the angle it runs at and the position of every city on it agree with
+ * one another. The shore is a simplified read of the real coastline rather
+ * than survey data — barrier islands are taken as the coast and the smaller
+ * sounds are left out — which is what the panel says.
  */
 
-const BOUNDS = { minLat: 26.08, maxLat: 27.03, minLng: -82.16, maxLng: -81.7 };
-/** Projection width. The canvas is wider so labels have room to sit east of
- *  their pin without being clipped at the edge. */
-const W = 440;
-const VIEW_W = 610;
-const H = 720;
+const BOUNDS = { minLat: 25.85, maxLat: 27.05, minLng: -82.45, maxLng: -81.55 };
 
-function project(loc: Location) {
+/** Projection width. The canvas is wider than the projection so a city label
+ *  has room to sit east of its pin without being clipped at the edge. */
+const W = 440;
+const VIEW_W = 500;
+
+/**
+ * Equirectangular, with the height derived from the latitude of the middle of
+ * the frame rather than fixed. Stretching one axis to fill a chosen box is
+ * what made the old outline look hand-drawn: at 26.5°N a degree of longitude
+ * is only 0.895 of a degree of latitude, so the projection has to say so.
+ */
+const LAT_SPAN = BOUNDS.maxLat - BOUNDS.minLat;
+const LNG_SPAN = BOUNDS.maxLng - BOUNDS.minLng;
+const LAT_MID = (BOUNDS.minLat + BOUNDS.maxLat) / 2;
+const H = Math.round(
+  (W * LAT_SPAN) / (LNG_SPAN * Math.cos((LAT_MID * Math.PI) / 180)),
+);
+
+function px(lat: number, lng: number) {
   return {
-    x: ((loc.lng - BOUNDS.minLng) / (BOUNDS.maxLng - BOUNDS.minLng)) * W,
-    y: ((BOUNDS.maxLat - loc.lat) / (BOUNDS.maxLat - BOUNDS.minLat)) * H,
+    x: ((lng - BOUNDS.minLng) / LNG_SPAN) * W,
+    y: ((BOUNDS.maxLat - lat) / LAT_SPAN) * H,
   };
 }
 
-/** Stylised Gulf coastline: land to the east, water to the west. */
-const COAST =
-  `M${VIEW_W} 0 L40 0 C30 58, 92 78, 80 130 C68 182, 152 198, 150 250 ` +
-  "C148 302, 198 330, 210 390 C222 450, 278 470, 290 530 " +
-  `C302 590, 330 640, 330 720 L${VIEW_W} 720 Z`;
+function project(loc: Location) {
+  return px(loc.lat, loc.lng);
+}
+
+/**
+ * The Gulf shore from Manasota Key down to Cape Romano, as [lat, lng] pairs
+ * read off the real coastline and run through the same projection as the
+ * pins — so the shape, the angle of the coast and the position of every city
+ * on it agree with one another.
+ *
+ * The barrier islands are taken as the coast, which is what a coverage map
+ * should show, and the excursion in the middle is Charlotte Harbor: north-east
+ * from Boca Grande Pass up to Punta Gorda and back down the far shore. It is
+ * the feature that makes this stretch of coast recognisable, so it is the one
+ * piece of inland water worth drawing at this size.
+ */
+const GULF_SHORE: [number, number][] = [
+  [27.05, -82.44], // Manasota Key
+  [26.99, -82.39], // Englewood Beach
+  [26.94, -82.36], // Stump Pass
+  [26.88, -82.335],
+  [26.83, -82.305],
+  [26.775, -82.28],
+  [26.735, -82.268], // Gasparilla Island
+  [26.715, -82.255], // Boca Grande Pass
+  // -- north-west shore of Charlotte Harbor, running inland --
+  [26.762, -82.236], // Cape Haze
+  [26.806, -82.216],
+  [26.852, -82.186],
+  [26.902, -82.142],
+  [26.948, -82.096], // head of the harbour, off Punta Gorda
+  [26.986, -82.058], // Peace River mouth
+  // -- and back out along the south-east shore --
+  [26.958, -82.028],
+  [26.908, -82.048],
+  [26.858, -82.068],
+  [26.802, -82.086], // Burnt Store
+  [26.742, -82.114],
+  [26.698, -82.152],
+  [26.668, -82.196],
+  // -- back out along the islands --
+  [26.64, -82.245], // Cayo Costa
+  [26.58, -82.228],
+  [26.52, -82.215], // North Captiva
+  [26.47, -82.19], // Captiva
+  [26.45, -82.15], // Blind Pass
+  [26.455, -82.105], // Sanibel, west end
+  [26.435, -82.05],
+  [26.435, -81.99], // Point Ybel
+  [26.455, -81.955], // Estero Island
+  [26.41, -81.895], // Big Carlos Pass
+  [26.365, -81.87], // Lovers Key
+  [26.325, -81.855], // Bonita Beach
+  [26.28, -81.845], // Barefoot Beach
+  [26.24, -81.835], // Wiggins Pass
+  [26.2, -81.825], // Vanderbilt Beach
+  [26.15, -81.812], // Naples Beach
+  [26.1, -81.795], // Gordon Pass
+  [26.05, -81.765], // Keewaydin
+  [25.99, -81.74],
+  [25.94, -81.725], // Marco Island
+  [25.88, -81.69], // Cape Romano
+  [25.85, -81.645],
+];
+
+/** The Caloosahatchee, San Carlos Bay to the eastern edge of the frame. */
+const CALOOSAHATCHEE: [number, number][] = [
+  [26.45, -82.0],
+  [26.5, -81.968],
+  [26.535, -81.928],
+  [26.565, -81.898],
+  [26.61, -81.878],
+  [26.645, -81.868],
+  [26.685, -81.83],
+  [26.72, -81.78],
+  [26.732, -81.72],
+  [26.722, -81.64],
+  [26.712, -81.55],
+];
+
+/** County lines, as latitudes. Both run close enough to east-west at this
+ *  scale to draw as one. */
+const COUNTY_LINES = [
+  { lat: 26.785, name: "Charlotte" },
+  { lat: 26.322, name: "Lee" },
+] as const;
+
+function polyline(points: [number, number][]) {
+  return points
+    .map(([lat, lng], i) => {
+      const { x, y } = px(lat, lng);
+      return `${i === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`;
+    })
+    .join(" ");
+}
+
+/** Land: the shore, then round the eastern edge of the frame to close it. */
+const LAND = (() => {
+  const first = px(...GULF_SHORE[0]);
+  const last = px(...GULF_SHORE[GULF_SHORE.length - 1]);
+  return `${polyline(GULF_SHORE)} L${VIEW_W} ${last.y.toFixed(1)} L${VIEW_W} 0 L${first.x.toFixed(1)} 0 Z`;
+})();
 
 export function ServiceMap() {
   const [activeSlug, setActiveSlug] = useState(
@@ -88,12 +199,12 @@ export function ServiceMap() {
               viewBox={`0 0 ${VIEW_W} ${H}`}
               className="w-full"
               role="img"
-              aria-label={`Schematic coverage map of ${locations.length} Southwest Florida cities`}
+              aria-label={`Coverage map of ${locations.length} Southwest Florida cities across Charlotte, Lee and Collier counties, from Port Charlotte down to Naples`}
             >
               <defs>
                 <linearGradient id="map-land" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#123a7a" stopOpacity="0.85" />
-                  <stop offset="100%" stopColor="#0a2352" stopOpacity="0.9" />
+                  <stop offset="0%" stopColor="#1d59ad" stopOpacity="0.95" />
+                  <stop offset="100%" stopColor="#0d2f6b" stopOpacity="0.95" />
                 </linearGradient>
                 <radialGradient id="map-glow" cx="0.5" cy="0.5" r="0.5">
                   <stop offset="0%" stopColor="#2bd9ff" stopOpacity="0.45" />
@@ -102,12 +213,12 @@ export function ServiceMap() {
               </defs>
 
               {/* Gulf */}
-              <rect width={VIEW_W} height={H} fill="#050f26" rx="18" />
-              <g stroke="#2bd9ff" strokeOpacity="0.14" strokeLinecap="round">
-                {Array.from({ length: 13 }, (_, i) => (
+              <rect width={VIEW_W} height={H} fill="#04102a" rx="18" />
+              <g stroke="#2bd9ff" strokeOpacity="0.13" strokeLinecap="round">
+                {Array.from({ length: 12 }, (_, i) => (
                   <path
                     key={i}
-                    d={`M6 ${44 + i * 52} q28 -11 56 0 t56 0`}
+                    d={`M8 ${52 + i * 52} q26 -10 52 0 t52 0`}
                     fill="none"
                     strokeWidth="2"
                   />
@@ -115,14 +226,79 @@ export function ServiceMap() {
               </g>
 
               {/* Land */}
-              <path d={COAST} fill="url(#map-land)" />
+              <clipPath id="map-land-clip">
+                <path d={LAND} />
+              </clipPath>
+              <path d={LAND} fill="url(#map-land)" />
+
+              {/* County lines, clipped to the land so they stop at the shore
+                  rather than running out over the Gulf. */}
+              <g clipPath="url(#map-land-clip)">
+                {COUNTY_LINES.map((c) => {
+                  const { y } = px(c.lat, 0);
+                  return (
+                    <line
+                      key={c.name}
+                      x1="0"
+                      x2={VIEW_W}
+                      y1={y}
+                      y2={y}
+                      stroke="#2bd9ff"
+                      strokeOpacity="0.28"
+                      strokeWidth="1.5"
+                      strokeDasharray="7 7"
+                    />
+                  );
+                })}
+                <path
+                  d={polyline(CALOOSAHATCHEE)}
+                  fill="none"
+                  stroke="#04102a"
+                  strokeOpacity="0.55"
+                  strokeWidth="5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d={polyline(CALOOSAHATCHEE)}
+                  fill="none"
+                  stroke="#2bd9ff"
+                  strokeOpacity="0.22"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </g>
+
               <path
-                d={COAST}
+                d={LAND}
                 fill="none"
                 stroke="#2bd9ff"
-                strokeOpacity="0.5"
-                strokeWidth="2"
+                strokeOpacity="0.75"
+                strokeWidth="2.5"
+                strokeLinejoin="round"
               />
+
+              {/* County names, set along their own band. */}
+              <g
+                fill="#ffffff"
+                fillOpacity="0.3"
+                fontSize="15"
+                fontWeight={800}
+                letterSpacing="2.5"
+                style={{ fontFamily: "Archivo, sans-serif" }}
+                className="select-none"
+              >
+                <text x={VIEW_W - 14} y={px(26.9, 0).y} textAnchor="end">
+                  CHARLOTTE
+                </text>
+                <text x={VIEW_W - 14} y={px(26.55, 0).y} textAnchor="end">
+                  LEE
+                </text>
+                <text x={VIEW_W - 14} y={px(26.15, 0).y} textAnchor="end">
+                  COLLIER
+                </text>
+              </g>
 
               {/* Pins */}
               {locations.map((l) => {
@@ -186,7 +362,7 @@ export function ServiceMap() {
               })}
             </svg>
 
-            <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+            <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:mt-5 lg:pl-24">
               {[
                 { c: "bg-orange", label: "Focus markets" },
                 { c: "bg-cyan", label: "Also covered" },
@@ -213,7 +389,7 @@ export function ServiceMap() {
               width={900}
               height={1513}
               loading="lazy"
-              className="pointer-events-none absolute -bottom-6 -left-10 hidden w-32 drop-shadow-[0_18px_36px_rgb(5_15_38/0.85)] sm:block sm:w-40"
+              className="pointer-events-none absolute -bottom-3 left-0 hidden w-28 drop-shadow-[0_18px_36px_rgb(5_15_38/0.85)] lg:block xl:w-32"
             />
           </div>
 
@@ -297,8 +473,9 @@ export function ServiceMap() {
             <SeasonCard variant="bar" className="mt-4 w-fit" />
 
             <p className="mt-3 text-[0.7rem] text-white/35">
-              Pin positions are plotted from real coordinates; the coastline is a
-              stylisation, not survey data.
+              Cities and coastline are plotted from real coordinates. The shore is
+              simplified for legibility and the county lines are approximate — it
+              is a coverage map, not a survey.
             </p>
           </div>
         </div>

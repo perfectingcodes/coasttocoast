@@ -199,13 +199,18 @@
       linear-gradient(180deg, #071a3d 0%, #050f26 100%);
   }
 
-  /* Hero ground: sunset, but deep enough to carry white type and a navy
-     vignette at the edges so it does not glare. */
-  .band-ember {
+  /* Hero ground: bright electric blue, lit from the top right so the artwork
+     sits in the light and the copy sits on the deep end where white type has
+     real contrast. The warm bloom in the bottom-left corner is the orange
+     accent bleeding into the ground rather than an applied decoration. */
+  .band-azure {
     background:
-      radial-gradient(72% 62% at 84% 6%, rgb(255 208 92 / 0.6) 0%, transparent 62%),
-      radial-gradient(55% 50% at 4% 96%, rgb(255 176 32 / 0.35) 0%, transparent 62%),
-      linear-gradient(152deg, #ff8322 0%, #f2541a 46%, #d33e0e 100%);
+      /* Warm bloom the artwork sits in. The graphic is drawn in the brand's
+         blues, so it needs a complementary ground or it sinks into the band. */
+      radial-gradient(56% 62% at 79% 44%, rgb(255 138 40 / 0.42) 0%, transparent 64%),
+      radial-gradient(76% 56% at 88% 2%, rgb(92 196 255 / 0.55) 0%, transparent 62%),
+      radial-gradient(58% 52% at 0% 100%, rgb(255 106 19 / 0.26) 0%, transparent 66%),
+      linear-gradient(158deg, #1a86ff 0%, #0f5ed6 46%, #0a3a94 100%);
   }
 
   /**
@@ -230,7 +235,7 @@
     width: 146%;
     background: repeating-conic-gradient(
       from 0deg at 50% 50%,
-      rgb(255 240 205 / 0.22) 0deg 2.6deg,
+      rgb(255 196 120 / 0.3) 0deg 2.6deg,
       transparent 2.6deg 11deg
     );
     mask-image: radial-gradient(closest-side, transparent 14%, black 34%, transparent 72%);
@@ -241,7 +246,7 @@
     background: repeating-radial-gradient(
       circle at 50% 50%,
       transparent 0 44px,
-      rgb(255 255 255 / 0.14) 44px 47px
+      rgb(255 214 160 / 0.18) 44px 47px
     );
     mask-image: radial-gradient(closest-side, transparent 22%, black 46%, transparent 84%);
     -webkit-mask-image: radial-gradient(closest-side, transparent 22%, black 46%, transparent 84%);
@@ -410,13 +415,13 @@
     background-clip: text;
     color: transparent;
   }
-  /* Key word on the orange ground. The same electric cyan that carries
-     "second opinions" on navy, so both headlines read as one voice — flat,
-     with a soft shadow doing the separating. A keyline made the word look
-     like a different, chunkier typeface than the rest of the site. */
-  .text-pop-blue {
-    color: #2bd9ff;
-    text-shadow: 0 5px 22px rgb(6 24 64 / 0.4);
+  /* Key word on the blue ground. Flat, saturated orange — the same family as
+     the buttons, so the word and the action read as one accent. No keyline
+     and no gradient: both made the word look set in a different face than the
+     rest of the site. */
+  .text-pop {
+    color: #ff7a1f;
+    text-shadow: 0 5px 22px rgb(3 18 48 / 0.45);
   }
 
   .text-ember {

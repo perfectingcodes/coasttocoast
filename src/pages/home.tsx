@@ -90,7 +90,7 @@ const HERO_PROOF = [
 
 function Hero() {
   return (
-    <section className="band-ember grain relative isolate overflow-hidden">
+    <section className="band-azure grain relative isolate overflow-hidden">
       <div className="shell relative grid items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:gap-6 lg:pb-12 lg:pt-24">
         <div className="max-w-xl">
           {/* The divider only appears once both halves are on one line —
@@ -98,14 +98,14 @@ function Hero() {
           <p className="font-display text-[0.68rem] font-extrabold uppercase tracking-[0.24em] text-white">
             Southwest Florida HVAC
             <span className="mx-3 hidden h-3 w-px align-middle sm:inline-block sm:bg-white/40" aria-hidden="true" />
-            <span className="block text-white/85 sm:inline">Lic. {business.license}</span>
+            <span className="block text-orange-light sm:inline">Lic. {business.license}</span>
           </p>
 
-          <h1 className="poster mt-4 text-[clamp(2.9rem,6.6vw,5.2rem)] text-white drop-shadow-[0_4px_18px_rgb(150_50_0/0.4)]">
+          <h1 className="poster mt-4 text-[clamp(2.9rem,6.6vw,5.2rem)] text-white drop-shadow-[0_4px_18px_rgb(3_18_48/0.45)]">
             Comfort
             <br />
             lives{" "}
-            <span className="text-pop-blue">
+            <span className="text-pop">
               here<span className="text-white">.</span>
             </span>
           </h1>
@@ -120,7 +120,7 @@ function Hero() {
           </p>
 
           <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
-            <ButtonLink href="/contact" variant="sky" size="lg">
+            <ButtonLink href="/contact" variant="primary" size="lg">
               Book Service Today
               <ArrowRight className="size-4" aria-hidden="true" />
             </ButtonLink>
@@ -140,10 +140,10 @@ function Hero() {
                 />
               </span>
               <span className="leading-tight">
-                <span className="block font-display text-[0.58rem] font-extrabold uppercase tracking-[0.18em] text-white/80">
+                <span className="block font-display text-[0.58rem] font-extrabold uppercase tracking-[0.18em] text-orange-light">
                   A person answers · 24/7
                 </span>
-                <span className="block font-display text-lg font-extrabold text-white transition-colors group-hover:text-cyan-light">
+                <span className="block font-display text-lg font-extrabold text-white transition-colors group-hover:text-orange-light">
                   {business.phone}
                 </span>
               </span>
@@ -159,7 +159,7 @@ function Hero() {
               alt="Locally owned and operated"
               width={640}
               height={632}
-              className="size-14 shrink-0 drop-shadow-[0_8px_18px_rgb(150_50_0/0.45)] sm:size-[4.25rem]"
+              className="size-14 shrink-0 drop-shadow-[0_8px_18px_rgb(3_18_48/0.5)] sm:size-[4.25rem]"
             />
             {/* Stacked on a phone, one divided line from `sm` up — three
                 poster numerals side by side do not survive a 375px column. */}
@@ -176,7 +176,7 @@ function Hero() {
                     <dt className="poster text-[1.15rem] leading-none text-white sm:text-[1.35rem]">
                       {p.v}
                     </dt>
-                    <dd className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/75 sm:mt-1 sm:text-gold">
+                    <dd className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-orange-light sm:mt-1">
                       {p.k}
                     </dd>
                   </div>
@@ -189,7 +189,7 @@ function Hero() {
         <div className="rays-burst relative">
           {/* Warm core the rays radiate from, sitting under the artwork. */}
           <div
-            className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/30 blur-[80px]"
+            className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange/35 blur-[80px]"
             aria-hidden="true"
           />
           <img
@@ -200,7 +200,7 @@ function Hero() {
             width={1200}
             height={1026}
             fetchPriority="high"
-            className="mx-auto w-full max-w-lg drop-shadow-[0_28px_56px_rgb(150_50_0/0.45)]"
+            className="mx-auto w-full max-w-lg drop-shadow-[0_28px_56px_rgb(3_18_48/0.55)]"
           />
 
           {/* Social proof rides on the artwork rather than in the promise
@@ -210,7 +210,7 @@ function Hero() {
               the artwork is full-bleed, so the chip sits under it instead of
               on top of the coastline. */}
           <div className="mt-4 flex justify-center sm:absolute sm:bottom-0 sm:left-0 sm:mt-0 sm:block lg:bottom-4">
-            <GoogleBadge className="shadow-[0_14px_30px_-10px_rgb(90_30_0/0.6)]" />
+            <GoogleBadge className="shadow-[0_14px_30px_-10px_rgb(3_18_48/0.65)]" />
           </div>
         </div>
       </div>

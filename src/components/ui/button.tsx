@@ -8,8 +8,7 @@ type Variant =
   | "outline"
   | "onDark"
   | "ghost"
-  | "gold"
-  | "sky";
+  | "gold";
 type Size = "sm" | "md" | "lg";
 
 const base =
@@ -30,11 +29,6 @@ const variants: Record<Variant, string> = {
     "border-2 border-cyan/60 text-white hover:border-cyan hover:bg-cyan/12 hover:shadow-[var(--shadow-cyan)]",
   onDark: "bg-white text-navy shadow-[0_12px_30px_-12px_rgb(5_15_38/0.7)] hover:bg-cyan-light",
   ghost: "text-navy border-2 border-navy/15 hover:border-blue/45 hover:bg-blue/5",
-  /** The hero action on ember. Flat electric blue, not a gradient: gradients
-   *  bottom out dark against orange and the button stops reading as one
-   *  colour. #1266f0 is the brightest blue that still clears AA for white
-   *  label text at this size. */
-  sky: "bg-[#1266f0] text-white ring-2 ring-inset ring-white/45 shadow-[0_16px_38px_-10px_rgb(10_60_170/0.85)] hover:bg-[#1f7bff]",
   /** Financing and secondary offers. */
   gold: "bg-gradient-to-b from-gold to-orange text-navy ring-1 ring-inset ring-white/30 shadow-[0_10px_28px_-10px_rgb(255_176_32/0.7)]",
 };
@@ -51,7 +45,7 @@ const SHEEN =
   "before:from-transparent before:via-white/25 before:to-transparent before:transition-transform " +
   "before:duration-700 hover:before:translate-x-full motion-reduce:before:hidden";
 
-const FILLED: Variant[] = ["primary", "secondary", "gold", "onDark", "sky"];
+const FILLED: Variant[] = ["primary", "secondary", "gold", "onDark"];
 
 export function buttonClass(variant: Variant = "primary", size: Size = "md") {
   return cn(base, variants[variant], sizes[size], FILLED.includes(variant) && SHEEN);
