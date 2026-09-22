@@ -88,8 +88,13 @@ export function ButtonLink({
       </Link>
     );
   }
+  const external = /^https?:/i.test(href);
   return (
-    <a href={href} className={cls}>
+    <a
+      href={href}
+      className={cls}
+      {...(external ? { target: "_blank", rel: "noreferrer noopener" } : {})}
+    >
       {children}
     </a>
   );

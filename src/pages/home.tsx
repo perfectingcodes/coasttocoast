@@ -5,7 +5,6 @@ import {
   CalendarCheck,
   Check,
   Phone,
-  Quote,
   Sparkles,
   Star,
   Zap,
@@ -16,6 +15,7 @@ import {
   cleanAndTune,
   countyList,
   generalFaqs,
+  googleReviews,
   locations,
   process,
   services,
@@ -27,7 +27,7 @@ import { Icon } from "@/components/icon";
 import { Wave } from "@/components/wave";
 import { Reveal } from "@/components/reveal";
 import { PaymentTeaser } from "@/components/payment-teaser";
-import { GoogleBadge, GoogleReviewCard } from "@/components/google-reviews";
+import { GoogleBadge } from "@/components/google-reviews";
 import {
   ArrowLink,
   CityMarquee,
@@ -809,10 +809,28 @@ function WhyUsSection() {
   );
 }
 
+/**
+ * Reviews.
+ *
+ * Three quotes and an invitation, staggered rather than set in a row of equal
+ * boxes, with the fourth cell carrying the mascot — head over the top edge, so
+ * one card in the set breaks its own frame. That is the whole trick: a wall of
+ * identical rectangles reads as a widget, and one thing escaping it reads as
+ * design.
+ *
+ * No stars. A five-star row under a quote is a rating, and there is no rating
+ * attached to any of these quotes — see the note in content/site.ts. The card
+ * draws them only when a real one is supplied.
+ */
 function TestimonialsSection() {
   return (
-    <section className="bg-foam py-16 md:py-20">
-      <div className="shell">
+    <section className="grid-lines-light relative overflow-hidden bg-foam py-16 md:py-20">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="absolute -left-40 top-0 size-[32rem] rounded-full bg-orange/10 blur-[130px]" />
+        <div className="absolute -bottom-40 -right-32 size-[30rem] rounded-full bg-cyan/12 blur-[130px]" />
+      </div>
+
+      <div className="shell relative">
         <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-5">
           <div>
             <SectionEyebrow index={4}>Reviews</SectionEyebrow>
@@ -824,61 +842,96 @@ function TestimonialsSection() {
           <GoogleBadge />
         </div>
 
-        {/* Three reviews shown at once. A one-at-a-time carousel meant most of
-            the proof was hidden behind a control nobody presses. */}
-        <ul className="mt-11 grid gap-5 md:grid-cols-3">
+        <div className="thermal-rule mt-8 w-full opacity-60" aria-hidden="true" />
+
+        <ul className="mt-12 grid items-start gap-5 sm:grid-cols-2 xl:grid-cols-[repeat(3,minmax(0,1fr))_minmax(0,0.84fr)]">
           {testimonials.map((t, i) => (
-            <li key={t.name}>
+            <li key={t.name} className={cn(i % 2 === 1 && "xl:mt-10")}>
               <Reveal delay={i * 0.06} className="h-full">
-                <figure className="card relative flex h-full flex-col p-7">
-                  <Quote
-                    className="absolute right-6 top-6 size-8 text-blue/10"
+                <figure className="card group relative flex h-full flex-col p-7 transition-shadow duration-300 hover:shadow-[var(--shadow-lift)]">
+                  {/* An opening mark set as type, at a size that makes it part
+                      of the composition rather than an icon in the corner. */}
+                  <span
+                    className="poster pointer-events-none absolute -top-2 right-5 select-none text-[5rem] leading-none text-ember/15 transition-colors duration-300 group-hover:text-ember/25"
                     aria-hidden="true"
-                  />
-                  <div className="flex gap-0.5" aria-label="Rated 5 out of 5">
-                    {Array.from({ length: 5 }, (_, n) => (
-                      <Star
-                        key={n}
-                        className="size-4 fill-gold text-gold"
-                        aria-hidden="true"
-                      />
-                    ))}
-                  </div>
-                  <blockquote className="mt-4 flex-1 text-[0.95rem] leading-relaxed text-navy/75">
-                    &ldquo;{t.quote}&rdquo;
+                  >
+                    &rdquo;
+                  </span>
+
+                  {t.rating && (
+                    <div
+                      className="flex gap-0.5"
+                      aria-label={`Rated ${t.rating} out of 5`}
+                    >
+                      {Array.from({ length: 5 }, (_, n) => (
+                        <Star
+                          key={n}
+                          className={cn(
+                            "size-4",
+                            n < t.rating! ? "fill-gold text-gold" : "text-navy/15",
+                          )}
+                          aria-hidden="true"
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  <blockquote className="relative mt-1 flex-1 text-[0.98rem] leading-relaxed text-navy/80">
+                    {t.quote}
                   </blockquote>
-                  <figcaption className="mt-6 flex items-center gap-3 border-t border-navy/8 pt-4">
-                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-blue-bright to-blue font-display text-xs font-extrabold text-white">
+
+                  <figcaption className="relative mt-6 flex items-center gap-3 border-t border-navy/8 pt-4">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-blue-bright to-blue font-display text-xs font-extrabold text-white ring-1 ring-inset ring-white/25">
                       {t.name.charAt(0)}
                     </span>
-                    <span className="leading-tight">
+                    <span className="min-w-0 leading-tight">
                       <span className="block font-display text-sm font-extrabold text-navy">
                         {t.name}
                       </span>
-                      <span className="block text-xs text-navy/50">{t.city}</span>
+                      <span className="block font-mono text-[0.62rem] uppercase tracking-[0.1em] text-navy/45">
+                        {t.city}
+                      </span>
                     </span>
                   </figcaption>
                 </figure>
               </Reveal>
             </li>
           ))}
-        </ul>
 
-        <div className="card mt-6 flex flex-col items-center gap-6 overflow-hidden p-6 md:flex-row md:p-0">
-          <img
-            src="/brand/mascot-bust.webp"
-            srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
-            sizes="(min-width: 768px) 200px, 160px"
-            alt=""
-            width={800}
-            height={849}
-            loading="lazy"
-            className="w-32 shrink-0 self-center sm:w-40 md:-mb-4 md:ml-6 md:w-48 md:self-end"
-          />
-          <div className="flex-1 md:py-6 md:pr-6">
-            <GoogleReviewCard className="border-0 bg-transparent shadow-none ring-0 !p-0" />
-          </div>
-        </div>
+          {/* ------------------------------------------- the invitation */}
+          <li className="mt-16 sm:mt-20 xl:mt-10">
+            <div className="band-ocean grain relative rounded-card px-6 pb-6 pt-[5.5rem] text-center shadow-[0_26px_50px_-22px_rgb(5_15_38/0.6)] ring-1 ring-white/15">
+              {/* Over the top edge, so one card in the set breaks its frame. */}
+              <img
+                src="/brand/mascot-bust.webp"
+                srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
+                sizes="150px"
+                alt=""
+                width={800}
+                height={849}
+                loading="lazy"
+                className="pointer-events-none absolute -top-[4.75rem] left-1/2 w-[8.75rem] -translate-x-1/2 drop-shadow-[0_16px_30px_rgb(5_15_38/0.55)]"
+              />
+
+              <p className="font-display text-lg font-extrabold leading-tight text-white">
+                Worked with us?
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-white/72">
+                A minute of your time helps your neighbours choose.
+              </p>
+
+              <div className="mt-6 grid gap-2.5">
+                <ButtonLink href={googleReviews.reviewUrl} variant="onDark">
+                  Leave a review
+                  <ArrowUpRight className="size-4" aria-hidden="true" />
+                </ButtonLink>
+                <ButtonLink href={googleReviews.profileUrl} variant="outline">
+                  Read reviews
+                </ButtonLink>
+              </div>
+            </div>
+          </li>
+        </ul>
       </div>
     </section>
   );

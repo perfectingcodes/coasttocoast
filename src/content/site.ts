@@ -856,7 +856,19 @@ export const whyUs = [
  * testimonials; the other two are placeholders. Replace them with real,
  * attributable Google reviews before launch.
  */
-export const testimonials = [
+/**
+ * ⚠️ No `rating` on any of these, and the cards only draw stars when one is
+ * present. A five-star row under a quote is a rating, and we do not have one
+ * for any of these quotes — the Google profile link is the honest proof until
+ * real reviews are supplied.
+ */
+export const testimonials: {
+  quote: string;
+  name: string;
+  city: string;
+  /** 1-5, only when it comes from the customer's actual review. */
+  rating?: number;
+}[] = [
   {
     quote:
       "They handled our HVAC installation start to finish and walked us through what we'd actually save. The energy difference showed up on the very first bill.",
@@ -875,7 +887,7 @@ export const testimonials = [
     name: "Linda K.",
     city: "Cape Coral, FL",
   },
-] as const;
+];
 
 export const process = [
   {
