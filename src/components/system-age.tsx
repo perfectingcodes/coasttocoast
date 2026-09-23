@@ -1,6 +1,5 @@
 import { useId, useMemo, useState } from "react";
 import { Gauge } from "lucide-react";
-import { cleanAndTune } from "@/content/site";
 import { cn } from "@/lib/utils";
 
 /**
@@ -29,18 +28,18 @@ function verdictFor(years: number): Verdict {
     return {
       tone: "text-cyan",
       label: "Maintenance years",
-      body: `Inside the usual range. Twice-yearly service is what keeps a system here — our ${cleanAndTune.name} is ${cleanAndTune.price}.`,
+      body: "Service it twice a year",
     };
   if (years <= LIFE_TO)
     return {
       tone: "text-gold",
       label: "Watch years",
-      body: "In the band where systems in this climate typically end. Worth knowing the condition before something fails in August.",
+      body: "Know its condition now",
     };
   return {
     tone: "text-orange-light",
     label: "Past the usual range",
-    body: "Past what systems here typically last. Get a second opinion before spending on a large repair.",
+    body: "Get a second opinion",
   };
 }
 
@@ -54,32 +53,42 @@ export function SystemAgeCard({ className }: { className?: string }) {
   const bandWidth = ((LIFE_TO - LIFE_FROM) / MAX) * 100;
 
   return (
-    <div className={cn("glass-instrument edge-lit relative overflow-hidden px-4 py-3.5", className)}>
+    <div
+      className={cn(
+        "glass-instrument edge-lit relative overflow-hidden px-4 py-3",
+        className,
+      )}
+    >
       <span className="flex items-center gap-2">
-        <Gauge className="size-3.5 shrink-0 text-cyan" aria-hidden="true" />
-        <span className="truncate font-display text-[0.55rem] font-extrabold uppercase tracking-[0.16em] text-white/58">
+        <Gauge className="size-3 shrink-0 text-cyan" aria-hidden="true" />
+        <span className="truncate font-display text-[0.52rem] font-extrabold uppercase tracking-[0.13em] text-white/58">
           How old is your system?
         </span>
       </span>
 
-      <p className="mt-2 flex items-baseline justify-between gap-2">
-        <span className={cn("truncate font-display text-[0.95rem] font-extrabold leading-tight", v.tone)}>
+      <p className="mt-1.5 flex items-baseline justify-between gap-2">
+        <span
+          className={cn(
+            "truncate font-display text-[0.88rem] font-extrabold leading-tight",
+            v.tone,
+          )}
+        >
           {v.label}
         </span>
-        <span className="shrink-0 font-mono text-[0.58rem] uppercase tracking-[0.12em] text-white/50">
+        <span className="shrink-0 font-mono text-[0.56rem] uppercase tracking-[0.1em] text-white/50">
           {years === MAX ? `${MAX}+` : years} yr
         </span>
       </p>
 
-      <div className="relative mt-3.5">
+      <div className="relative mt-2.5">
         {/* Track, with the 10–15 year band drawn to scale on it. */}
-        <div className="h-2 w-full rounded-full bg-white/15" aria-hidden="true">
+        <div className="h-1.5 w-full rounded-full bg-white/15" aria-hidden="true">
           <div
-            className="absolute top-0 h-2 rounded-full bg-gold/45"
+            className="absolute top-0 h-1.5 rounded-full bg-gold/45"
             style={{ left: `${bandLeft}%`, width: `${bandWidth}%` }}
           />
           <div
-            className="absolute top-0 h-2 rounded-full bg-gradient-to-r from-cyan to-cyan-light transition-[width] duration-200"
+            className="absolute top-0 h-1.5 rounded-full bg-gradient-to-r from-cyan to-cyan-light transition-[width] duration-200"
             style={{ width: `${pct}%` }}
           />
         </div>
@@ -96,20 +105,15 @@ export function SystemAgeCard({ className }: { className?: string }) {
           value={years}
           onChange={(e) => setYears(Number(e.target.value))}
           aria-valuetext={`${years} years — ${v.label}`}
-          className="range-ghost absolute inset-x-0 -top-3 h-8 w-full cursor-ew-resize"
+          className="range-ghost absolute inset-x-0 -top-3 h-7 w-full cursor-ew-resize"
         />
       </div>
 
-      <div className="mt-2 flex justify-between font-mono text-[0.5rem] uppercase tracking-[0.08em] text-white/45">
-        <span>New</span>
-        <span className="text-gold/90">
-          {LIFE_FROM}–{LIFE_TO} yr typical here
+      <p className="mt-2 flex items-baseline justify-between gap-3 font-mono text-[0.55rem] uppercase tracking-[0.06em]">
+        <span className="truncate text-white/65">{v.body}</span>
+        <span className="shrink-0 text-gold/90">
+          {LIFE_FROM}–{LIFE_TO} yr typical
         </span>
-        <span>{MAX}+</span>
-      </div>
-
-      <p className="mt-2.5 border-t border-white/12 pt-2.5 text-[0.7rem] leading-snug text-white/58">
-        {v.body}
       </p>
     </div>
   );

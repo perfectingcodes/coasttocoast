@@ -233,12 +233,12 @@ function Hero() {
               are part of the first screen rather than something found by
               scrolling: what the season is doing to every system in the
               region, and where theirs sits against how long one lasts here. */}
-          <div className="relative z-10 mb-3 space-y-2.5 sm:mb-0">
-            <SeasonScrubber className="sm:w-[84%]" />
-            <SystemAgeCard className="sm:ml-auto sm:w-[84%]" />
+          <div className="relative z-10 mb-3 space-y-3 sm:mb-0">
+            <SeasonScrubber className="sm:w-[86%]" />
+            <SystemAgeCard className="sm:ml-auto sm:w-[66%]" />
           </div>
 
-          <div className="rays-burst relative sm:-mt-6 lg:-mt-16">
+          <div className="rays-burst relative sm:-mt-4 lg:-mt-10">
           {/* Warm core the rays radiate from, sitting under the artwork. */}
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange/35 blur-[80px]"
