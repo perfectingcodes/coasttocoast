@@ -45,7 +45,7 @@ export function SeasonScrubber({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "glass edge-lit relative overflow-hidden px-4 py-3.5",
+        "glass-instrument edge-lit relative overflow-hidden px-4 py-3.5",
         className,
       )}
     >

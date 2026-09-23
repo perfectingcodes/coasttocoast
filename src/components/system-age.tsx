@@ -54,7 +54,7 @@ export function SystemAgeCard({ className }: { className?: string }) {
   const bandWidth = ((LIFE_TO - LIFE_FROM) / MAX) * 100;
 
   return (
-    <div className={cn("glass edge-lit relative overflow-hidden px-4 py-3.5", className)}>
+    <div className={cn("glass-instrument edge-lit relative overflow-hidden px-4 py-3.5", className)}>
       <span className="flex items-center gap-2">
         <Gauge className="size-3.5 shrink-0 text-cyan" aria-hidden="true" />
         <span className="truncate font-display text-[0.55rem] font-extrabold uppercase tracking-[0.16em] text-white/58">

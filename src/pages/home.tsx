@@ -113,7 +113,7 @@ const HERO_PROOF = [
 function Hero() {
   return (
     <section className="band-azure grain grid-lines relative isolate overflow-hidden">
-      <div className="shell relative grid grid-cols-1 items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:gap-6 lg:pb-12 lg:pt-24">
+      <div className="shell relative grid grid-cols-1 items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:items-start lg:gap-8 lg:pb-10 lg:pt-20">
         <span
           className="pointer-events-none absolute inset-y-24 left-[calc(50%-0.75rem)] hidden w-px bg-gradient-to-b from-transparent via-white/18 to-transparent lg:block"
           aria-hidden="true"
@@ -233,12 +233,12 @@ function Hero() {
               are part of the first screen rather than something found by
               scrolling: what the season is doing to every system in the
               region, and where theirs sits against how long one lasts here. */}
-          <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <SeasonScrubber />
-            <SystemAgeCard />
+          <div className="relative z-10 mb-3 space-y-2.5 sm:mb-0">
+            <SeasonScrubber className="sm:w-[84%]" />
+            <SystemAgeCard className="sm:ml-auto sm:w-[84%]" />
           </div>
 
-          <div className="rays-burst relative">
+          <div className="rays-burst relative sm:-mt-6 lg:-mt-16">
           {/* Warm core the rays radiate from, sitting under the artwork. */}
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange/35 blur-[80px]"

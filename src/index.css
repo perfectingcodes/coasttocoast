@@ -341,6 +341,37 @@
       0 24px 50px -24px rgb(5 15 38 / 0.9);
   }
 
+/* A glass card that has to hold its own against a bright ground: deeper
+     ground, a real drop shadow, and a cyan hairline down the leading edge as
+     well as across the top. Used for the hero's readouts. */
+  .glass-instrument {
+    border-radius: var(--radius-card);
+    border: 1px solid rgb(255 255 255 / 0.22);
+    background: linear-gradient(
+      165deg,
+      rgb(4 30 52 / 0.62) 0%,
+      rgb(4 22 44 / 0.5) 100%
+    );
+    backdrop-filter: blur(18px) saturate(150%);
+    box-shadow:
+      var(--shadow-inset-top),
+      0 26px 55px -22px rgb(3 14 34 / 0.95);
+  }
+  .glass-instrument::after {
+    content: "";
+    position: absolute;
+    inset-block: 18%;
+    left: 0;
+    width: 2px;
+    border-radius: 999px;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgb(43 217 255 / 0.85),
+      transparent
+    );
+  }
+
   /* Gradient hairline along the top edge of a dark card. */
   .edge-lit {
     position: relative;
