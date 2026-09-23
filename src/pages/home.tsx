@@ -28,7 +28,7 @@ import { Icon } from "@/components/icon";
 import { Wave } from "@/components/wave";
 import { Reveal } from "@/components/reveal";
 import { PaymentTeaser } from "@/components/payment-teaser";
-import { GoogleBadge } from "@/components/google-reviews";
+import { GoogleBadge, GoogleSeal } from "@/components/google-reviews";
 import {
   ArrowLink,
   CityMarquee,
@@ -37,6 +37,7 @@ import {
   TrustStrip,
 } from "@/components/brand";
 import { SeasonScrubber } from "@/components/season-scrubber";
+import { SystemAgeCard } from "@/components/system-age";
 import { ServiceMap } from "@/components/service-map";
 import { CtaBand } from "@/components/cta-band";
 import { FaqList } from "@/components/faq-list";
@@ -106,7 +107,6 @@ export default function Home() {
  */
 const HERO_PROOF = [
   { v: "Same-day", k: "Appointments" },
-  { v: "Flat price", k: "Before we start" },
   { v: cleanAndTune.price, k: "Clean & Tune" },
 ] as const;
 
@@ -210,6 +210,11 @@ function Hero() {
                 </div>
               ))}
             </dl>
+
+            {/* Social proof as a mark rather than a pill, standing in the row
+                of proof beside the locally-owned seal. */}
+            <span className="hidden h-9 w-px bg-white/30 sm:block" aria-hidden="true" />
+            <GoogleSeal className="mt-1 sm:mt-0" />
           </div>
 
           <div className="mt-8 hidden items-center gap-3 lg:flex" aria-hidden="true">
@@ -221,8 +226,6 @@ function Hero() {
         </div>
 
         <div className="relative">
-          <SeasonScrubber className="mb-5 w-full" />
-
           <div className="rays-burst relative">
           {/* Warm core the rays radiate from, sitting under the artwork. */}
           <div
@@ -243,19 +246,23 @@ function Hero() {
           {/* Social proof rides on the artwork rather than in the promise
               strip: the strip is what we commit to, this is what other people
               say, and keeping them apart buys the hero a line of height. */}
-          {/* Pinned to the artwork where there is room beside it; on a phone
-              the artwork is full-bleed, so the chip sits under it instead of
-              on top of the coastline. */}
-          <div className="mt-4 flex justify-center sm:absolute sm:bottom-0 sm:left-0 sm:mt-0 sm:block lg:bottom-4">
-            <GoogleBadge className="shadow-[0_14px_30px_-10px_rgb(3_18_48/0.65)]" />
-          </div>
-
           {/* Where the trucks actually leave from. */}
           <p className="mt-4 hidden text-right font-mono text-[0.62rem] uppercase tracking-[0.14em] text-white/52 lg:block">
             {business.city}, {business.state} · {business.lat.toFixed(4)}° N{" "}
             {Math.abs(business.lng).toFixed(4)}° W
           </p>
           </div>
+        </div>
+      </div>
+
+      {/* Instrument deck. Two readings a homeowner can act on: what the season
+          is doing to every system in the region, and where their own sits
+          against how long one lasts here. Both run on figures already
+          published elsewhere on this site. */}
+      <div className="shell relative pb-10">
+        <div className="grid gap-3 xl:grid-cols-2">
+          <SeasonScrubber />
+          <SystemAgeCard />
         </div>
       </div>
 

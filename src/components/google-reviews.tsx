@@ -90,6 +90,51 @@ export function GoogleBadge({
 }
 
 /**
+ * The same link as `GoogleBadge`, built as a badge rather than a pill so it
+ * can stand in a row of proof marks beside the locally-owned seal. Shows a
+ * real rating only when one has been supplied.
+ */
+export function GoogleSeal({ className }: { className?: string }) {
+  const real = hasReviewData();
+  return (
+    <a
+      href={googleReviews.profileUrl}
+      target="_blank"
+      rel="noreferrer noopener"
+      className={cn(
+        "group flex items-center gap-2.5 transition-opacity hover:opacity-90",
+        className,
+      )}
+    >
+      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-white shadow-[0_8px_18px_-8px_rgb(3_18_48/0.7)] ring-1 ring-white/50 transition-transform duration-300 group-hover:-translate-y-0.5">
+        <GoogleGlyph className="size-5" />
+      </span>
+      <span className="leading-tight">
+        {real ? (
+          <>
+            <span className="poster block text-[1.15rem] leading-none text-white">
+              {googleReviews.rating!.toFixed(1)}
+            </span>
+            <span className="mt-1 block font-display text-[0.55rem] font-extrabold uppercase tracking-[0.16em] text-cyan-light">
+              {googleReviews.count} Google reviews
+            </span>
+          </>
+        ) : (
+          <>
+            <span className="block font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/70">
+              Reviews on
+            </span>
+            <span className="block font-display text-sm font-extrabold uppercase tracking-[0.06em] text-white">
+              Google
+            </span>
+          </>
+        )}
+      </span>
+    </a>
+  );
+}
+
+/**
  * Larger card for the testimonials section and the contact page — invites the
  * customer to leave a review, which is the part that actually builds the
  * profile over time.
