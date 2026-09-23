@@ -11,11 +11,11 @@ export interface Faq {
  * Native `<details>` accordion — works without JS, renders correctly in the
  * prerendered HTML, and stays keyboard accessible for free.
  *
- * Rows are hairlines rather than boxes: a stack of bordered cards competes
- * with the cards everywhere else on the page, and the question is the only
- * thing here that needs to be seen from across the room. The open row gets an
- * ember tick down its left edge, which is the same mark the reasons band and
- * the service cards use.
+ * Each question is a card with its own edge and its own shadow, not a row in a
+ * divided box. Hairlines disappear on a busy page; a card has presence, lifts
+ * under the cursor, and can carry an accent spine and a tinted answer panel
+ * when it opens. The question is set large enough to be the thing you read
+ * first, with the index in mono beside it.
  */
 export function FaqList({
   faqs,
@@ -25,60 +25,79 @@ export function FaqList({
   className?: string;
 }) {
   // Preserve source order; start a new heading whenever the group changes.
-  const groups: { name?: string; items: readonly Faq[] }[] = [];
+  const groups: { name?: string; items: Faq[] }[] = [];
   for (const f of faqs) {
     const last = groups[groups.length - 1];
-    if (last && last.name === f.group) {
-      (last.items as Faq[]).push(f);
-    } else {
-      groups.push({ name: f.group, items: [f] });
-    }
+    if (last && last.name === f.group) last.items.push(f);
+    else groups.push({ name: f.group, items: [f] });
   }
+
+  let n = 0;
 
   return (
     <div className={cn("mt-8", className)}>
       {groups.map((g, gi) => (
-        <div key={g.name ?? gi} className={cn(gi > 0 && "mt-10")}>
+        <div key={g.name ?? gi} className={cn(gi > 0 && "mt-12")}>
           {g.name && (
-            <p className="flex items-center gap-3 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-navy/45">
+            <div className="mb-4 flex items-center gap-4">
+              <p className="font-display text-[0.66rem] font-extrabold uppercase tracking-[0.22em] text-navy">
+                {g.name}
+              </p>
               <span
-                className="h-px w-6 shrink-0 bg-ember"
+                className="h-px flex-1 bg-gradient-to-r from-ember/60 to-transparent"
                 aria-hidden="true"
               />
-              {g.name}
-            </p>
+              <span className="font-mono text-[0.62rem] text-navy/40">
+                {String(g.items.length).padStart(2, "0")}
+              </span>
+            </div>
           )}
 
-          <div className={cn("border-t border-navy/12", g.name && "mt-3")}>
-            {g.items.map((f) => (
-              <details
-                key={f.q}
-                className="group relative border-b border-navy/12 [&_summary::-webkit-details-marker]:hidden"
-              >
-                {/* Ember tick on the open row. */}
-                <span
-                  className="pointer-events-none absolute -left-px top-0 h-full w-[3px] origin-top scale-y-0 bg-ember transition-transform duration-300 group-open:scale-y-100"
-                  aria-hidden="true"
-                />
-
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-5 py-4 pl-0 pr-1 font-display text-[1.02rem] font-extrabold text-navy transition-[padding,color] duration-300 group-open:text-blue group-hover:pl-3 group-open:pl-4">
-                  {f.q}
-                  {/* A plus that becomes a minus. One glyph, two states, no
-                      icon swap. */}
+          <div className="grid gap-3">
+            {g.items.map((f) => {
+              n += 1;
+              const index = String(n).padStart(2, "0");
+              return (
+                <details
+                  key={f.q}
+                  className={cn(
+                    "group relative overflow-hidden rounded-card bg-white ring-1 ring-navy/10",
+                    "shadow-[0_1px_2px_rgb(7_26_61/0.04)] transition-shadow duration-300",
+                    "hover:shadow-[var(--shadow-soft)] open:shadow-[var(--shadow-lift)] open:ring-navy/15",
+                    "[&_summary::-webkit-details-marker]:hidden",
+                  )}
+                >
+                  {/* Accent spine, drawn top-down as the card opens. */}
                   <span
-                    className="relative grid size-8 shrink-0 place-items-center rounded-full ring-1 ring-navy/15 transition-colors duration-300 group-hover:ring-navy/40 group-open:bg-blue group-open:ring-blue"
+                    className="pointer-events-none absolute left-0 top-0 h-full w-1 origin-top scale-y-0 bg-gradient-to-b from-orange-light to-ember transition-transform duration-500 group-open:scale-y-100"
                     aria-hidden="true"
-                  >
-                    <span className="absolute h-[2px] w-3 rounded-full bg-navy transition-colors duration-300 group-open:bg-white" />
-                    <span className="absolute h-[2px] w-3 rotate-90 rounded-full bg-navy transition-[transform,background-color] duration-300 group-open:rotate-0 group-open:bg-white" />
-                  </span>
-                </summary>
+                  />
 
-                <p className="max-w-2xl pb-5 pl-0 pr-10 leading-relaxed text-navy/70 transition-[padding] duration-300 group-open:pl-4">
-                  {f.a}
-                </p>
-              </details>
-            ))}
+                  <summary className="flex cursor-pointer list-none items-start gap-4 px-5 py-5 md:gap-6 md:px-7">
+                    <span className="mt-1 font-mono text-[0.72rem] tabular-nums text-navy/35 transition-colors duration-300 group-hover:text-ember group-open:text-ember">
+                      {index}
+                    </span>
+
+                    <span className="flex-1 font-display text-[1.05rem] font-extrabold leading-snug text-navy transition-colors duration-300 group-open:text-blue md:text-[1.15rem]">
+                      {f.q}
+                    </span>
+
+                    {/* A plus that becomes a minus. One glyph, two states. */}
+                    <span
+                      className="relative mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-foam ring-1 ring-navy/10 transition-colors duration-300 group-hover:ring-navy/30 group-open:bg-blue group-open:ring-blue"
+                      aria-hidden="true"
+                    >
+                      <span className="absolute h-[2px] w-3.5 rounded-full bg-navy transition-colors duration-300 group-open:bg-white" />
+                      <span className="absolute h-[2px] w-3.5 rotate-90 rounded-full bg-navy transition-[transform,background-color] duration-300 group-open:rotate-0 group-open:bg-white" />
+                    </span>
+                  </summary>
+
+                  <div className="border-t border-navy/8 bg-foam/70 px-5 py-5 md:px-7 md:pl-[4.1rem]">
+                    <p className="max-w-2xl leading-relaxed text-navy/72">{f.a}</p>
+                  </div>
+                </details>
+              );
+            })}
           </div>
         </div>
       ))}

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "wouter";
 import {
   ArrowRight,
@@ -812,17 +813,21 @@ function WhyUsSection() {
 /**
  * Reviews.
  *
- * Three quotes and an invitation, staggered rather than set in a row of equal
- * boxes, with the fourth cell carrying the mascot — head over the top edge, so
- * one card in the set breaks its own frame. That is the whole trick: a wall of
- * identical rectangles reads as a widget, and one thing escaping it reads as
- * design.
+ * A grid of equal cards is a testimonial widget; three of them staggered is
+ * the same widget tilted. This is an editorial spread instead — one review at
+ * display size carrying the section, and the others as a list you can move
+ * between, which is the same "pick from the list, the panel answers" pattern
+ * the coverage map uses. Reading a review should feel like reading, not like
+ * scanning a row of boxes.
  *
  * No stars. A five-star row under a quote is a rating, and there is no rating
- * attached to any of these quotes — see the note in content/site.ts. The card
- * draws them only when a real one is supplied.
+ * attached to any of these quotes — see the note in content/site.ts. They are
+ * drawn only when a real one is supplied.
  */
 function TestimonialsSection() {
+  const [active, setActive] = useState(0);
+  const t = testimonials[active];
+
   return (
     <section className="grid-lines-light relative overflow-hidden bg-foam py-16 md:py-20">
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
@@ -844,94 +849,147 @@ function TestimonialsSection() {
 
         <div className="thermal-rule mt-8 w-full opacity-60" aria-hidden="true" />
 
-        <ul className="mt-12 grid items-start gap-5 sm:grid-cols-2 xl:grid-cols-[repeat(3,minmax(0,1fr))_minmax(0,0.84fr)]">
-          {testimonials.map((t, i) => (
-            <li key={t.name} className={cn(i % 2 === 1 && "xl:mt-10")}>
-              <Reveal delay={i * 0.06} className="h-full">
-                <figure className="card group relative flex h-full flex-col p-7 transition-shadow duration-300 hover:shadow-[var(--shadow-lift)]">
-                  {/* An opening mark set as type, at a size that makes it part
-                      of the composition rather than an icon in the corner. */}
-                  <span
-                    className="poster pointer-events-none absolute -top-2 right-5 select-none text-[5rem] leading-none text-ember/15 transition-colors duration-300 group-hover:text-ember/25"
+        <div className="mt-10 grid gap-5 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,0.9fr)] lg:items-stretch">
+          {/* ------------------------------------------- the one you read */}
+          <figure className="band-ocean grain relative flex flex-col overflow-hidden rounded-[1.75rem] p-8 shadow-[0_34px_70px_-30px_rgb(5_15_38/0.65)] ring-1 ring-white/15 md:p-11">
+            <div
+              className="pointer-events-none absolute -right-24 -top-28 size-[26rem] rounded-full bg-cyan/14 blur-[110px]"
+              aria-hidden="true"
+            />
+
+            {/* The opening mark, set as type at a size that makes it part of
+                the composition rather than an icon in a corner. */}
+            <span
+              className="poster pointer-events-none select-none text-[5.5rem] leading-[0.5] text-orange-light md:text-[7rem]"
+              aria-hidden="true"
+            >
+              &ldquo;
+            </span>
+
+            {t.rating && (
+              <div
+                className="relative mt-2 flex gap-1"
+                aria-label={`Rated ${t.rating} out of 5`}
+              >
+                {Array.from({ length: 5 }, (_, n) => (
+                  <Star
+                    key={n}
+                    className={cn(
+                      "size-5",
+                      n < t.rating! ? "fill-gold text-gold" : "text-white/25",
+                    )}
                     aria-hidden="true"
+                  />
+                ))}
+              </div>
+            )}
+
+            <blockquote
+              key={t.name}
+              className="relative mt-4 flex-1 font-display text-[clamp(1.25rem,2.3vw,1.75rem)] font-extrabold leading-[1.32] text-white"
+            >
+              {t.quote}
+            </blockquote>
+
+            <figcaption className="relative mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 border-t border-white/15 pt-6">
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-white/12 font-display text-sm font-extrabold text-white ring-1 ring-white/25">
+                {t.name.charAt(0)}
+              </span>
+              <span className="leading-tight">
+                <span className="block font-display text-base font-extrabold text-white">
+                  {t.name}
+                </span>
+                <span className="block font-mono text-[0.64rem] uppercase tracking-[0.12em] text-white/58">
+                  {t.city}
+                </span>
+              </span>
+              <span className="ml-auto font-mono text-[0.64rem] uppercase tracking-[0.14em] text-white/45">
+                {String(active + 1).padStart(2, "0")} /{" "}
+                {String(testimonials.length).padStart(2, "0")}
+              </span>
+            </figcaption>
+          </figure>
+
+          {/* ------------------------------------------------ the others */}
+          <div className="flex flex-col gap-5">
+            <ul className="grid gap-2.5">
+              {testimonials.map((r, i) => (
+                <li key={r.name}>
+                  <button
+                    type="button"
+                    onClick={() => setActive(i)}
+                    onMouseEnter={() => setActive(i)}
+                    onFocus={() => setActive(i)}
+                    aria-pressed={i === active}
+                    className={cn(
+                      "group flex w-full items-center gap-3.5 rounded-card px-4 py-3.5 text-left transition-[background-color,box-shadow,transform] duration-300",
+                      i === active
+                        ? "bg-white shadow-[var(--shadow-soft)] ring-1 ring-navy/10"
+                        : "bg-white/55 ring-1 ring-navy/8 hover:bg-white hover:shadow-[var(--shadow-soft)]",
+                    )}
                   >
-                    &rdquo;
-                  </span>
-
-                  {t.rating && (
-                    <div
-                      className="flex gap-0.5"
-                      aria-label={`Rated ${t.rating} out of 5`}
+                    <span
+                      className={cn(
+                        "grid size-9 shrink-0 place-items-center rounded-full font-display text-xs font-extrabold transition-colors duration-300",
+                        i === active
+                          ? "bg-gradient-to-br from-blue-bright to-blue text-white"
+                          : "bg-navy/8 text-navy/55 group-hover:bg-navy/12",
+                      )}
                     >
-                      {Array.from({ length: 5 }, (_, n) => (
-                        <Star
-                          key={n}
-                          className={cn(
-                            "size-4",
-                            n < t.rating! ? "fill-gold text-gold" : "text-navy/15",
-                          )}
-                          aria-hidden="true"
-                        />
-                      ))}
-                    </div>
-                  )}
-
-                  <blockquote className="relative mt-1 flex-1 text-[0.98rem] leading-relaxed text-navy/80">
-                    {t.quote}
-                  </blockquote>
-
-                  <figcaption className="relative mt-6 flex items-center gap-3 border-t border-navy/8 pt-4">
-                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-blue-bright to-blue font-display text-xs font-extrabold text-white ring-1 ring-inset ring-white/25">
-                      {t.name.charAt(0)}
+                      {r.name.charAt(0)}
                     </span>
-                    <span className="min-w-0 leading-tight">
+                    <span className="min-w-0 flex-1 leading-tight">
                       <span className="block font-display text-sm font-extrabold text-navy">
-                        {t.name}
+                        {r.name}
                       </span>
-                      <span className="block font-mono text-[0.62rem] uppercase tracking-[0.1em] text-navy/45">
-                        {t.city}
+                      <span className="block truncate font-mono text-[0.6rem] uppercase tracking-[0.1em] text-navy/45">
+                        {r.city}
                       </span>
                     </span>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            </li>
-          ))}
+                    <span
+                      className={cn(
+                        "h-[3px] w-6 shrink-0 rounded-full transition-all duration-300",
+                        i === active
+                          ? "bg-ember"
+                          : "bg-navy/12 group-hover:w-9 group-hover:bg-ember/50",
+                      )}
+                      aria-hidden="true"
+                    />
+                  </button>
+                </li>
+              ))}
+            </ul>
 
-          {/* ------------------------------------------- the invitation */}
-          <li className="mt-16 sm:mt-20 xl:mt-10">
-            <div className="band-ocean grain relative rounded-card px-6 pb-6 pt-[5.5rem] text-center shadow-[0_26px_50px_-22px_rgb(5_15_38/0.6)] ring-1 ring-white/15">
-              {/* Over the top edge, so one card in the set breaks its frame. */}
+            {/* The invitation, with the mascot's head over the top edge. */}
+            <div className="card relative mt-14 flex flex-1 flex-col justify-center px-6 pb-6 pt-[5.25rem] text-center">
               <img
                 src="/brand/mascot-bust.webp"
                 srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
-                sizes="150px"
+                sizes="140px"
                 alt=""
                 width={800}
                 height={849}
                 loading="lazy"
-                className="pointer-events-none absolute -top-[4.75rem] left-1/2 w-[8.75rem] -translate-x-1/2 drop-shadow-[0_16px_30px_rgb(5_15_38/0.55)]"
+                className="pointer-events-none absolute -top-[4.25rem] left-1/2 w-[8.25rem] -translate-x-1/2 drop-shadow-[0_16px_30px_rgb(10_35_82/0.35)]"
               />
-
-              <p className="font-display text-lg font-extrabold leading-tight text-white">
+              <p className="font-display text-base font-extrabold text-navy">
                 Worked with us?
               </p>
-              <p className="mt-2 text-sm leading-relaxed text-white/72">
+              <p className="mx-auto mt-1.5 max-w-[15rem] text-sm leading-relaxed text-navy/62">
                 A minute of your time helps your neighbours choose.
               </p>
-
-              <div className="mt-6 grid gap-2.5">
-                <ButtonLink href={googleReviews.reviewUrl} variant="onDark">
+              <div className="mt-5 grid gap-2.5">
+                <ButtonLink href={googleReviews.reviewUrl} size="sm">
                   Leave a review
                   <ArrowUpRight className="size-4" aria-hidden="true" />
                 </ButtonLink>
-                <ButtonLink href={googleReviews.profileUrl} variant="outline">
+                <ButtonLink href={googleReviews.profileUrl} variant="ghost" size="sm">
                   Read reviews
                 </ButtonLink>
               </div>
             </div>
-          </li>
-        </ul>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -1038,48 +1096,68 @@ const RAIL_FADE =
   "linear-gradient(90deg, transparent 0%, black 9%, black 91%, transparent 100%)";
 
 /**
- * The four steps, drawn as one hot-to-cold run.
+ * The four steps, as a run you can move along.
  *
- * The heading promises "from your call to cold air", so the line the badges
- * sit on is that journey: ember under step one, cooling to blue under step
- * four, with each badge's glow, halo and numeral taken from its own point on
- * the ramp. Below `lg` the run turns vertical rather than shrinking four
- * badges into a row — the artwork is the section, so it stays large on a
- * phone and the copy reads beside it.
+ * The rail is not decoration: it fills from the first badge to whichever step
+ * is being pointed at, so the section behaves like the job it describes —
+ * hover the third badge and the line has travelled three quarters of the way.
+ * Nothing is hidden behind the interaction; all four steps are always legible,
+ * and the rail only says where you are in them.
+ *
+ * It sits on the site's blue rather than on the near-black it used to, so the
+ * band belongs to the same page as everything above it.
  */
 function HowItWorks() {
+  const [active, setActive] = useState(0);
+
   return (
-    <section className="band-abyss grain relative overflow-hidden py-16 md:py-24">
+    <section className="band-navy grain grid-lines relative overflow-hidden py-16 md:py-24">
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="absolute -left-32 top-1/3 size-[34rem] rounded-full bg-ember/10 blur-[130px]" />
-        <div className="absolute -right-32 top-1/4 size-[34rem] rounded-full bg-cyan/10 blur-[130px]" />
+        <div className="absolute -left-32 top-1/3 size-[34rem] rounded-full bg-orange/14 blur-[130px]" />
+        <div className="absolute -right-32 top-1/4 size-[34rem] rounded-full bg-cyan/14 blur-[130px]" />
       </div>
 
       <div className="shell relative">
         <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-5">
           <div className="max-w-xl">
-            <SectionEyebrow index={7} className="text-cyan">What happens next</SectionEyebrow>
+            <SectionEyebrow index={7} className="text-cyan">
+              What happens next
+            </SectionEyebrow>
             <h2 className="poster mt-4 text-[clamp(1.9rem,4vw,2.9rem)] text-white">
               From your call to
               <span className="block text-chill">cold air, in four.</span>
             </h2>
           </div>
-          {/* The same ramp the badges sit on, stated once up here. */}
-          <div className="thermal-rule w-40" aria-hidden="true" />
+
+          {/* Where you are in the run, in words, for anyone not using a
+              pointer. */}
+          <p className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-white/55">
+            Step {String(active + 1).padStart(2, "0")} / 04 ·{" "}
+            <span className="text-white">{process[active].title}</span>
+          </p>
         </div>
 
-        <ol className="relative mt-12 grid lg:mt-20 lg:grid-cols-4 lg:gap-x-6">
-          {/* Desktop rail. Ends land on the first and last badge centres; the
-              badges are lifted above it, so the line threads behind them. */}
+        <ol
+          className="relative mt-12 grid lg:mt-20 lg:grid-cols-4 lg:gap-x-6"
+          onMouseLeave={() => setActive(0)}
+        >
+          {/* Desktop rail. The track is dim; the run fills over it to the
+              active badge. Ends land on the first and last badge centres. */}
           <span
-            className="thermal-rule pointer-events-none absolute inset-x-[11.5%] top-20 hidden lg:block"
+            className="pointer-events-none absolute inset-x-[11.5%] top-20 hidden h-[3px] rounded-full bg-white/15 lg:block"
             style={{ maskImage: RAIL_FADE, WebkitMaskImage: RAIL_FADE }}
+            aria-hidden="true"
+          />
+          <span
+            className="thermal-rule pointer-events-none absolute left-[11.5%] top-20 hidden origin-left transition-[width] duration-700 ease-out lg:block"
+            style={{ width: `calc(77% * ${active / (process.length - 1)})` }}
             aria-hidden="true"
           />
 
           {process.map((step, i) => {
             const accent = STEP_ACCENT[i];
             const next = STEP_ACCENT[i + 1];
+            const on = i <= active;
             return (
               <li
                 key={step.title}
@@ -1095,15 +1173,33 @@ function HowItWorks() {
                   />
                 )}
 
-                <div className="relative z-10 w-24 shrink-0 lg:mx-auto lg:w-40">
+                <button
+                  type="button"
+                  onMouseEnter={() => setActive(i)}
+                  onFocus={() => setActive(i)}
+                  onClick={() => setActive(i)}
+                  aria-current={i === active ? "step" : undefined}
+                  className="relative z-10 w-24 shrink-0 cursor-pointer rounded-full outline-none ring-offset-4 ring-offset-transparent focus-visible:ring-2 focus-visible:ring-cyan lg:mx-auto lg:block lg:w-40"
+                >
+                  <span className="sr-only">
+                    Step {i + 1}: {step.title}
+                  </span>
                   <span
-                    className="absolute inset-[12%] -z-10 rounded-full opacity-45 blur-2xl transition-opacity duration-500 group-hover:opacity-80"
+                    className={cn(
+                      "absolute inset-[12%] -z-10 rounded-full opacity-80 blur-2xl transition-opacity duration-500",
+                      !on && "lg:opacity-[0.28]",
+                    )}
                     style={{ background: accent }}
                     aria-hidden="true"
                   />
                   {/* Station halo, just outside the ring of the artwork. */}
                   <span
-                    className="absolute inset-[7%] rounded-full border opacity-25 transition-all duration-500 group-hover:inset-[3%] group-hover:opacity-70"
+                    className={cn(
+                      "absolute rounded-full border opacity-70 transition-all duration-500",
+                      i === active
+                        ? "inset-[2%] lg:opacity-90"
+                        : "inset-[7%] lg:opacity-25",
+                    )}
                     style={{ borderColor: accent }}
                     aria-hidden="true"
                   />
@@ -1113,13 +1209,21 @@ function HowItWorks() {
                     width={480}
                     height={480}
                     loading="lazy"
-                    className="w-full drop-shadow-[0_18px_34px_rgb(3_10_28/0.75)] transition-transform duration-500 group-hover:-translate-y-1.5"
+                    className={cn(
+                      "w-full drop-shadow-[0_18px_34px_rgb(3_10_28/0.75)] transition-[transform,filter] duration-500",
+                      i === active
+                        ? "lg:-translate-y-2"
+                        : "lg:opacity-85 lg:saturate-[0.72]",
+                    )}
                   />
-                </div>
+                </button>
 
                 <div className="min-w-0 pt-1 lg:mt-6 lg:pt-0">
                   <p
-                    className="font-display text-[0.68rem] font-extrabold uppercase tracking-[0.3em]"
+                    className={cn(
+                      "font-display text-[0.68rem] font-extrabold uppercase tracking-[0.3em] transition-opacity duration-500",
+                      !on && "lg:opacity-60",
+                    )}
                     style={{ color: accent }}
                   >
                     Step {String(i + 1).padStart(2, "0")}
@@ -1138,12 +1242,12 @@ function HowItWorks() {
 
         <p
           data-answer=""
-          className="mt-14 max-w-3xl border-t border-white/10 pt-7 text-sm leading-relaxed text-white/50"
+          className="mt-14 max-w-3xl border-t border-white/12 pt-7 text-sm leading-relaxed text-white/58"
         >
           {business.name} is a licensed, insured HVAC contractor in{" "}
-          {business.city}, Florida, serving {locations.length} cities across Lee,
-          Collier and Charlotte counties under Florida Mechanical Contractor
-          licence #{business.license}.
+          {business.city}, Florida, serving {locations.length} cities across{" "}
+          {countyList} counties under Florida Mechanical Contractor licence #
+          {business.license}.
         </p>
       </div>
     </section>
