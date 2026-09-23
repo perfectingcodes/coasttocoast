@@ -211,14 +211,14 @@
     background:
       /* Warm bloom the artwork sits in. The graphic is drawn in the brand's
          blues, so it needs a complementary ground or it sinks into the band. */
-      radial-gradient(52% 58% at 79% 44%, rgb(255 122 31 / 0.34) 0%, transparent 64%),
-      /* The teal the rest of the site runs its accents on, brought up to the
-         scale of a ground: strongest top-right, where the artwork sits. */
-      radial-gradient(74% 62% at 88% 2%, rgb(43 217 255 / 0.46) 0%, transparent 64%),
-      radial-gradient(60% 46% at 16% 8%, rgb(43 217 255 / 0.2) 0%, transparent 62%),
-      radial-gradient(56% 50% at 0% 100%, rgb(255 106 19 / 0.2) 0%, transparent 66%),
+      radial-gradient(48% 54% at 78% 52%, rgb(255 122 31 / 0.3) 0%, transparent 64%),
+      /* The teal off the logo's keyline and the map's glow, brought up to the
+         scale of a ground. */
+      radial-gradient(76% 66% at 86% 4%, rgb(43 217 255 / 0.55) 0%, transparent 66%),
+      radial-gradient(64% 50% at 12% 6%, rgb(43 217 255 / 0.26) 0%, transparent 64%),
+      radial-gradient(56% 50% at 0% 100%, rgb(255 106 19 / 0.18) 0%, transparent 66%),
       /* Blue at the top, through teal, into a deep teal-navy. */
-      linear-gradient(162deg, #1668e3 0%, #0e6f9c 44%, #093f63 100%);
+      linear-gradient(162deg, #1673e6 0%, #0d7d9e 46%, #07445f 100%);
   }
 
   /**

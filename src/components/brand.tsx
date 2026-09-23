@@ -187,7 +187,7 @@ export function LicenceCard({ className }: { className?: string }) {
 export function CityMarquee({ className }: { className?: string }) {
   const items = [...locations, ...locations];
   return (
-    <div className={cn("marquee py-3", className)} aria-hidden="true">
+    <div className={cn("marquee py-3", className)} data-wide="" aria-hidden="true">
       {[0, 1].map((copy) => (
         <div className="marquee-track" key={copy}>
           {items.map((l, i) => (
@@ -287,7 +287,7 @@ export function KineticWordmark({ className }: { className?: string }) {
     </>
   );
   return (
-    <div className={cn("kinetic py-2", className)} aria-hidden="true">
+    <div className={cn("kinetic py-2", className)} data-wide="" aria-hidden="true">
       {[0, 1].map((copy) => (
         <div className="kinetic-track" key={copy}>
           {[0, 1].map((n) => (

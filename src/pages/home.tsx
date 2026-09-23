@@ -113,7 +113,7 @@ const HERO_PROOF = [
 function Hero() {
   return (
     <section className="band-azure grain grid-lines relative isolate overflow-hidden">
-      <div className="shell relative grid items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:gap-6 lg:pb-12 lg:pt-24">
+      <div className="shell relative grid grid-cols-1 items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:gap-6 lg:pb-12 lg:pt-24">
         <span
           className="pointer-events-none absolute inset-y-24 left-[calc(50%-0.75rem)] hidden w-px bg-gradient-to-b from-transparent via-white/18 to-transparent lg:block"
           aria-hidden="true"
@@ -123,17 +123,20 @@ function Hero() {
               wrapped, it left a pipe hanging off the end of the first line. */}
           <p className="font-display text-[0.68rem] font-extrabold uppercase tracking-[0.24em] text-white">
             Southwest Florida HVAC
-            <span className="mx-3 hidden h-3 w-px align-middle sm:inline-block sm:bg-white/40" aria-hidden="true" />
+            <span className="mx-3 hidden h-3 w-px align-middle sm:inline-block sm:bg-cyan/70" aria-hidden="true" />
             <span className="block text-orange-light sm:inline">Lic. {business.license}</span>
           </p>
           <div className="thermal-rule mt-5 w-20" aria-hidden="true" />
 
-          <h1 className="poster mt-5 text-[clamp(2.9rem,6.6vw,5.2rem)] text-white drop-shadow-[0_4px_18px_rgb(3_18_48/0.45)]">
-            Comfort
-            <br />
-            lives{" "}
-            <span className="text-pop">
-              here<span className="text-white">.</span>
+          {/* The break was after "Comfort", which left a short line over a
+              long one and split the subject from its verb. Long over short
+              rags better, and it drops the accent word onto its own line
+              where it can carry the weight. */}
+          <h1 className="poster mt-5 text-[clamp(2.7rem,5vw,4.2rem)] leading-[0.88] text-white drop-shadow-[0_4px_18px_rgb(3_18_48/0.45)]">
+            Comfort lives
+            <span className="mt-1 block">
+              <span className="text-pop">here</span>
+              <span className="text-cyan">.</span>
             </span>
           </h1>
 
@@ -180,7 +183,7 @@ function Hero() {
           {/* What a homeowner actually wants to know before they call: how
               fast, what it costs, and who they are dealing with. Counting
               cities and counties is a map fact, not a reason to book. */}
-          <div className="mt-7 flex items-center gap-x-5 gap-y-4 border-t border-white/25 pt-5 sm:flex-wrap sm:gap-x-6">
+          <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-4 border-t border-white/25 pt-5 sm:gap-x-6">
             <img
               src="/brand/badge-locally-owned.webp"
               alt="Locally owned and operated"
@@ -213,8 +216,8 @@ function Hero() {
 
             {/* Social proof as a mark rather than a pill, standing in the row
                 of proof beside the locally-owned seal. */}
-            <span className="hidden h-9 w-px bg-white/30 sm:block" aria-hidden="true" />
-            <GoogleSeal className="mt-1 sm:mt-0" />
+            <span className="hidden h-9 w-px bg-white/30 xl:block" aria-hidden="true" />
+            <GoogleSeal className="basis-full sm:basis-auto" />
           </div>
 
           <div className="mt-8 hidden items-center gap-3 lg:flex" aria-hidden="true">
@@ -226,6 +229,15 @@ function Hero() {
         </div>
 
         <div className="relative">
+          {/* Two readings a homeowner can act on, above the artwork so they
+              are part of the first screen rather than something found by
+              scrolling: what the season is doing to every system in the
+              region, and where theirs sits against how long one lasts here. */}
+          <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <SeasonScrubber />
+            <SystemAgeCard />
+          </div>
+
           <div className="rays-burst relative">
           {/* Warm core the rays radiate from, sitting under the artwork. */}
           <div
@@ -240,7 +252,7 @@ function Hero() {
             width={1200}
             height={1026}
             fetchPriority="high"
-            className="mx-auto w-full max-w-lg drop-shadow-[0_28px_56px_rgb(3_18_48/0.55)]"
+            className="mx-auto w-full max-w-md drop-shadow-[0_28px_56px_rgb(3_18_48/0.55)] xl:max-w-lg"
           />
 
           {/* Social proof rides on the artwork rather than in the promise
@@ -252,17 +264,6 @@ function Hero() {
             {Math.abs(business.lng).toFixed(4)}° W
           </p>
           </div>
-        </div>
-      </div>
-
-      {/* Instrument deck. Two readings a homeowner can act on: what the season
-          is doing to every system in the region, and where their own sits
-          against how long one lasts here. Both run on figures already
-          published elsewhere on this site. */}
-      <div className="shell relative pb-10">
-        <div className="grid gap-3 xl:grid-cols-2">
-          <SeasonScrubber />
-          <SystemAgeCard />
         </div>
       </div>
 

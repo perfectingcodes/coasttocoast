@@ -2,8 +2,9 @@
  * Responsive QA harness.
  *
  * Loads each route at a phone width, settles every scroll-reveal, then reports
- * the three things that actually break a mobile layout — anything sticking out
- * past the viewport, text clipped inside its own box, and tap targets under
+ * the four things that actually break a mobile layout — anything sticking out
+ * past the viewport, any block wider than the viewport even when an ancestor
+ * quietly clips it, text clipped inside its own box, and tap targets under
  * 34px — and writes a screenshot strip so the result can be looked at rather
  * than assumed.
  *
@@ -25,7 +26,7 @@ const paths = (process.env.PATHS || "/").split(",");
 
 const AUDIT = () => {
   const vw = document.documentElement.clientWidth;
-  const out = { docW: document.documentElement.scrollWidth, vw, over: [], tiny: [], clipped: [] };
+  const out = { docW: document.documentElement.scrollWidth, vw, over: [], tooWide: [], tiny: [], clipped: [] };
   for (const el of document.querySelectorAll("body *")) {
     const cs = getComputedStyle(el);
     if (cs.display === "none" || cs.visibility === "hidden" || cs.position === "fixed") continue;
@@ -40,12 +41,15 @@ const AUDIT = () => {
       }
       if (!clipped) out.over.push({ id, l: Math.round(r.left), r: Math.round(r.right) });
     }
+    if (r.width > vw + 1 && cs.display !== "inline" && el.children.length > 0 && !el.closest("[data-wide]"))
+      out.tooWide.push({ id, w: Math.round(r.width) });
     if (el.children.length === 0 && el.scrollWidth > el.clientWidth + 2 && cs.overflowX === "visible")
       out.clipped.push({ id, sw: el.scrollWidth, cw: el.clientWidth, txt: (el.textContent || "").trim().slice(0, 40) });
     if ((el.tagName === "A" || el.tagName === "BUTTON") && r.height > 0 && r.height < 34)
       out.tiny.push({ h: Math.round(r.height), txt: (el.textContent || "").trim().slice(0, 34) });
   }
   out.over = out.over.slice(0, 12);
+  out.tooWide = out.tooWide.slice(0, 12);
   out.clipped = out.clipped.slice(0, 12);
   out.tiny = out.tiny.slice(0, 20);
   return out;
@@ -86,7 +90,7 @@ for (const p of paths) {
     await page.screenshot({ path: path.join(dir, `${String(i).padStart(2, "0")}.png`), scale: "css" });
     i++;
   }
-  console.log(`${p}  ${WIDTH}px  h=${height}  shots=${i}  docW=${audit.docW}  over=${audit.over.length} clipped=${audit.clipped.length} tiny=${audit.tiny.length}`);
+  console.log(`${p}  ${WIDTH}px  h=${height}  shots=${i}  docW=${audit.docW}  over=${audit.over.length} wide=${audit.tooWide.length} clipped=${audit.clipped.length} tiny=${audit.tiny.length}`);
 }
 
 await browser.close();

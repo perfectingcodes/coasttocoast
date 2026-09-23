@@ -54,64 +54,63 @@ export function SystemAgeCard({ className }: { className?: string }) {
   const bandWidth = ((LIFE_TO - LIFE_FROM) / MAX) * 100;
 
   return (
-    <div className={cn("glass edge-lit relative overflow-hidden px-5 py-3.5", className)}>
-      <div className="flex flex-col gap-3.5 sm:flex-row sm:items-center sm:gap-6">
-        <div className="min-w-0 flex-1">
-          <span className="flex items-center gap-2">
-            <Gauge className="size-3.5 shrink-0 text-cyan" aria-hidden="true" />
-            <span className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.18em] text-white/58">
-              How old is your system?
-            </span>
-          </span>
+    <div className={cn("glass edge-lit relative overflow-hidden px-4 py-3.5", className)}>
+      <span className="flex items-center gap-2">
+        <Gauge className="size-3.5 shrink-0 text-cyan" aria-hidden="true" />
+        <span className="truncate font-display text-[0.55rem] font-extrabold uppercase tracking-[0.16em] text-white/58">
+          How old is your system?
+        </span>
+      </span>
 
-          <p className="mt-1.5 font-display text-base font-extrabold leading-tight text-white">
-            <span className={v.tone}>{v.label}</span>
-            <span className="ml-2 align-middle font-mono text-[0.62rem] uppercase tracking-[0.12em] text-white/45">
-              {years === MAX ? `${MAX}+` : years} yr
-            </span>
-          </p>
-          <p className="mt-0.5 text-[0.74rem] leading-snug text-white/58">{v.body}</p>
+      <p className="mt-2 flex items-baseline justify-between gap-2">
+        <span className={cn("truncate font-display text-[0.95rem] font-extrabold leading-tight", v.tone)}>
+          {v.label}
+        </span>
+        <span className="shrink-0 font-mono text-[0.58rem] uppercase tracking-[0.12em] text-white/50">
+          {years === MAX ? `${MAX}+` : years} yr
+        </span>
+      </p>
+
+      <div className="relative mt-3.5">
+        {/* Track, with the 10–15 year band drawn to scale on it. */}
+        <div className="h-2 w-full rounded-full bg-white/15" aria-hidden="true">
+          <div
+            className="absolute top-0 h-2 rounded-full bg-gold/45"
+            style={{ left: `${bandLeft}%`, width: `${bandWidth}%` }}
+          />
+          <div
+            className="absolute top-0 h-2 rounded-full bg-gradient-to-r from-cyan to-cyan-light transition-[width] duration-200"
+            style={{ width: `${pct}%` }}
+          />
         </div>
 
-        <div className="sm:w-[14.5rem] sm:shrink-0">
-          <div className="relative">
-            {/* Track, with the 10–15 year band drawn to scale on it. */}
-            <div className="h-2 w-full rounded-full bg-white/15" aria-hidden="true">
-              <div
-                className="absolute top-0 h-2 rounded-full bg-gold/45"
-                style={{ left: `${bandLeft}%`, width: `${bandWidth}%` }}
-              />
-              <div
-                className="absolute top-0 h-2 rounded-full bg-gradient-to-r from-cyan to-cyan-light transition-[width] duration-200"
-                style={{ width: `${pct}%` }}
-              />
-            </div>
-
-            <label htmlFor={id} className="sr-only">
-              System age in years
-            </label>
-            <input
-              id={id}
-              type="range"
-              min={0}
-              max={MAX}
-              step={1}
-              value={years}
-              onChange={(e) => setYears(Number(e.target.value))}
-              aria-valuetext={`${years} years — ${v.label}`}
-              className="range-ghost absolute inset-x-0 -top-3 h-8 w-full cursor-ew-resize"
-            />
-          </div>
-
-          <div className="mt-2 flex justify-between font-mono text-[0.55rem] uppercase tracking-[0.1em] text-white/45">
-            <span>New</span>
-            <span className="text-gold/90">
-              {LIFE_FROM}–{LIFE_TO} yr typical
-            </span>
-            <span>{MAX}+</span>
-          </div>
-        </div>
+        <label htmlFor={id} className="sr-only">
+          System age in years
+        </label>
+        <input
+          id={id}
+          type="range"
+          min={0}
+          max={MAX}
+          step={1}
+          value={years}
+          onChange={(e) => setYears(Number(e.target.value))}
+          aria-valuetext={`${years} years — ${v.label}`}
+          className="range-ghost absolute inset-x-0 -top-3 h-8 w-full cursor-ew-resize"
+        />
       </div>
+
+      <div className="mt-2 flex justify-between font-mono text-[0.5rem] uppercase tracking-[0.08em] text-white/45">
+        <span>New</span>
+        <span className="text-gold/90">
+          {LIFE_FROM}–{LIFE_TO} yr typical here
+        </span>
+        <span>{MAX}+</span>
+      </div>
+
+      <p className="mt-2.5 border-t border-white/12 pt-2.5 text-[0.7rem] leading-snug text-white/58">
+        {v.body}
+      </p>
     </div>
   );
 }
