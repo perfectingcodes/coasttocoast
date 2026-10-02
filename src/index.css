@@ -153,21 +153,26 @@
      a near-black navy: the brand's blue at the top, cooling to a deep — not
      black — blue at the bottom, with an orange ember low and a cyan light
      high. White body copy clears AA at every point on it. */
+  /* The site's one dark ground: the brand blue at the top running into teal
+     and then into a deep teal — the same path the hero takes, so every band
+     on the page belongs to the same palette. Warm light is kept to the bottom
+     corner, where the ramp is dark enough to take it; over mid-teal, orange
+     turns to mud. */
   .band-navy {
     position: relative;
     background:
-      radial-gradient(68% 58% at 82% 6%, rgb(43 217 255 / 0.28) 0%, transparent 62%),
-      radial-gradient(52% 46% at 8% 96%, rgb(255 106 19 / 0.24) 0%, transparent 64%),
-      linear-gradient(162deg, #1668e3 0%, #0f4aae 48%, #0a2c6b 100%);
+      radial-gradient(66% 56% at 84% 4%, rgb(43 217 255 / 0.3) 0%, transparent 64%),
+      radial-gradient(46% 42% at 4% 100%, rgb(255 122 31 / 0.16) 0%, transparent 62%),
+      linear-gradient(162deg, #1670e0 0%, #0e6a93 46%, #09425e 100%);
   }
 
   /* Footer ground: a bright, saturated ocean blue rather than a washed pale
      one — it has to read as the brand's blue, not as a tint. */
   .band-ocean {
     background:
-      radial-gradient(60% 55% at 84% 0%, rgb(43 217 255 / 0.3) 0%, transparent 62%),
-      radial-gradient(50% 45% at 6% 100%, rgb(255 106 19 / 0.16) 0%, transparent 62%),
-      linear-gradient(168deg, #1668e3 0%, #1150bd 48%, #0a2c6b 100%);
+      radial-gradient(60% 55% at 84% 0%, rgb(43 217 255 / 0.34) 0%, transparent 62%),
+      radial-gradient(46% 42% at 4% 100%, rgb(255 122 31 / 0.14) 0%, transparent 62%),
+      linear-gradient(168deg, #1670e0 0%, #0e6a93 48%, #09425e 100%);
   }
 
   /* Oversized kinetic wordmark. Two tracks so the loop is seamless. */
@@ -199,26 +204,23 @@
      to sit — but a blue deep, not a black one. */
   .band-abyss {
     background:
-      radial-gradient(64% 54% at 50% 0%, rgb(22 104 227 / 0.45) 0%, transparent 66%),
-      linear-gradient(180deg, #0b3479 0%, #071f4d 100%);
+      radial-gradient(64% 54% at 50% 0%, rgb(43 217 255 / 0.3) 0%, transparent 66%),
+      linear-gradient(180deg, #0c5476 0%, #072e42 100%);
   }
 
   /* Hero ground: bright electric blue, lit from the top right so the artwork
      sits in the light and the copy sits on the deep end where white type has
      real contrast. The warm bloom in the bottom-left corner is the orange
      accent bleeding into the ground rather than an applied decoration. */
+  /* Hero: the brightest slice of the same ramp. No warm wash in the ground —
+     orange laid over mid-teal is what made this band look muddy. The warmth
+     behind the artwork comes from the sunburst's own gold core instead, where
+     it sits on top rather than mixing in. */
   .band-azure {
     background:
-      /* Warm bloom the artwork sits in. The graphic is drawn in the brand's
-         blues, so it needs a complementary ground or it sinks into the band. */
-      radial-gradient(48% 54% at 78% 52%, rgb(255 122 31 / 0.3) 0%, transparent 64%),
-      /* The teal off the logo's keyline and the map's glow, brought up to the
-         scale of a ground. */
-      radial-gradient(76% 66% at 86% 4%, rgb(43 217 255 / 0.55) 0%, transparent 66%),
-      radial-gradient(64% 50% at 12% 6%, rgb(43 217 255 / 0.26) 0%, transparent 64%),
-      radial-gradient(56% 50% at 0% 100%, rgb(255 106 19 / 0.18) 0%, transparent 66%),
-      /* Blue at the top, through teal, into a deep teal-navy. */
-      linear-gradient(162deg, #1673e6 0%, #0d7d9e 46%, #07445f 100%);
+      radial-gradient(78% 68% at 86% 2%, rgb(43 217 255 / 0.5) 0%, transparent 66%),
+      radial-gradient(62% 48% at 10% 4%, rgb(43 217 255 / 0.2) 0%, transparent 62%),
+      linear-gradient(160deg, #1670e0 0%, #0f7ba4 44%, #0a4a68 100%);
   }
 
   /**
@@ -275,8 +277,8 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.4;
-    mix-blend-mode: overlay;
+    opacity: 0.22;
+    mix-blend-mode: soft-light;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
   }
 

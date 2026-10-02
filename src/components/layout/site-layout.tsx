@@ -18,7 +18,7 @@ export interface Crumb {
  */
 const TONES = {
   default: {
-    wash: "bg-[linear-gradient(105deg,rgb(10_44_107/0.92)_0%,rgb(16_74_174/0.86)_45%,rgb(22_104_227/0.74)_100%)]",
+    wash: "bg-[linear-gradient(105deg,rgb(10_68_94/0.93)_0%,rgb(14_106_147/0.87)_45%,rgb(22_112_224/0.74)_100%)]",
     glow: "bg-cyan/28",
   },
   /** Heating — sunset warmth over the blue. */
@@ -28,7 +28,7 @@ const TONES = {
   },
   /** Cooling — the coldest, most electric treatment on the site. */
   cool: {
-    wash: "bg-[linear-gradient(105deg,rgb(8_48_120/0.93)_0%,rgb(14_84_186/0.86)_45%,rgb(28_128_226/0.72)_100%)]",
+    wash: "bg-[linear-gradient(105deg,rgb(10_78_108/0.93)_0%,rgb(15_123_164/0.87)_45%,rgb(22_118_214/0.74)_100%)]",
     glow: "bg-cyan/45",
   },
   /** Mechanical — desaturated steel. */
@@ -43,12 +43,12 @@ const TONES = {
   },
   /** Commercial — darkest and flattest, least consumer. */
   deep: {
-    wash: "bg-[linear-gradient(105deg,rgb(6_26_62/0.95)_0%,rgb(10_46_106/0.92)_50%,rgb(18_74_152/0.86)_100%)]",
+    wash: "bg-[linear-gradient(105deg,rgb(7_46_66/0.95)_0%,rgb(10_74_104/0.92)_50%,rgb(14_106_147/0.86)_100%)]",
     glow: "bg-blue/38",
   },
   /** Air quality — green-leaning aqua. */
   aqua: {
-    wash: "bg-[linear-gradient(105deg,rgb(6_62_82/0.93)_0%,rgb(10_96_118/0.86)_45%,rgb(12_116_132/0.74)_100%)]",
+    wash: "bg-[linear-gradient(105deg,rgb(5_66_78/0.93)_0%,rgb(9_104_118/0.86)_45%,rgb(12_124_134/0.74)_100%)]",
     glow: "bg-cyan-light/45",
   },
 } as const;
