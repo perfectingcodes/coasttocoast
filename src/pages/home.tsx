@@ -99,6 +99,11 @@ export default function Home() {
 
 /* ------------------------------------------------------------------- hero */
 
+/** Strongest across the middle of the band: gone behind the copy at the top,
+ *  faded again over the tarmac at the very bottom. */
+const HERO_PHOTO_MASK =
+  "linear-gradient(180deg, transparent 6%, rgb(0 0 0 / 0.85) 54%, black 80%, rgb(0 0 0 / 0.45) 100%)";
+
 /**
  * Hero proof points. Every line is a promise the rest of the site already
  * makes — same-day booking, a written price before work starts, and the
@@ -113,6 +118,27 @@ const HERO_PROOF = [
 function Hero() {
   return (
     <section className="band-azure grain grid-lines relative isolate overflow-hidden">
+      {/* A real street, under the band. The hero was a gradient and a drawing;
+          the houses behind it are the ones this company actually works on, and
+          they give the type something with depth to sit on. Masked so it is
+          strongest along the bottom and gone where the copy lives. */}
+      <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+        <picture>
+          <source media="(min-width: 768px)" srcSet="/brand/photo-street.webp" />
+          <img
+            src="/brand/photo-street-760.webp"
+            alt=""
+            width={1800}
+            height={1192}
+            fetchPriority="low"
+            className="size-full object-cover object-[50%_56%] opacity-[0.2] mix-blend-luminosity"
+            style={{
+              maskImage: HERO_PHOTO_MASK,
+              WebkitMaskImage: HERO_PHOTO_MASK,
+            }}
+          />
+        </picture>
+      </div>
       <div className="shell relative grid grid-cols-1 items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:items-start lg:gap-8 lg:pb-10 lg:pt-20">
         <span
           className="pointer-events-none absolute inset-y-24 left-[calc(50%-0.75rem)] hidden w-px bg-gradient-to-b from-transparent via-white/18 to-transparent lg:block"
@@ -312,7 +338,25 @@ function ServicesSection() {
         <div className="mt-12 grid gap-5 lg:grid-cols-3">
           <Reveal className="lg:row-span-2">
             <div className="band-navy grain edge-lit relative flex h-full flex-col overflow-hidden rounded-card p-8">
-              <Pill icon={<Zap className="size-3.5 text-gold" />}>The promise</Pill>
+              {/* The equipment itself, under the panel. Unbranded, which is
+                  the point — this is the work, not an advert. */}
+              <img
+                src="/brand/photo-hvac-unit.webp"
+                srcSet="/brand/photo-hvac-unit-760.webp 760w, /brand/photo-hvac-unit.webp 1280w"
+                sizes="420px"
+                alt=""
+                width={1280}
+                height={853}
+                loading="lazy"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 w-full object-cover opacity-[0.18] mix-blend-luminosity"
+                style={{
+                  maskImage: "linear-gradient(180deg, transparent, black 70%)",
+                  WebkitMaskImage: "linear-gradient(180deg, transparent, black 70%)",
+                }}
+              />
+              <Pill icon={<Zap className="size-3.5 text-gold" />} className="relative">
+                The promise
+              </Pill>
               <h3 className="mt-6 text-3xl leading-[1.05] text-white">
                 Flat price
                 <span className="block text-chill">before we start.</span>

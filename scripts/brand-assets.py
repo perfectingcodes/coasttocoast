@@ -284,6 +284,7 @@ def main():
     print("writing photography...")
     # Hero runs full-bleed, so it needs a large source; the rest sit in panels.
     emit_photo("hero-coast.jpg", [1920, 1200, 760])
+    emit_photo("photo-street.jpg", [1800, 1100, 760])
     emit_photo("photo-condenser.png", [1024, 640])
     emit_photo("photo-hvac-unit.jpg", [1280, 760])
     emit_photo("photo-home.jpg", [1100, 700])
