@@ -163,7 +163,7 @@
     background:
       radial-gradient(66% 56% at 84% 4%, rgb(43 217 255 / 0.3) 0%, transparent 64%),
       radial-gradient(46% 42% at 4% 100%, rgb(255 122 31 / 0.16) 0%, transparent 62%),
-      linear-gradient(162deg, #1670e0 0%, #0e6a93 46%, #09425e 100%);
+      linear-gradient(162deg, #1670e0 0%, #0e7fa8 46%, #0a5b7d 100%);
   }
 
   /* Footer ground: a bright, saturated ocean blue rather than a washed pale
@@ -172,7 +172,7 @@
     background:
       radial-gradient(60% 55% at 84% 0%, rgb(43 217 255 / 0.34) 0%, transparent 62%),
       radial-gradient(46% 42% at 4% 100%, rgb(255 122 31 / 0.14) 0%, transparent 62%),
-      linear-gradient(168deg, #1670e0 0%, #0e6a93 48%, #09425e 100%);
+      linear-gradient(168deg, #1670e0 0%, #0e7fa8 48%, #0a5b7d 100%);
   }
 
   /* Oversized kinetic wordmark. Two tracks so the loop is seamless. */
@@ -205,7 +205,7 @@
   .band-abyss {
     background:
       radial-gradient(64% 54% at 50% 0%, rgb(43 217 255 / 0.3) 0%, transparent 66%),
-      linear-gradient(180deg, #0c5476 0%, #072e42 100%);
+      linear-gradient(180deg, #0b6a92 0%, #08455f 100%);
   }
 
   /* Hero ground: bright electric blue, lit from the top right so the artwork
@@ -216,11 +216,15 @@
      orange laid over mid-teal is what made this band look muddy. The warmth
      behind the artwork comes from the sunburst's own gold core instead, where
      it sits on top rather than mixing in. */
+  /* Hero: the brightest, most saturated slice of the ramp, and no photograph
+     behind it — chroma is what makes this read as teal rather than as grey,
+     and anything blended over the whole band pulls it toward mud. The copy
+     column gets its own deeper scrim in the same hue, in home.tsx. */
   .band-azure {
     background:
-      radial-gradient(78% 68% at 86% 2%, rgb(43 217 255 / 0.5) 0%, transparent 66%),
-      radial-gradient(62% 48% at 10% 4%, rgb(43 217 255 / 0.2) 0%, transparent 62%),
-      linear-gradient(160deg, #1670e0 0%, #0f7ba4 44%, #0a4a68 100%);
+      radial-gradient(70% 60% at 88% 0%, rgb(94 232 255 / 0.45) 0%, transparent 62%),
+      radial-gradient(56% 46% at 6% 0%, rgb(43 217 255 / 0.2) 0%, transparent 60%),
+      linear-gradient(158deg, #1d8ae8 0%, #0fa5cf 44%, #0b7ba4 100%);
   }
 
   /**

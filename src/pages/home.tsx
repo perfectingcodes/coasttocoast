@@ -113,37 +113,17 @@ const HERO_PROOF = [
 function Hero() {
   return (
     <section className="band-azure grain grid-lines relative isolate overflow-hidden">
-      {/* A real street under the band — the housing stock this company works
-          on. At a wash it was texture nobody reads as a photograph, so it runs
-          at full strength here and a teal scrim is laid over the top instead:
-          near-solid under the copy, clearing to nothing on the artwork side. */}
-      <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-        <picture>
-          <source media="(min-width: 768px)" srcSet="/brand/photo-street.webp" />
-          <img
-            src="/brand/photo-street-760.webp"
-            alt=""
-            width={1800}
-            height={1192}
-            fetchPriority="low"
-            className="size-full object-cover object-[50%_62%]"
-          />
-        </picture>
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(100deg, rgb(10 70 96 / 0.97) 0%, rgb(11 86 116 / 0.94) 34%, rgb(13 103 136 / 0.84) 62%, rgb(16 118 150 / 0.72) 100%)",
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(180deg, rgb(9 62 88 / 0.82) 0%, transparent 34%, transparent 66%, rgb(8 52 74 / 0.72) 100%)",
-          }}
-        />
-      </div>
+      {/* Only where the copy sits: the same teal, deeper, so white body copy
+          clears AA without the band losing its brightness anywhere else. */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-10"
+        aria-hidden="true"
+        style={{
+          background:
+            "linear-gradient(104deg, rgb(6 86 122 / 0.78) 0%, rgb(7 102 142 / 0.5) 34%, transparent 62%)",
+        }}
+      />
+
       <div className="shell relative grid grid-cols-1 items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:items-start lg:gap-8 lg:pb-10 lg:pt-20">
         <span
           className="pointer-events-none absolute inset-y-24 left-[calc(50%-0.75rem)] hidden w-px bg-gradient-to-b from-transparent via-white/18 to-transparent lg:block"
