@@ -99,11 +99,6 @@ export default function Home() {
 
 /* ------------------------------------------------------------------- hero */
 
-/** Strongest across the middle of the band: gone behind the copy at the top,
- *  faded again over the tarmac at the very bottom. */
-const HERO_PHOTO_MASK =
-  "linear-gradient(180deg, transparent 6%, rgb(0 0 0 / 0.85) 54%, black 80%, rgb(0 0 0 / 0.45) 100%)";
-
 /**
  * Hero proof points. Every line is a promise the rest of the site already
  * makes — same-day booking, a written price before work starts, and the
@@ -118,10 +113,10 @@ const HERO_PROOF = [
 function Hero() {
   return (
     <section className="band-azure grain grid-lines relative isolate overflow-hidden">
-      {/* A real street, under the band. The hero was a gradient and a drawing;
-          the houses behind it are the ones this company actually works on, and
-          they give the type something with depth to sit on. Masked so it is
-          strongest along the bottom and gone where the copy lives. */}
+      {/* A real street under the band — the housing stock this company works
+          on. At a wash it was texture nobody reads as a photograph, so it runs
+          at full strength here and a teal scrim is laid over the top instead:
+          near-solid under the copy, clearing to nothing on the artwork side. */}
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
         <picture>
           <source media="(min-width: 768px)" srcSet="/brand/photo-street.webp" />
@@ -131,13 +126,23 @@ function Hero() {
             width={1800}
             height={1192}
             fetchPriority="low"
-            className="size-full object-cover object-[50%_56%] opacity-[0.2] mix-blend-luminosity"
-            style={{
-              maskImage: HERO_PHOTO_MASK,
-              WebkitMaskImage: HERO_PHOTO_MASK,
-            }}
+            className="size-full object-cover object-[50%_62%]"
           />
         </picture>
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(100deg, rgb(10 70 96 / 0.97) 0%, rgb(11 86 116 / 0.94) 34%, rgb(13 103 136 / 0.84) 62%, rgb(16 118 150 / 0.72) 100%)",
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgb(9 62 88 / 0.82) 0%, transparent 34%, transparent 66%, rgb(8 52 74 / 0.72) 100%)",
+          }}
+        />
       </div>
       <div className="shell relative grid grid-cols-1 items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:items-start lg:gap-8 lg:pb-10 lg:pt-20">
         <span
@@ -338,22 +343,6 @@ function ServicesSection() {
         <div className="mt-12 grid gap-5 lg:grid-cols-3">
           <Reveal className="lg:row-span-2">
             <div className="band-navy grain edge-lit relative flex h-full flex-col overflow-hidden rounded-card p-8">
-              {/* The equipment itself, under the panel. Unbranded, which is
-                  the point — this is the work, not an advert. */}
-              <img
-                src="/brand/photo-hvac-unit.webp"
-                srcSet="/brand/photo-hvac-unit-760.webp 760w, /brand/photo-hvac-unit.webp 1280w"
-                sizes="420px"
-                alt=""
-                width={1280}
-                height={853}
-                loading="lazy"
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 w-full object-cover opacity-[0.18] mix-blend-luminosity"
-                style={{
-                  maskImage: "linear-gradient(180deg, transparent, black 70%)",
-                  WebkitMaskImage: "linear-gradient(180deg, transparent, black 70%)",
-                }}
-              />
               <Pill icon={<Zap className="size-3.5 text-gold" />} className="relative">
                 The promise
               </Pill>
@@ -378,7 +367,24 @@ function ServicesSection() {
                   </li>
                 ))}
               </ul>
-              <div className="relative z-10 mt-auto pt-8">
+              {/* The equipment, at full strength and cropped to a band — a
+                  photograph the reader can actually see rather than a texture
+                  behind the type. Unbranded, which is the point: this is the
+                  work, not an advert. */}
+              <div className="relative z-10 mt-8 overflow-hidden rounded-xl ring-1 ring-white/15">
+                <img
+                  src="/brand/photo-hvac-unit.webp"
+                  srcSet="/brand/photo-hvac-unit-760.webp 760w, /brand/photo-hvac-unit.webp 1280w"
+                  sizes="(min-width: 1280px) 340px, 90vw"
+                  alt="An outdoor condenser installed beside a Southwest Florida home"
+                  width={1280}
+                  height={853}
+                  loading="lazy"
+                  className="h-28 w-full object-cover object-[50%_58%] xl:h-32"
+                />
+              </div>
+
+              <div className="relative z-10 mt-6">
                 <ButtonLink href={business.phoneHref} variant="onDark">
                   <Phone className="size-4" aria-hidden="true" />
                   {business.phone}
@@ -803,6 +809,17 @@ function WhyUsSection() {
               height={1375}
               loading="lazy"
               className="aspect-[5/4] w-full rounded-card object-cover object-[50%_64%] shadow-[0_30px_60px_-20px_rgb(3_12_32/0.9)] ring-1 ring-white/15"
+            />
+
+            <img
+              src="/brand/photo-street-1100.webp"
+              srcSet="/brand/photo-street-760.webp 760w, /brand/photo-street-1100.webp 1100w"
+              sizes="(min-width: 1024px) 240px, 46vw"
+              alt="A residential street in the Southwest Florida service area"
+              width={1100}
+              height={728}
+              loading="lazy"
+              className="absolute -bottom-7 -right-5 aspect-[4/3] w-[46%] rounded-card object-cover object-[50%_58%] shadow-[0_26px_50px_-18px_rgb(3_12_32/0.95)] ring-1 ring-white/20 sm:-right-8"
             />
 
             {/* The licence, stated on the picture rather than under it. */}

@@ -1,14 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { ArrowUpRight, MapPin, Phone } from "lucide-react";
-import {
-  business,
-  countyList,
-  locations,
-  milesFromShop,
-  serviceRadiusMiles,
-  type Location,
-} from "@/content/site";
+import { business, countyList, locations, type Location } from "@/content/site";
 import { saltNote } from "@/content/local";
 import { Pill, SectionEyebrow } from "@/components/brand";
 import { ButtonLink } from "@/components/ui/button";
@@ -148,14 +141,6 @@ const COUNTY_LABELS = [
   { lat: 26.15, name: "COLLIER" },
 ] as const;
 
-/** Pixels per statute mile in this projection — a degree of latitude is
- *  69 miles, and the vertical scale is uniform. */
-const PX_PER_MILE = H / LAT_SPAN / 69;
-
-/** Rings that actually fall inside the frame. The service radius is drawn as
- *  a soft reach instead — at 60 miles it is mostly off the edge. */
-const RING_MILES = [20, 40];
-
 function polyline(points: [number, number][]) {
   return points
     .map(([lat, lng], i) => {
@@ -235,11 +220,6 @@ export function ServiceMap() {
                   <stop offset="0%" stopColor="#06304a" />
                   <stop offset="100%" stopColor="#03172b" />
                 </linearGradient>
-                <radialGradient id="map-reach" cx="0.5" cy="0.5" r="0.5">
-                  <stop offset="0%" stopColor="#2bd9ff" stopOpacity="0.16" />
-                  <stop offset="70%" stopColor="#2bd9ff" stopOpacity="0.05" />
-                  <stop offset="100%" stopColor="#2bd9ff" stopOpacity="0" />
-                </radialGradient>
                 <radialGradient id="map-glow" cx="0.5" cy="0.5" r="0.5">
                   <stop offset="0%" stopColor="#2bd9ff" stopOpacity="0.45" />
                   <stop offset="100%" stopColor="#2bd9ff" stopOpacity="0" />
@@ -346,38 +326,6 @@ export function ServiceMap() {
                 strokeOpacity="0.22"
                 strokeWidth="2"
               />
-
-              {/* How far out the trucks go, drawn to scale. Every distance on
-                  this map is measured from the shop, so the rings are the one
-                  piece of furniture that explains the rest of it. They are
-                  labelled in the legend rather than on the map — at this crop
-                  the ring labels landed on the county names. */}
-              {(() => {
-                const c = px(business.lat, business.lng);
-                return (
-                  <g clipPath="url(#map-land-clip-full)">
-                    <circle
-                      cx={c.x}
-                      cy={c.y}
-                      r={serviceRadiusMiles * PX_PER_MILE}
-                      fill="url(#map-reach)"
-                    />
-                    {RING_MILES.map((mi) => (
-                      <circle
-                        key={mi}
-                        cx={c.x}
-                        cy={c.y}
-                        r={mi * PX_PER_MILE}
-                        fill="none"
-                        stroke="#2bd9ff"
-                        strokeOpacity="0.26"
-                        strokeWidth="1.5"
-                        strokeDasharray="5 8"
-                      />
-                    ))}
-                  </g>
-                );
-              })()}
 
               {/* The run from the shop to the city being looked at. Both
                   ends are real coordinates, so the line is the actual bearing
@@ -537,7 +485,6 @@ export function ServiceMap() {
                 { c: "bg-orange ring-2 ring-white/70", label: "Our shop" },
                 { c: "bg-orange", label: "Focus markets" },
                 { c: "bg-cyan", label: "Also covered" },
-                { c: "ring-1 ring-dashed ring-cyan/60", label: `Rings ${RING_MILES.join(" / ")} mi` },
               ].map((k) => (
                 <li
                   key={k.label}
@@ -579,21 +526,10 @@ export function ServiceMap() {
                 </span>
               </div>
 
-              <div className="mt-3 flex flex-wrap items-end justify-between gap-x-5 gap-y-2">
-                <h3 className="poster text-[1.75rem] text-white sm:text-3xl">
-                  {active.city}
-                  <span className="text-cyan">.</span>
-                </h3>
-                <p className="text-right">
-                  <span className="poster text-[1.6rem] leading-none text-orange-light">
-                    {milesFromShop(active)}
-                    <span className="ml-1 font-display text-sm font-bold">mi</span>
-                  </span>
-                  <span className="mt-1 block font-mono text-[0.58rem] uppercase tracking-[0.12em] text-white/50">
-                    From our shop
-                  </span>
-                </p>
-              </div>
+              <h3 className="poster mt-3 text-[1.75rem] text-white sm:text-3xl">
+                {active.city}
+                <span className="text-cyan">.</span>
+              </h3>
 
               <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3.5 border-t border-white/12 pt-4">
                 {[
@@ -653,10 +589,9 @@ export function ServiceMap() {
             </ul>
 
             <p className="mt-5 text-[0.7rem] leading-relaxed text-white/52">
-              Cities, coastline and the {serviceRadiusMiles}-mile rings are
-              plotted from real coordinates, measured straight-line from the
-              shop. The shore is simplified for legibility and the county lines
-              are approximate — it is a coverage map, not a survey.
+              Cities and coastline are plotted from real coordinates. The shore
+              is simplified for legibility and the county lines are approximate
+              — it is a coverage map, not a survey.
             </p>
           </div>
         </div>
