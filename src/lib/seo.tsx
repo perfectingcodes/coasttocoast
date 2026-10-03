@@ -6,6 +6,7 @@ import {
   hasReviewData,
   locations,
   region,
+  serviceRadiusMiles,
   services,
 } from "@/content/site";
 
@@ -135,8 +136,8 @@ export const ID = {
   faq: (path: string) => canonical(path) + "#faq",
 } as const;
 
-/** 50 miles from the Fort Myers office reaches every city we list. */
-const SERVICE_RADIUS_M = 80467;
+/** Derived from the farthest city listed, so it cannot under-declare. */
+const SERVICE_RADIUS_M = Math.round(serviceRadiusMiles * 1609.344);
 
 export function businessNode(): Record<string, unknown> {
   return {

@@ -806,6 +806,32 @@ export const locations: Location[] = [
   },
 ];
 
+/** Great-circle distance in statute miles. */
+export function milesBetween(
+  aLat: number, aLng: number, bLat: number, bLng: number,
+) {
+  const R = 3958.8;
+  const rad = (d: number) => (d * Math.PI) / 180;
+  const dLat = rad(bLat - aLat);
+  const dLng = rad(bLng - aLng);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(rad(aLat)) * Math.cos(rad(bLat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+/** Straight-line distance from the shop to a city, to the nearest mile. */
+export const milesFromShop = (loc: { lat: number; lng: number }) =>
+  Math.round(milesBetween(business.lat, business.lng, loc.lat, loc.lng));
+
+/**
+ * Service radius, rounded up from the farthest city we actually list rather
+ * than written down. The schema declared 50 miles while Venice sits 54 out —
+ * derived, that cannot drift again when a city is added.
+ */
+export const serviceRadiusMiles =
+  Math.ceil(Math.max(...locations.map(milesFromShop)) / 5) * 5 + 5;
+
 export const locationBySlug = (slug: string) =>
   locations.find((l) => l.slug === slug);
 

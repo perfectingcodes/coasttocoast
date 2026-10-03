@@ -1,9 +1,16 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { ArrowUpRight, MapPin, Phone } from "lucide-react";
-import { business, countyList, locations, type Location } from "@/content/site";
+import {
+  business,
+  countyList,
+  locations,
+  milesFromShop,
+  serviceRadiusMiles,
+  type Location,
+} from "@/content/site";
 import { saltNote } from "@/content/local";
-import { Pill, SeasonCard, SectionEyebrow } from "@/components/brand";
+import { Pill, SectionEyebrow } from "@/components/brand";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -141,28 +148,13 @@ const COUNTY_LABELS = [
   { lat: 26.15, name: "COLLIER" },
 ] as const;
 
-/** Great-circle distance in statute miles. */
-function milesBetween(
-  aLat: number, aLng: number, bLat: number, bLng: number,
-) {
-  const R = 3958.8;
-  const rad = (d: number) => (d * Math.PI) / 180;
-  const dLat = rad(bLat - aLat);
-  const dLng = rad(bLng - aLng);
-  const h =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(rad(aLat)) * Math.cos(rad(bLat)) * Math.sin(dLng / 2) ** 2;
-  return 2 * R * Math.asin(Math.sqrt(h));
-}
+/** Pixels per statute mile in this projection — a degree of latitude is
+ *  69 miles, and the vertical scale is uniform. */
+const PX_PER_MILE = H / LAT_SPAN / 69;
 
-/**
- * Straight-line distance from the shop to a city, rounded to the nearest mile.
- * Deliberately not a drive time: the projection is real but the roads are not
- * in it, and quoting a duration we have not measured would be a promise.
- */
-function milesFromShop(loc: Location) {
-  return Math.round(milesBetween(business.lat, business.lng, loc.lat, loc.lng));
-}
+/** Rings that actually fall inside the frame. The service radius is drawn as
+ *  a soft reach instead — at 60 miles it is mostly off the edge. */
+const RING_MILES = [20, 40];
 
 function polyline(points: [number, number][]) {
   return points
@@ -239,6 +231,15 @@ export function ServiceMap() {
                   <stop offset="0%" stopColor="#1d59ad" stopOpacity="0.95" />
                   <stop offset="100%" stopColor="#0d2f6b" stopOpacity="0.95" />
                 </linearGradient>
+                <linearGradient id="map-water" x1="0" y1="0" x2="0.6" y2="1">
+                  <stop offset="0%" stopColor="#06304a" />
+                  <stop offset="100%" stopColor="#03172b" />
+                </linearGradient>
+                <radialGradient id="map-reach" cx="0.5" cy="0.5" r="0.5">
+                  <stop offset="0%" stopColor="#2bd9ff" stopOpacity="0.16" />
+                  <stop offset="70%" stopColor="#2bd9ff" stopOpacity="0.05" />
+                  <stop offset="100%" stopColor="#2bd9ff" stopOpacity="0" />
+                </radialGradient>
                 <radialGradient id="map-glow" cx="0.5" cy="0.5" r="0.5">
                   <stop offset="0%" stopColor="#2bd9ff" stopOpacity="0.45" />
                   <stop offset="100%" stopColor="#2bd9ff" stopOpacity="0" />
@@ -246,8 +247,8 @@ export function ServiceMap() {
               </defs>
 
               {/* Gulf */}
-              <rect width={VIEW_W} height={H} fill="#04102a" rx="18" />
-              <g stroke="#2bd9ff" strokeOpacity="0.13" strokeLinecap="round">
+              <rect width={VIEW_W} height={H} fill="url(#map-water)" rx="18" />
+              <g stroke="#2bd9ff" strokeOpacity="0.12" strokeLinecap="round">
                 {Array.from({ length: 12 }, (_, i) => (
                   <path
                     key={i}
@@ -257,6 +258,10 @@ export function ServiceMap() {
                   />
                 ))}
               </g>
+
+              <clipPath id="map-land-clip-full">
+                <rect width={VIEW_W} height={H} rx="18" />
+              </clipPath>
 
               {/* Land */}
               <clipPath id="map-land-clip">
@@ -341,6 +346,38 @@ export function ServiceMap() {
                 strokeOpacity="0.22"
                 strokeWidth="2"
               />
+
+              {/* How far out the trucks go, drawn to scale. Every distance on
+                  this map is measured from the shop, so the rings are the one
+                  piece of furniture that explains the rest of it. They are
+                  labelled in the legend rather than on the map — at this crop
+                  the ring labels landed on the county names. */}
+              {(() => {
+                const c = px(business.lat, business.lng);
+                return (
+                  <g clipPath="url(#map-land-clip-full)">
+                    <circle
+                      cx={c.x}
+                      cy={c.y}
+                      r={serviceRadiusMiles * PX_PER_MILE}
+                      fill="url(#map-reach)"
+                    />
+                    {RING_MILES.map((mi) => (
+                      <circle
+                        key={mi}
+                        cx={c.x}
+                        cy={c.y}
+                        r={mi * PX_PER_MILE}
+                        fill="none"
+                        stroke="#2bd9ff"
+                        strokeOpacity="0.26"
+                        strokeWidth="1.5"
+                        strokeDasharray="5 8"
+                      />
+                    ))}
+                  </g>
+                );
+              })()}
 
               {/* The run from the shop to the city being looked at. Both
                   ends are real coordinates, so the line is the actual bearing
@@ -437,16 +474,40 @@ export function ServiceMap() {
                     >
                       {/* generous invisible hit area */}
                       <circle cx={x} cy={y} r="26" fill="transparent" />
-                      <circle
-                        cx={x}
-                        cy={y}
-                        r={l.focus ? 11 : 8}
-                        fill={l.focus ? "#ff6a13" : "#2bd9ff"}
-                        stroke="#050f26"
-                        strokeWidth="3"
-                        className="transition-all duration-200"
-                        style={{ transform: isActive ? "scale(1.25)" : undefined, transformOrigin: `${x}px ${y}px` }}
-                      />
+                      {l.focus ? (
+                        /* The teardrop off the hero artwork, so the map and
+                           the graphic above it mark a place the same way. */
+                        <g
+                          className="transition-transform duration-200"
+                          style={{
+                            transform: isActive ? "scale(1.14)" : undefined,
+                            transformOrigin: `${x}px ${y}px`,
+                          }}
+                        >
+                          <path
+                            d={`M${x} ${y + 3} c-7.2 -9 -11 -13.6 -11 -18.4 a11 11 0 0 1 22 0 c0 4.8 -3.8 9.4 -11 18.4 z`}
+                            fill="#ff6a13"
+                            stroke="#04102a"
+                            strokeWidth="2.5"
+                            strokeLinejoin="round"
+                          />
+                          <circle cx={x} cy={y - 15.4} r="4" fill="#04102a" fillOpacity="0.85" />
+                        </g>
+                      ) : (
+                        <circle
+                          cx={x}
+                          cy={y}
+                          r="8"
+                          fill="#2bd9ff"
+                          stroke="#04102a"
+                          strokeWidth="3"
+                          className="transition-all duration-200"
+                          style={{
+                            transform: isActive ? "scale(1.25)" : undefined,
+                            transformOrigin: `${x}px ${y}px`,
+                          }}
+                        />
+                      )}
                       <text
                         x={x + (flip ? -1 : 1) * (l.focus ? 18 : 15)}
                         y={y + 5}
@@ -476,6 +537,7 @@ export function ServiceMap() {
                 { c: "bg-orange ring-2 ring-white/70", label: "Our shop" },
                 { c: "bg-orange", label: "Focus markets" },
                 { c: "bg-cyan", label: "Also covered" },
+                { c: "ring-1 ring-dashed ring-cyan/60", label: `Rings ${RING_MILES.join(" / ")} mi` },
               ].map((k) => (
                 <li
                   key={k.label}
@@ -590,12 +652,11 @@ export function ServiceMap() {
               ))}
             </ul>
 
-            <SeasonCard variant="bar" className="mt-4 w-fit" />
-
-            <p className="mt-3 text-[0.7rem] text-white/52">
-              Cities and coastline are plotted from real coordinates. The shore is
-              simplified for legibility and the county lines are approximate — it
-              is a coverage map, not a survey.
+            <p className="mt-5 text-[0.7rem] leading-relaxed text-white/52">
+              Cities, coastline and the {serviceRadiusMiles}-mile rings are
+              plotted from real coordinates, measured straight-line from the
+              shop. The shore is simplified for legibility and the county lines
+              are approximate — it is a coverage map, not a survey.
             </p>
           </div>
         </div>
