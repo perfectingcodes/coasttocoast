@@ -55,13 +55,13 @@ export function SystemAgeCard({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "glass-instrument edge-lit relative overflow-hidden px-4 py-3",
+        "glass-instrument edge-lit relative overflow-hidden px-3.5 py-3",
         className,
       )}
     >
       <span className="flex items-center gap-2">
         <Gauge className="size-3 shrink-0 text-cyan" aria-hidden="true" />
-        <span className="truncate font-display text-[0.52rem] font-extrabold uppercase tracking-[0.13em] text-white/58">
+        <span className="truncate font-display text-[0.5rem] font-extrabold uppercase tracking-[0.13em] text-white/58">
           How old is your system?
         </span>
       </span>
@@ -69,7 +69,7 @@ export function SystemAgeCard({ className }: { className?: string }) {
       <p className="mt-1.5 flex items-baseline justify-between gap-2">
         <span
           className={cn(
-            "truncate font-display text-[0.88rem] font-extrabold leading-tight",
+            "truncate font-display text-[0.82rem] font-extrabold leading-tight",
             v.tone,
           )}
         >
@@ -80,7 +80,7 @@ export function SystemAgeCard({ className }: { className?: string }) {
         </span>
       </p>
 
-      <div className="relative mt-2.5">
+      <div className="relative mt-2">
         {/* Track, with the 10–15 year band drawn to scale on it. */}
         <div className="h-1.5 w-full rounded-full bg-white/15" aria-hidden="true">
           <div
@@ -105,11 +105,11 @@ export function SystemAgeCard({ className }: { className?: string }) {
           value={years}
           onChange={(e) => setYears(Number(e.target.value))}
           aria-valuetext={`${years} years — ${v.label}`}
-          className="range-ghost absolute inset-x-0 -top-3 h-7 w-full cursor-ew-resize"
+          className="range-ghost absolute inset-x-0 -top-2 h-6 w-full cursor-ew-resize"
         />
       </div>
 
-      <p className="mt-2 flex items-baseline justify-between gap-3 font-mono text-[0.55rem] uppercase tracking-[0.06em]">
+      <p className="mt-1.5 flex items-baseline justify-between gap-3 font-mono text-[0.5rem] uppercase tracking-[0.06em]">
         <span className="truncate text-white/65">{v.body}</span>
         <span className="shrink-0 text-gold/90">
           {LIFE_FROM}–{LIFE_TO} yr typical

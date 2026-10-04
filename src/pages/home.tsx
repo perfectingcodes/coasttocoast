@@ -231,12 +231,6 @@ function Hero() {
             <GoogleSeal className="basis-full sm:basis-auto" />
           </div>
 
-          <div className="mt-8 hidden items-center gap-3 lg:flex" aria-hidden="true">
-            <span className="scroll-rail" />
-            <span className="font-display text-[0.55rem] font-extrabold uppercase tracking-[0.22em] text-white/55">
-              Scroll
-            </span>
-          </div>
         </div>
 
         <div className="relative">
@@ -245,8 +239,8 @@ function Hero() {
               scrolling: what the season is doing to every system in the
               region, and where theirs sits against how long one lasts here. */}
           <div className="relative z-10 mb-3 space-y-3 sm:mb-0">
-            <SeasonScrubber className="sm:w-[86%]" />
-            <SystemAgeCard className="sm:ml-auto sm:w-[66%]" />
+            <SeasonScrubber className="sm:w-[76%]" />
+            <SystemAgeCard className="sm:ml-auto sm:w-[58%]" />
           </div>
 
           <div className="rays-burst relative sm:-mt-4 lg:-mt-10">
@@ -269,12 +263,30 @@ function Hero() {
           {/* Social proof rides on the artwork rather than in the promise
               strip: the strip is what we commit to, this is what other people
               say, and keeping them apart buys the hero a line of height. */}
-          {/* Where the trucks actually leave from. */}
-          <p className="mt-4 hidden text-right font-mono text-[0.62rem] uppercase tracking-[0.14em] text-white/52 lg:block">
+          </div>
+        </div>
+      </div>
+
+      {/* Title block. A drawing is signed along its bottom edge; this band had
+          two loose marks at opposite corners instead — the scroll cue and the
+          shop's coordinates. One rule, three entries. */}
+      <div className="shell relative hidden border-t border-white/20 pb-5 pt-4 lg:block">
+        <div className="flex items-center justify-between gap-8">
+          <span className="flex items-center gap-3" aria-hidden="true">
+            <span className="scroll-rail" />
+            <span className="font-display text-[0.55rem] font-extrabold uppercase tracking-[0.22em] text-white/55">
+              Scroll
+            </span>
+          </span>
+
+          <span className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-white/45">
+            Lic. {business.license} · {business.emergency}
+          </span>
+
+          <span className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-white/45">
             {business.city}, {business.state} · {business.lat.toFixed(4)}° N{" "}
             {Math.abs(business.lng).toFixed(4)}° W
-          </p>
-          </div>
+          </span>
         </div>
       </div>
 
