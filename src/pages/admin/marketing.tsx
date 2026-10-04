@@ -18,7 +18,7 @@ export default function AdminMarketing() {
       title="Marketing plan"
       lead={`${planMeta.version} — drafted ${planMeta.drafted} from the site's own content. Budgets and targets are proposals for ${business.name} to confirm, not commitments.`}
     >
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard
           label="Proposed monthly spend"
           value={`$${proposed.toLocaleString()}`}

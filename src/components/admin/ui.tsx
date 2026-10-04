@@ -48,7 +48,7 @@ export function Panel({
   return (
     <section
       className={cn(
-        "rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgb(15_23_42/0.04)]",
+        "min-w-0 rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgb(15_23_42/0.04)]",
         className,
       )}
     >
@@ -112,7 +112,7 @@ export function Table({
   children: ReactNode;
 }) {
   return (
-    <div className="-mx-5 overflow-x-auto">
+    <div className="-mx-5 overflow-x-auto" data-wide="">
       <table className="w-full min-w-[42rem] border-collapse text-left text-sm">
         <thead>
           <tr className="border-b border-slate-200">

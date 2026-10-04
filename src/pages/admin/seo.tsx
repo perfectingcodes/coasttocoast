@@ -71,7 +71,7 @@ export default function AdminSeo() {
         </div>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Pages published"
           value={report?.pages ?? "—"}
@@ -136,7 +136,7 @@ export default function AdminSeo() {
         )}
       </Panel>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Panel
           title="Structured data"
           subtitle="What every page emits, and what it deliberately does not."

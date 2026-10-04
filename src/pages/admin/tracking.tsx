@@ -11,7 +11,7 @@ export default function AdminTracking() {
       title="Tracking"
       lead="Nothing is measurable yet. No analytics, pixel or call tracking is installed, which means no ad spend can be judged and no conversion rate is known."
     >
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard label="Tools connected" value={`${connected} / ${trackingStack.length}`} tone="bad" />
         <StatCard label="Visitor data collected" value="None" tone="bad" hint="No analytics installed" />
         <StatCard label="Lead destination" value="Email fallback" tone="warn" hint="VITE_QUOTE_ENDPOINT unset" />

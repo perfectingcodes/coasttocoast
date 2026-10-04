@@ -28,7 +28,7 @@ export default function AdminHome() {
       title="Home Base"
       lead={`Everything for ${business.name} in one place — what is live, what is blocked, and what the season calls for next. ${planMeta.version}, ${planMeta.drafted}.`}
     >
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Pages live"
           value={locations.length * services.length + locations.length + services.length + 7}
@@ -58,45 +58,64 @@ export default function AdminHome() {
           {[
             {
               what: "Google Business Profile not claimed",
+              go: "/admin/google",
               why: "The highest-ROI asset in local search. Nothing in the local pack works without it.",
               who: "Client",
             },
             {
               what: "No analytics or conversion tracking installed",
+              go: "/admin/tracking",
               why: "No visitor data is being collected. Ad spend cannot be judged until this exists.",
               who: "Elevate + client",
             },
             {
               what: "Quote form has no destination",
+              go: "/admin/tracking",
               why: "VITE_QUOTE_ENDPOINT is unset, so the form falls back to opening a prefilled email. Leads are not lost but are not tracked.",
               who: "Elevate",
             },
             {
               what: "Domain and email unconfirmed",
+              go: "/admin/seo",
               why: "coasttocoastair.com and info@ come from the design comp, not from anything published.",
               who: "Client",
             },
             {
               what: "No verified review figures",
+              go: "/admin/google",
               why: "Site shows a neutral Google link and emits no rating, by design.",
               who: "Client",
             },
           ].map((b) => (
-            <li key={b.what} className="flex gap-3 rounded-lg bg-slate-50 p-3.5">
-              <CircleAlert className="mt-0.5 size-4 shrink-0 text-amber-600" aria-hidden="true" />
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-slate-900">{b.what}</p>
-                <p className="mt-0.5 text-xs leading-relaxed text-slate-600">{b.why}</p>
-              </div>
-              <span className="ml-auto shrink-0 self-start rounded-full bg-white px-2.5 py-0.5 text-[0.7rem] font-semibold text-slate-600 ring-1 ring-slate-300">
-                {b.who}
-              </span>
+            <li key={b.what}>
+              <Link
+                href={b.go}
+                className="group flex gap-3 rounded-lg bg-slate-50 p-3.5 transition-colors hover:bg-slate-100"
+              >
+                <CircleAlert
+                  className="mt-0.5 size-4 shrink-0 text-amber-600"
+                  aria-hidden="true"
+                />
+                <div className="min-w-0">
+                  <p className="flex items-center gap-1.5 text-sm font-semibold text-slate-900">
+                    {b.what}
+                    <ArrowRight
+                      className="size-3.5 shrink-0 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:text-slate-600"
+                      aria-hidden="true"
+                    />
+                  </p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-slate-600">{b.why}</p>
+                </div>
+                <span className="ml-auto shrink-0 self-start rounded-full bg-white px-2.5 py-0.5 text-[0.7rem] font-semibold text-slate-600 ring-1 ring-slate-300">
+                  {b.who}
+                </span>
+              </Link>
             </li>
           ))}
         </ul>
       </Panel>
 
-      <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
         <Panel title="Channel status" subtitle="Where each channel stands today.">
           <Table columns={["Channel", "Status", "Budget", "Owner"]}>
             {channels.map((c) => (
@@ -150,7 +169,7 @@ export default function AdminHome() {
       </div>
 
       <Panel title="Objectives" subtitle="What this plan is trying to achieve.">
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {objectives.map((o) => (
             <div key={o.title} className="rounded-lg border border-slate-200 p-4">
               <p className="font-display text-sm font-bold text-slate-900">{o.title}</p>
@@ -170,7 +189,7 @@ export default function AdminHome() {
         </div>
       </Panel>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
           { href: "/admin/seo", label: "SEO & GEO", body: "Measured audit of the live site", Icon: Gauge },
           { href: "/admin/marketing", label: "Marketing plan", body: "Channels, budget, calendar", Icon: Target },

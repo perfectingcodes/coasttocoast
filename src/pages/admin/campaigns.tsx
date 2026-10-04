@@ -13,7 +13,7 @@ export default function AdminCampaigns() {
       title="Campaigns"
       lead="Planned campaigns across Google, Meta and email. No platform is connected, so there is no performance data here — only the plan."
     >
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard label="Campaigns planned" value={campaigns.length} />
         <StatCard label="Proposed monthly" value={`$${monthly.toLocaleString()}`} />
         <StatCard label="Live campaigns" value={0} tone="warn" hint="Nothing running yet" />

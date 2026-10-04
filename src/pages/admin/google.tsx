@@ -11,7 +11,7 @@ export default function AdminGoogle() {
       title="Google"
       lead="Business Profile, Ads, Local Services and Search Console. For a local contractor the Business Profile matters more than everything else here combined."
     >
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard label="Profile status" value="Unclaimed" tone="bad" hint="Highest priority" />
         <StatCard
           label="Verified reviews"
