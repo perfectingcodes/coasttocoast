@@ -23,15 +23,20 @@ export function AnswerBlock({
     <aside
       data-answer=""
       className={cn(
-        "rounded-card border-l-4 border-cyan bg-foam p-6 md:p-7",
+        "relative overflow-hidden rounded-card bg-foam p-6 ring-1 ring-navy/10 md:p-8",
         className,
       )}
     >
-      <p className="flex items-center gap-2 font-display text-[0.7rem] font-bold uppercase tracking-[0.18em] text-blue">
-        <Sparkles className="size-3.5" aria-hidden="true" />
+      {/* The thermal rule caps it, the way it caps every other panel on the
+          site — this is the passage answer engines quote, so it should look
+          like the most considered thing on the page. */}
+      <div className="thermal-rule absolute inset-x-0 top-0 h-[3px] rounded-none" aria-hidden="true" />
+
+      <p className="flex items-center gap-2.5 font-display text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-navy/55">
+        <Sparkles className="size-3.5 text-ember" aria-hidden="true" />
         {heading}
       </p>
-      <div className="mt-3 text-[1.05rem] leading-relaxed text-navy/85">
+      <div className="mt-3.5 text-[1.05rem] leading-relaxed text-navy/85 md:text-[1.12rem]">
         {children}
       </div>
     </aside>
@@ -40,7 +45,9 @@ export function AnswerBlock({
 
 /**
  * Label/value rows. A real <table> rather than styled divs — it is what
- * extractors parse cleanly, and it reads correctly in a screen reader.
+ * extractors parse cleanly, and it reads correctly in a screen reader — but
+ * set as a spec sheet rather than a zebra-striped default: hairline rows, the
+ * label in display caps, the value in mono.
  */
 export function FactTable({
   caption,
@@ -52,25 +59,25 @@ export function FactTable({
   className?: string;
 }) {
   return (
-    <div className={cn("overflow-hidden rounded-card ring-1 ring-navy/10", className)}>
+    <div className={cn("overflow-hidden rounded-card bg-white ring-1 ring-navy/10", className)}>
       <table className="w-full border-collapse text-left text-sm">
         <caption className="sr-only">{caption}</caption>
         <tbody>
-          {rows.map((r, i) => (
-            <tr
-              key={r.label}
-              className={cn(
-                "align-top",
-                i % 2 === 0 ? "bg-white" : "bg-foam",
-              )}
-            >
+          {rows.map((r) => (
+            <tr key={r.label} className="group align-top border-b border-navy/8 last:border-b-0">
               <th
                 scope="row"
-                className="w-2/5 px-5 py-3 font-display text-xs font-bold uppercase tracking-wide text-navy/55 md:w-1/3"
+                className="relative w-2/5 py-3.5 pl-6 pr-4 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-navy/50 md:w-[34%]"
               >
+                <span
+                  className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full bg-ember/0 transition-colors duration-300 group-hover:bg-ember"
+                  aria-hidden="true"
+                />
                 {r.label}
               </th>
-              <td className="px-5 py-3 text-navy/85">{r.value}</td>
+              <td className="py-3.5 pr-6 font-mono text-[0.82rem] leading-relaxed text-navy/85">
+                {r.value}
+              </td>
             </tr>
           ))}
         </tbody>
