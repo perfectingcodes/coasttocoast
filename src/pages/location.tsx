@@ -58,6 +58,7 @@ export default function LocationPage({ slug }: { slug: string }) {
         title={`HVAC services in ${loc.city}`}
         lead={loc.intro}
         crumbs={crumbs}
+        mark={<MapPin className="size-[24rem] xl:size-[28rem]" strokeWidth={1} />}
         hero={
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <ButtonLink href={business.phoneHref} variant="onDark">

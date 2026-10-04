@@ -66,6 +66,7 @@ export function SiteLayout({
   crumbs,
   hero,
   aside,
+  mark,
   tone = "default",
   children,
 }: {
@@ -77,6 +78,9 @@ export function SiteLayout({
   hero?: ReactNode;
   /** Panel beside the hero copy; splits the hero into two columns. */
   aside?: ReactNode;
+  /** An outsized mark washed into the band — the page's own icon, so one
+   *  shared hero still looks different on each of the 76 pages that use it. */
+  mark?: ReactNode;
   tone?: HeroTone;
   children: ReactNode;
 }) {
@@ -86,6 +90,28 @@ export function SiteLayout({
 
       <div className="band-navy grain grid-lines relative isolate overflow-hidden">
         <HeroBackdrop tone={tone} />
+
+        {/* The page's own mark, oversized and washed back. It costs nothing,
+            and it is the difference between 76 pages sharing a hero and 76
+            pages looking like the same page. */}
+        {mark && (
+          <div
+            className="pointer-events-none absolute -bottom-24 -right-16 hidden text-white/[0.09] lg:block xl:-right-8"
+            aria-hidden="true"
+          >
+            {mark}
+          </div>
+        )}
+
+        {/* Registration marks, the way a plate is positioned on a press sheet. */}
+        <span
+          className="pointer-events-none absolute left-6 top-6 hidden size-7 border-l border-t border-cyan/30 lg:block"
+          aria-hidden="true"
+        />
+        <span
+          className="pointer-events-none absolute right-6 top-6 hidden size-7 border-r border-t border-cyan/30 lg:block"
+          aria-hidden="true"
+        />
 
         <div className="shell relative pb-20 pt-10 md:pb-24 md:pt-14 lg:pt-20">
           {crumbs && crumbs.length > 0 && (
@@ -126,7 +152,7 @@ export function SiteLayout({
               </h1>
               {lead && (
                 <>
-                  <div className="thermal-rule mt-6 w-24" aria-hidden="true" />
+                  <div className="thermal-rule mt-6 w-28" aria-hidden="true" />
                   <p className="mt-5 max-w-2xl leading-relaxed text-white/80 md:text-lg">
                     {lead}
                   </p>
