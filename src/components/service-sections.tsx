@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Link } from "wouter";
 import { ArrowRight, Check, Phone, ShieldCheck } from "lucide-react";
 import { business, cleanAndTune, locations, type Service } from "@/content/site";
@@ -82,7 +83,106 @@ export function SeasonalBody({ service, answer }: BodyProps) {
   );
 }
 
+/**
+ * Numbered section heading, the running spine the home page and the city
+ * pages both use. Shared here so the service bodies stop inventing their own.
+ */
+export function ServiceHead({
+  index,
+  children,
+}: {
+  index: number;
+  children: ReactNode;
+}) {
+  return (
+    <div className="mt-12 first:mt-0">
+      <p className="flex items-center gap-3 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-navy/45">
+        <span className="tabular-nums text-ember">
+          {String(index).padStart(2, "0")}
+        </span>
+        <span className="h-px w-7 bg-ember/60" aria-hidden="true" />
+      </p>
+      <h2 className="poster mt-3 text-[clamp(1.4rem,2.4vw,1.85rem)]">{children}</h2>
+    </div>
+  );
+}
+
 /* ------------------------------------------------------ cooling: lifespan */
+
+/**
+ * The life of a system in this climate, drawn to scale.
+ *
+ * This page is about why equipment here lasts 10–15 years instead of twenty,
+ * and that number was buried in a stat line. It is the page's subject, so it
+ * gets to be the page's picture: a twenty-year scale with the typical range
+ * marked on it and the phases named. Same figure the home page's readout
+ * uses, from the same place in the content.
+ */
+function LifespanScale({ from, to, max = 20 }: { from: number; to: number; max?: number }) {
+  const phases = [
+    { at: 0, label: "Install", note: "Commissioned and balanced" },
+    { at: 3, label: "Maintenance years", note: "Twice-yearly service" },
+    { at: from, label: "Typical range ends", note: "Where systems here land" },
+    { at: to + 2, label: "Past the range", note: "Second opinion territory" },
+  ];
+  const pct = (y: number) => (y / max) * 100;
+
+  return (
+    <figure className="band-navy grain edge-lit relative overflow-hidden rounded-card p-7 text-white md:p-9">
+      <figcaption className="font-display text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+        The life of a system here
+      </figcaption>
+      <p className="poster mt-3 text-[clamp(1.6rem,3vw,2.2rem)]">
+        {from}–{to} years
+        <span className="ml-3 align-middle font-display text-sm font-bold text-white/55">
+          not twenty
+        </span>
+      </p>
+
+      <div className="relative mt-9">
+        <div className="h-2.5 w-full rounded-full bg-white/15" aria-hidden="true">
+          <div
+            className="absolute top-0 h-2.5 rounded-full bg-gradient-to-r from-cyan to-cyan-light"
+            style={{ width: `${pct(from)}%` }}
+          />
+          <div
+            className="absolute top-0 h-2.5 rounded-full bg-gradient-to-r from-gold to-orange"
+            style={{ left: `${pct(from)}%`, width: `${pct(to) - pct(from)}%` }}
+          />
+        </div>
+
+        {/* Year ticks, so the band is read as a measurement. */}
+        <div className="relative mt-2 h-4" aria-hidden="true">
+          {[0, 5, 10, 15, 20].map((y) => (
+            <span
+              key={y}
+              className="absolute top-0 -translate-x-1/2 text-center"
+              style={{ left: `${pct(y)}%` }}
+            >
+              <span className="mx-auto block h-1.5 w-px bg-white/30" />
+              <span className="mt-1 block font-mono text-[0.6rem] text-white/50">{y}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <ol className="mt-7 grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-4">
+        {phases.map((ph, i) => (
+          <li key={ph.label} className="border-t border-white/15 pt-3.5">
+            <p className="font-mono text-[0.62rem] tabular-nums text-cyan">
+              {ph.at === 0 ? "YR 0" : `YR ${ph.at}+`}
+            </p>
+            <p className="mt-1.5 font-display text-[0.92rem] font-extrabold leading-tight text-white">
+              {ph.label}
+            </p>
+            <p className="mt-1 text-[0.78rem] leading-snug text-white/65">{ph.note}</p>
+            <span className="sr-only">Phase {i + 1}</span>
+          </li>
+        ))}
+      </ol>
+    </figure>
+  );
+}
 
 export function LifespanBody({ service, answer }: BodyProps) {
   if (service.detail.kind !== "lifespan") return null;
@@ -90,54 +190,72 @@ export function LifespanBody({ service, answer }: BodyProps) {
 
   return (
     <>
-      {/* Stats live in the hero on this page. */}
-      <section className="shell grid items-start gap-12 py-14 md:py-18 lg:grid-cols-[1.15fr_0.85fr]">
-        <div>
-          <AnswerBlock>{answer}</AnswerBlock>
-          <h2 className="mt-10 text-2xl">{d.heading}</h2>
-          <p className="mt-4 leading-relaxed text-navy/80 md:text-lg">{d.lead}</p>
-          <p className="mt-4 leading-relaxed text-navy/75">{service.intro}</p>
+      <section className="shell py-14 md:py-18">
+        <div className="grid items-start gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
+          <div className="min-w-0">
+            <AnswerBlock>{answer}</AnswerBlock>
 
-          <h3 className="mt-10 font-display text-lg font-extrabold">
-            What is included
-          </h3>
-          <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
-            {service.bullets.map((b) => (
-              <li key={b} className="flex items-start gap-2.5">
-                <Check className="mt-1 size-4 shrink-0 text-cyan" aria-hidden="true" />
-                <span className="text-sm leading-relaxed text-navy/75">{b}</span>
-              </li>
-            ))}
-          </ul>
+            <ServiceHead index={1}>{d.heading}</ServiceHead>
+            <p className="mt-5 leading-relaxed text-navy/80 md:text-lg">{d.lead}</p>
+            <p className="mt-4 leading-relaxed text-navy/75">{service.intro}</p>
+
+            <ServiceHead index={2}>What is included</ServiceHead>
+            <ul className="mt-6 grid gap-x-8 sm:grid-cols-2">
+              {service.bullets.map((b, i) => (
+                <li
+                  key={b}
+                  className="flex items-start gap-3 border-t border-navy/10 py-3.5 first:border-t-0 sm:[&:nth-child(2)]:border-t-0"
+                >
+                  <span className="mt-0.5 font-mono text-[0.7rem] font-semibold tabular-nums text-ember">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-[0.95rem] leading-relaxed text-navy/80">{b}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Symptom checklist rather than a form — the form comes later. */}
+          <aside className="card overflow-hidden lg:sticky lg:top-28">
+            <div className="thermal-rule h-[3px] rounded-none" aria-hidden="true" />
+            <div className="px-6 pb-2 pt-6">
+              <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-ember">
+                Check for these
+              </p>
+              <h2 className="poster mt-2.5 text-xl">{d.signsHeading}</h2>
+            </div>
+            <ul className="mt-3">
+              {d.signs.map((sign, i) => (
+                <li
+                  key={sign}
+                  className="flex items-start gap-3 border-t border-navy/8 px-6 py-3"
+                >
+                  <span className="mt-0.5 font-mono text-[0.65rem] tabular-nums text-ember/80">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-[0.88rem] leading-relaxed text-navy/80">
+                    {sign}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="border-t border-navy/8 bg-foam/70 p-6">
+              <p className="text-sm leading-relaxed text-navy/68">
+                Any of these means the system is telling you something. A
+                diagnostic gives you a flat price before anything is opened.
+              </p>
+              <ButtonLink href={business.phoneHref} className="mt-4 w-full">
+                <Phone className="size-4" aria-hidden="true" />
+                {business.phone}
+              </ButtonLink>
+            </div>
+          </aside>
         </div>
 
-        {/* Symptom checklist rather than a form — the form comes later. */}
-        <aside className="card overflow-hidden lg:sticky lg:top-28">
-          <div className="band-sunset px-6 py-5">
-            <h2 className="text-lg text-white">{d.signsHeading}</h2>
-          </div>
-          <ul className="divide-y divide-navy/8">
-            {d.signs.map((sign) => (
-              <li key={sign} className="flex items-start gap-3 px-6 py-3.5">
-                <span
-                  className="mt-1.5 size-2 shrink-0 rounded-full bg-orange"
-                  aria-hidden="true"
-                />
-                <span className="text-sm leading-relaxed text-navy/80">{sign}</span>
-              </li>
-            ))}
-          </ul>
-          <div className="border-t border-navy/8 p-6">
-            <p className="text-sm text-navy/65">
-              Any of these means the system is telling you something. A
-              diagnostic gives you a flat price before anything is opened.
-            </p>
-            <ButtonLink href={business.phoneHref} className="mt-4 w-full">
-              <Phone className="size-4" aria-hidden="true" />
-              {business.phone}
-            </ButtonLink>
-          </div>
-        </aside>
+        {/* The page's own number, at the size the page's argument deserves. */}
+        <div className="mt-16">
+          <LifespanScale from={10} to={15} />
+        </div>
       </section>
 
       <section className="bg-foam py-14 md:py-18">
