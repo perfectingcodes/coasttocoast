@@ -78,8 +78,8 @@ export function SiteLayout({
   hero?: ReactNode;
   /** Panel beside the hero copy; splits the hero into two columns. */
   aside?: ReactNode;
-  /** An outsized mark washed into the band — the page's own icon, so one
-   *  shared hero still looks different on each of the 76 pages that use it. */
+  /** The page's own icon, set in a chip beside the eyebrow — one shared hero
+   *  that still identifies itself on each of the 76 pages using it. */
   mark?: ReactNode;
   tone?: HeroTone;
   children: ReactNode;
@@ -91,25 +91,15 @@ export function SiteLayout({
       <div className="band-navy grain grid-lines relative isolate overflow-hidden">
         <HeroBackdrop tone={tone} />
 
-        {/* The page's own mark, oversized and washed back. It costs nothing,
-            and it is the difference between 76 pages sharing a hero and 76
-            pages looking like the same page. */}
-        {mark && (
-          <div
-            className="pointer-events-none absolute -bottom-24 -right-16 hidden text-white/[0.09] lg:block xl:-right-8"
-            aria-hidden="true"
-          >
-            {mark}
-          </div>
-        )}
 
-        {/* Registration marks, the way a plate is positioned on a press sheet. */}
+        {/* Registration marks, the way a plate is positioned on a press sheet.
+            Along the bottom — the overhanging logo cuts through the top. */}
         <span
-          className="pointer-events-none absolute left-6 top-6 hidden size-7 border-l border-t border-cyan/30 lg:block"
+          className="pointer-events-none absolute bottom-20 left-6 hidden size-7 border-b border-l border-cyan/30 lg:block"
           aria-hidden="true"
         />
         <span
-          className="pointer-events-none absolute right-6 top-6 hidden size-7 border-r border-t border-cyan/30 lg:block"
+          className="pointer-events-none absolute bottom-20 right-6 hidden size-7 border-b border-r border-cyan/30 lg:block"
           aria-hidden="true"
         />
 
@@ -142,8 +132,16 @@ export function SiteLayout({
             )}
           >
             <div className={cn(!aside && "max-w-3xl")}>
-              {eyebrow && (
-                <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.24em] text-cyan md:text-xs">
+              {(eyebrow || mark) && (
+                <p className="flex items-center gap-3 font-display text-[0.7rem] font-bold uppercase tracking-[0.24em] text-cyan md:text-xs">
+                  {mark && (
+                    <span
+                      className="grid size-9 shrink-0 place-items-center rounded-xl bg-white/12 text-cyan ring-1 ring-inset ring-white/25"
+                      aria-hidden="true"
+                    >
+                      {mark}
+                    </span>
+                  )}
                   {eyebrow}
                 </p>
               )}

@@ -88,7 +88,7 @@ export default function ServicePage({ slug }: { slug: string }) {
         crumbs={crumbs}
         tone={toneFor(kind)}
         aside={<ServiceHeroAside service={service} />}
-        mark={<Icon name={service.icon} className="size-[26rem] xl:size-[30rem]" />}
+        mark={<Icon name={service.icon} className="size-4" />}
         hero={
           <>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">

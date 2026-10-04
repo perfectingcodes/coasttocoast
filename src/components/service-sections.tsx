@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "wouter";
 import { ArrowRight, Check, Phone, ShieldCheck } from "lucide-react";
 import { business, cleanAndTune, locations, type Service } from "@/content/site";
-import { GoogleBadge } from "@/components/google-reviews";
+import { GoogleSeal } from "@/components/google-reviews";
 import type { HeroTone } from "@/components/layout/site-layout";
 import { AnswerBlock, FactTable } from "@/components/answer";
 import { QuoteForm } from "@/components/quote-form";
@@ -639,7 +639,11 @@ export function toneFor(kind: Service["detail"]["kind"]): HeroTone {
 }
 
 const panel =
-  "rounded-card border border-white/15 bg-white/8 p-6 backdrop-blur-sm";
+  "relative overflow-hidden rounded-card border border-white/20 " +
+  "bg-[linear-gradient(165deg,rgb(4_30_52/0.5),rgb(4_22_44/0.38))] p-6 pt-7 " +
+  "shadow-[0_24px_50px_-24px_rgb(3_14_34/0.9)] backdrop-blur-md " +
+  "before:absolute before:inset-x-0 before:top-0 before:h-[3px] " +
+  "before:bg-[linear-gradient(90deg,var(--color-ember),var(--color-orange),var(--color-gold),var(--color-cyan),var(--color-blue))]";
 
 /**
  * The panel beside the hero copy. Each service puts something different here —
@@ -778,12 +782,25 @@ export function ServiceHeroAside({ service }: { service: Service }) {
 
 /** Trust row under the hero buttons — same on every service page. */
 export function HeroTrust() {
+  const items = [
+    `Licensed #${business.license}`,
+    "Flat-rate pricing",
+    business.emergency,
+  ];
   return (
-    <div className="mt-6 flex flex-wrap items-center gap-3">
-      <GoogleBadge onDark />
-      <span className="text-xs text-white/55">
-        Licensed #{business.license} · Flat-rate pricing
-      </span>
+    <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-white/20 pt-5">
+      <GoogleSeal />
+      <span className="hidden h-7 w-px bg-white/25 sm:block" aria-hidden="true" />
+      <ul className="flex flex-wrap items-center gap-x-5 gap-y-1.5">
+        {items.map((t) => (
+          <li
+            key={t}
+            className="font-mono text-[0.62rem] uppercase tracking-[0.12em] text-white/60"
+          >
+            {t}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

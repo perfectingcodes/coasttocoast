@@ -58,7 +58,35 @@ export default function LocationPage({ slug }: { slug: string }) {
         title={`HVAC services in ${loc.city}`}
         lead={loc.intro}
         crumbs={crumbs}
-        mark={<MapPin className="size-[24rem] xl:size-[28rem]" strokeWidth={1} />}
+        mark={<MapPin className="size-4" />}
+        aside={
+          <div className="relative overflow-hidden rounded-card border border-white/20 bg-[linear-gradient(165deg,rgb(4_30_52/0.5),rgb(4_22_44/0.38))] p-6 pt-7 shadow-[0_24px_50px_-24px_rgb(3_14_34/0.9)] backdrop-blur-md">
+            <div className="thermal-rule absolute inset-x-0 top-0 h-[3px] rounded-none" aria-hidden="true" />
+            <p className="font-display text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+              {loc.city} at a glance
+            </p>
+            <dl className="mt-5">
+              {[
+                ["County", loc.county],
+                ["ZIP codes", loc.zips.slice(0, 5).join(", ")],
+                ["Permits", loc.permitAuthority],
+                ["Coastal exposure", salt.short],
+              ].map(([k, v]) => (
+                <div
+                  key={k}
+                  className="flex flex-col gap-0.5 border-t border-white/12 py-2.5 first:border-t-0 first:pt-0 sm:flex-row sm:items-baseline sm:gap-4"
+                >
+                  <dt className="font-display text-[0.55rem] font-extrabold uppercase tracking-[0.16em] text-white/50 sm:w-[7.5rem] sm:shrink-0">
+                    {k}
+                  </dt>
+                  <dd className="font-mono text-[0.78rem] leading-relaxed text-white/85">
+                    {v}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        }
         hero={
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <ButtonLink href={business.phoneHref} variant="onDark">
