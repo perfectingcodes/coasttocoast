@@ -58,6 +58,10 @@ const docs: Record<Slug, { title: string; sections: { h: string; p: string }[] }
   },
 };
 
+/** Stable anchor from a clause heading. */
+const clauseId = (h: string) =>
+  h.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
 export default function LegalPage({ slug }: { slug: Slug }) {
   const doc = docs[slug];
   const updated = "September 2026";
@@ -81,20 +85,56 @@ export default function LegalPage({ slug }: { slug: Slug }) {
         ]}
       >
         <Section>
-          <div className="max-w-3xl space-y-10">
-            {doc.sections.map((s) => (
-              <div key={s.h}>
-                <h2 className="text-2xl">{s.h}</h2>
-                <p className="mt-3 text-navy/75 leading-relaxed">{s.p}</p>
-              </div>
-            ))}
-            <p className="text-navy/60">
-              Questions about this page? Email{" "}
-              <a href={`mailto:${business.email}`} className="font-semibold text-blue">
-                {business.email}
-              </a>
-              .
-            </p>
+          <div className="grid items-start gap-10 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-16">
+            <nav
+              aria-label="On this page"
+              className="lg:sticky lg:top-28"
+            >
+              <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-navy/45">
+                On this page
+              </p>
+              <ol className="mt-3 space-y-0.5">
+                {doc.sections.map((sec, i) => (
+                  <li key={sec.h}>
+                    <a
+                      href={`#${clauseId(sec.h)}`}
+                      className="flex min-h-9 items-baseline gap-3 text-sm text-navy/65 transition-colors hover:text-blue"
+                    >
+                      <span className="font-mono text-[0.65rem] tabular-nums text-ember">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      {sec.h}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+
+            <div className="min-w-0 max-w-2xl">
+              {doc.sections.map((sec, i) => (
+                <section
+                  key={sec.h}
+                  id={clauseId(sec.h)}
+                  className="scroll-mt-28 border-t border-navy/10 py-7 first:border-t-0 first:pt-0"
+                >
+                  <p className="font-mono text-[0.65rem] tabular-nums text-ember">
+                    {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <h2 className="mt-2 font-display text-xl font-extrabold text-navy">
+                    {sec.h}
+                  </h2>
+                  <p className="mt-3 leading-relaxed text-navy/75">{sec.p}</p>
+                </section>
+              ))}
+
+              <p className="mt-6 border-t border-navy/10 pt-7 text-navy/60">
+                Questions about this page? Email{" "}
+                <a href={`mailto:${business.email}`} className="font-semibold text-blue">
+                  {business.email}
+                </a>
+                .
+              </p>
+            </div>
           </div>
         </Section>
       </SiteLayout>
