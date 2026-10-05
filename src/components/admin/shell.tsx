@@ -12,7 +12,7 @@ import {
   Target,
   X,
 } from "lucide-react";
-import { business } from "@/content/site";
+import { business, locations } from "@/content/site";
 import { Seo } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -108,7 +108,7 @@ export function AdminShell({
     end ? location === href : location.startsWith(href);
 
   return (
-    <div className="min-h-dvh bg-slate-50 text-slate-900">
+    <div className="min-h-dvh bg-[#eef4fb] text-slate-900">
       <Seo
         title={`${title} · ${business.name} Admin`}
         description={`Internal marketing dashboard for ${business.name}. Not a public page.`}
@@ -120,11 +120,11 @@ export function AdminShell({
         {/* ------------------------------------------------------ sidebar */}
         <aside
           className={cn(
-            "border-r border-slate-200 bg-white lg:sticky lg:top-0 lg:h-dvh",
+            "bg-white lg:sticky lg:top-0 lg:flex lg:h-dvh lg:flex-col",
             open ? "block" : "hidden lg:block",
           )}
         >
-          <div className="flex items-center gap-2.5 border-b border-slate-100 px-5 py-4">
+          <div className="flex items-center gap-2.5 px-5 py-5">
             <img
               src="/brand/logo-badge-sm.webp"
               alt=""
@@ -140,7 +140,7 @@ export function AdminShell({
             </div>
           </div>
 
-          <nav className="p-3" aria-label="Admin">
+          <nav className="min-h-0 flex-1 overflow-y-auto p-3" aria-label="Admin">
             {NAV.map((section, gi) => (
               <div key={section.group} className={cn(gi > 0 && "mt-5")}>
                 <p className="px-3 pb-1.5 font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-slate-400">
@@ -158,18 +158,12 @@ export function AdminShell({
                           className={cn(
                             "group relative flex items-start gap-2.5 rounded-lg px-3 py-2 transition-colors",
                             active
-                              ? "bg-slate-900 text-white"
+                              ? "bg-blue text-white shadow-[0_10px_22px_-10px_rgb(22_112_224/0.9)]"
                               : "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
                           )}
                         >
                           {/* Ember tick on the active item, the site's own
                               mark for "you are here". */}
-                          {active && (
-                            <span
-                              className="absolute -left-px top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-ember"
-                              aria-hidden="true"
-                            />
-                          )}
                           <Icon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
                           <span className="min-w-0 leading-tight">
                             <span className="block text-sm font-medium">{label}</span>
@@ -190,16 +184,17 @@ export function AdminShell({
               </div>
             ))}
 
-            <div className="mt-5 border-t border-slate-100 pt-4">
-              <Link
-                href="/"
-                className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100"
-              >
-                <ExternalLink className="size-4 shrink-0" aria-hidden="true" />
-                View live site
-              </Link>
-            </div>
           </nav>
+
+          <div className="border-t border-slate-100 p-3">
+            <Link
+              href="/"
+              className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100"
+            >
+              <ExternalLink className="size-4 shrink-0" aria-hidden="true" />
+              View live site
+            </Link>
+          </div>
         </aside>
 
         {/* --------------------------------------------------------- main */}
@@ -217,20 +212,24 @@ export function AdminShell({
             <p className="font-display text-sm font-bold">{title}</p>
           </header>
 
-          <div className="thermal-rule h-[3px] rounded-none" aria-hidden="true" />
-
           <main className="mx-auto max-w-6xl px-5 py-7 md:px-8 md:py-9">
             <UnsecuredNotice />
 
-            <div className="mt-6">
-              <h1 className="font-display text-2xl font-extrabold tracking-tight md:text-3xl">
-                {title}
-              </h1>
-              {lead && (
-                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
-                  {lead}
-                </p>
-              )}
+            <div className="mt-6 flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+              <div className="min-w-0">
+                <h1 className="font-display text-2xl font-extrabold tracking-tight md:text-3xl">
+                  {title}
+                </h1>
+                {lead && (
+                  <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">
+                    {lead}
+                  </p>
+                )}
+              </div>
+              <p className="flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 text-[0.7rem] font-semibold text-slate-500 shadow-[0_1px_2px_rgb(10_35_82/0.05)]">
+                <span className="size-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
+                Site live · {locations.length} cities
+              </p>
             </div>
 
             <div className="mt-7 space-y-6">{children}</div>

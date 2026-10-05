@@ -9,7 +9,14 @@ import {
   trackingStack,
 } from "@/content/marketing";
 import { AdminShell } from "@/components/admin/shell";
-import { Panel, StatCard, StatusPill, Table, Td } from "@/components/admin/ui";
+import {
+  FeatureCard,
+  Panel,
+  StatCard,
+  StatusPill,
+  Table,
+  Td,
+} from "@/components/admin/ui";
 
 /** Home Base — the one screen that answers "where does everything stand". */
 export default function AdminHome() {
@@ -33,15 +40,23 @@ export default function AdminHome() {
           label="Pages live"
           value={locations.length * services.length + locations.length + services.length + 7}
           hint="Prerendered static HTML"
+          icon={<Globe className="size-4" />}
         />
-        <StatCard label="Cities covered" value={locations.length} hint={`Across ${counties.length} counties`} />
         <StatCard
+          label="Cities covered"
+          value={locations.length}
+          hint={`Across ${counties.length} counties`}
+          icon={<Target className="size-4" />}
+        />
+        <StatCard
+          icon={<Megaphone className="size-4" />}
           label="Channels blocked"
           value={blocked.length}
           tone={blocked.length ? "warn" : "good"}
           hint="Need client account access"
         />
         <StatCard
+          icon={<Gauge className="size-4" />}
           label="Tracking gaps"
           value={trackingBlocked.length}
           tone={trackingBlocked.length ? "bad" : "good"}
@@ -50,7 +65,8 @@ export default function AdminHome() {
       </div>
 
       {/* The honest headline: nothing paid can start until these land. */}
-      <Panel
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_20rem]">
+        <Panel
         title="Blocking the whole plan"
         subtitle="None of the paid or measurement work can begin until these are resolved. They all need the client, not us."
       >
@@ -113,7 +129,17 @@ export default function AdminHome() {
             </li>
           ))}
         </ul>
-      </Panel>
+        </Panel>
+
+        <FeatureCard
+          className="lg:self-start"
+          eyebrow="Start here"
+          title="Claim the Google Business Profile"
+          body="It is the highest-return item on this list and the one everything else in local search depends on. Nothing in the pack works until it is claimed."
+          action="Open the Google page"
+          href="/admin/google"
+        />
+      </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
         <Panel title="Channel status" subtitle="Where each channel stands today.">
