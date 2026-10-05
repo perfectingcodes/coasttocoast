@@ -65,9 +65,10 @@ export function CtaBand({
 
       {mascot && <SurfacingMascot />}
 
-      {/* Water line into the footer. */}
+      {/* Water line into the footer — painted in the footer's first stop, so
+          the join reads as one body of water rather than as a dark band. */}
       <Wave
-        fill="#0e2f6b"
+        fill="#1670e0"
         swell="#2bd9ff"
         height={56}
         className="relative z-10"

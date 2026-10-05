@@ -238,12 +238,9 @@ function Hero() {
               are part of the first screen rather than something found by
               scrolling: what the season is doing to every system in the
               region, and where theirs sits against how long one lasts here. */}
-          <div className="relative z-10 mb-3 space-y-3 sm:mb-0">
-            <SeasonScrubber className="sm:w-[76%]" />
-            <SystemAgeCard className="sm:ml-auto sm:w-[58%]" />
-          </div>
+          <SeasonScrubber className="relative z-10 mb-3 sm:mb-0 sm:w-[76%]" />
 
-          <div className="rays-burst relative sm:-mt-4 lg:-mt-10">
+          <div className="rays-burst relative sm:-mt-4 lg:-mt-8">
           {/* Warm core the rays radiate from, sitting under the artwork. */}
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange/35 blur-[80px]"
@@ -260,10 +257,11 @@ function Hero() {
             className="mx-auto w-full max-w-md drop-shadow-[0_28px_56px_rgb(3_18_48/0.55)] xl:max-w-lg"
           />
 
-          {/* Social proof rides on the artwork rather than in the promise
-              strip: the strip is what we commit to, this is what other people
-              say, and keeping them apart buys the hero a line of height. */}
           </div>
+
+          {/* The second reading sits under the graphic rather than stacked on
+              top of it, so the artwork has a card at each end. */}
+          <SystemAgeCard className="relative z-10 mt-3 sm:ml-auto sm:mt-0 sm:w-[58%] lg:-mt-4" />
         </div>
       </div>
 

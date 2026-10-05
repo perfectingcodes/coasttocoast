@@ -1,0 +1,11 @@
+import { chromium } from "playwright";
+const OUT = "/private/tmp/claude-501/-Users-sandin-Projects-coasttocoast/42fded79-d9b6-4a98-98f9-4090dc973bf1/scratchpad/shots";
+const b = await chromium.launch();
+const p = await (await b.newContext({ viewport: { width: Number(process.env.W||1440), height: 900 }, deviceScaleFactor: 2 })).newPage();
+await p.goto("http://localhost:5173/", { waitUntil: "networkidle" });
+await p.addStyleTag({ content: "*{animation-duration:0s!important;transition-duration:0s!important}html{scroll-behavior:auto!important}" });
+await p.evaluate(async () => { for (let y=0;y<document.body.scrollHeight;y+=400){scrollTo(0,y);await new Promise(r=>setTimeout(r,25));} scrollTo(0,0); });
+await p.waitForTimeout(700);
+await p.screenshot({ path: `${OUT}/${process.env.NAME||"hh"}.png` });
+console.log(JSON.stringify(await p.evaluate(() => ({ hero: Math.round(document.querySelector("section").getBoundingClientRect().height) }))));
+await b.close();
