@@ -509,7 +509,7 @@ export function SymptomsBody({ service, answer }: BodyProps) {
       {/* A genuine three-column diagnostic table — the centrepiece of the
           page, and a shape used nowhere else on the site. */}
       <section className="shell pb-14 md:pb-18">
-        <div className="overflow-x-auto rounded-card ring-1 ring-navy/10">
+        <div className="overflow-x-auto rounded-card ring-1 ring-navy/10" data-wide="">
           <table className="w-full min-w-[46rem] border-collapse text-left text-sm">
             <caption className="sr-only">
               Indoor air quality symptoms, likely causes and the corresponding fix
@@ -645,6 +645,32 @@ const panel =
   "before:absolute before:inset-x-0 before:top-0 before:h-[3px] " +
   "before:bg-[linear-gradient(90deg,var(--color-ember),var(--color-orange),var(--color-gold),var(--color-cyan),var(--color-blue))]";
 
+/** Numbered rows on hairlines — the aside equivalent of the spec sheets used
+ *  everywhere else, so the six panels read as one system. */
+function AsideRows({
+  items,
+  tone = "text-cyan",
+}: {
+  items: string[];
+  tone?: string;
+}) {
+  return (
+    <ol className="mt-4">
+      {items.map((t, i) => (
+        <li
+          key={t}
+          className="flex items-start gap-3 border-t border-white/12 py-2.5 first:border-t-0 first:pt-0"
+        >
+          <span className={cn("mt-px font-mono text-[0.62rem] tabular-nums", tone)}>
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <span className="text-[0.82rem] leading-snug text-white/80">{t}</span>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 /**
  * The panel beside the hero copy. Each service puts something different here —
  * the stats, the licences, the price, the property types — so the heroes are
@@ -659,11 +685,21 @@ export function ServiceHeroAside({ service }: { service: Service }) {
         <p className="font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
           Cooling in this climate
         </p>
-        <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-5">
-          {d.stats.map((st) => (
-            <div key={st.label}>
-              <dt className="display text-3xl text-white">{st.value}</dt>
-              <dd className="mt-1 text-xs leading-snug text-white/60">
+        <dl className="mt-4 grid grid-cols-2 gap-x-6">
+          {d.stats.map((st, i) => (
+            <div
+              key={st.label}
+              className={cn(
+                "border-white/12 py-3",
+                i > 1 && "border-t",
+                i === 1 && "border-l pl-6",
+                i === 3 && "border-l pl-6",
+              )}
+            >
+              <dt className="display text-[1.65rem] leading-none text-white">
+                {st.value}
+              </dt>
+              <dd className="mt-1.5 text-[0.72rem] leading-snug text-white/62">
                 {st.label}
               </dd>
             </div>
@@ -759,18 +795,11 @@ export function ServiceHeroAside({ service }: { service: Service }) {
   if (d.kind === "seasonal") {
     return (
       <div className={panel}>
-        <p className="font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-gold">
+        <p className="font-display text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-gold">
           Checked on every maintenance visit
         </p>
-        <ul className="mt-5 space-y-2.5">
-          {d.items.map((it) => (
-            <li key={it.title} className="flex items-start gap-2.5">
-              <Check className="mt-1 size-3.5 shrink-0 text-gold" aria-hidden="true" />
-              <span className="text-sm leading-snug text-white/80">{it.title}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-5 border-t border-white/15 pt-4 text-xs leading-relaxed text-white/55">
+        <AsideRows items={d.items.map((it) => it.title)} tone="text-gold" />
+        <p className="mt-4 border-t border-white/15 pt-3.5 text-[0.72rem] leading-relaxed text-white/58">
           All four are visible months before the first cold night.
         </p>
       </div>
