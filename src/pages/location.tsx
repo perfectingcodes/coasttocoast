@@ -17,6 +17,44 @@ import NotFound from "./not-found";
  * grid of every service in this city — where the service × city pages below it
  * are narrow and prose-led.
  */
+/** Nine city pages share one template, so the template reads the city. The
+ *  exposure that changes what the copy says changes how the page looks. */
+const TONE_BY_EXPOSURE = {
+  gulf: "cool",
+  canal: "aqua",
+  inland: "deep",
+} as const;
+
+/** A condition panel that only appears on the cities it is true of. */
+function ConditionCard({
+  tone,
+  label,
+  title,
+  body,
+}: {
+  tone: "ember" | "cyan";
+  label: string;
+  title: string;
+  body: string;
+}) {
+  const t =
+    tone === "ember"
+      ? { rule: "bg-ember", text: "text-ember" }
+      : { rule: "bg-cyan", text: "text-blue" };
+  return (
+    <div className="relative overflow-hidden rounded-card bg-white p-5 ring-1 ring-navy/10">
+      <span className={`absolute inset-y-0 left-0 w-1 ${t.rule}`} aria-hidden="true" />
+      <p className={`pl-2 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.18em] ${t.text}`}>
+        {label}
+      </p>
+      <p className="mt-2 pl-2 font-display text-base font-extrabold text-navy">
+        {title}
+      </p>
+      <p className="mt-1.5 pl-2 text-sm leading-relaxed text-navy/70">{body}</p>
+    </div>
+  );
+}
+
 export default function LocationPage({ slug }: { slug: string }) {
   const loc = locationBySlug(slug);
   if (!loc) return <NotFound />;
@@ -58,6 +96,7 @@ export default function LocationPage({ slug }: { slug: string }) {
         title={`HVAC services in ${loc.city}`}
         lead={loc.intro}
         crumbs={crumbs}
+        tone={TONE_BY_EXPOSURE[loc.conditions.salt]}
         mark={<MapPin className="size-4" />}
         aside={
           <div className="relative overflow-hidden rounded-card border border-white/20 bg-[linear-gradient(165deg,rgb(4_30_52/0.5),rgb(4_22_44/0.38))] p-6 pt-7 shadow-[0_24px_50px_-24px_rgb(3_14_34/0.9)] backdrop-blur-md">
@@ -171,10 +210,33 @@ export default function LocationPage({ slug }: { slug: string }) {
               </p>
             </div>
 
+            <div className="space-y-5">
+              {(loc.conditions.stormImpact || loc.conditions.seasonal) && (
+                <div className="grid gap-4">
+                  {loc.conditions.stormImpact && (
+                    <ConditionCard
+                      tone="ember"
+                      label="Since 2022"
+                      title="Still catching up from Ian"
+                      body={`A great deal of the mechanical work in ${loc.city} is storm repair that never finished — elevated pads, hurricane-rated mounts, and ductwork that was wet once and never properly dried.`}
+                    />
+                  )}
+                  {loc.conditions.seasonal && (
+                    <ConditionCard
+                      tone="cyan"
+                      label="Seasonal homes"
+                      title="An empty house in July"
+                      body={`Many ${loc.city} homes sit unoccupied for months. A system left to idle in a closed house is where humidity damage starts, which is why a mid-season check matters more here.`}
+                    />
+                  )}
+                </div>
+              )}
+
             <FactTable
               caption={`Service details for ${loc.city}, ${business.state}`}
               rows={cityFacts(loc)}
             />
+            </div>
           </div>
         </section>
 

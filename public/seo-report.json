@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T21:53:20.085Z",
+  "generatedAt": "2026-10-05T23:38:43.738Z",
   "pages": 84,
   "problems": [],
   "similarity": {
@@ -12,10 +12,10 @@
     },
     "city": {
       "pages": 9,
-      "meanSimilarity": 0.2843,
-      "maxSimilarity": 0.4382,
+      "meanSimilarity": 0.2767,
+      "maxSimilarity": 0.4488,
       "pairsOverThreshold": 0,
-      "medianWords": 709
+      "medianWords": 747
     },
     "service": {
       "pages": 6,
