@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { business, locations, services } from "@/content/site";
 import { Button } from "@/components/ui/button";
-import { captureLead, track } from "@/lib/leads";
+import { cn } from "@/lib/utils";
+import { captureLead, currentAttribution, track } from "@/lib/leads";
 
 /**
  * Quote request form.
@@ -133,6 +134,8 @@ export function QuoteForm({
         </p>
       )}
 
+      <AttributionFields />
+
       <Button
         type="submit"
         size="lg"
@@ -148,6 +151,34 @@ export function QuoteForm({
         No obligation. We never sell your information.
       </p>
     </form>
+  );
+}
+
+/**
+ * Hidden click-identifier fields.
+ *
+ * The Google Ads build sheet requires the GCLID on every form and stored
+ * against the lead: it is what makes offline conversion import possible, and
+ * offline import is what lets the account optimize for booked jobs instead of
+ * form fills. These are rendered into the posted payload and the fallback
+ * email so the value survives whichever path the submission takes.
+ */
+export function AttributionFields() {
+  // Read after mount, not during render: the prerendered HTML has no
+  // localStorage, and on a fresh ad click the tracker writes the GCLID in its
+  // own effect — reading during render would miss it on the very visit that
+  // matters most.
+  const [a, setA] = useState<ReturnType<typeof currentAttribution>>();
+  useEffect(() => setA(currentAttribution()), []);
+  if (!a) return null;
+  return (
+    <>
+      {Object.entries(a)
+        .filter(([k]) => k !== "at" && k !== "landing")
+        .map(([k, v]) => (
+          <input key={k} type="hidden" name={k} value={String(v)} readOnly />
+        ))}
+    </>
   );
 }
 
@@ -190,5 +221,107 @@ function Select({
         {children}
       </select>
     </div>
+  );
+}
+
+/**
+ * Two fields, nothing else.
+ *
+ * Tab 10 of the build sheet asks for a 2-field form above the fold on the
+ * repair page, and it is right to: a name and a number is all that is needed
+ * to call somebody back, and every extra field on a paid page costs
+ * conversions. The long form still exists further down for people who would
+ * rather write out the problem.
+ */
+export function QuickQuote({
+  service,
+  heading = "We will call you straight back",
+  className,
+}: {
+  service?: string;
+  heading?: string;
+  className?: string;
+}) {
+  const [state, setState] = useState<State>("idle");
+
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+    setState("sending");
+
+    captureLead({ ...data, service: service ?? data.service });
+    track("quote-submit", service ?? "Quick form");
+
+    if (!endpoint) {
+      const body = Object.entries(data)
+        .map(([k, v]) => `${k}: ${v}`)
+        .join("\n");
+      window.location.href = `mailto:${business.email}?subject=${encodeURIComponent(
+        "Callback request from the website",
+      )}&body=${encodeURIComponent(body)}`;
+      setState("sent");
+      return;
+    }
+
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+      form.reset();
+      setState("sent");
+    } catch {
+      setState("error");
+    }
+  }
+
+  if (state === "sent") {
+    return (
+      <div className={cn("card p-6 text-center text-navy", className)}>
+        <CheckCircle2 className="mx-auto size-8 text-blue" aria-hidden="true" />
+        <p className="mt-3 font-display text-lg font-extrabold">Got it</p>
+        <p className="mt-1.5 text-sm leading-relaxed text-navy/70">
+          We will call you straight back. If you would rather not wait, call{" "}
+          <a href={business.phoneHref} className="font-bold text-blue">
+            {business.phone}
+          </a>
+          .
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={onSubmit} className={cn("card p-6 text-navy", className)}>
+      <p className="font-display text-lg font-extrabold leading-tight">{heading}</p>
+      <p className="mt-1.5 text-sm text-navy/60">
+        Name and number is enough. No obligation.
+      </p>
+      <div className="mt-4 grid gap-3">
+        <Field label="Name" name="name" autoComplete="name" required />
+        <Field label="Phone" name="phone" type="tel" autoComplete="tel" required />
+      </div>
+
+      {state === "error" && (
+        <p role="alert" className="mt-3 text-sm font-semibold text-red-600">
+          Something went wrong. Please call {business.phone}.
+        </p>
+      )}
+
+      <AttributionFields />
+
+      <Button type="submit" size="lg" className="mt-4 w-full" disabled={state === "sending"}>
+        {state === "sending" && (
+          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+        )}
+        {state === "sending" ? "Sending…" : "Call me back"}
+      </Button>
+      <p className="mt-2.5 text-center text-xs text-navy/55">
+        We never sell your information.
+      </p>
+    </form>
   );
 }

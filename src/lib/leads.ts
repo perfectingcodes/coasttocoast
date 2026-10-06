@@ -71,6 +71,10 @@ export interface Lead {
   wonAt?: number;
   /** Ids of review-sequence steps already sent for this customer. */
   reviewSteps?: string[];
+  /** Copied off the visitor at capture time so the lead carries its own
+   *  attribution — this is what gets uploaded to Google Ads once the job is
+   *  booked. */
+  attribution?: Attribution;
 }
 
 export type EventKind =
@@ -98,6 +102,37 @@ export interface SiteEvent {
   label?: string;
 }
 
+/**
+ * Google's click identifier, plus the UTM set, captured on FIRST touch and
+ * never overwritten.
+ *
+ * This is the single most important field in the file. The Google Ads build
+ * sheet optimizes the account on booked jobs rather than form fills, and that
+ * only works through offline conversion import: the GCLID is captured here,
+ * stored against the lead, and uploaded weekly once the job is booked. Without
+ * it the account can only ever learn from form submissions, which include
+ * every tyre-kicker and exclude every phone call.
+ *
+ * First touch, not last: someone who clicks an ad, leaves, and comes back a
+ * week later by typing the domain should still be credited to the ad.
+ * `wbraid` and `gbraid` are the iOS and app equivalents Google sends when a
+ * GCLID is unavailable.
+ */
+export interface Attribution {
+  gclid?: string;
+  wbraid?: string;
+  gbraid?: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_term?: string;
+  utm_content?: string;
+  /** When the click arrived. Google only accepts imports inside 90 days. */
+  at: number;
+  /** The page the ad landed on. */
+  landing: string;
+}
+
 export interface Visitor {
   id: string;
   first: number;
@@ -106,6 +141,8 @@ export interface Visitor {
   /** Where this browser came from the first time. "" means typed or bookmarked. */
   referrer: string;
   landing: string;
+  /** First-touch paid attribution, if this browser ever arrived from an ad. */
+  attribution?: Attribution;
 }
 
 export interface Crm {
@@ -172,11 +209,35 @@ function forward(type: "lead" | "event", payload: unknown) {
 
 /* --------------------------------------------------------------- tracking */
 
+const AD_PARAMS = [
+  "gclid",
+  "wbraid",
+  "gbraid",
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+] as const;
+
+/** Reads the click identifiers off the current URL, if any are present. */
+function readAttribution(): Attribution | null {
+  const params = new URLSearchParams(window.location.search);
+  const found: Record<string, string> = {};
+  for (const key of AD_PARAMS) {
+    const value = params.get(key);
+    if (value) found[key] = value.slice(0, 200);
+  }
+  if (!Object.keys(found).length) return null;
+  return { ...found, at: Date.now(), landing: window.location.pathname };
+}
+
 /** Called once per session by the tracker component. */
 export function startSession() {
   if (typeof window === "undefined") return;
   mutate((crm) => {
     const now = Date.now();
+    const incoming = readAttribution();
     const visitor: Visitor = crm.visitor
       ? { ...crm.visitor, last: now, visits: crm.visitor.visits + 1 }
       : {
@@ -187,8 +248,16 @@ export function startSession() {
           referrer: document.referrer || "",
           landing: window.location.pathname,
         };
+    // First touch wins. A visitor who clicked an ad last week and typed the
+    // domain today is still that ad's lead.
+    if (incoming && !visitor.attribution) visitor.attribution = incoming;
     return { ...crm, visitor };
   });
+}
+
+/** The attribution this browser carries, for a form's hidden fields. */
+export function currentAttribution(): Attribution | undefined {
+  return loadCrm().visitor?.attribution;
 }
 
 export function track(kind: EventKind, label?: string, path?: string) {
@@ -238,6 +307,7 @@ export function captureLead(data: NewLead): Lead {
     source: data.source ?? "website",
     stage: "new",
     notes: [],
+    attribution: currentAttribution(),
   };
   mutate((crm) => ({ ...crm, leads: [lead, ...crm.leads] }));
   forward("lead", lead);

@@ -8,9 +8,17 @@ import {
   ShieldCheck,
   Wind,
 } from "lucide-react";
-import { business, cleanAndTune, locations, region } from "@/content/site";
-import { landingBySlug, type LandingPage } from "@/content/landing";
-import { QuoteForm } from "@/components/quote-form";
+import { business, cleanAndTune, locations, testimonials } from "@/content/site";
+
+/** Cities the Meta storm campaign is segmented on. */
+const stormCities = locations.filter((l) => l.conditions.stormImpact);
+import {
+  adMarketLine,
+  adMarkets,
+  landingByPath,
+  type LandingPage,
+} from "@/content/landing";
+import { QuickQuote, QuoteForm } from "@/components/quote-form";
 import { PaymentCalculator } from "@/components/payment-calculator";
 import { FaqList } from "@/components/faq-list";
 import { ButtonLink } from "@/components/ui/button";
@@ -36,27 +44,26 @@ import NotFound from "./not-found";
  */
 
 const GROUND: Record<LandingPage["variant"], string> = {
-  emergency: "band-abyss",
+  repair: "band-abyss",
   offer: "band-azure",
+  plans: "band-navy",
   replacement: "band-navy",
   storm: "band-abyss",
   commercial: "band-navy",
 };
 
-export default function LandingPageView({ slug }: { slug: string }) {
-  const page = landingBySlug(slug);
+export default function LandingPageView({ path }: { path: string }) {
+  const page = landingByPath(path);
   if (!page) return <NotFound />;
 
-  const form = (
-    <QuoteForm defaultService={serviceFor(page)} />
-  );
+  const form = <QuoteForm defaultService={serviceFor(page)} />;
 
   return (
     <>
       <Seo
         title={page.title}
         description={page.description}
-        path={`/lp/${page.slug}`}
+        path={page.path}
         // Noindexed on purpose: these would compete with the organic city and
         // service pages for the same terms. Not disallowed in robots.txt —
         // AdsBot must be able to fetch a landing page.
@@ -70,10 +77,16 @@ export default function LandingPageView({ slug }: { slug: string }) {
 
         <Steps page={page} />
 
+        {page.variant === "repair" && <CommonCauses />}
         {page.variant === "offer" && <OfferDetail />}
+        {page.variant === "plans" && <PlanTiers />}
         {page.variant === "replacement" && <FinanceBlock />}
         {page.variant === "storm" && <StormCities />}
         {page.variant === "commercial" && <SectorGrid />}
+
+        {/* Tab 10 asks for reviews on the repair page. Only quotes we
+            actually hold are rendered — see the note in site.ts. */}
+        {page.variant === "repair" && <Reviews />}
 
         <Reasons page={page} />
 
@@ -179,6 +192,14 @@ function AdFooter({ page }: { page: LandingPage }) {
             <br />
             Lic. {business.license} · {business.hours}
           </p>
+          {/* The paid service area, which is narrower than the organic one.
+              Tab 3: Naples, Bonita Springs, Estero and North Naples only. */}
+          {page.plan === "google-ads" && (
+            <p className="mt-2 text-[0.7rem] font-semibold text-navy/55">
+              Serving {adMarketLine}
+              <span className="sr-only"> and {adMarkets[3]}</span>
+            </p>
+          )}
         </div>
         {/* min-h-11 on every one: these are thumb targets on a phone, not
             desktop footer text. */}
@@ -269,6 +290,22 @@ function Hero({ page, form }: { page: LandingPage; form: React.ReactNode }) {
             )}
           </div>
 
+          {/* Tab 10: the $89 offer as a secondary CTA on the repair page. */}
+          {page.variant === "repair" && (
+            <Link
+              href="/ac-tune-up"
+              className="mt-5 inline-flex items-center gap-2.5 rounded-full bg-white/10 py-2 pl-2 pr-4 ring-1 ring-inset ring-white/20 transition-colors hover:bg-white/16"
+            >
+              <span className="rounded-full bg-gold px-2.5 py-1 font-display text-[0.72rem] font-extrabold text-navy">
+                {cleanAndTune.price}
+              </span>
+              <span className="text-[0.82rem] font-semibold text-white/85">
+                Not an emergency? Book the {cleanAndTune.name}
+              </span>
+              <ArrowRight className="size-3.5 shrink-0 text-cyan" aria-hidden="true" />
+            </Link>
+          )}
+
           <ul className="mt-9 grid gap-x-7 gap-y-3 border-t border-white/15 pt-6 sm:grid-cols-3">
             {page.proof.map((p) => (
               <li key={p} className="flex items-start gap-2.5">
@@ -281,10 +318,20 @@ function Hero({ page, form }: { page: LandingPage; form: React.ReactNode }) {
           </ul>
         </div>
 
-        {/* The emergency page puts the phone first and the form below the
-            fold; everything else puts the form in the first screen. */}
+        {/* Tab 10: a 2-field form above the fold on the repair page. The
+            commercial page leads with the phone and gets the readout card
+            instead; everything else puts the full form in the first screen. */}
         <div className="min-w-0">
-          {callFirst ? <ResponseCard /> : <div className="lg:-mb-6">{form}</div>}
+          {page.variant === "repair" ? (
+            <QuickQuote
+              service="Repairs & Maintenance"
+              heading="AC out? We will call you straight back."
+            />
+          ) : callFirst ? (
+            <ResponseCard />
+          ) : (
+            <div className="lg:-mb-6">{form}</div>
+          )}
         </div>
       </div>
     </section>
@@ -379,6 +426,238 @@ function Reasons({ page }: { page: LandingPage }) {
   );
 }
 
+/**
+ * Repair page only.
+ *
+ * The AC Not Cooling ad group points here, and tab 10 asks for an H2 covering
+ * the common causes so the ad-to-page message matches. Somebody who searched
+ * "ac blowing warm air" should see those words on the page they land on.
+ */
+function CommonCauses() {
+  const causes = [
+    {
+      name: "A failed capacitor",
+      tell: "The outdoor fan hums but will not start, or starts if you nudge it.",
+      note: "The most common single failure on this coast and an inexpensive part. Usually fixed in one visit.",
+    },
+    {
+      name: "A dirty or iced evaporator coil",
+      tell: "Air is blowing but it is barely cool, or there is ice on the line set.",
+      note: "Airflow or refrigerant. The ice has to be melted before anything can be measured properly.",
+    },
+    {
+      name: "A blocked condensate drain line",
+      tell: "Water around the air handler, or the system shuts itself off.",
+      note: "Extremely common in Florida humidity. A safety switch is doing its job — the fix is clearing and treating the line.",
+    },
+    {
+      name: "Low refrigerant",
+      tell: "Cools for a while, then stops. Worse on the hottest days.",
+      note: "Refrigerant does not get used up, so low means a leak. Topping it up without finding the leak is money spent twice.",
+    },
+  ];
+
+  return (
+    <section className="shell py-14 md:py-18">
+      <h2 className="poster max-w-2xl text-[clamp(1.6rem,3vw,2.2rem)]">
+        AC running but not cooling? It is usually one of four things
+        <span className="text-ember">.</span>
+      </h2>
+      <p className="mt-4 max-w-2xl leading-relaxed text-navy/70">
+        None of these needs guessing at. A technician measures the system and
+        tells you which it is, with the price, before anything is opened.
+      </p>
+      <ul className="mt-8 grid gap-x-10 gap-y-7 md:grid-cols-2">
+        {causes.map((c, i) => (
+          <li key={c.name} className="flex min-w-0 gap-4">
+            <span className="mt-1 font-mono text-[0.72rem] font-bold tabular-nums text-ember">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <div className="min-w-0">
+              <h3 className="font-display text-[1.02rem] font-extrabold text-navy">
+                {c.name}
+              </h3>
+              <p className="mt-1.5 text-[0.9rem] font-semibold leading-relaxed text-navy/75">
+                {c.tell}
+              </p>
+              <p className="mt-1 text-[0.88rem] leading-relaxed text-navy/60">{c.note}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/**
+ * Tab 10 asks for three reviews on the repair page.
+ *
+ * It renders what the site actually holds and no more. There is no verified
+ * Google rating and no review count anywhere on this site, by design — see
+ * the note in content/site.ts — so there are no stars here either. Inventing
+ * them on a page bought with ad money is both a Google policy violation and
+ * the kind of thing that is very hard to walk back.
+ */
+function Reviews() {
+  if (!testimonials.length) return null;
+  return (
+    <section className="bg-foam py-14 md:py-18">
+      <div className="shell">
+        <h2 className="poster text-[clamp(1.6rem,3vw,2.2rem)]">
+          What customers say
+          <span className="text-ember">.</span>
+        </h2>
+        <ul className="mt-8 grid gap-5 md:grid-cols-3">
+          {testimonials.slice(0, 3).map((t) => (
+            <li
+              key={t.name}
+              className="relative min-w-0 rounded-card bg-white p-6 ring-1 ring-navy/10"
+            >
+              <span
+                className="thermal-rule absolute inset-x-6 top-0 h-[2px] rounded-none"
+                aria-hidden="true"
+              />
+              <p className="text-[0.92rem] leading-relaxed text-navy/80">
+                &ldquo;{t.quote}&rdquo;
+              </p>
+              <p className="mt-4 font-display text-[0.82rem] font-extrabold text-navy">
+                {t.name}
+              </p>
+              <p className="font-mono text-[0.6rem] uppercase tracking-[0.1em] text-navy/45">
+                {t.city}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Maintenance plan page only.
+ *
+ * Plan pricing is an open item on the build sheet, so there is no price on
+ * this page. A made-up number on a page people enrol from is worse than no
+ * number: it is the figure they will hold you to. The tiers and what each
+ * covers are real; the rate is a phone call until the client sets it.
+ */
+function PlanTiers() {
+  const tiers = [
+    {
+      name: "Single system",
+      who: "One air handler and one condenser — most homes.",
+      includes: [
+        "Two visits a year, spring and autumn",
+        "The full ten-point service each visit",
+        "Written condition report each visit",
+        "Priority scheduling in season",
+        "No overtime charge on after-hours calls",
+      ],
+    },
+    {
+      name: "Multi-system",
+      who: "Two or more systems at one address.",
+      includes: [
+        "Everything in the single-system plan, per unit",
+        "One visit covering every system",
+        "One report covering the whole house",
+        "Per-unit rate below the single-system price",
+      ],
+    },
+    {
+      name: "Property or HOA",
+      who: "Several addresses, or a board that needs reporting.",
+      includes: [
+        "Every unit listed, aged and photographed",
+        "Visit frequency set in the agreement",
+        "A response window written in, not implied",
+        "One contact, one invoice, reporting a board can read",
+      ],
+    },
+  ];
+
+  return (
+    <section className="shell py-14 md:py-18">
+      <h2 className="poster max-w-2xl text-[clamp(1.6rem,3vw,2.2rem)]">
+        Three plans, depending on what you have
+        <span className="text-ember">.</span>
+      </h2>
+      <ul className="mt-8 grid gap-5 lg:grid-cols-3">
+        {tiers.map((t, i) => (
+          <li
+            key={t.name}
+            className={cn(
+              "relative flex min-w-0 flex-col overflow-hidden rounded-card p-6",
+              i === 0
+                ? "band-navy grain text-white"
+                : "bg-white ring-1 ring-navy/10",
+            )}
+          >
+            {i === 0 && (
+              <div
+                className="thermal-rule absolute inset-x-0 top-0 rounded-none"
+                aria-hidden="true"
+              />
+            )}
+            <p
+              className={cn(
+                "font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em]",
+                i === 0 ? "text-cyan" : "text-blue",
+              )}
+            >
+              {i === 0 ? "Most homes" : `Plan ${i + 1}`}
+            </p>
+            <h3
+              className={cn(
+                "mt-3 font-display text-xl font-extrabold",
+                i === 0 ? "text-white" : "text-navy",
+              )}
+            >
+              {t.name}
+            </h3>
+            <p
+              className={cn(
+                "mt-1.5 text-[0.85rem] leading-relaxed",
+                i === 0 ? "text-white/70" : "text-navy/60",
+              )}
+            >
+              {t.who}
+            </p>
+            <ul className="mt-5 space-y-2.5">
+              {t.includes.map((line) => (
+                <li
+                  key={line}
+                  className={cn(
+                    "flex items-start gap-2.5 text-[0.85rem] leading-snug",
+                    i === 0 ? "text-white/85" : "text-navy/70",
+                  )}
+                >
+                  <Check
+                    className={cn(
+                      "mt-0.5 size-3.5 shrink-0",
+                      i === 0 ? "text-cyan" : "text-blue",
+                    )}
+                    aria-hidden="true"
+                  />
+                  {line}
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-7 max-w-2xl text-[0.9rem] leading-relaxed text-navy/60">
+        Plan rates depend on the number of systems and are quoted on the call —
+        we would rather give you the right number for your house than a
+        headline price with conditions under it. The {cleanAndTune.price}{" "}
+        {cleanAndTune.name} is available on its own if you would rather start
+        there.
+      </p>
+    </section>
+  );
+}
+
 /** Offer page only — the ten points, since the price is the whole pitch. */
 function OfferDetail() {
   return (
@@ -458,7 +737,7 @@ function FinanceBlock() {
 
 /** Storm page only — says where, which is what the audience is segmented on. */
 function StormCities() {
-  const hit = locations.filter((l) => l.conditions.stormImpact);
+  const hit = stormCities;
   return (
     <section className="shell py-14 md:py-18">
       <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
@@ -526,7 +805,7 @@ function SectorGrid() {
           ))}
         </ul>
         <p className="mt-6 text-sm text-navy/55">
-          Covering {region} — {locations.map((l) => l.city).join(", ")}.
+          Covering {locations.map((l) => l.city).join(", ")}.
         </p>
       </div>
     </section>
@@ -538,12 +817,11 @@ function SectorGrid() {
 /** Preselects the form so the visitor is not re-stating what the ad promised. */
 function serviceFor(page: LandingPage) {
   switch (page.variant) {
-    case "emergency":
-      return "Repairs & Maintenance";
+    case "repair":
     case "offer":
+    case "plans":
       return "Repairs & Maintenance";
     case "replacement":
-      return "Mechanical Services";
     case "storm":
       return "Mechanical Services";
     case "commercial":

@@ -36,7 +36,7 @@ export const publicRoutes: string[] = [
  * Deliberately NOT disallowed in robots.txt: AdsBot has to be able to fetch a
  * landing page or the ad is disapproved.
  */
-export const adRoutes: string[] = landingPages.map((p) => `/lp/${p.slug}`);
+export const adRoutes: string[] = landingPages.map((p) => p.path);
 
 /**
  * Internal dashboard routes. Prerendered so they exist as real pages, but
@@ -52,6 +52,7 @@ export const adminRoutes: string[] = [
   "/admin/leads",
   "/admin/resources",
   "/admin/google",
+  "/admin/google-ads",
   "/admin/tracking",
 ];
 

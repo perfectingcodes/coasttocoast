@@ -47,16 +47,16 @@ export default function AdminCampaigns() {
             const campaign = campaigns.find((c) => c.name === lp.campaign);
             return (
               <li
-                key={lp.slug}
+                key={lp.path}
                 className="min-w-0 rounded-xl bg-navy/[0.025] p-4 ring-1 ring-inset ring-navy/8"
               >
                 <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
                   <div className="min-w-0">
                     <a
-                      href={`/lp/${lp.slug}`}
+                      href={lp.path}
                       className="inline-flex items-center gap-1.5 font-display text-[0.9rem] font-extrabold text-navy hover:text-blue"
                     >
-                      /lp/{lp.slug}
+                      {lp.path}
                       <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
                     </a>
                     <p className="mt-1 text-[0.78rem] text-navy/55">

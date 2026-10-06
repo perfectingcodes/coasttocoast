@@ -83,15 +83,23 @@ const NAV: { group: string; items: NavItem[] }[] = [
     items: [
       { href: "/admin/seo", label: "SEO & GEO", hint: "Live page audit", Icon: Gauge },
       {
+        // `end` matters: without it /admin/google-ads would light this up too.
         href: "/admin/google",
         label: "Google",
         hint: "Business Profile and local pack",
         Icon: Globe,
+        end: true,
+      },
+      {
+        href: "/admin/google-ads",
+        label: "Google Ads build",
+        hint: "The build sheet being worked to",
+        Icon: Megaphone,
       },
       {
         href: "/admin/campaigns",
         label: "Campaigns",
-        hint: "Paid search and Meta",
+        hint: "Meta, email and the earlier draft",
         Icon: Megaphone,
       },
     ],

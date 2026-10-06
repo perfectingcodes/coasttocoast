@@ -1,43 +1,62 @@
-import { business, cleanAndTune, locations, region } from "./site";
+import { business, cleanAndTune } from "./site";
 
 /**
  * Paid landing pages.
  *
- * These are not marketing pages with a form bolted on. A landing page bought
- * with ad money has one job and is judged on one number, so each of these
- * drops the site navigation entirely, answers the exact promise the ad made
- * in the first screen, and gives the visitor two ways forward — call or
- * book — and nothing else to click.
+ * Built to the Google Ads Build Sheet (Arranges Web, October 2026). Tab 10 of
+ * that sheet maps every ad group to a destination and lists what the page has
+ * to carry; `path`, `adGroups` and `requirements` below are that mapping, kept
+ * here so a page and the ad group pointing at it cannot drift apart.
  *
- * Every page here is noindexed on purpose. They would otherwise compete with
- * the organic city and service pages for the same terms, which is paying
- * twice to split your own ranking. They are deliberately NOT disallowed in
- * robots.txt: AdsBot has to be able to fetch a landing page or the ad is
- * disapproved.
+ * Two things that follow from the sheet and are easy to get wrong:
  *
- * `campaign` ties each page back to content/marketing.ts so the dashboard can
- * show which campaign points where, and so nobody ships an ad group without a
- * page behind it.
+ * GEO. The Google Ads launch targets Naples, Bonita Springs, Estero and North
+ * Naples only. Fort Myers and Cape Coral are deliberately excluded until
+ * month 4 — splitting a $2,500 budget across six cities is the stated fastest
+ * way to fail. So these pages say Naples, Bonita and Estero, not "Southwest
+ * Florida", and they do not list the northern cities. The organic site still
+ * covers all nine; that is a different channel with different economics.
+ *
+ * INDEXING. Every page here is noindexed on purpose — they would otherwise
+ * compete with the organic city and service pages for the same terms. They
+ * are deliberately NOT disallowed in robots.txt: AdsBot has to be able to
+ * fetch a landing page or the ad is disapproved.
  */
 
-export type Variant = "emergency" | "offer" | "replacement" | "storm" | "commercial";
+export type Variant =
+  | "repair"
+  | "offer"
+  | "plans"
+  | "replacement"
+  | "storm"
+  | "commercial";
+
+/** The Phase 1 paid service area. Tab 3 of the build sheet. */
+export const adMarkets = ["Naples", "Bonita Springs", "Estero", "North Naples"];
+export const adMarketLine = "Naples, Bonita Springs and Estero";
 
 export interface LandingPage {
-  slug: string;
-  /** Matches a campaign name in marketing.ts. */
+  /** URL. The Google Ads pages sit at the top level because that is what the
+   *  sitelinks and ad destinations in the sheet point at. */
+  path: string;
+  /** Which plan this page belongs to — the Google Ads build sheet, or our own
+   *  Meta plan in content/marketing.ts. */
+  plan: "google-ads" | "meta";
+  /** Ad groups routed here, from tab 10. */
+  adGroups: string[];
   campaign: string;
   platform: "Google Ads" | "Google LSA" | "Meta";
   variant: Variant;
   /** The headline the ad itself runs, so message match can be checked. */
   adHeadline: string;
-  /** Terms this page is bought against. */
   terms: string[];
+  /** Tab 10, "Required on the page". The admin checks the page against it. */
+  requirements: string[];
   title: string;
   description: string;
   eyebrow: string;
   h1: string;
   sub: string;
-  /** Three facts above the fold. Short enough to read without stopping. */
   proof: string[];
   /** Which action the page pushes hardest. */
   lead: "call" | "book";
@@ -47,109 +66,129 @@ export interface LandingPage {
   close: { title: string; body: string };
 }
 
-const cities = locations.map((l) => l.city);
-
 export const landingPages: LandingPage[] = [
-  /* ------------------------------------------------------------ emergency */
+  /* --------------------------------------------------------- /ac-repair */
   {
-    slug: "emergency-ac-repair",
-    campaign: "Emergency AC — always on",
+    path: "/ac-repair",
+    plan: "google-ads",
+    adGroups: ["AC Repair", "AC Not Cooling", "AC Service"],
+    campaign: "Search — AC Repair",
     platform: "Google Ads",
-    variant: "emergency",
-    adHeadline: "AC Out? We Answer 24/7 — Licensed Fort Myers HVAC",
+    variant: "repair",
+    adHeadline: "AC Repair in Naples, FL — Same-Day Service",
     terms: [
-      "emergency ac repair",
-      "ac repair near me",
-      "24 hour ac repair fort myers",
+      "ac repair naples",
       "ac not cooling",
+      "ac blowing warm air",
+      "ac repair near me",
+      "ac leaking water",
     ],
-    title: `24/7 Emergency AC Repair | ${business.name}`,
-    description: `AC out? A real person answers around the clock and a licensed tech is dispatched same day across ${region}. Flat price in writing before work starts. Call ${business.phone}.`,
-    eyebrow: "Emergency service",
-    h1: "Your AC is out. We answer at 2am.",
-    sub: `A real person picks up around the clock — not a call centre, not a voicemail box. Licensed techs, flat price agreed before anything is opened, and same-day dispatch across ${region}.`,
-    proof: ["Answered 24/7", "Same-day dispatch", "Flat price before we start"],
+    requirements: [
+      "Click-to-call above the fold",
+      "2-field form",
+      "'Same-day service'",
+      "License number",
+      "3 reviews",
+      "$89 offer as secondary CTA",
+      "H2 on common causes (capacitor, coil, drain line)",
+    ],
+    title: `AC Repair in Naples & Bonita Springs | ${business.name}`,
+    description: `Same-day AC repair in ${adMarketLine}. Licensed ${business.license}, upfront pricing before any work begins. Call ${business.phone}.`,
+    eyebrow: "Same-day AC repair",
+    h1: "AC out? Same-day repair in Naples, Bonita and Estero.",
+    sub: "A licensed technician diagnoses the actual fault and gives you the price in writing before anything is opened. Most repairs finish in one visit.",
+    proof: ["Same-day service", `Licensed ${business.license}`, "Upfront pricing, no surprises"],
     lead: "call",
     steps: [
       {
-        title: "You call, a person answers",
-        body: "Any hour. They take the address, the symptom and how urgent it is — not a message to pass on in the morning.",
+        title: "Call and tell us what it is doing",
+        body: "Not cooling, blowing warm, leaking, making a noise. Two minutes on the phone is usually enough to know what we are walking into.",
       },
       {
-        title: "We tell you when, not 'sometime'",
-        body: "You get a window before you hang up, and a call from the tech when they are on the way.",
+        title: "A real window, before you hang up",
+        body: "You get a time, and a call from the technician when they are on the way — not a promise to ring back.",
       },
       {
-        title: "Price agreed, then the work",
-        body: "The tech diagnoses it, quotes a flat price in writing, and only then opens the system. No hourly meter running while you watch.",
+        title: "Diagnosed, priced, then fixed",
+        body: "The fault is found and the flat price goes in writing before the system is opened. No hourly meter running while you watch.",
       },
     ],
     reasons: [
       {
         title: "Licensed and insured, with the number published",
-        body: `Florida Mechanical Contractor ${business.license}. It is on every page of this site and on the side of the van, because an unlicensed install is a code problem you inherit when you sell the house.`,
+        body: `Florida Mechanical Contractor ${business.license}. It is on every page of this site, because an unlicensed install is a code problem you inherit when you sell the house.`,
       },
       {
-        title: "Flat rate, not hourly",
-        body: "You are quoted the job, not the clock. A tech who is slow because the attic is 140 degrees does not cost you more.",
+        title: "Upfront pricing, not an hourly rate",
+        body: "You are quoted the job, not the clock. A technician who is slow because the attic is 140 degrees does not cost you more.",
       },
       {
-        title: "We work on what is already there",
-        body: "A failed capacitor is a part, not a reason to sell you a system. If replacement genuinely is the better call, you get both numbers and the reasoning.",
+        title: "We fix what is there before we sell you anything",
+        body: "A failed capacitor is a part, not a reason to replace a system. If replacement genuinely is the better call you get both numbers and the reasoning.",
       },
       {
-        title: "Local, and it matters here",
-        body: `Salt air, canal humidity and a cooling season that never really stops. ${cities.slice(0, 4).join(", ")} and the rest of the coast — we know what fails here and why.`,
+        title: "All makes and models",
+        body: "Carrier, Trane, Lennox, Rheem, Goodman, Daikin and the rest. The common failure parts are on the van.",
       },
     ],
     faqs: [
       {
-        q: "Do you really answer at night?",
-        a: "Yes — a person takes the call and dispatches, at any hour. You are not leaving a message for the morning.",
+        q: "Can you come today?",
+        a: `Same-day service across ${adMarketLine} in most cases. You are given a real window on the phone rather than a promise to call back.`,
       },
       {
-        q: "What does an emergency call cost?",
-        a: "You are given a flat price for the repair before any work begins. The diagnostic is quoted up front too, so nothing on the invoice is a surprise.",
+        q: "What does a repair cost?",
+        a: "You get a flat price for the repair in writing before any work begins, and the diagnostic is quoted up front too. Nothing on the invoice is a surprise.",
       },
       {
-        q: "How fast can someone get here?",
-        a: "Same day in most of the service area. You are given a real window on the phone rather than a promise to call back.",
+        q: "My AC runs but blows warm air. What is that?",
+        a: "Most often a failed capacitor, a dirty or iced evaporator coil, or a refrigerant problem. All three are diagnosable in one visit and two of them are inexpensive fixes.",
       },
       {
-        q: "What if it needs a part you do not have?",
-        a: "Common failure parts — capacitors, contactors, motors, thermostats — are on the vans. If it is something rarer you are told what it is, what it costs and when it lands, that day.",
+        q: "Do you work on every brand?",
+        a: "Yes — all makes and models, residential and light commercial. Common failure parts are carried on the vans so most repairs finish the same visit.",
       },
     ],
     close: {
-      title: "Call now and speak to a person",
-      body: "Or send the details and we will call you straight back. Either way you get a real time, not a maybe.",
+      title: "Get a technician out today",
+      body: "Name and number is enough to start. We will call you straight back with a time.",
     },
   },
 
-  /* ---------------------------------------------------------------- offer */
+  /* -------------------------------------------------------- /ac-tune-up */
   {
-    slug: "ac-tune-up",
-    campaign: `${cleanAndTune.price} Clean & Tune — pre-season`,
+    path: "/ac-tune-up",
+    plan: "google-ads",
+    adGroups: ["AC Tune-Up", "AC Cleaning", "AC Inspection"],
+    campaign: "Search — $89 Tune-Up",
     platform: "Google Ads",
     variant: "offer",
-    adHeadline: `${cleanAndTune.price} AC Clean & Tune — 10-Point Service, Booked Today`,
+    adHeadline: `${cleanAndTune.price} AC Clean & Tune — 10-Point Inspection`,
     terms: [
-      "ac tune up",
+      "ac tune up naples",
+      "ac tune up special",
       "ac maintenance near me",
-      "air conditioner service special",
-      "ac tune up cost",
+      "ac drain line cleaning",
+      "ac coil cleaning",
     ],
-    title: `${cleanAndTune.price} AC Clean & Tune in ${region} | ${business.name}`,
-    description: `A ${cleanAndTune.price} 10-point AC clean and tune by a licensed tech, ${cleanAndTune.unit}. Catches the failures that strand people in August. Book online or call ${business.phone}.`,
+    requirements: [
+      "Price in the H1",
+      "The 10-point checklist",
+      "'Usually $X' anchor — PRICE NOT CONFIRMED, see admin",
+      "Booking",
+      "'What happens if we find something' section",
+    ],
+    title: `${cleanAndTune.price} AC Clean & Tune in Naples & Bonita | ${business.name}`,
+    description: `A ${cleanAndTune.price} 10-point AC clean and tune by a licensed technician across ${adMarketLine}. Honest report, no upsell. Book online or call ${business.phone}.`,
     eyebrow: "Pre-season service",
-    h1: `A ${cleanAndTune.price} tune-up now, or a $2,000 call in August.`,
-    sub: `Ten points, a licensed tech, and a written condition report you keep. Most summer breakdowns are something a spring service would have caught — a weak capacitor, a choked coil, a drain about to back up.`,
-    proof: [`${cleanAndTune.price} ${cleanAndTune.unit}`, "10-point service", "Written condition report"],
+    h1: `An ${cleanAndTune.price} tune-up now, or a $2,000 call in August.`,
+    sub: "Ten points, a licensed technician, and a written condition report you keep. Most summer breakdowns start as something a spring service would have caught.",
+    proof: [`${cleanAndTune.price} ${cleanAndTune.unit}`, "10-point inspection", "No upsell — just the report"],
     lead: "book",
     steps: [
       {
         title: "Book a window that suits you",
-        body: "Pick a day; we confirm the window. No all-day waiting.",
+        body: "Same-week appointments across Naples, Bonita Springs and Estero. Pick a day; we confirm the window.",
       },
       {
         title: "The ten points, properly",
@@ -157,17 +196,17 @@ export const landingPages: LandingPage[] = [
       },
       {
         title: "You get the numbers",
-        body: "A written report with the readings, what is fine, what is aging and what will need attention — with no obligation attached to any of it.",
+        body: "A written report with the readings — what is fine, what is aging, what will need attention — and no obligation attached to any of it.",
       },
     ],
     reasons: [
       {
         title: "The price is the price",
-        body: `${cleanAndTune.price} ${cleanAndTune.unit}, published on the site rather than quoted on the phone. If something is found that needs fixing you are told what it costs before anything is done.`,
+        body: `${cleanAndTune.price} ${cleanAndTune.unit}, published rather than quoted on the phone. Anything found that needs fixing is priced before it is done.`,
       },
       {
         title: "It is a diagnostic, not a dusting",
-        body: "The point of the visit is to find the thing that will fail. A capacitor reading low in March is a $200 part; the same capacitor in July is an emergency call and a hot house.",
+        body: "The point of the visit is to find the thing that will fail. A capacitor reading low in March is a cheap part; the same capacitor in July is an emergency call and a hot house.",
       },
       {
         title: "Twice a year is right in this climate",
@@ -175,7 +214,7 @@ export const landingPages: LandingPage[] = [
       },
       {
         title: "No pressure to replace anything",
-        body: "A condition report with real readings is more useful to you than a sales pitch, and it is what you will want in hand when the system genuinely is near the end.",
+        body: "A condition report with real readings is worth more to you than a sales pitch, and it is what you will want in hand when the system genuinely is near the end.",
       },
     ],
     faqs: [
@@ -184,16 +223,16 @@ export const landingPages: LandingPage[] = [
         a: `Yes — ${cleanAndTune.price} ${cleanAndTune.unit} for the ten-point service. Repairs found during the visit are quoted separately and only done with your say-so.`,
       },
       {
+        q: "What if you find something wrong?",
+        a: "You are told what it is, what it costs and how urgent it is. Nothing gets done without your approval, and plenty of visits end with nothing needing doing at all.",
+      },
+      {
         q: "How long does it take?",
         a: "Usually under an hour for a single system. Longer if the drain needs clearing or the coil is badly fouled, and you are told before that work starts.",
       },
       {
         q: "What are the ten points?",
-        a: "Refrigerant charge, electrical connections and amp draw, capacitor and contactor condition, coil cleaning, condensate drain, blower and airflow, thermostat calibration, safety controls, cabinet and mounts, and a full visual on the ductwork.",
-      },
-      {
-        q: "When should I book it?",
-        a: "Before the season rather than during it — March going into summer, October after it. Mid-season slots fill with emergencies.",
+        a: "Thermostat, filter, condensate drain and P-trap, drain pan treatment, capacitor readings, evaporator coil, condenser coil and cabinet, amp draws and refrigerant pressures, heater operation, and a full condition report.",
       },
     ],
     close: {
@@ -202,44 +241,140 @@ export const landingPages: LandingPage[] = [
     },
   },
 
-  /* ---------------------------------------------------------- replacement */
+  /* ------------------------------------------------- /maintenance-plans */
   {
-    slug: "ac-replacement",
-    campaign: "Local Services Ads — Google Guaranteed",
-    platform: "Google LSA",
+    path: "/maintenance-plans",
+    plan: "google-ads",
+    adGroups: ["AC Maintenance"],
+    campaign: "Search — $89 Tune-Up",
+    platform: "Google Ads",
+    variant: "plans",
+    adHeadline: "AC Maintenance Plans — Two Visits a Year",
+    terms: [
+      "ac maintenance plan",
+      "ac maintenance near me",
+      "annual ac service",
+      "hvac maintenance naples",
+    ],
+    requirements: [
+      "Plan tiers and pricing — PRICING NOT SET, see admin",
+      "What's included",
+      "Enrollment form",
+    ],
+    title: `AC Maintenance Plans in Naples & Bonita | ${business.name}`,
+    description: `Two seasonal visits a year, priority scheduling and no overtime charges across ${adMarketLine}. Licensed ${business.license}. Call ${business.phone}.`,
+    eyebrow: "Maintenance plans",
+    h1: "Two visits a year, and we are the ones who remember.",
+    sub: "A plan is the difference between a system that gets looked at twice a year and one that gets looked at when it stops. Priority scheduling, no overtime charges, and the same technician who knows the system.",
+    proof: ["Two visits a year", "Priority scheduling", "No overtime charges"],
+    lead: "book",
+    steps: [
+      {
+        title: "Pick a plan",
+        body: "One system or several. Residential plans cover the spring and autumn visits; multi-system homes are priced per unit.",
+      },
+      {
+        title: "We book the visits",
+        body: "March and October, scheduled by us rather than remembered by you. You get a call to confirm a window each time.",
+      },
+      {
+        title: "You get the report, twice a year",
+        body: "The same written condition report as the one-off service, so you can see what changed between visits — which is what actually predicts a failure.",
+      },
+    ],
+    reasons: [
+      {
+        title: "Priority when the season breaks",
+        body: "In July the schedule fills with emergencies. Plan members go to the front of it, which is the whole point of being on one.",
+      },
+      {
+        title: "No overtime charges",
+        body: "An after-hours call on a plan is charged at the normal rate. That is worth more than most of the discount lines on a maintenance agreement.",
+      },
+      {
+        title: "A history, not a visit",
+        body: "Two readings a year on the same system is a trend. It is how a failing capacitor or a slow refrigerant leak shows up before it strands you.",
+      },
+      {
+        title: "It protects the manufacturer warranty",
+        body: "Most manufacturer warranties require documented annual maintenance. A plan produces the paperwork automatically.",
+      },
+    ],
+    faqs: [
+      {
+        q: "What does a plan cost?",
+        a: "Plan pricing is being finalised. Call us and we will give you the current rate for your system, and the one-off $89 Clean & Tune is available either way.",
+      },
+      {
+        q: "What is included in each visit?",
+        a: "The same ten-point service as the one-off Clean & Tune: thermostat, filter, drain line and pan, capacitor readings, both coils, amp draws and refrigerant pressures, heater operation and a written report.",
+      },
+      {
+        q: "Can I cover more than one system?",
+        a: "Yes. Multi-system homes are priced per unit, and several addresses can sit on one agreement.",
+      },
+      {
+        q: "What if I need a repair between visits?",
+        a: "Plan members get priority scheduling and no overtime charge. Repairs themselves are quoted flat, the same as for anyone else.",
+      },
+    ],
+    close: {
+      title: "Ask about a plan",
+      body: "Tell us how many systems and where. We will come back with the plan rate and the next available visit.",
+    },
+  },
+
+  /* --------------------------------------------------- /ac-replacement */
+  {
+    path: "/ac-replacement",
+    plan: "google-ads",
+    adGroups: ["AC Replacement", "AC Installation"],
+    campaign: "Search — AC Replacement",
+    platform: "Google Ads",
     variant: "replacement",
-    adHeadline: "New AC System, Financed — Free Quote, Licensed Installer",
+    adHeadline: "Free AC Replacement Estimate — Financing Available",
     terms: [
       "ac replacement cost",
-      "new ac unit price",
-      "hvac installation near me",
-      "ac financing",
+      "new ac unit cost",
+      "ac installation near me",
+      "replace air conditioner naples",
+      "new ac install naples",
     ],
-    title: `AC Replacement & Installation | ${business.name}`,
-    description: `A written quote for a new system, a permit pulled properly, and monthly payment options worked out before you commit. Licensed ${business.license}. Call ${business.phone}.`,
+    requirements: [
+      "Financing",
+      "Brands — LIST NOT CONFIRMED, see admin",
+      "Free estimate form",
+      "Repair-vs-replace guidance",
+    ],
+    title: `AC Replacement & Installation in Naples | ${business.name}`,
+    description: `A free in-home estimate, a properly sized system, permits and haul-away included, financing available. Licensed ${business.license}. Call ${business.phone}.`,
     eyebrow: "System replacement",
     h1: "A new system, priced in writing before you commit.",
-    sub: "Most people replacing a system have been told a number over the phone and nothing else. You get a load calculation, two or three real options with the monthly cost of each, and the permit handled.",
-    proof: ["Written quote, no pressure", "Permit pulled and inspected", "Monthly options shown up front"],
+    sub: "Most people replacing a system have been given a number over the phone and nothing else. You get a load calculation, two or three real options with the monthly cost of each, and the permit handled.",
+    proof: ["Free in-home estimate", "Permits & haul-away included", "Financing available"],
     lead: "book",
     steps: [
       {
         title: "A visit, not a phone estimate",
-        body: "Someone looks at the house: the ductwork, the electrical, where the air handler sits and how much system it actually needs. A quote given over the phone is a guess.",
+        body: "Someone looks at the house: the ductwork, the electrical, where the air handler sits and how much system it actually needs. A number given over the phone is a guess.",
       },
       {
-        title: "Options with monthly numbers",
-        body: "Usually three: a solid baseline, a mid tier, and the efficient one. Each with an installed price and the monthly payment beside it, so the decision is a real comparison.",
+        title: "Options with monthly figures",
+        body: "Usually three — a solid baseline, a mid tier and the efficient one — each with an installed price and the monthly payment beside it, so the decision is a real comparison.",
       },
       {
         title: "Installed, permitted, inspected",
-        body: `The permit goes through your city's office and the job is inspected. That paperwork is what a buyer's inspector asks for years later.`,
+        body: "The permit goes through your city's office and the job is inspected. That paperwork is what a buyer's inspector asks for years later.",
       },
     ],
     reasons: [
       {
         title: "Sized by calculation, not by habit",
-        body: "An oversized system short-cycles, never pulls the humidity out, and dies early — which in this climate is the single most common install mistake.",
+        body: "An oversized system short-cycles, never pulls the humidity out and dies early — in this climate the single most common install mistake.",
+      },
+      {
+        title: "Repair or replace? We will say which",
+        body: "The rough test is the age of the system against the cost of the repair. A ten-year-old unit with a $400 fix is usually worth fixing, and we will tell you so.",
       },
       {
         title: "The quote is the price",
@@ -247,21 +382,17 @@ export const landingPages: LandingPage[] = [
       },
       {
         title: "Financing figured out before you decide",
-        body: "You can work the monthly number yourself on this page. Nobody should be signing for a system without knowing what it does to the month.",
-      },
-      {
-        title: "Ten to fifteen years is the real window here",
-        body: "Near-constant runtime and salt air shorten the life of a system on this coast. If yours is in that band, a condition report is worth more than another repair.",
+        body: "Work the monthly number yourself on this page. Nobody should sign for a system without knowing what it does to the month.",
       },
     ],
     faqs: [
       {
         q: "What does a new system cost?",
-        a: "It depends on the size, the efficiency and what the ductwork and electrical need. That is why the quote comes after a visit — but you get the full installed number in writing, not a range.",
+        a: "It depends on the size, the efficiency, and what the ductwork and electrical need. That is why the estimate comes after a visit — but you get the full installed number in writing, not a range.",
       },
       {
         q: "Do I need a permit?",
-        a: "Yes. Florida requires one for a system replacement, and the issuing office differs by city. We pull it and meet the inspector.",
+        a: "Yes. Florida requires one for a system replacement and the issuing office differs by city. We pull it and meet the inspector.",
       },
       {
         q: "Can I finance it?",
@@ -269,25 +400,30 @@ export const landingPages: LandingPage[] = [
       },
       {
         q: "Should I repair it instead?",
-        a: "Often, yes — and we will say so. The rough test is the age of the system against the cost of the repair; a ten-year-old unit with a $400 fix is usually worth fixing.",
+        a: "Often, yes — and we will say so. If the system is under about ten years old and the repair is a few hundred dollars, replacing it is rarely the better buy.",
       },
     ],
     close: {
-      title: "Get the quote in writing",
+      title: "Get the free estimate",
       body: "Tell us about the system and the house. We will book a visit and put real numbers in front of you.",
     },
   },
 
-  /* ---------------------------------------------------------------- storm */
+  /* -------------------------------------------------------- Meta plan */
+  /* Not part of the Google Ads build sheet. These belong to our own Meta
+     campaigns in content/marketing.ts and stay under /lp/. */
   {
-    slug: "storm-ready",
+    path: "/lp/storm-ready",
+    plan: "meta",
+    adGroups: [],
     campaign: "Storm season readiness",
     platform: "Meta",
     variant: "storm",
     adHeadline: "Is Your AC Mounted For The Next One? Free Storm Check",
-    terms: ["hurricane hvac", "elevated ac pad", "storm damage ac", "ian ac repair"],
+    terms: ["hurricane hvac", "elevated ac pad", "storm damage ac"],
+    requirements: ["Elevation and mounting", "Wet-duct inspection", "Written report"],
     title: `Storm-Season HVAC Checks | ${business.name}`,
-    description: `Elevated pads, hurricane-rated mounts and the ductwork that got wet in 2022 and never properly dried. A storm-readiness check across ${region}. Call ${business.phone}.`,
+    description: `Elevated pads, hurricane-rated mounts and the ductwork that got wet in 2022 and never properly dried. Call ${business.phone}.`,
     eyebrow: "Storm season",
     h1: "The last one took the condenser. Where is yours sitting?",
     sub: "A great deal of the mechanical work on this coast is still storm repair that never finished — units back on the original slab, mounts that were never rated, ductwork that got wet once and was never properly dried.",
@@ -310,7 +446,7 @@ export const landingPages: LandingPage[] = [
     reasons: [
       {
         title: "Elevation is the cheapest insurance there is",
-        body: "A condenser raised onto a proper stand survives water that writes off one sitting on the original pad. It is a fraction of a replacement.",
+        body: "A condenser raised onto a proper stand survives water that writes off one sitting on the original pad, for a fraction of a replacement.",
       },
       {
         title: "Rated mounts, not whatever was there",
@@ -318,7 +454,7 @@ export const landingPages: LandingPage[] = [
       },
       {
         title: "We were here for the last one",
-        body: `Storm-impacted cities across our area — ${locations.filter((l) => l.conditions.stormImpact).map((l) => l.city).slice(0, 5).join(", ")} — and we are still finishing work that started then.`,
+        body: "We are still finishing work that started in 2022, which is how we know what to look for.",
       },
       {
         title: "Before the season, not during it",
@@ -348,25 +484,21 @@ export const landingPages: LandingPage[] = [
       body: "Tell us the city and roughly how old the system is. We will come and look before the season does.",
     },
   },
-
-  /* ----------------------------------------------------------- commercial */
   {
-    slug: "commercial-hvac",
+    path: "/lp/commercial-hvac",
+    plan: "meta",
+    adGroups: [],
     campaign: "Site retargeting",
     platform: "Meta",
     variant: "commercial",
-    adHeadline: "Commercial HVAC With A Real Response Time — Service Agreements",
-    terms: [
-      "commercial hvac near me",
-      "commercial ac repair",
-      "rooftop unit service",
-      "hvac service contract",
-    ],
-    title: `Commercial HVAC in ${region} | ${business.name}`,
-    description: `Rooftop units, split systems and service agreements for restaurants, offices, HOAs and senior housing across ${region}. Licensed ${business.license}. Call ${business.phone}.`,
+    adHeadline: "Commercial HVAC With A Real Response Time",
+    terms: ["commercial hvac near me", "rooftop unit service", "hvac service contract"],
+    requirements: ["Sectors served", "Service agreements", "Response time"],
+    title: `Commercial HVAC | ${business.name}`,
+    description: `Rooftop units, split systems and service agreements for restaurants, offices, HOAs and senior housing. Licensed ${business.license}. Call ${business.phone}.`,
     eyebrow: "Commercial",
     h1: "When the rooftop goes down, the business stops.",
-    sub: "Restaurants, medical and professional offices, HOAs, retail and senior housing across the coast. Planned maintenance that keeps units running, and a response time that is written into the agreement rather than implied.",
+    sub: "Restaurants, medical and professional offices, HOAs, retail and senior housing. Planned maintenance that keeps units running, and a response time written into the agreement rather than implied.",
     proof: ["Service agreements", "Licensed & insured", "After-hours response"],
     lead: "call",
     steps: [
@@ -426,5 +558,5 @@ export const landingPages: LandingPage[] = [
   },
 ];
 
-export const landingBySlug = (slug: string) =>
-  landingPages.find((p) => p.slug === slug);
+export const landingByPath = (path: string) =>
+  landingPages.find((p) => p.path === path);

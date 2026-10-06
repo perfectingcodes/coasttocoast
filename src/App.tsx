@@ -16,6 +16,7 @@ import Contact from "@/pages/contact";
 import Financing from "@/pages/financing";
 import LegalPage from "@/pages/legal";
 import LandingPageView from "@/pages/landing";
+import { landingPages } from "@/content/landing";
 import NotFound from "@/pages/not-found";
 
 import AdminHome from "@/pages/admin/index";
@@ -25,6 +26,7 @@ import AdminCampaigns from "@/pages/admin/campaigns";
 import AdminLeads from "@/pages/admin/leads";
 import AdminResources from "@/pages/admin/resources";
 import AdminGoogle from "@/pages/admin/google";
+import AdminGoogleAds from "@/pages/admin/google-ads";
 import AdminTracking from "@/pages/admin/tracking";
 
 function Routes() {
@@ -47,9 +49,14 @@ function Routes() {
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/financing" component={Financing} />
-      {/* Paid landing pages. Noindexed, excluded from the sitemap, no site
-          navigation — see pages/landing.tsx. */}
-      <Route path="/lp/:slug">{(params) => <LandingPageView slug={params.slug} />}</Route>
+      {/* Paid landing pages, each at the path the Google Ads build sheet
+          points its ad groups and sitelinks at. Noindexed and excluded from
+          the sitemap — see pages/landing.tsx. */}
+      {landingPages.map((lp) => (
+        <Route key={lp.path} path={lp.path}>
+          {() => <LandingPageView path={lp.path} />}
+        </Route>
+      ))}
       {/* Internal dashboard. No auth — static build. Noindexed, disallowed
           in robots.txt and excluded from the sitemap. */}
       <Route path="/admin" component={AdminHome} />
@@ -58,6 +65,7 @@ function Routes() {
       <Route path="/admin/campaigns" component={AdminCampaigns} />
       <Route path="/admin/leads" component={AdminLeads} />
       <Route path="/admin/resources" component={AdminResources} />
+      <Route path="/admin/google-ads" component={AdminGoogleAds} />
       <Route path="/admin/google" component={AdminGoogle} />
       <Route path="/admin/tracking" component={AdminTracking} />
 
@@ -74,7 +82,10 @@ function Routes() {
  */
 function SupportLauncher() {
   const [location] = useLocation();
-  if (location.startsWith("/admin") || location.startsWith("/lp")) return null;
+  // Paid pages now sit at top-level paths, so this checks the real list
+  // rather than a prefix that stopped being true.
+  const isPaid = landingPages.some((lp) => lp.path === location);
+  if (location.startsWith("/admin") || isPaid) return null;
   return <SupportBot />;
 }
 
