@@ -25,7 +25,7 @@ async function main() {
     path.resolve(publicDir, "index.html"),
     "utf-8",
   );
-  const { render, routes, publicRoutes, siteUrl, buildLlmsTxt } = await import(
+  const { render, routes, publicRoutes, adRoutes, siteUrl, buildLlmsTxt } = await import(
     pathToFileURL(serverEntry).href,
   );
 
@@ -119,7 +119,7 @@ ${publicRoutes
   );
 
   console.log(
-    `\n✅ Prerendered ${routes.length} pages (${publicRoutes.length} public + ${routes.length - publicRoutes.length} admin) + 404.html + sitemap.xml + robots.txt + llms.txt`,
+    `\n✅ Prerendered ${routes.length} pages (${publicRoutes.length} public + ${adRoutes.length} ad landing + ${routes.length - publicRoutes.length - adRoutes.length} admin) + 404.html + sitemap.xml + robots.txt + llms.txt`,
   );
 }
 

@@ -15,6 +15,7 @@ import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import Financing from "@/pages/financing";
 import LegalPage from "@/pages/legal";
+import LandingPageView from "@/pages/landing";
 import NotFound from "@/pages/not-found";
 
 import AdminHome from "@/pages/admin/index";
@@ -46,6 +47,9 @@ function Routes() {
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/financing" component={Financing} />
+      {/* Paid landing pages. Noindexed, excluded from the sitemap, no site
+          navigation — see pages/landing.tsx. */}
+      <Route path="/lp/:slug">{(params) => <LandingPageView slug={params.slug} />}</Route>
       {/* Internal dashboard. No auth — static build. Noindexed, disallowed
           in robots.txt and excluded from the sitemap. */}
       <Route path="/admin" component={AdminHome} />
@@ -64,10 +68,13 @@ function Routes() {
   );
 }
 
-/** Public pages only — the internal dashboard has no use for it. */
+/**
+ * Public marketing pages only. The dashboard has no use for it, and on a paid
+ * landing page it is one more thing to click instead of converting.
+ */
 function SupportLauncher() {
   const [location] = useLocation();
-  if (location.startsWith("/admin")) return null;
+  if (location.startsWith("/admin") || location.startsWith("/lp")) return null;
   return <SupportBot />;
 }
 

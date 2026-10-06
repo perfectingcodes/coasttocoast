@@ -1,7 +1,11 @@
 {
-  "generatedAt": "2026-10-06T17:14:19.921Z",
-  "pages": 86,
-  "problems": [],
+  "generatedAt": "2026-10-06T17:42:54.552Z",
+  "pages": 91,
+  "problems": [
+    "lp/ac-replacement/index.html: title 71 chars (max 62)",
+    "lp/emergency-ac-repair/index.html: title 66 chars (max 62)",
+    "lp/storm-ready/index.html: title 66 chars (max 62)"
+  ],
   "similarity": {
     "service x city": {
       "pages": 54,

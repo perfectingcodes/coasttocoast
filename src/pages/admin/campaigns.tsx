@@ -1,4 +1,6 @@
+import { ExternalLink } from "lucide-react";
 import { campaigns } from "@/content/marketing";
+import { landingPages } from "@/content/landing";
 import { AdminShell } from "@/components/admin/shell";
 import { CampaignBoard } from "@/components/admin/kanban";
 import { NotConnected, Panel, StatCard, StatusPill, Table, Td } from "@/components/admin/ui";
@@ -34,6 +36,65 @@ export default function AdminCampaigns() {
             status: c.status,
           }))}
         />
+      </Panel>
+
+      <Panel
+        title="Landing pages"
+        subtitle="Where each paid campaign sends its clicks. Sending ad traffic to a service page that carries the full site navigation is how a budget leaks."
+      >
+        <ul className="space-y-2.5">
+          {landingPages.map((lp) => {
+            const campaign = campaigns.find((c) => c.name === lp.campaign);
+            return (
+              <li
+                key={lp.slug}
+                className="min-w-0 rounded-xl bg-navy/[0.025] p-4 ring-1 ring-inset ring-navy/8"
+              >
+                <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+                  <div className="min-w-0">
+                    <a
+                      href={`/lp/${lp.slug}`}
+                      className="inline-flex items-center gap-1.5 font-display text-[0.9rem] font-extrabold text-navy hover:text-blue"
+                    >
+                      /lp/{lp.slug}
+                      <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
+                    </a>
+                    <p className="mt-1 text-[0.78rem] text-navy/55">
+                      {lp.campaign} · {lp.platform}
+                    </p>
+                  </div>
+                  {campaign && <StatusPill status={campaign.status} />}
+                </div>
+
+                <p className="mt-3 border-t border-navy/8 pt-3 text-[0.8rem] leading-relaxed text-navy/70">
+                  <span className="font-mono text-[0.6rem] uppercase tracking-[0.1em] text-navy/40">
+                    Ad headline
+                  </span>
+                  <br />
+                  {lp.adHeadline}
+                </p>
+                <ul className="mt-3 flex flex-wrap gap-1.5">
+                  {lp.terms.map((t) => (
+                    <li
+                      key={t}
+                      className="rounded-full bg-white px-2.5 py-1 font-mono text-[0.62rem] text-navy/55 ring-1 ring-navy/10"
+                    >
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            );
+          })}
+        </ul>
+        <p className="mt-4 text-[0.74rem] leading-relaxed text-navy/50">
+          Every landing page carries <code className="font-mono">noindex</code> and
+          is excluded from the sitemap, so it cannot compete with the organic
+          city and service pages for the same terms. They are deliberately{" "}
+          <strong className="font-semibold text-navy/70">not</strong> blocked in
+          robots.txt — AdsBot has to be able to fetch a landing page or the ad
+          is disapproved.
+        </p>
       </Panel>
 
       <Panel title="All campaigns" subtitle="Planned, not running.">

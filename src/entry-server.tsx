@@ -2,6 +2,7 @@ import { renderToString } from "react-dom/server";
 import App from "./App";
 import { renderHeadToString, type HeadCollector } from "./lib/head";
 import { business, cleanAndTune, countyList, locations, region, services } from "./content/site";
+import { landingPages } from "./content/landing";
 
 /** Canonical origin, so the prerender step and the pages agree on one host. */
 export const siteUrl: string = business.url.replace(/\/$/, "");
@@ -28,6 +29,16 @@ export const publicRoutes: string[] = [
 ];
 
 /**
+ * Paid landing pages. Prerendered so the ad platforms get real HTML, but kept
+ * out of the sitemap — they carry noindex because they would otherwise
+ * compete with the organic city and service pages for the same terms.
+ *
+ * Deliberately NOT disallowed in robots.txt: AdsBot has to be able to fetch a
+ * landing page or the ad is disapproved.
+ */
+export const adRoutes: string[] = landingPages.map((p) => `/lp/${p.slug}`);
+
+/**
  * Internal dashboard routes. Prerendered so they exist as real pages, but
  * deliberately kept out of the sitemap and disallowed in robots.txt. They
  * carry noindex via the Seo component. There is no authentication on this
@@ -45,7 +56,7 @@ export const adminRoutes: string[] = [
 ];
 
 /** Everything that gets written to disk. */
-export const routes: string[] = [...publicRoutes, ...adminRoutes];
+export const routes: string[] = [...publicRoutes, ...adRoutes, ...adminRoutes];
 
 /**
  * llms.txt — the emerging convention for handing answer engines a clean,
