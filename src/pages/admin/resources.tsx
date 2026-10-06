@@ -4,6 +4,7 @@ import {
   AtSign,
   Check,
   Copy,
+  ExternalLink,
   Handshake,
   MessageSquare,
   ShieldAlert,
@@ -19,8 +20,9 @@ import {
   type Channel,
   type ReviewStep,
 } from "@/content/reviews";
+import { landingPages } from "@/content/landing";
 import { AdminShell } from "@/components/admin/shell";
-import { NotConnected, Panel, StatCard } from "@/components/admin/ui";
+import { Micro, NotConnected, Panel, StatCard } from "@/components/admin/ui";
 import { ago, toggleReviewStep, useCrm, type Lead } from "@/lib/leads";
 import { cn } from "@/lib/utils";
 
@@ -58,7 +60,7 @@ export default function AdminResources() {
       title="Resources"
       lead="The review request sequence, the message copy that goes with it, and the rules that keep a Google profile out of trouble."
     >
-      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-5">
         <StatCard
           label="Steps in the sequence"
           value={reviewSequence.filter((s) => s.id !== "stop").length}
@@ -81,12 +83,101 @@ export default function AdminResources() {
         {/* No icon tile on this one: the value is a word, and the tile left
             it 72px to render in. */}
         <StatCard
+          label="Landing pages"
+          value={landingPages.length}
+          icon={<ExternalLink className="size-4" />}
+          hint="Indexed below"
+        />
+        <StatCard
           label="Review link"
           value={reviewLink.url ? "Ready" : "Not set"}
           tone={reviewLink.url ? "good" : "bad"}
           hint="Google profile must be claimed first"
         />
       </div>
+
+      {/* Every landing page in one place. This is what somebody comes to
+          this page for when they ask "what is the link for the tune-up ad?",
+          so it sits above the review sequence rather than under it. */}
+      <Panel
+        title="Landing pages"
+        subtitle="Every paid page on the site, what it is bought against, and what it has to carry."
+      >
+        {(["google-ads", "meta"] as const).map((plan) => {
+          const pages = landingPages.filter((p) => p.plan === plan);
+          if (!pages.length) return null;
+          return (
+            <div key={plan} className="mt-6 first:mt-0">
+              <Micro>
+                {plan === "google-ads"
+                  ? "Google Ads build sheet · Naples, Bonita Springs, Estero"
+                  : "Meta — our own plan"}
+              </Micro>
+              <ul className="mt-3 grid gap-3 lg:grid-cols-2">
+                {pages.map((lp) => (
+                  <li
+                    key={lp.path}
+                    className="min-w-0 rounded-xl bg-navy/[0.025] p-4 ring-1 ring-inset ring-navy/8"
+                  >
+                    <a
+                      href={lp.path}
+                      className="inline-flex items-center gap-1.5 font-display text-[0.92rem] font-extrabold text-navy hover:text-blue"
+                    >
+                      {lp.path}
+                      <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
+                    </a>
+                    <p className="mt-1 text-[0.76rem] text-navy/55">
+                      {lp.campaign} · {lp.platform}
+                    </p>
+                    <p className="mt-2.5 border-t border-navy/8 pt-2.5 text-[0.78rem] leading-relaxed text-navy/70">
+                      {lp.adHeadline}
+                    </p>
+                    {lp.adGroups.length > 0 && (
+                      <p className="mt-2 font-mono text-[0.6rem] uppercase tracking-[0.08em] text-navy/40">
+                        {lp.adGroups.join(" · ")}
+                      </p>
+                    )}
+                    <ul className="mt-3 flex flex-wrap gap-1.5">
+                      {lp.requirements.map((r) => {
+                        const open = /NOT CONFIRMED|NOT SET/i.test(r);
+                        return (
+                          <li
+                            key={r}
+                            className={cn(
+                              "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.66rem] font-semibold ring-1 ring-inset",
+                              open
+                                ? "bg-gold/15 text-amber-800 ring-gold/40"
+                                : "bg-white text-navy/60 ring-navy/10",
+                            )}
+                          >
+                            {open ? (
+                              <ShieldAlert className="size-3 shrink-0" aria-hidden="true" />
+                            ) : (
+                              <Check className="size-3 shrink-0 text-emerald-600" aria-hidden="true" />
+                            )}
+                            {r}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+        <p className="mt-5 text-[0.74rem] leading-relaxed text-navy/50">
+          Emergency AC is call-only and has no page by design. Every page here
+          is <code className="font-mono">noindex</code> and out of the sitemap
+          so it cannot compete with the organic city pages, and deliberately
+          not blocked in robots.txt so AdsBot can fetch it. Full detail and the
+          open decisions sit on{" "}
+          <Link href="/admin/google-ads" className="font-semibold text-blue hover:underline">
+            Google Ads build
+          </Link>
+          .
+        </p>
+      </Panel>
 
       {/* What "automated" does and does not mean here. Stated before the
           sequence, not after it. */}

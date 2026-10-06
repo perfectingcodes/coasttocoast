@@ -22,6 +22,11 @@ import { QuickQuote, QuoteForm } from "@/components/quote-form";
 import { PaymentCalculator } from "@/components/payment-calculator";
 import { FaqList } from "@/components/faq-list";
 import { ButtonLink } from "@/components/ui/button";
+import {
+  KineticWordmark,
+  SectionEyebrow,
+  TrustStrip,
+} from "@/components/brand";
 import { Seo } from "@/lib/seo";
 import { track } from "@/lib/leads";
 import { cn } from "@/lib/utils";
@@ -58,6 +63,12 @@ export default function LandingPageView({ path }: { path: string }) {
 
   const form = <QuoteForm defaultService={serviceFor(page)} />;
 
+  // The sections differ by variant, so the index is counted as they render
+  // rather than hard-coded. Numbering is what turns a long page into one
+  // sequence instead of a pile of bands.
+  let section = 0;
+  const step = () => ++section;
+
   return (
     <>
       <Seo
@@ -75,37 +86,64 @@ export default function LandingPageView({ path }: { path: string }) {
 
         <Hero page={page} form={form} />
 
-        <Steps page={page} />
+        {/* The site's own licence strip, straight after the hero. On a paid
+            page the licence numbers are doing conversion work, not decoration
+            — and it is the same component the organic pages use, which is
+            what makes a landing page look like part of the company rather
+            than like a page a stranger built. */}
+        <TrustStrip />
 
-        {page.variant === "repair" && <CommonCauses />}
-        {page.variant === "offer" && <OfferDetail />}
-        {page.variant === "plans" && <PlanTiers />}
-        {page.variant === "replacement" && <FinanceBlock />}
-        {page.variant === "storm" && <StormCities />}
-        {page.variant === "commercial" && <SectorGrid />}
+        <Steps page={page} index={step()} />
+
+        {page.variant === "repair" && <CommonCauses index={step()} />}
+        {page.variant === "offer" && <OfferDetail index={step()} />}
+        {page.variant === "plans" && <PlanTiers index={step()} />}
+        {page.variant === "replacement" && <FinanceBlock index={step()} />}
+        {page.variant === "storm" && <StormCities index={step()} />}
+        {page.variant === "commercial" && <SectorGrid index={step()} />}
 
         {/* Tab 10 asks for reviews on the repair page. Only quotes we
             actually hold are rendered — see the note in site.ts. */}
-        {page.variant === "repair" && <Reviews />}
+        {page.variant === "repair" && <Reviews index={step()} />}
 
-        <Reasons page={page} />
+        <Reasons page={page} index={step()} />
 
         <section className="shell py-14 md:py-18">
           <div className="grid items-start gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
             <div className="min-w-0">
-              <h2 className="poster text-[clamp(1.6rem,3vw,2.2rem)]">
+              <SectionEyebrow index={step()} className="text-blue">
+                Common questions
+              </SectionEyebrow>
+              <h2 className="poster mt-3 text-[clamp(1.6rem,3vw,2.2rem)]">
                 Questions people ask
                 <span className="text-ember">.</span>
               </h2>
               <FaqList faqs={page.faqs} />
             </div>
             <div id="book" className="scroll-mt-24">
-              <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-blue">
-                {page.close.title}
-              </p>
-              <p className="mt-2 max-w-md leading-relaxed text-navy/70">
-                {page.close.body}
-              </p>
+              <div className="flex items-start gap-4">
+                {/* The mascot, the same one that carries the rest of the
+                    site. A paid page with no character on it reads as a
+                    template somebody bought. */}
+                <img
+                  src="/brand/mascot-bust.webp"
+                  srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
+                  sizes="72px"
+                  alt=""
+                  width={800}
+                  height={849}
+                  loading="lazy"
+                  className="hidden size-[72px] shrink-0 object-contain drop-shadow-[0_10px_20px_rgb(3_12_32/0.25)] sm:block"
+                />
+                <div className="min-w-0">
+                  <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-blue">
+                    {page.close.title}
+                  </p>
+                  <p className="mt-2 max-w-md leading-relaxed text-navy/70">
+                    {page.close.body}
+                  </p>
+                </div>
+              </div>
               <div className="mt-5">{form}</div>
             </div>
           </div>
@@ -124,6 +162,8 @@ export default function LandingPageView({ path }: { path: string }) {
 function AdHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-navy/8 bg-white/92 backdrop-blur-md">
+      {/* The brand's own rule across the top edge of every page. */}
+      <div className="thermal-rule h-[3px] rounded-none" aria-hidden="true" />
       <div className="shell flex h-16 items-center justify-between gap-4">
         <div className="flex min-w-0 items-center gap-3">
           <img
@@ -181,52 +221,86 @@ function StickyCall() {
 
 function AdFooter({ page }: { page: LandingPage }) {
   return (
-    <footer className="border-t border-navy/8 bg-foam py-10">
-      <div className="shell flex flex-col gap-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
-        <div>
-          <p className="font-display text-sm font-extrabold text-navy">
-            {business.name}
-          </p>
-          <p className="mt-1 font-mono text-[0.62rem] uppercase leading-relaxed tracking-[0.1em] text-navy/45">
-            {business.street}, {business.city}, {business.state} {business.zip}
-            <br />
-            Lic. {business.license} · {business.hours}
-          </p>
-          {/* The paid service area, which is narrower than the organic one.
-              Tab 3: Naples, Bonita Springs, Estero and North Naples only. */}
-          {page.plan === "google-ads" && (
-            <p className="mt-2 text-[0.7rem] font-semibold text-navy/55">
-              Serving {adMarketLine}
-              <span className="sr-only"> and {adMarkets[3]}</span>
+    <footer className="band-navy grain relative overflow-hidden text-white">
+      <div className="thermal-rule absolute inset-x-0 top-0 rounded-none" aria-hidden="true" />
+      <div className="grid-lines pointer-events-none absolute inset-0" aria-hidden="true" />
+
+      {/* The oversized wordmark the rest of the site signs off with. */}
+      <KineticWordmark className="relative border-b border-white/10 py-4" />
+
+      <div className="shell relative flex flex-col gap-7 py-10 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex min-w-0 items-start gap-4">
+          <img
+            src="/brand/logo-badge-sm.webp"
+            alt=""
+            width={400}
+            height={369}
+            loading="lazy"
+            className="h-12 w-auto shrink-0 drop-shadow-[0_8px_18px_rgb(3_14_34/0.6)]"
+          />
+          <div className="min-w-0">
+            <p className="font-display text-base font-extrabold">{business.name}</p>
+            <p className="mt-1.5 font-mono text-[0.62rem] uppercase leading-relaxed tracking-[0.12em] text-white/50">
+              {business.street}, {business.city}, {business.state} {business.zip}
+              <br />
+              Lic. {business.license} · {business.hours}
             </p>
-          )}
+            {/* The paid service area, which is narrower than the organic one.
+                Tab 3: Naples, Bonita Springs, Estero and North Naples only. */}
+            {page.plan === "google-ads" && (
+              <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className="font-display text-[0.55rem] font-extrabold uppercase tracking-[0.18em] text-cyan">
+                  Serving
+                </span>
+                {adMarkets.map((m) => (
+                  <span
+                    key={m}
+                    className="rounded-full bg-white/10 px-2.5 py-0.5 text-[0.68rem] font-semibold text-white/80"
+                  >
+                    {m}
+                  </span>
+                ))}
+              </p>
+            )}
+          </div>
         </div>
-        {/* min-h-11 on every one: these are thumb targets on a phone, not
-            desktop footer text. */}
-        <div className="flex flex-wrap items-center justify-center gap-x-5 text-[0.72rem] font-semibold text-navy/55 sm:justify-end">
+
+        <div className="flex shrink-0 flex-col gap-3 sm:items-end">
           <a
             href={business.phoneHref}
             onClick={() => track("call", "Landing footer")}
-            className="inline-flex min-h-11 items-center text-blue"
+            className="inline-flex min-h-11 items-center gap-2 font-display text-lg font-extrabold text-white transition-colors hover:text-cyan"
           >
+            <Phone className="size-4 shrink-0 text-cyan" aria-hidden="true" />
             {business.phone}
           </a>
-          <Link href="/privacy" className="inline-flex min-h-11 items-center">
-            Privacy
-          </Link>
-          <Link href="/terms" className="inline-flex min-h-11 items-center">
-            Terms
-          </Link>
-          {/* One way back to the full site, at the very bottom, where it
-              costs nothing. */}
-          <Link href="/" className="inline-flex min-h-11 items-center">
-            Main site
-          </Link>
+          {/* min-h-11 on every one: these are thumb targets on a phone, not
+              desktop footer text. */}
+          <div className="flex flex-wrap gap-x-5 text-[0.72rem] font-semibold text-white/55">
+            <Link href="/privacy" className="inline-flex min-h-11 items-center hover:text-white">
+              Privacy
+            </Link>
+            <Link href="/terms" className="inline-flex min-h-11 items-center hover:text-white">
+              Terms
+            </Link>
+            {/* One way back to the full site, at the very bottom, where it
+                costs nothing. */}
+            <Link href="/" className="inline-flex min-h-11 items-center hover:text-white">
+              Main site
+            </Link>
+          </div>
         </div>
       </div>
-      <p className="shell mt-6 text-center font-mono text-[0.55rem] uppercase tracking-[0.12em] text-navy/30 sm:text-left">
-        {page.platform} · {page.campaign}
-      </p>
+
+      {/* Registration marks, the same corner detail the organic pages carry. */}
+      <div className="shell relative flex items-center justify-between border-t border-white/10 py-4 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-white/28">
+        <span>
+          {page.platform} · {page.campaign}
+        </span>
+        <span aria-hidden="true">
+          {business.lat.toFixed(3)}°N {Math.abs(business.lng).toFixed(3)}°W
+        </span>
+      </div>
     </footer>
   );
 }
@@ -377,10 +451,20 @@ function ResponseCard() {
 
 /* ----------------------------------------------------------------- blocks */
 
-function Steps({ page }: { page: LandingPage }) {
+function Steps({ page, index }: { page: LandingPage; index: number }) {
   return (
     <section className="border-b border-navy/8 bg-foam py-12 md:py-16">
-      <div className="shell grid gap-8 md:grid-cols-3">
+      <div className="shell">
+        <SectionEyebrow index={index} className="text-blue">
+          How it works
+          {page.plan === "google-ads" && (
+            <span className="font-normal normal-case tracking-normal text-navy/40">
+              · {adMarketLine}
+            </span>
+          )}
+        </SectionEyebrow>
+      </div>
+      <div className="shell mt-7 grid gap-8 md:grid-cols-3">
         {page.steps.map((s, i) => (
           <div key={s.title} className="min-w-0">
             <p className="flex items-center gap-3">
@@ -400,10 +484,13 @@ function Steps({ page }: { page: LandingPage }) {
   );
 }
 
-function Reasons({ page }: { page: LandingPage }) {
+function Reasons({ page, index }: { page: LandingPage; index: number }) {
   return (
     <section className="shell py-14 md:py-18">
-      <h2 className="poster max-w-2xl text-[clamp(1.6rem,3vw,2.2rem)]">
+      <SectionEyebrow index={index} className="text-blue">
+        Why us
+      </SectionEyebrow>
+      <h2 className="poster mt-3 max-w-2xl text-[clamp(1.6rem,3vw,2.2rem)]">
         Why this company
         <span className="text-ember">.</span>
       </h2>
@@ -433,7 +520,7 @@ function Reasons({ page }: { page: LandingPage }) {
  * the common causes so the ad-to-page message matches. Somebody who searched
  * "ac blowing warm air" should see those words on the page they land on.
  */
-function CommonCauses() {
+function CommonCauses({ index }: { index: number }) {
   const causes = [
     {
       name: "A failed capacitor",
@@ -459,7 +546,10 @@ function CommonCauses() {
 
   return (
     <section className="shell py-14 md:py-18">
-      <h2 className="poster max-w-2xl text-[clamp(1.6rem,3vw,2.2rem)]">
+      <SectionEyebrow index={index} className="text-blue">
+        What it usually is
+      </SectionEyebrow>
+      <h2 className="poster mt-3 max-w-2xl text-[clamp(1.6rem,3vw,2.2rem)]">
         AC running but not cooling? It is usually one of four things
         <span className="text-ember">.</span>
       </h2>
@@ -498,12 +588,15 @@ function CommonCauses() {
  * them on a page bought with ad money is both a Google policy violation and
  * the kind of thing that is very hard to walk back.
  */
-function Reviews() {
+function Reviews({ index }: { index: number }) {
   if (!testimonials.length) return null;
   return (
     <section className="bg-foam py-14 md:py-18">
       <div className="shell">
-        <h2 className="poster text-[clamp(1.6rem,3vw,2.2rem)]">
+        <SectionEyebrow index={index} className="text-blue">
+          In their words
+        </SectionEyebrow>
+        <h2 className="poster mt-3 text-[clamp(1.6rem,3vw,2.2rem)]">
           What customers say
           <span className="text-ember">.</span>
         </h2>
@@ -542,7 +635,7 @@ function Reviews() {
  * number: it is the figure they will hold you to. The tiers and what each
  * covers are real; the rate is a phone call until the client sets it.
  */
-function PlanTiers() {
+function PlanTiers({ index }: { index: number }) {
   const tiers = [
     {
       name: "Single system",
@@ -579,7 +672,10 @@ function PlanTiers() {
 
   return (
     <section className="shell py-14 md:py-18">
-      <h2 className="poster max-w-2xl text-[clamp(1.6rem,3vw,2.2rem)]">
+      <SectionEyebrow index={index} className="text-blue">
+        The plans
+      </SectionEyebrow>
+      <h2 className="poster mt-3 max-w-2xl text-[clamp(1.6rem,3vw,2.2rem)]">
         Three plans, depending on what you have
         <span className="text-ember">.</span>
       </h2>
@@ -659,10 +755,13 @@ function PlanTiers() {
 }
 
 /** Offer page only — the ten points, since the price is the whole pitch. */
-function OfferDetail() {
+function OfferDetail({ index }: { index: number }) {
   return (
     <section className="shell py-14 md:py-18">
-      <div className="relative overflow-hidden rounded-card bg-navy p-8 text-white md:p-12">
+      <SectionEyebrow index={index} className="mb-7 text-blue">
+        What the {cleanAndTune.price} covers
+      </SectionEyebrow>
+      <div className="band-navy grain edge-lit relative overflow-hidden rounded-card p-8 text-white shadow-[0_26px_60px_-30px_rgb(7_26_61/0.9)] md:p-12">
         <div className="thermal-rule absolute inset-x-0 top-0 rounded-none" aria-hidden="true" />
         <div className="grid-lines pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="relative grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
@@ -699,14 +798,14 @@ function OfferDetail() {
 }
 
 /** Replacement page only — the number people actually decide on. */
-function FinanceBlock() {
+function FinanceBlock({ index }: { index: number }) {
   return (
     <section className="shell py-14 md:py-18">
       <div className="grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
         <div className="min-w-0">
-          <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-blue">
+          <SectionEyebrow index={index} className="text-blue">
             Work the monthly figure
-          </p>
+          </SectionEyebrow>
           <h2 className="poster mt-4 text-[clamp(1.6rem,3vw,2.2rem)]">
             Decide on the month, not the sticker
             <span className="text-ember">.</span>
@@ -736,15 +835,15 @@ function FinanceBlock() {
 }
 
 /** Storm page only — says where, which is what the audience is segmented on. */
-function StormCities() {
+function StormCities({ index }: { index: number }) {
   const hit = stormCities;
   return (
     <section className="shell py-14 md:py-18">
       <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
         <div className="min-w-0">
-          <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-ember">
+          <SectionEyebrow index={index} className="text-ember">
             Still catching up
-          </p>
+          </SectionEyebrow>
           <h2 className="poster mt-4 text-[clamp(1.6rem,3vw,2.2rem)]">
             Where the work still is
             <span className="text-ember">.</span>
@@ -777,7 +876,7 @@ function StormCities() {
 }
 
 /** Commercial page only — says who this is for before the pitch. */
-function SectorGrid() {
+function SectorGrid({ index }: { index: number }) {
   const sectors = [
     { name: "Restaurants & retail", note: "Makeup air, kitchen loads, trading-hours work", Icon: Wind },
     { name: "Medical & professional offices", note: "Humidity control and quiet operation", Icon: ShieldCheck },
@@ -787,7 +886,10 @@ function SectorGrid() {
   return (
     <section className="bg-foam py-14 md:py-18">
       <div className="shell">
-        <h2 className="poster text-[clamp(1.6rem,3vw,2.2rem)]">
+        <SectionEyebrow index={index} className="text-blue">
+          Sectors
+        </SectionEyebrow>
+        <h2 className="poster mt-3 text-[clamp(1.6rem,3vw,2.2rem)]">
           Who this is for
           <span className="text-ember">.</span>
         </h2>
