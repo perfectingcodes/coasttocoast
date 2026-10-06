@@ -24,6 +24,7 @@ import { FaqList } from "@/components/faq-list";
 import { ButtonLink } from "@/components/ui/button";
 import {
   KineticWordmark,
+  LicenceCard,
   SectionEyebrow,
   TrustStrip,
 } from "@/components/brand";
@@ -47,6 +48,93 @@ import NotFound from "./not-found";
  * page leads with the phone on a dark ground, the replacement page leads with
  * the payment calculator, the offer page leads with the price.
  */
+
+/**
+ * Each page gets one accent out of the brand palette, so six pages built from
+ * one template still read as six pages rather than as one page six times. The
+ * accent carries the section indices, the ghost numerals and the stop after
+ * each heading — nothing structural, everything visible.
+ */
+const ACCENT: Record<
+  LandingPage["variant"],
+  { text: string; rule: string; ghost: string; tint: string }
+> = {
+  repair: { text: "text-ember", rule: "bg-ember", ghost: "text-ember/10", tint: "bg-ember/10 text-ember" },
+  offer: { text: "text-orange", rule: "bg-orange", ghost: "text-orange/10", tint: "bg-gold/20 text-amber-700" },
+  plans: { text: "text-blue", rule: "bg-blue", ghost: "text-blue/10", tint: "bg-blue/10 text-blue" },
+  replacement: { text: "text-blue", rule: "bg-blue", ghost: "text-blue/10", tint: "bg-blue/10 text-blue" },
+  storm: { text: "text-ember", rule: "bg-ember", ghost: "text-ember/10", tint: "bg-ember/10 text-ember" },
+  commercial: { text: "text-blue", rule: "bg-blue", ghost: "text-blue/10", tint: "bg-blue/10 text-blue" },
+};
+
+/**
+ * One photograph per page.
+ *
+ * Only two of the library's images are usable on a paid page for this market:
+ * the branded condenser, and a Southwest Florida street. The others are a
+ * Samsung mini-split and a European heat pump standing between conifers —
+ * both carry another manufacturer's name and neither looks like Naples, which
+ * on a page bought against "ac repair naples" is worse than no photo at all.
+ */
+const PHOTO: Record<
+  LandingPage["variant"],
+  { src: string; small: string; w: number; h: number; alt: string; focus: string; caption: string }
+> = {
+  repair: {
+    src: "/brand/photo-condenser.webp",
+    small: "/brand/photo-condenser-640.webp",
+    w: 1024,
+    h: 688,
+    focus: "60% 50%",
+    alt: "A Coast to Coast Air condenser unit outside a Southwest Florida home",
+    caption: "The condenser is where most of it fails — and where most of it is fixable.",
+  },
+  offer: {
+    src: "/brand/photo-condenser.webp",
+    small: "/brand/photo-condenser-640.webp",
+    w: 1024,
+    h: 688,
+    focus: "60% 50%",
+    alt: "A Coast to Coast Air condenser unit outside a Southwest Florida home",
+    caption: "Ten points, measured and written down. Not a filter change and a sticker.",
+  },
+  plans: {
+    src: "/brand/photo-street.webp",
+    small: "/brand/photo-street-760.webp",
+    w: 1800,
+    h: 1192,
+    focus: "50% 62%",
+    alt: "A residential street in Southwest Florida",
+    caption: "Two readings a year on the same system is a trend. One reading is a guess.",
+  },
+  replacement: {
+    src: "/brand/photo-street.webp",
+    small: "/brand/photo-street-760.webp",
+    w: 1800,
+    h: 1192,
+    focus: "50% 62%",
+    alt: "A residential street in Southwest Florida",
+    caption: "The system gets sized for the house, not for the last one we installed.",
+  },
+  storm: {
+    src: "/brand/photo-street.webp",
+    small: "/brand/photo-street-760.webp",
+    w: 1800,
+    h: 1192,
+    focus: "50% 58%",
+    alt: "A residential street in coastal Southwest Florida",
+    caption: "All of it takes an hour when it is calm, and none of it can be done in the week a storm is named.",
+  },
+  commercial: {
+    src: "/brand/photo-condenser.webp",
+    small: "/brand/photo-condenser-640.webp",
+    w: 1024,
+    h: 688,
+    focus: "55% 50%",
+    alt: "Air conditioning equipment serviced by Coast to Coast Air",
+    caption: "Rooftop units fail on belts, bearings and controls — not on what a house fails on.",
+  },
+};
 
 const GROUND: Record<LandingPage["variant"], string> = {
   repair: "band-abyss",
@@ -95,6 +183,8 @@ export default function LandingPageView({ path }: { path: string }) {
 
         <Steps page={page} index={step()} />
 
+        <PhotoBand page={page} />
+
         {page.variant === "repair" && <CommonCauses index={step()} />}
         {page.variant === "offer" && <OfferDetail index={step()} />}
         {page.variant === "plans" && <PlanTiers index={step()} />}
@@ -114,9 +204,9 @@ export default function LandingPageView({ path }: { path: string }) {
               <SectionEyebrow index={step()} className="text-blue">
                 Common questions
               </SectionEyebrow>
-              <h2 className="poster mt-3 text-[clamp(1.6rem,3vw,2.2rem)]">
+              <h2 className="poster mt-4 text-[clamp(1.8rem,3.4vw,2.6rem)]">
                 Questions people ask
-                <span className="text-ember">.</span>
+                <span className={ACCENT[page.variant].text}>.</span>
               </h2>
               <FaqList faqs={page.faqs} />
             </div>
@@ -452,10 +542,12 @@ function ResponseCard() {
 /* ----------------------------------------------------------------- blocks */
 
 function Steps({ page, index }: { page: LandingPage; index: number }) {
+  const a = ACCENT[page.variant];
   return (
-    <section className="border-b border-navy/8 bg-foam py-12 md:py-16">
-      <div className="shell">
-        <SectionEyebrow index={index} className="text-blue">
+    <section className="relative overflow-hidden border-b border-navy/8 bg-foam py-14 md:py-18">
+      <div className="grid-lines-light pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div className="shell relative">
+        <SectionEyebrow index={index} className={a.text}>
           How it works
           {page.plan === "google-ads" && (
             <span className="font-normal normal-case tracking-normal text-navy/40">
@@ -463,22 +555,90 @@ function Steps({ page, index }: { page: LandingPage; index: number }) {
             </span>
           )}
         </SectionEyebrow>
-      </div>
-      <div className="shell mt-7 grid gap-8 md:grid-cols-3">
-        {page.steps.map((s, i) => (
-          <div key={s.title} className="min-w-0">
-            <p className="flex items-center gap-3">
-              <span className="font-mono text-[0.8rem] font-bold tabular-nums text-ember">
+
+        <div className="mt-8 grid gap-x-10 gap-y-10 md:grid-cols-3">
+          {page.steps.map((st, i) => (
+            <div key={st.title} className="relative min-w-0">
+              {/* The numeral as a graphic, not a label. */}
+              <span
+                className={cn(
+                  "numeral-ghost pointer-events-none absolute -top-5 right-0 text-[4.5rem] md:-top-7 md:text-[5.5rem]",
+                  a.ghost,
+                )}
+                aria-hidden="true"
+              >
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <span className="h-px flex-1 bg-navy/12" aria-hidden="true" />
-            </p>
-            <h2 className="mt-4 font-display text-lg font-extrabold leading-tight text-navy">
-              {s.title}
-            </h2>
-            <p className="mt-2 text-[0.9rem] leading-relaxed text-navy/65">{s.body}</p>
-          </div>
-        ))}
+              <span
+                className={cn("block h-[3px] w-10 rounded-full", a.rule)}
+                aria-hidden="true"
+              />
+              <h2 className="relative mt-5 font-display text-[1.15rem] font-extrabold leading-tight tracking-[-0.02em] text-navy">
+                {st.title}
+              </h2>
+              <p className="relative mt-2.5 text-[0.92rem] leading-relaxed text-navy/65">
+                {st.body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * One photograph, full width, with the line that matters over it.
+ *
+ * The page needs somewhere for the eye to rest between four blocks of type,
+ * and a landing page with no picture of the actual work on it reads as a
+ * brochure. The image is unbranded equipment rather than stock people, which
+ * is the honest version of what we have.
+ */
+function PhotoBand({ page }: { page: LandingPage }) {
+  const ph = PHOTO[page.variant];
+  const a = ACCENT[page.variant];
+  return (
+    <section className="relative isolate overflow-hidden bg-abyss">
+      <img
+        src={ph.src}
+        srcSet={`${ph.small} 760w, ${ph.src} 1800w`}
+        sizes="100vw"
+        alt={ph.alt}
+        width={ph.w}
+        height={ph.h}
+        loading="lazy"
+        className="absolute inset-0 -z-10 size-full object-cover"
+        style={{ objectPosition: ph.focus }}
+      />
+      {/* A scrim in the brand navy rather than neutral black — the difference
+          between a photograph that belongs to this site and one that merely
+          sits on it. */}
+      <div
+        className="absolute inset-0 -z-10 bg-[linear-gradient(100deg,rgb(5_15_38/0.88)_0%,rgb(5_15_38/0.62)_42%,rgb(5_15_38/0.3)_100%)]"
+        aria-hidden="true"
+      />
+      <div className="thermal-rule absolute inset-x-0 top-0 rounded-none" aria-hidden="true" />
+      <div className="shell relative py-16 md:py-24">
+        {/* The copy gets its own surface rather than sitting loose on the
+            photograph. The condenser shot carries the logo across its middle,
+            and type laid straight over a logo reads as a mistake. */}
+        <div className="glass-instrument relative max-w-lg overflow-hidden p-7 md:p-9">
+          <p className="flex items-center gap-3">
+            <span className={cn("h-[3px] w-10 rounded-full", a.rule)} aria-hidden="true" />
+            <span className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+              On the job
+            </span>
+          </p>
+          <p className="poster mt-5 text-[clamp(1.5rem,3vw,2.2rem)] text-white">
+            {ph.caption}
+          </p>
+          <p className="mt-6 border-t border-white/12 pt-4 font-mono text-[0.6rem] uppercase leading-relaxed tracking-[0.13em] text-white/55">
+            Lic. {business.license} · {business.city}, {business.state}
+            <br />
+            {business.emergency}
+          </p>
+        </div>
       </div>
     </section>
   );
@@ -486,28 +646,69 @@ function Steps({ page, index }: { page: LandingPage; index: number }) {
 
 function Reasons({ page, index }: { page: LandingPage; index: number }) {
   return (
-    <section className="shell py-14 md:py-18">
-      <SectionEyebrow index={index} className="text-blue">
-        Why us
-      </SectionEyebrow>
-      <h2 className="poster mt-3 max-w-2xl text-[clamp(1.6rem,3vw,2.2rem)]">
-        Why this company
-        <span className="text-ember">.</span>
-      </h2>
-      <div className="mt-8 grid gap-x-10 gap-y-8 md:grid-cols-2">
-        {page.reasons.map((r) => (
-          <div key={r.title} className="flex min-w-0 gap-4">
-            <span className="mt-1 grid size-9 shrink-0 place-items-center rounded-xl bg-blue/10 text-blue">
-              <BadgeCheck className="size-4.5" aria-hidden="true" />
-            </span>
-            <div className="min-w-0">
-              <h3 className="font-display text-[1.02rem] font-extrabold text-navy">
-                {r.title}
-              </h3>
-              <p className="mt-1.5 text-[0.9rem] leading-relaxed text-navy/65">{r.body}</p>
-            </div>
+    <section className="band-abyss grain relative overflow-hidden py-16 text-white md:py-20">
+      <div className="grid-lines pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div className="thermal-rule absolute inset-x-0 top-0 rounded-none" aria-hidden="true" />
+
+      <div className="shell relative grid items-start gap-12 lg:grid-cols-[1fr_18rem] lg:gap-16">
+        <div className="min-w-0">
+          <SectionEyebrow index={index} className="text-cyan">
+            Why us
+          </SectionEyebrow>
+          {/* Cyan, not the page accent: blue-on-navy makes the stop vanish. */}
+          <h2 className="poster mt-4 max-w-2xl text-[clamp(1.9rem,3.8vw,2.9rem)]">
+            Why this company
+            <span className="text-cyan">.</span>
+          </h2>
+
+          <ul className="mt-9">
+            {page.reasons.map((r, i) => (
+              <li
+                key={r.title}
+                className="flex gap-5 border-t border-white/12 py-6 first:border-t-0 first:pt-0"
+              >
+                <span
+                  className={cn(
+                    "mt-1 font-mono text-[0.78rem] font-bold tabular-nums",
+                    i === 0 ? "text-cyan" : "text-white/35",
+                  )}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div className="min-w-0">
+                  <h3 className="font-display text-[1.1rem] font-extrabold leading-tight tracking-[-0.015em]">
+                    {r.title}
+                  </h3>
+                  <p className="mt-2 max-w-2xl text-[0.94rem] leading-relaxed text-white/70">
+                    {r.body}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* The licence card the organic site uses, on the ground it was
+            designed for. */}
+        <aside className="min-w-0 lg:sticky lg:top-24">
+          <LicenceCard />
+          <div className="glass mt-4 p-5">
+            <p className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.18em] text-cyan">
+              Call it in
+            </p>
+            <a
+              href={business.phoneHref}
+              onClick={() => track("call", "Reasons rail")}
+              className="mt-2 flex items-center gap-2.5 font-display text-xl font-extrabold text-white transition-colors hover:text-cyan"
+            >
+              <Phone className="size-4 shrink-0 text-cyan" aria-hidden="true" />
+              {business.phone}
+            </a>
+            <p className="mt-2 text-[0.78rem] leading-relaxed text-white/60">
+              A person answers, and you get a time before you hang up.
+            </p>
           </div>
-        ))}
+        </aside>
       </div>
     </section>
   );
@@ -549,7 +750,7 @@ function CommonCauses({ index }: { index: number }) {
       <SectionEyebrow index={index} className="text-blue">
         What it usually is
       </SectionEyebrow>
-      <h2 className="poster mt-3 max-w-2xl text-[clamp(1.6rem,3vw,2.2rem)]">
+      <h2 className="poster mt-4 max-w-3xl text-[clamp(1.8rem,3.4vw,2.6rem)]">
         AC running but not cooling? It is usually one of four things
         <span className="text-ember">.</span>
       </h2>
@@ -596,7 +797,7 @@ function Reviews({ index }: { index: number }) {
         <SectionEyebrow index={index} className="text-blue">
           In their words
         </SectionEyebrow>
-        <h2 className="poster mt-3 text-[clamp(1.6rem,3vw,2.2rem)]">
+        <h2 className="poster mt-4 text-[clamp(1.8rem,3.4vw,2.6rem)]">
           What customers say
           <span className="text-ember">.</span>
         </h2>
@@ -675,9 +876,9 @@ function PlanTiers({ index }: { index: number }) {
       <SectionEyebrow index={index} className="text-blue">
         The plans
       </SectionEyebrow>
-      <h2 className="poster mt-3 max-w-2xl text-[clamp(1.6rem,3vw,2.2rem)]">
+      <h2 className="poster mt-4 max-w-2xl text-[clamp(1.8rem,3.4vw,2.6rem)]">
         Three plans, depending on what you have
-        <span className="text-ember">.</span>
+        <span className="text-blue">.</span>
       </h2>
       <ul className="mt-8 grid gap-5 lg:grid-cols-3">
         {tiers.map((t, i) => (
@@ -806,9 +1007,9 @@ function FinanceBlock({ index }: { index: number }) {
           <SectionEyebrow index={index} className="text-blue">
             Work the monthly figure
           </SectionEyebrow>
-          <h2 className="poster mt-4 text-[clamp(1.6rem,3vw,2.2rem)]">
+          <h2 className="poster mt-4 text-[clamp(1.8rem,3.4vw,2.6rem)]">
             Decide on the month, not the sticker
-            <span className="text-ember">.</span>
+            <span className="text-blue">.</span>
           </h2>
           <p className="mt-4 leading-relaxed text-navy/70">
             Move the sliders to whatever you are considering. These are
@@ -844,7 +1045,7 @@ function StormCities({ index }: { index: number }) {
           <SectionEyebrow index={index} className="text-ember">
             Still catching up
           </SectionEyebrow>
-          <h2 className="poster mt-4 text-[clamp(1.6rem,3vw,2.2rem)]">
+          <h2 className="poster mt-4 text-[clamp(1.8rem,3.4vw,2.6rem)]">
             Where the work still is
             <span className="text-ember">.</span>
           </h2>
@@ -889,9 +1090,9 @@ function SectorGrid({ index }: { index: number }) {
         <SectionEyebrow index={index} className="text-blue">
           Sectors
         </SectionEyebrow>
-        <h2 className="poster mt-3 text-[clamp(1.6rem,3vw,2.2rem)]">
+        <h2 className="poster mt-4 text-[clamp(1.8rem,3.4vw,2.6rem)]">
           Who this is for
-          <span className="text-ember">.</span>
+          <span className="text-blue">.</span>
         </h2>
         <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {sectors.map(({ name, note, Icon }) => (
