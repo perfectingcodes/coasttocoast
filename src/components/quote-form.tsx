@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { business, locations, services } from "@/content/site";
 import { Button } from "@/components/ui/button";
+import { captureLead, track } from "@/lib/leads";
 
 /**
  * Quote request form.
@@ -29,6 +30,12 @@ export function QuoteForm({
     const form = event.currentTarget;
     const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
     setState("sending");
+
+    // Record it before anything can fail. The dashboard's CRM reads this —
+    // on this device only, until a backend exists (see lib/leads.ts) — so a
+    // request is never lost to a dead endpoint or a blocked mail client.
+    captureLead(data);
+    track("quote-submit", data.service);
 
     if (!endpoint) {
       const body = Object.entries(data)

@@ -38,6 +38,7 @@ export const adminRoutes: string[] = [
   "/admin/seo",
   "/admin/marketing",
   "/admin/campaigns",
+  "/admin/leads",
   "/admin/google",
   "/admin/tracking",
 ];

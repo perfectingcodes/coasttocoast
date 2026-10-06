@@ -1,8 +1,9 @@
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { ArrowRight, Info, Phone } from "lucide-react";
 import { business } from "@/content/site";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/leads";
 
 /**
  * Monthly payment estimator.
@@ -40,6 +41,17 @@ export function PaymentCalculator({ className }: { className?: string }) {
   const [term, setTerm] = useState<number>(60);
   const [apr, setApr] = useState(9.99);
   const [down, setDown] = useState(0);
+
+  // One event the first time somebody actually moves a slider — a count of
+  // people who came to work out a payment is worth having; a count of people
+  // who scrolled past the widget is not.
+  const logged = useRef(false);
+  useEffect(() => {
+    if (logged.current) return;
+    if (amount === 9000 && term === 60 && apr === 9.99 && down === 0) return;
+    logged.current = true;
+    track("financing", `$${amount.toLocaleString()} over ${term} months`);
+  }, [amount, term, apr, down]);
 
   const amountId = useId();
   const downId = useId();

@@ -1,6 +1,7 @@
 import { Route, Router as WouterRouter, Switch, useLocation } from "wouter";
 import { MotionConfig } from "framer-motion";
 import { ScrollToTop } from "@/components/scroll-to-top";
+import { TrafficTracker } from "@/components/traffic-tracker";
 import { SupportBot } from "@/components/support-bot";
 import { HeadProvider, type HeadCollector } from "@/lib/head";
 
@@ -20,6 +21,7 @@ import AdminHome from "@/pages/admin/index";
 import AdminSeo from "@/pages/admin/seo";
 import AdminMarketing from "@/pages/admin/marketing";
 import AdminCampaigns from "@/pages/admin/campaigns";
+import AdminLeads from "@/pages/admin/leads";
 import AdminGoogle from "@/pages/admin/google";
 import AdminTracking from "@/pages/admin/tracking";
 
@@ -49,6 +51,7 @@ function Routes() {
       <Route path="/admin/seo" component={AdminSeo} />
       <Route path="/admin/marketing" component={AdminMarketing} />
       <Route path="/admin/campaigns" component={AdminCampaigns} />
+      <Route path="/admin/leads" component={AdminLeads} />
       <Route path="/admin/google" component={AdminGoogle} />
       <Route path="/admin/tracking" component={AdminTracking} />
 
@@ -78,6 +81,7 @@ export default function App({
       <HeadProvider collector={head}>
         <WouterRouter ssrPath={ssrPath}>
           <ScrollToTop />
+          <TrafficTracker />
           <Routes />
           <SupportLauncher />
         </WouterRouter>

@@ -10,6 +10,7 @@ import {
 } from "@/content/site";
 import { cityFaqs } from "@/content/local";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/leads";
 
 /**
  * "Ask Coast" — the support launcher in the bottom corner.
@@ -111,7 +112,9 @@ export function SupportBot() {
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (open) inputRef.current?.focus();
+    if (!open) return;
+    inputRef.current?.focus();
+    track("chat");
   }, [open]);
 
   // Escape closes; clicking outside closes.

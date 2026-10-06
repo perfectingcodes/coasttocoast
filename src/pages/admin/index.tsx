@@ -1,5 +1,13 @@
 import { Link } from "wouter";
-import { ArrowRight, CircleAlert, Gauge, Globe, Megaphone, Target } from "lucide-react";
+import {
+  ArrowRight,
+  CircleAlert,
+  Gauge,
+  Globe,
+  Megaphone,
+  Target,
+  Users,
+} from "lucide-react";
 import { business, cleanAndTune, counties, locations, services } from "@/content/site";
 import {
   channels,
@@ -17,6 +25,7 @@ import {
   Table,
   Td,
 } from "@/components/admin/ui";
+import { STAGES, ago, traction, useCrm } from "@/lib/leads";
 
 /** Home Base — the one screen that answers "where does everything stand". */
 export default function AdminHome() {
@@ -26,6 +35,9 @@ export default function AdminHome() {
   const trackingBlocked = trackingStack.filter(
     (t) => t.status === "blocked" || t.status === "not-connected",
   );
+  const crm = useCrm();
+  const t = traction(crm.events);
+  const openLeads = crm.leads.filter((l) => l.stage !== "won" && l.stage !== "lost");
   const peak = Math.max(...seasonality.map((s) => s.demand));
   const month = new Date().toLocaleString("en-US", { month: "short" });
   const current = seasonality.find((s) => s.month === month);
@@ -87,7 +99,7 @@ export default function AdminHome() {
             {
               what: "Quote form has no destination",
               go: "/admin/tracking",
-              why: "VITE_QUOTE_ENDPOINT is unset, so the form falls back to opening a prefilled email. Leads are not lost but are not tracked.",
+              why: "VITE_QUOTE_ENDPOINT is unset, so the form falls back to opening a prefilled email. Requests are also written to the visitor's own browser, which the office cannot see.",
               who: "Elevate",
             },
             {
@@ -140,6 +152,60 @@ export default function AdminHome() {
           href="/admin/google"
         />
       </div>
+
+      <Panel
+        title="Leads & traction"
+        subtitle="Read from this browser only — there is no server to share it. Full picture on the Leads page."
+        action={
+          <Link
+            href="/admin/leads"
+            className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-600 ring-1 ring-slate-300 transition-colors hover:bg-slate-100"
+          >
+            Open CRM
+            <ArrowRight className="size-3.5" aria-hidden="true" />
+          </Link>
+        }
+      >
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {[
+            ["Leads", crm.leads.length],
+            ["Still open", openLeads.length],
+            ["Views, 14 days", t.views],
+            ["Phone taps", t.calls],
+          ].map(([label, n]) => (
+            <div key={label as string} className="min-w-0">
+              <p className="font-display text-2xl font-extrabold leading-none tabular-nums text-slate-900">
+                {n as number}
+              </p>
+              <p className="mt-1 text-[0.7rem] font-medium leading-snug text-slate-500">
+                {label as string}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {crm.leads.length > 0 ? (
+          <ul className="mt-5 space-y-2 border-t border-slate-100 pt-4">
+            {crm.leads.slice(0, 4).map((l) => (
+              <li key={l.id} className="flex flex-wrap items-baseline gap-x-2.5 text-xs">
+                <span className="font-semibold text-slate-900">{l.name}</span>
+                <span className="text-slate-500">
+                  {[l.service, l.city].filter(Boolean).join(" · ")}
+                </span>
+                <span className="ml-auto shrink-0 font-mono text-[0.6rem] uppercase tracking-[0.08em] text-slate-400">
+                  {STAGES.find((s) => s.id === l.stage)!.label} · {ago(l.at)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-5 border-t border-slate-100 pt-4 text-xs leading-relaxed text-slate-500">
+            Nothing captured in this browser. That is expected — quote requests
+            are emailed, and a visitor's activity stays on their own device
+            until a backend exists.
+          </p>
+        )}
+      </Panel>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
         <Panel title="Channel status" subtitle="Where each channel stands today.">
@@ -215,8 +281,9 @@ export default function AdminHome() {
         </div>
       </Panel>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {[
+          { href: "/admin/leads", label: "Leads & CRM", body: "Enquiries and site traction", Icon: Users },
           { href: "/admin/seo", label: "SEO & GEO", body: "Measured audit of the live site", Icon: Gauge },
           { href: "/admin/marketing", label: "Marketing plan", body: "Channels, budget, calendar", Icon: Target },
           { href: "/admin/campaigns", label: "Campaigns", body: `Meta & Google, ${cleanAndTune.price} offer`, Icon: Megaphone },

@@ -1,5 +1,6 @@
 import { campaigns } from "@/content/marketing";
 import { AdminShell } from "@/components/admin/shell";
+import { CampaignBoard } from "@/components/admin/kanban";
 import { NotConnected, Panel, StatCard, StatusPill, Table, Td } from "@/components/admin/ui";
 
 export default function AdminCampaigns() {
@@ -18,6 +19,22 @@ export default function AdminCampaigns() {
         <StatCard label="Proposed monthly" value={`$${monthly.toLocaleString()}`} />
         <StatCard label="Live campaigns" value={0} tone="warn" hint="Nothing running yet" />
       </div>
+
+      <Panel
+        title="Campaign board"
+        subtitle="The same campaigns as the table below, arranged by where each one stands."
+      >
+        <CampaignBoard
+          cards={campaigns.map((c) => ({
+            id: c.name,
+            title: c.name,
+            meta: c.platform,
+            note: c.objective,
+            footer: `${c.budget} · ${c.window}`,
+            status: c.status,
+          }))}
+        />
+      </Panel>
 
       <Panel title="All campaigns" subtitle="Planned, not running.">
         <Table columns={["Campaign", "Platform", "Status", "Budget", "Window", "KPI"]}>

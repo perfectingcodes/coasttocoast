@@ -9,6 +9,7 @@ import {
   Lock,
   Megaphone,
   Menu,
+  Users,
   Target,
   X,
 } from "lucide-react";
@@ -47,6 +48,17 @@ const NAV: {
         label: "Marketing plan",
         hint: "Objectives, channels, seasonality",
         Icon: Target,
+      },
+    ],
+  },
+  {
+    group: "Customers",
+    items: [
+      {
+        href: "/admin/leads",
+        label: "Leads & CRM",
+        hint: "Enquiries and site traction",
+        Icon: Users,
       },
     ],
   },

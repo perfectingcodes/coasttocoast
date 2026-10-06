@@ -26,7 +26,14 @@ const paths = (process.env.PATHS || "/").split(",");
 
 const AUDIT = () => {
   const vw = document.documentElement.clientWidth;
-  const out = { docW: document.documentElement.scrollWidth, vw, over: [], tooWide: [], tiny: [], clipped: [] };
+  // documentElement.scrollWidth over-reports when the page contains a
+  // horizontal scroll container (a board, a wide table): Chromium hands back
+  // that container's content width even though the page itself cannot scroll.
+  // body.scrollWidth and an actual scroll attempt are the honest measures.
+  window.scrollTo(vw, 0);
+  const scrollsX = window.scrollX > 0;
+  window.scrollTo(0, 0);
+  const out = { docW: document.body.scrollWidth, rawDocW: document.documentElement.scrollWidth, scrollsX, vw, over: [], tooWide: [], tiny: [], clipped: [] };
   for (const el of document.querySelectorAll("body *")) {
     const cs = getComputedStyle(el);
     if (cs.display === "none" || cs.visibility === "hidden" || cs.position === "fixed") continue;
@@ -90,7 +97,7 @@ for (const p of paths) {
     await page.screenshot({ path: path.join(dir, `${String(i).padStart(2, "0")}.png`), scale: "css" });
     i++;
   }
-  console.log(`${p}  ${WIDTH}px  h=${height}  shots=${i}  docW=${audit.docW}  over=${audit.over.length} wide=${audit.tooWide.length} clipped=${audit.clipped.length} tiny=${audit.tiny.length}`);
+  console.log(`${p}  ${WIDTH}px  h=${height}  shots=${i}  bodyW=${audit.docW}${audit.scrollsX ? " SCROLLS-X" : ""}  over=${audit.over.length} wide=${audit.tooWide.length} clipped=${audit.clipped.length} tiny=${audit.tiny.length}`);
 }
 
 await browser.close();
