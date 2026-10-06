@@ -186,15 +186,26 @@ export function PaymentCalculator({ className }: { className?: string }) {
 
           {/* `flex-1` is a main-axis basis: stacked, it collapsed both buttons
               to the height of their label. Full width below `sm` instead. */}
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/contact" className="w-full sm:flex-1">
-              Get a real quote
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </ButtonLink>
-            <ButtonLink href={business.phoneHref} variant="outline" className="w-full sm:flex-1">
-              <Phone className="size-4" aria-hidden="true" />
-              Talk it through
-            </ButtonLink>
+          {/* Stacked by default. Side by side only at @md, measured against
+              this card rather than the viewport — the calculator also sits in
+              a narrow column on the replacement landing page, where a
+              viewport breakpoint put two buttons in 240px and broke both
+              labels out of their pills. */}
+          <div className="@container mt-6">
+            <div className="flex flex-col gap-3 @md:flex-row">
+              <ButtonLink href="/contact" className="w-full @md:flex-1">
+                Get a real quote
+                <ArrowRight className="size-4 shrink-0" aria-hidden="true" />
+              </ButtonLink>
+              <ButtonLink
+                href={business.phoneHref}
+                variant="outline"
+                className="w-full @md:flex-1"
+              >
+                <Phone className="size-4 shrink-0" aria-hidden="true" />
+                Talk it through
+              </ButtonLink>
+            </div>
           </div>
         </div>
       </div>

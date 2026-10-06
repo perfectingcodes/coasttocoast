@@ -685,21 +685,23 @@ export function ServiceHeroAside({ service }: { service: Service }) {
         <p className="font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
           Cooling in this climate
         </p>
-        <dl className="mt-4 grid grid-cols-2 gap-x-6">
+        {/* One column below 360px — two 78px cells cannot hold a word like
+            "Recommended". */}
+        <dl className="mt-4 grid grid-cols-1 gap-x-6 min-[360px]:grid-cols-2">
           {d.stats.map((st, i) => (
             <div
               key={st.label}
               className={cn(
-                "border-white/12 py-3",
-                i > 1 && "border-t",
-                i === 1 && "border-l pl-6",
-                i === 3 && "border-l pl-6",
+                "min-w-0 border-white/12 py-3",
+                i > 0 && "border-t",
+                i === 1 && "min-[360px]:border-t-0 min-[360px]:border-l min-[360px]:pl-6",
+                i === 3 && "min-[360px]:border-l min-[360px]:pl-6",
               )}
             >
               <dt className="display text-[1.65rem] leading-none text-white">
                 {st.value}
               </dt>
-              <dd className="mt-1.5 text-[0.72rem] leading-snug text-white/62">
+              <dd className="mt-1.5 text-[0.72rem] leading-snug text-white/62 hyphens-auto">
                 {st.label}
               </dd>
             </div>

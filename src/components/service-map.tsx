@@ -387,10 +387,17 @@ export function ServiceMap() {
                 // straight through the shop marker. Anything that close flips
                 // to the seaward side, which is open water here.
                 const shop = px(business.lat, business.lng);
-                const flip =
+                const nearShop =
                   x < shop.x &&
                   Math.abs(x - shop.x) < 80 &&
                   Math.abs(y - shop.y) < 26;
+                // A label set to the right of a pin near the east edge runs
+                // off the panel and into the county name. Archivo at this
+                // weight averages ~0.56em per character, which is close
+                // enough to decide which side the label belongs on.
+                const labelWidth = l.city.length * 19 * 0.56;
+                const overflowsRight = x + 18 + labelWidth > VIEW_W - 12;
+                const flip = nearShop || overflowsRight;
                 return (
                   <g key={l.slug}>
                     {isActive && <circle cx={x} cy={y} r="46" fill="url(#map-glow)" />}

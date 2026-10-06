@@ -180,15 +180,27 @@ function AdFooter({ page }: { page: LandingPage }) {
             Lic. {business.license} · {business.hours}
           </p>
         </div>
-        <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-[0.72rem] font-semibold text-navy/55 sm:justify-end">
-          <a href={business.phoneHref} className="text-blue">
+        {/* min-h-11 on every one: these are thumb targets on a phone, not
+            desktop footer text. */}
+        <div className="flex flex-wrap items-center justify-center gap-x-5 text-[0.72rem] font-semibold text-navy/55 sm:justify-end">
+          <a
+            href={business.phoneHref}
+            onClick={() => track("call", "Landing footer")}
+            className="inline-flex min-h-11 items-center text-blue"
+          >
             {business.phone}
           </a>
-          <Link href="/privacy">Privacy</Link>
-          <Link href="/terms">Terms</Link>
+          <Link href="/privacy" className="inline-flex min-h-11 items-center">
+            Privacy
+          </Link>
+          <Link href="/terms" className="inline-flex min-h-11 items-center">
+            Terms
+          </Link>
           {/* One way back to the full site, at the very bottom, where it
               costs nothing. */}
-          <Link href="/">Main site</Link>
+          <Link href="/" className="inline-flex min-h-11 items-center">
+            Main site
+          </Link>
         </div>
       </div>
       <p className="shell mt-6 text-center font-mono text-[0.55rem] uppercase tracking-[0.12em] text-navy/30 sm:text-left">

@@ -168,7 +168,7 @@ export default function AdminHome() {
                         aria-hidden="true"
                       />
                     </p>
-                    <p className="mt-1 text-[0.76rem] leading-relaxed text-navy/55">
+                    <p className="mt-1 break-words text-[0.76rem] leading-relaxed text-navy/55">
                       {b.why}
                     </p>
                   </div>

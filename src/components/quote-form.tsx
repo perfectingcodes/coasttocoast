@@ -64,7 +64,7 @@ export function QuoteForm({
 
   if (state === "sent") {
     return (
-      <div className="card p-8 text-center">
+      <div className="card p-8 text-center text-navy">
         <CheckCircle2 className="mx-auto size-10 text-blue" aria-hidden="true" />
         <h3 className="mt-4 text-xl">Request received</h3>
         <p className="mt-2 text-navy/70 leading-relaxed">
@@ -80,7 +80,10 @@ export function QuoteForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className="card p-6 md:p-8">
+    // text-navy is explicit, not inherited: this form is dropped onto dark
+    // grounds (the paid landing heroes) where inheriting would make every
+    // label white on a white card.
+    <form onSubmit={onSubmit} className="card p-6 text-navy md:p-8">
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Name" name="name" autoComplete="name" required />
         <Field label="Phone" name="phone" type="tel" autoComplete="tel" required />
