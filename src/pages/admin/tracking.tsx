@@ -21,7 +21,7 @@ export default function AdminTracking() {
         title="Why this comes first"
         subtitle="Order of operations matters more here than anywhere else in the plan."
       >
-        <ol className="space-y-2.5 text-sm text-slate-700">
+        <ol className="space-y-2.5 text-sm text-navy/75">
           {[
             "Verify Search Console and submit the sitemap — free, and it is the only view of how Google actually sees the site.",
             "Install GA4 and confirm pageviews arrive.",
@@ -31,7 +31,7 @@ export default function AdminTracking() {
             "Only then start paid spend. Before this, a budget cannot be evaluated.",
           ].map((t, i) => (
             <li key={t} className="flex gap-3">
-              <span className="grid size-5 shrink-0 place-items-center rounded-full bg-slate-900 text-[0.65rem] font-bold text-white">
+              <span className="grid size-5 shrink-0 place-items-center rounded-full bg-navy text-[0.65rem] font-bold text-white">
                 {i + 1}
               </span>
               {t}
@@ -47,15 +47,15 @@ export default function AdminTracking() {
           subtitle={t.purpose}
           action={<StatusPill status={t.status} />}
         >
-          <p className="text-sm leading-relaxed text-slate-700">{t.note}</p>
-          <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-2 border-t border-slate-100 pt-4 text-sm">
+          <p className="text-sm leading-relaxed text-navy/75">{t.note}</p>
+          <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-2 border-t border-navy/8 pt-4 text-sm">
             <div className="flex gap-2">
-              <dt className="text-slate-500">Identifier</dt>
-              <dd className="font-mono text-xs text-slate-900">{t.idLabel}</dd>
+              <dt className="text-navy/50">Identifier</dt>
+              <dd className="font-mono text-xs text-navy">{t.idLabel}</dd>
             </div>
             <div className="flex gap-2">
-              <dt className="text-slate-500">Value</dt>
-              <dd className="font-mono text-xs text-slate-400">not set</dd>
+              <dt className="text-navy/50">Value</dt>
+              <dd className="font-mono text-xs text-navy/40">not set</dd>
             </div>
           </dl>
         </Panel>
@@ -74,7 +74,7 @@ export default function AdminTracking() {
       </Panel>
 
       <Panel title="Privacy and consent">
-        <p className="text-sm leading-relaxed text-slate-700">
+        <p className="text-sm leading-relaxed text-navy/75">
           Adding analytics and a Meta Pixel means collecting visitor data. Before
           either goes live the site needs a cookie/consent notice and the privacy
           policy needs updating to name the tools, what they collect and how long

@@ -39,21 +39,21 @@ export default function AdminMarketing() {
           subtitle={c.role}
           action={<StatusPill status={c.status} />}
         >
-          <dl className="flex flex-wrap gap-x-8 gap-y-2 border-b border-slate-100 pb-4 text-sm">
+          <dl className="flex flex-wrap gap-x-8 gap-y-2 border-b border-navy/8 pb-4 text-sm">
             <div className="flex gap-2">
-              <dt className="text-slate-500">Budget</dt>
-              <dd className="font-semibold text-slate-900">{c.budget}</dd>
+              <dt className="text-navy/50">Budget</dt>
+              <dd className="font-semibold text-navy">{c.budget}</dd>
             </div>
             <div className="flex gap-2">
-              <dt className="text-slate-500">Owner</dt>
-              <dd className="font-semibold text-slate-900">{c.owner}</dd>
+              <dt className="text-navy/50">Owner</dt>
+              <dd className="font-semibold text-navy">{c.owner}</dd>
             </div>
           </dl>
           <ul className="mt-4 space-y-2">
             {c.actions.map((a) => (
-              <li key={a} className="flex gap-2.5 text-sm text-slate-700">
+              <li key={a} className="flex gap-2.5 text-sm text-navy/75">
                 <span
-                  className="mt-1.5 size-1.5 shrink-0 rounded-full bg-slate-400"
+                  className="mt-1.5 size-1.5 shrink-0 rounded-full bg-navy/35"
                   aria-hidden="true"
                 />
                 {a}
@@ -70,7 +70,7 @@ export default function AdminMarketing() {
         <Table columns={["Month", "Piece", "Channel", "Supports"]}>
           {contentCalendar.map((c) => (
             <tr key={c.month}>
-              <Td className="font-medium text-slate-900">{c.month}</Td>
+              <Td className="font-medium text-navy">{c.month}</Td>
               <Td>{c.piece}</Td>
               <Td muted className="uppercase">{c.channel}</Td>
               <Td muted>{c.ties}</Td>
@@ -83,7 +83,7 @@ export default function AdminMarketing() {
         <Table columns={["Objective", "Metric", "Target", "Horizon"]}>
           {objectives.map((o) => (
             <tr key={o.title}>
-              <Td className="font-medium text-slate-900">{o.title}</Td>
+              <Td className="font-medium text-navy">{o.title}</Td>
               <Td muted>{o.metric}</Td>
               <Td className="font-semibold">{o.target}</Td>
               <Td muted>{o.horizon}</Td>
@@ -99,7 +99,7 @@ export default function AdminMarketing() {
         <Table columns={["City", "County", "ZIPs", "Conditions"]}>
           {locations.map((l) => (
             <tr key={l.slug}>
-              <Td className="font-medium text-slate-900">{l.city}</Td>
+              <Td className="font-medium text-navy">{l.city}</Td>
               <Td muted>{l.county}</Td>
               <Td muted>{l.zips.length}</Td>
               <Td muted>
@@ -110,7 +110,7 @@ export default function AdminMarketing() {
             </tr>
           ))}
         </Table>
-        <p className="mt-4 text-xs leading-relaxed text-slate-500">
+        <p className="mt-4 text-xs leading-relaxed text-navy/50">
           Seasonal-home cities (Naples, North Naples, Bonita Springs) shift
           spend toward the winter months. Storm-affected cities carry more
           replacement and insurance work.

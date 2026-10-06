@@ -96,21 +96,21 @@ export default function AdminResources() {
       >
         <ul className="grid gap-3 md:grid-cols-2">
           {automationGaps.map((g) => (
-            <li key={g.what} className="rounded-xl bg-slate-50 p-4">
-              <p className="flex items-start gap-2 text-sm font-semibold text-slate-900">
+            <li key={g.what} className="rounded-xl bg-navy/[0.035] p-4">
+              <p className="flex items-start gap-2 text-sm font-semibold text-navy">
                 <ShieldAlert
                   className="mt-0.5 size-3.5 shrink-0 text-amber-600"
                   aria-hidden="true"
                 />
                 {g.what}
               </p>
-              <p className="mt-1.5 pl-5 text-xs leading-relaxed text-slate-600">
+              <p className="mt-1.5 pl-5 text-xs leading-relaxed text-navy/60">
                 {g.needs}
               </p>
             </li>
           ))}
         </ul>
-        <p className="mt-4 text-xs leading-relaxed text-slate-500">
+        <p className="mt-4 text-xs leading-relaxed text-navy/50">
           Until those exist this page does the half a dashboard can honestly
           do: it works out who is due, today, from the jobs marked won in the{" "}
           <Link href="/admin/leads" className="font-semibold text-blue hover:underline">
@@ -126,11 +126,11 @@ export default function AdminResources() {
         subtitle="Computed from the date each job was marked won. Tick a step once it has gone out."
       >
         {due.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/60 px-6 py-8 text-center">
-            <p className="font-display text-sm font-bold text-slate-900">
+          <div className="rounded-xl border border-dashed border-navy/15 bg-navy/[0.02] px-6 py-8 text-center">
+            <p className="font-display text-sm font-bold text-navy">
               {won.length === 0 ? "No jobs marked won yet" : "Nothing due right now"}
             </p>
-            <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-slate-500">
+            <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-navy/50">
               {won.length === 0 ? (
                 <>
                   Mark a lead <strong>Won</strong> in the CRM and its review
@@ -169,7 +169,7 @@ export default function AdminResources() {
 
       {/* ----------------------------------------------------------- branch */}
       <Panel title={unhappyBranch.title}>
-        <p className="text-sm leading-relaxed text-slate-600">{unhappyBranch.body}</p>
+        <p className="text-sm leading-relaxed text-navy/60">{unhappyBranch.body}</p>
         <Template className="mt-4" body={unhappyBranch.template} />
       </Panel>
 
@@ -185,8 +185,8 @@ export default function AdminResources() {
                 {String(i + 1).padStart(2, "0")}
               </span>
               <div className="min-w-0">
-                <p className="text-sm font-semibold text-slate-900">{r.rule}</p>
-                <p className="mt-0.5 text-xs leading-relaxed text-slate-600">
+                <p className="text-sm font-semibold text-navy">{r.rule}</p>
+                <p className="mt-0.5 text-xs leading-relaxed text-navy/60">
                   {r.detail}
                 </p>
               </div>
@@ -202,12 +202,12 @@ export default function AdminResources() {
       >
         <div className="grid gap-4 md:grid-cols-2">
           {replyTemplates.map((r) => (
-            <div key={r.label} className="min-w-0 rounded-xl bg-slate-50 p-4">
+            <div key={r.label} className="min-w-0 rounded-xl bg-navy/[0.035] p-4">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <p className="font-display text-sm font-bold text-slate-900">
+                <p className="font-display text-sm font-bold text-navy">
                   {r.label}
                 </p>
-                <p className="font-mono text-[0.6rem] uppercase tracking-[0.08em] text-slate-400">
+                <p className="font-mono text-[0.6rem] uppercase tracking-[0.08em] text-navy/40">
                   {r.when}
                 </p>
               </div>
@@ -233,12 +233,12 @@ export default function AdminResources() {
             ]}
           />
         )}
-        <p className="mt-4 text-xs leading-relaxed text-slate-500">
+        <p className="mt-4 text-xs leading-relaxed text-navy/50">
           Placeholders used across this page:{" "}
-          <code className="rounded bg-slate-100 px-1 py-0.5 font-mono">{"{{first}}"}</code>{" "}
-          <code className="rounded bg-slate-100 px-1 py-0.5 font-mono">{"{{tech}}"}</code>{" "}
-          <code className="rounded bg-slate-100 px-1 py-0.5 font-mono">{"{{city}}"}</code>{" "}
-          <code className="rounded bg-slate-100 px-1 py-0.5 font-mono">{"{{link}}"}</code>.
+          <code className="rounded bg-navy/8 px-1 py-0.5 font-mono">{"{{first}}"}</code>{" "}
+          <code className="rounded bg-navy/8 px-1 py-0.5 font-mono">{"{{tech}}"}</code>{" "}
+          <code className="rounded bg-navy/8 px-1 py-0.5 font-mono">{"{{city}}"}</code>{" "}
+          <code className="rounded bg-navy/8 px-1 py-0.5 font-mono">{"{{link}}"}</code>.
           Copying a message fills in what this dashboard knows and leaves the
           rest for you.
         </p>
@@ -265,14 +265,14 @@ function SequenceStep({
     <li className="relative flex gap-4 pb-6 last:pb-0">
       {!last && (
         <span
-          className="absolute left-[1.3rem] top-10 bottom-0 w-px bg-slate-200"
+          className="absolute left-[1.3rem] top-10 bottom-0 w-px bg-navy/15"
           aria-hidden="true"
         />
       )}
       <span
         className={cn(
           "relative grid size-11 shrink-0 place-items-center rounded-full",
-          ending ? "bg-slate-100 text-slate-400" : c.tint,
+          ending ? "bg-navy/8 text-navy/40" : c.tint,
         )}
       >
         <c.Icon className="size-4" aria-hidden="true" />
@@ -280,17 +280,17 @@ function SequenceStep({
 
       <div className="min-w-0 flex-1 pt-0.5">
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <p className="font-display text-sm font-bold text-slate-900">
+          <p className="font-display text-sm font-bold text-navy">
             {index}. {step.title}
           </p>
-          <span className="rounded-full bg-slate-100 px-2 py-0.5 font-mono text-[0.6rem] font-semibold uppercase tracking-[0.08em] text-slate-500">
+          <span className="rounded-full bg-navy/8 px-2 py-0.5 font-mono text-[0.6rem] font-semibold uppercase tracking-[0.08em] text-navy/50">
             {step.day === 0 ? "Same day" : `Day ${step.day}`}
           </span>
-          <span className="font-mono text-[0.6rem] uppercase tracking-[0.08em] text-slate-400">
+          <span className="font-mono text-[0.6rem] uppercase tracking-[0.08em] text-navy/40">
             {c.label} · {step.by}
           </span>
         </div>
-        <p className="mt-1.5 text-xs leading-relaxed text-slate-600">{step.why}</p>
+        <p className="mt-1.5 text-xs leading-relaxed text-navy/60">{step.why}</p>
         {step.template && <Template className="mt-3" body={step.template} />}
       </div>
     </li>
@@ -300,16 +300,16 @@ function SequenceStep({
 function DueRow({ lead, step, at }: { lead: Lead; step: ReviewStep; at: number }) {
   const c = CHANNEL[step.channel];
   return (
-    <li className="flex flex-wrap items-start gap-3 rounded-xl bg-slate-50 p-3.5">
+    <li className="flex flex-wrap items-start gap-3 rounded-xl bg-navy/[0.035] p-3.5">
       <span className={cn("grid size-8 shrink-0 place-items-center rounded-full", c.tint)}>
         <c.Icon className="size-3.5" aria-hidden="true" />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold text-slate-900">
+        <p className="text-sm font-semibold text-navy">
           {lead.name}
-          <span className="ml-2 font-normal text-slate-500">{step.title}</span>
+          <span className="ml-2 font-normal text-navy/50">{step.title}</span>
         </p>
-        <p className="mt-0.5 font-mono text-[0.6rem] uppercase tracking-[0.08em] text-slate-400">
+        <p className="mt-0.5 font-mono text-[0.6rem] uppercase tracking-[0.08em] text-navy/40">
           Due {ago(at)} · {c.label}
           {lead.phone && ` · ${lead.phone}`}
         </p>
@@ -321,7 +321,7 @@ function DueRow({ lead, step, at }: { lead: Lead; step: ReviewStep; at: number }
       <button
         type="button"
         onClick={() => toggleReviewStep(lead.id, step.id)}
-        className="shrink-0 rounded-full bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-slate-700"
+        className="shrink-0 rounded-full bg-navy px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-navy-soft"
       >
         Mark sent
       </button>
@@ -354,8 +354,8 @@ function Template({
     <div className={cn("relative min-w-0", className)}>
       <p
         className={cn(
-          "whitespace-pre-wrap pr-10 text-xs leading-relaxed text-slate-700",
-          !plain && "rounded-xl bg-slate-50 p-3.5 ring-1 ring-slate-200",
+          "whitespace-pre-wrap pr-10 text-xs leading-relaxed text-navy/75",
+          !plain && "rounded-xl bg-navy/[0.035] p-3.5 ring-1 ring-navy/10",
         )}
       >
         {body}
@@ -378,7 +378,7 @@ function Template({
           "absolute right-1 top-1 grid size-9 place-items-center rounded-lg transition-colors",
           copied
             ? "bg-emerald-50 text-emerald-600"
-            : "text-slate-400 hover:bg-white hover:text-slate-700",
+            : "text-navy/40 hover:bg-white hover:text-navy/75",
         )}
       >
         {copied ? (

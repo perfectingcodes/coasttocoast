@@ -44,7 +44,7 @@ const STAGE_STYLE: Record<Stage, { pill: string; dot: string; bar: string }> = {
   contacted: { pill: "bg-cyan/15 text-sky-700", dot: "bg-cyan", bar: "bg-cyan" },
   quoted: { pill: "bg-gold/20 text-amber-700", dot: "bg-gold", bar: "bg-gold" },
   won: { pill: "bg-emerald-50 text-emerald-700", dot: "bg-emerald-500", bar: "bg-emerald-500" },
-  lost: { pill: "bg-slate-100 text-slate-500", dot: "bg-slate-400", bar: "bg-slate-300" },
+  lost: { pill: "bg-navy/8 text-navy/50", dot: "bg-navy/35", bar: "bg-navy/25" },
 };
 
 function StagePill({ stage }: { stage: Stage }) {
@@ -91,7 +91,7 @@ export default function AdminLeads() {
       lead="Every enquiry the website captures, the stage each one is at, and what visitors did before they got in touch."
     >
       {/* The single most important thing on this page. It is not a footnote. */}
-      <div className="overflow-hidden rounded-2xl border border-amber-300 bg-amber-50">
+      <div className="overflow-hidden rounded-2xl bg-gold/12 ring-1 ring-inset ring-gold/40">
         <div className="flex gap-3 px-5 py-4">
           <TriangleAlert className="mt-0.5 size-4 shrink-0 text-amber-700" aria-hidden="true" />
           <div className="min-w-0">
@@ -111,7 +111,7 @@ export default function AdminLeads() {
             </p>
             <p className="mt-2 text-xs leading-relaxed text-amber-900/90">
               Everything is already wired for the day that changes: set{" "}
-              <code className="rounded bg-amber-100 px-1 py-0.5 font-mono text-[0.68rem]">
+              <code className="rounded bg-gold/25 px-1 py-0.5 font-mono text-[0.68rem]">
                 VITE_LEADS_ENDPOINT
               </code>{" "}
               to a URL that accepts a JSON POST and every lead and event below
@@ -177,7 +177,7 @@ export default function AdminLeads() {
               type="button"
               onClick={download}
               disabled={!crm.leads.length && !crm.events.length}
-              className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-600 ring-1 ring-slate-300 transition-colors hover:bg-slate-100 disabled:opacity-40"
+              className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold text-navy/60 ring-1 ring-navy/15 transition-colors hover:bg-navy/6 disabled:opacity-40"
             >
               <Download className="size-3.5" aria-hidden="true" />
               Export
@@ -199,20 +199,20 @@ export default function AdminLeads() {
                   "min-w-0 rounded-xl p-3.5 text-left ring-1 transition-colors",
                   active
                     ? "bg-blue/5 ring-blue/40"
-                    : "bg-slate-50/70 ring-slate-200 hover:bg-slate-100",
+                    : "bg-navy/[0.025] ring-navy/10 hover:bg-navy/6",
                 )}
               >
                 <span
                   className={cn("block h-1 w-8 rounded-full", STAGE_STYLE[s.id].bar)}
                   aria-hidden="true"
                 />
-                <span className="mt-2.5 block font-display text-2xl font-extrabold leading-none tabular-nums text-slate-900">
+                <span className="mt-2.5 block font-display text-2xl font-extrabold leading-none tabular-nums text-navy">
                   {n}
                 </span>
-                <span className="mt-1 block text-xs font-semibold text-slate-700">
+                <span className="mt-1 block text-xs font-semibold text-navy/75">
                   {s.label}
                 </span>
-                <span className="mt-0.5 block text-[0.68rem] leading-snug text-slate-400">
+                <span className="mt-0.5 block text-[0.68rem] leading-snug text-navy/40">
                   {s.blurb}
                 </span>
               </button>
@@ -250,29 +250,29 @@ export default function AdminLeads() {
                       "flex w-full items-start gap-3 rounded-xl p-3.5 text-left ring-1 transition-colors",
                       l.id === selected
                         ? "bg-blue/5 ring-blue/40"
-                        : "bg-white ring-slate-200 hover:bg-slate-50",
+                        : "bg-white ring-navy/10 hover:bg-navy/[0.03]",
                     )}
                   >
-                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-slate-100 font-display text-xs font-extrabold text-slate-500">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-navy/8 font-display text-xs font-extrabold text-navy/50">
                       {initials(l.name)}
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
-                        <span className="text-sm font-semibold text-slate-900">
+                        <span className="text-sm font-semibold text-navy">
                           {l.name}
                         </span>
                         <StagePill stage={l.stage} />
                         {l.source !== "website" && (
-                          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[0.62rem] font-semibold uppercase tracking-wide text-slate-500">
+                          <span className="rounded-full bg-navy/8 px-2 py-0.5 text-[0.62rem] font-semibold uppercase tracking-wide text-navy/50">
                             {l.source}
                           </span>
                         )}
                       </span>
-                      <span className="mt-1 block text-xs text-slate-500">
+                      <span className="mt-1 block text-xs text-navy/50">
                         {[l.service, l.city].filter(Boolean).join(" · ") ||
                           "No service or city given"}
                       </span>
-                      <span className="mt-1.5 block font-mono text-[0.62rem] uppercase tracking-[0.08em] text-slate-400">
+                      <span className="mt-1.5 block font-mono text-[0.62rem] uppercase tracking-[0.08em] text-navy/40">
                         {origin(l)}
                       </span>
                     </span>
@@ -288,7 +288,7 @@ export default function AdminLeads() {
             <LeadDetail key={lead.id} lead={lead} onClose={() => setSelected(null)} />
           ) : (
             <Panel title="Lead detail" className="hidden xl:block">
-              <p className="text-xs leading-relaxed text-slate-500">
+              <p className="text-xs leading-relaxed text-navy/50">
                 Select a lead to see the full request, change its stage and
                 keep a call log against it.
               </p>
@@ -310,10 +310,10 @@ export default function AdminLeads() {
             ["Quote requests sent", t.quoteSubmits],
           ].map(([label, n]) => (
             <div key={label as string} className="min-w-0">
-              <p className="font-display text-xl font-extrabold tabular-nums text-slate-900">
+              <p className="font-display text-xl font-extrabold tabular-nums text-navy">
                 {n as number}
               </p>
-              <p className="mt-0.5 text-[0.7rem] font-medium leading-snug text-slate-500">
+              <p className="mt-0.5 text-[0.7rem] font-medium leading-snug text-navy/50">
                 {label as string}
               </p>
             </div>
@@ -328,7 +328,7 @@ export default function AdminLeads() {
             <div
               key={d.day}
               title={`${d.day}: ${d.count} event${d.count === 1 ? "" : "s"}`}
-              className="flex h-full min-w-0 flex-1 items-end overflow-hidden rounded-sm bg-slate-100"
+              className="flex h-full min-w-0 flex-1 items-end overflow-hidden rounded-sm bg-navy/8"
             >
               <div
                 className="w-full rounded-sm bg-blue"
@@ -338,14 +338,14 @@ export default function AdminLeads() {
             </div>
           ))}
         </div>
-        <p className="mt-1.5 flex justify-between font-mono text-[0.6rem] uppercase tracking-[0.08em] text-slate-400">
+        <p className="mt-1.5 flex justify-between font-mono text-[0.6rem] uppercase tracking-[0.08em] text-navy/40">
           <span>{t.byDay[0]?.day}</span>
           <span>Today</span>
         </p>
 
         <div className="mt-7 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="min-w-0">
-            <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-slate-400">
+            <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-navy/40">
               Most viewed pages
             </p>
             {t.topPages.length ? (
@@ -353,19 +353,19 @@ export default function AdminLeads() {
                 {t.topPages.map((p) => (
                   <li
                     key={p.path}
-                    className="flex items-center gap-3 border-b border-slate-100 pb-1.5 text-xs last:border-0"
+                    className="flex items-center gap-3 border-b border-navy/8 pb-1.5 text-xs last:border-0"
                   >
-                    <span className="min-w-0 flex-1 truncate font-mono text-slate-600">
+                    <span className="min-w-0 flex-1 truncate font-mono text-navy/60">
                       {p.path}
                     </span>
-                    <span className="shrink-0 tabular-nums font-semibold text-slate-900">
+                    <span className="shrink-0 tabular-nums font-semibold text-navy">
                       {p.count}
                     </span>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="mt-3 text-xs text-slate-400">
+              <p className="mt-3 text-xs text-navy/40">
                 Nothing recorded yet. Open the public site in this browser and
                 these fill in.
               </p>
@@ -373,7 +373,7 @@ export default function AdminLeads() {
           </div>
 
           <div className="min-w-0">
-            <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-slate-400">
+            <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-navy/40">
               Recent activity
             </p>
             {crm.events.length ? (
@@ -385,11 +385,11 @@ export default function AdminLeads() {
                       aria-hidden="true"
                     />
                     <span className="min-w-0">
-                      <span className="text-slate-700">{EVENT_LABELS[e.kind]}</span>
+                      <span className="text-navy/75">{EVENT_LABELS[e.kind]}</span>
                       {e.label && (
-                        <span className="text-slate-400"> — {e.label}</span>
+                        <span className="text-navy/40"> — {e.label}</span>
                       )}
-                      <span className="mt-0.5 block font-mono text-[0.6rem] uppercase tracking-[0.08em] text-slate-400">
+                      <span className="mt-0.5 block font-mono text-[0.6rem] uppercase tracking-[0.08em] text-navy/40">
                         {ago(e.at)} · {e.path}
                       </span>
                     </span>
@@ -397,28 +397,28 @@ export default function AdminLeads() {
                 ))}
               </ol>
             ) : (
-              <p className="mt-3 text-xs text-slate-400">No activity recorded yet.</p>
+              <p className="mt-3 text-xs text-navy/40">No activity recorded yet.</p>
             )}
           </div>
         </div>
 
         {crm.visitor && (
-          <dl className="mt-7 grid gap-x-8 gap-y-2 border-t border-slate-100 pt-5 text-xs sm:grid-cols-3">
+          <dl className="mt-7 grid gap-x-8 gap-y-2 border-t border-navy/8 pt-5 text-xs sm:grid-cols-3">
             {[
               ["This browser first seen", new Date(crm.visitor.first).toLocaleDateString()],
               ["Sessions", String(crm.visitor.visits)],
               ["Arrived from", crm.visitor.referrer || "Typed or bookmarked"],
             ].map(([k, v]) => (
               <div key={k}>
-                <dt className="text-slate-400">{k}</dt>
-                <dd className="mt-0.5 truncate font-medium text-slate-700">{v}</dd>
+                <dt className="text-navy/40">{k}</dt>
+                <dd className="mt-0.5 truncate font-medium text-navy/75">{v}</dd>
               </div>
             ))}
           </dl>
         )}
 
         {(crm.leads.length > 0 || crm.events.length > 0) && (
-          <div className="mt-6 flex justify-end border-t border-slate-100 pt-4">
+          <div className="mt-6 flex justify-end border-t border-navy/8 pt-4">
             <button
               type="button"
               onClick={() => {
@@ -427,7 +427,7 @@ export default function AdminLeads() {
                   setSelected(null);
                 }
               }}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 transition-colors hover:text-ember"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-navy/40 transition-colors hover:text-ember"
             >
               <Trash2 className="size-3.5" aria-hidden="true" />
               Erase everything stored here
@@ -456,11 +456,11 @@ function initials(name: string) {
 
 function EmptyLeads({ hasAny, onAdd }: { hasAny: boolean; onAdd: () => void }) {
   return (
-    <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/60 px-6 py-10 text-center">
-      <p className="font-display text-sm font-bold text-slate-900">
+    <div className="rounded-xl border border-dashed border-navy/15 bg-navy/[0.02] px-6 py-10 text-center">
+      <p className="font-display text-sm font-bold text-navy">
         {hasAny ? "No leads at this stage" : "No leads captured in this browser"}
       </p>
-      <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-slate-500">
+      <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-navy/50">
         {hasAny
           ? "Clear the stage filter above to see the rest."
           : `This is expected and is not a fault. Quote requests are emailed to ${business.email} and are recorded in the visitor's own browser, not here. Use this pipeline for calls you take yourself.`}
@@ -491,12 +491,12 @@ function ManualLead({ onDone }: { onDone: () => void }) {
         captureLead({ ...data, source: "phone", path: "logged by hand" });
         onDone();
       }}
-      className="mt-5 rounded-xl bg-slate-50 p-5 ring-1 ring-slate-200"
+      className="mt-5 rounded-xl bg-navy/[0.035] p-5 ring-1 ring-navy/10"
     >
-      <p className="font-display text-sm font-bold text-slate-900">
+      <p className="font-display text-sm font-bold text-navy">
         Log a lead you took by phone
       </p>
-      <p className="mt-1 text-xs text-slate-500">
+      <p className="mt-1 text-xs text-navy/50">
         Saved in this browser so it can be worked through the pipeline.
       </p>
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -511,11 +511,11 @@ function ManualLead({ onDone }: { onDone: () => void }) {
           className="sm:col-span-2"
         />
         <label className="sm:col-span-2">
-          <span className="text-xs font-semibold text-slate-600">Notes</span>
+          <span className="text-xs font-semibold text-navy/60">Notes</span>
           <textarea
             name="message"
             rows={2}
-            className="mt-1 w-full rounded-lg border-0 bg-white px-3 py-2 text-sm text-slate-900 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-blue"
+            className="mt-1 w-full rounded-lg border-0 bg-white px-3 py-2 text-sm text-navy ring-1 ring-inset ring-navy/10 focus:ring-2 focus:ring-blue"
           />
         </label>
       </div>
@@ -529,7 +529,7 @@ function ManualLead({ onDone }: { onDone: () => void }) {
         <button
           type="button"
           onClick={onDone}
-          className="rounded-full px-4 py-2 text-xs font-semibold text-slate-600 ring-1 ring-slate-300 transition-colors hover:bg-slate-100"
+          className="rounded-full px-4 py-2 text-xs font-semibold text-navy/60 ring-1 ring-navy/15 transition-colors hover:bg-navy/6"
         >
           Cancel
         </button>
@@ -551,12 +551,12 @@ function Field({
 }) {
   return (
     <label className="min-w-0">
-      <span className="text-xs font-semibold text-slate-600">{label}</span>
+      <span className="text-xs font-semibold text-navy/60">{label}</span>
       <input
         name={name}
         type={type}
         required={required}
-        className="mt-1 w-full rounded-lg border-0 bg-white px-3 py-2 text-sm text-slate-900 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-blue"
+        className="mt-1 w-full rounded-lg border-0 bg-white px-3 py-2 text-sm text-navy ring-1 ring-inset ring-navy/10 focus:ring-2 focus:ring-blue"
       />
     </label>
   );
@@ -575,10 +575,10 @@ function Pick({
 }) {
   return (
     <label className={cn("min-w-0", className)}>
-      <span className="text-xs font-semibold text-slate-600">{label}</span>
+      <span className="text-xs font-semibold text-navy/60">{label}</span>
       <select
         name={name}
-        className="mt-1 w-full rounded-lg border-0 bg-white px-3 py-2 text-sm text-slate-900 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-blue"
+        className="mt-1 w-full rounded-lg border-0 bg-white px-3 py-2 text-sm text-navy ring-1 ring-inset ring-navy/10 focus:ring-2 focus:ring-blue"
       >
         <option value="">—</option>
         {options.map((o) => (
@@ -602,20 +602,20 @@ function LeadDetail({ lead, onClose }: { lead: Lead; onClose: () => void }) {
         <button
           type="button"
           onClick={onClose}
-          className="text-xs font-semibold text-slate-400 hover:text-slate-700"
+          className="text-xs font-semibold text-navy/40 hover:text-navy/75"
         >
           Close
         </button>
       }
     >
       <label className="block">
-        <span className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-slate-400">
+        <span className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-navy/40">
           Stage
         </span>
         <select
           value={lead.stage}
           onChange={(e) => updateLead(lead.id, { stage: e.target.value as Stage })}
-          className="mt-1.5 w-full rounded-lg border-0 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-800 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-blue"
+          className="mt-1.5 w-full rounded-lg border-0 bg-navy/[0.035] px-3 py-2 text-sm font-medium text-navy/85 ring-1 ring-inset ring-navy/10 focus:ring-2 focus:ring-blue"
         >
           {STAGES.map((s) => (
             <option key={s.id} value={s.id}>
@@ -625,7 +625,7 @@ function LeadDetail({ lead, onClose }: { lead: Lead; onClose: () => void }) {
         </select>
       </label>
 
-      <dl className="mt-5 border-t border-slate-100 pt-4 text-xs">
+      <dl className="mt-5 border-t border-navy/8 pt-4 text-xs">
         {[
           ["Phone", lead.phone],
           ["Email", lead.email],
@@ -634,9 +634,9 @@ function LeadDetail({ lead, onClose }: { lead: Lead; onClose: () => void }) {
         ]
           .filter(([, v]) => v)
           .map(([k, v]) => (
-            <div key={k} className="flex gap-3 border-b border-slate-100 py-2 last:border-0">
-              <dt className="w-16 shrink-0 text-slate-400">{k}</dt>
-              <dd className="min-w-0 flex-1 break-words font-medium text-slate-800">
+            <div key={k} className="flex gap-3 border-b border-navy/8 py-2 last:border-0">
+              <dt className="w-16 shrink-0 text-navy/40">{k}</dt>
+              <dd className="min-w-0 flex-1 break-words font-medium text-navy/85">
                 {k === "Phone" ? (
                   <a href={`tel:${v}`} className="text-blue hover:underline">
                     {v}
@@ -654,20 +654,20 @@ function LeadDetail({ lead, onClose }: { lead: Lead; onClose: () => void }) {
       </dl>
 
       {lead.message && (
-        <blockquote className="mt-4 rounded-lg bg-slate-50 p-3 text-xs leading-relaxed text-slate-700">
+        <blockquote className="mt-4 rounded-lg bg-navy/[0.035] p-3 text-xs leading-relaxed text-navy/75">
           {lead.message}
         </blockquote>
       )}
 
-      <p className="mt-6 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-slate-400">
+      <p className="mt-6 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-navy/40">
         Call log
       </p>
       {lead.notes.length > 0 && (
         <ol className="mt-3 space-y-2.5">
           {lead.notes.map((n) => (
             <li key={n.at} className="border-l-2 border-cyan pl-3">
-              <p className="text-xs leading-relaxed text-slate-700">{n.text}</p>
-              <p className="mt-0.5 font-mono text-[0.6rem] uppercase tracking-[0.08em] text-slate-400">
+              <p className="text-xs leading-relaxed text-navy/75">{n.text}</p>
+              <p className="mt-0.5 font-mono text-[0.6rem] uppercase tracking-[0.08em] text-navy/40">
                 {ago(n.at)}
               </p>
             </li>
@@ -687,13 +687,13 @@ function LeadDetail({ lead, onClose }: { lead: Lead; onClose: () => void }) {
           onChange={(e) => setNote(e.target.value)}
           rows={2}
           placeholder="Left a voicemail, calling back Thursday…"
-          className="w-full rounded-lg border-0 bg-slate-50 px-3 py-2 text-xs text-slate-900 ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-blue"
+          className="w-full rounded-lg border-0 bg-navy/[0.035] px-3 py-2 text-xs text-navy ring-1 ring-inset ring-navy/10 placeholder:text-navy/40 focus:ring-2 focus:ring-blue"
         />
         <div className="mt-2 flex items-center justify-between gap-3">
           <button
             type="submit"
             disabled={!note.trim()}
-            className="rounded-full bg-slate-900 px-3.5 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-slate-700 disabled:opacity-30"
+            className="rounded-full bg-navy px-3.5 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-navy-soft disabled:opacity-30"
           >
             Add note
           </button>
@@ -705,7 +705,7 @@ function LeadDetail({ lead, onClose }: { lead: Lead; onClose: () => void }) {
                 onClose();
               }
             }}
-            className="text-xs font-semibold text-slate-400 transition-colors hover:text-ember"
+            className="text-xs font-semibold text-navy/40 transition-colors hover:text-ember"
           >
             Delete
           </button>

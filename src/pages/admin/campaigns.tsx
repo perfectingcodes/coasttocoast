@@ -40,9 +40,9 @@ export default function AdminCampaigns() {
         <Table columns={["Campaign", "Platform", "Status", "Budget", "Window", "KPI"]}>
           {campaigns.map((c) => (
             <tr key={c.name}>
-              <Td className="font-medium text-slate-900">
+              <Td className="font-medium text-navy">
                 {c.name}
-                <span className="mt-0.5 block text-xs font-normal text-slate-500">
+                <span className="mt-0.5 block text-xs font-normal text-navy/50">
                   {c.objective}
                 </span>
               </Td>
@@ -74,20 +74,20 @@ export default function AdminCampaigns() {
         />
         <div className="mt-5 space-y-3">
           {meta.map((c) => (
-            <div key={c.name} className="rounded-lg border border-slate-200 p-4">
+            <div key={c.name} className="rounded-lg border border-navy/10 p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="font-display text-sm font-bold text-slate-900">{c.name}</p>
+                <p className="font-display text-sm font-bold text-navy">{c.name}</p>
                 <StatusPill status={c.status} />
               </div>
-              <p className="mt-1.5 text-xs leading-relaxed text-slate-600">{c.objective}</p>
-              <dl className="mt-3 flex flex-wrap gap-x-6 gap-y-1 border-t border-slate-100 pt-3 text-xs">
+              <p className="mt-1.5 text-xs leading-relaxed text-navy/60">{c.objective}</p>
+              <dl className="mt-3 flex flex-wrap gap-x-6 gap-y-1 border-t border-navy/8 pt-3 text-xs">
                 <div className="flex gap-1.5">
-                  <dt className="text-slate-500">Audience</dt>
-                  <dd className="text-slate-900">{c.audience}</dd>
+                  <dt className="text-navy/50">Audience</dt>
+                  <dd className="text-navy">{c.audience}</dd>
                 </div>
                 <div className="flex gap-1.5">
-                  <dt className="text-slate-500">Budget</dt>
-                  <dd className="font-semibold text-slate-900">{c.budget}</dd>
+                  <dt className="text-navy/50">Budget</dt>
+                  <dd className="font-semibold text-navy">{c.budget}</dd>
                 </div>
               </dl>
             </div>
@@ -99,7 +99,7 @@ export default function AdminCampaigns() {
         title="Creative notes"
         subtitle="What this brand has that most HVAC competitors do not."
       >
-        <ul className="space-y-2.5 text-sm text-slate-700">
+        <ul className="space-y-2.5 text-sm text-navy/75">
           {[
             "The husky mascot is genuinely distinctive in a category of stock photos and blue gradients — it should carry the social creative.",
             "The wrapped van shot is the strongest owned asset for awareness. Reshoot it once the wrap shows the real phone number.",
@@ -107,7 +107,7 @@ export default function AdminCampaigns() {
             "Licence #CMC1251768 and 24/7 answering are the trust levers — use them in ad copy, not just on the site.",
           ].map((n) => (
             <li key={n} className="flex gap-2.5">
-              <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-slate-400" aria-hidden="true" />
+              <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-navy/35" aria-hidden="true" />
               {n}
             </li>
           ))}

@@ -3,17 +3,32 @@ import { Link } from "wouter";
 import { cn } from "@/lib/utils";
 import type { Status } from "@/content/marketing";
 
+/**
+ * Dashboard primitives.
+ *
+ * Two rules hold this together. Neutrals are mixed from the brand navy, never
+ * from Tailwind's grey — a dashboard built on slate looks like a different
+ * company's product sitting inside this one. And a panel is allowed to be
+ * more than a white box: the dark instrument card and the metric tile below
+ * exist so a page can have a focal point instead of eight identical
+ * rectangles stacked down the screen.
+ */
+
 /* ------------------------------------------------------------------ status */
 
 const STATUS: Record<Status, { label: string; className: string; dot: string }> = {
-  live: { label: "Live", className: "bg-emerald-50 text-emerald-700", dot: "bg-emerald-500" },
-  ready: { label: "Ready", className: "bg-cyan/12 text-sky-700", dot: "bg-cyan" },
-  draft: { label: "Draft", className: "bg-gold/15 text-amber-700", dot: "bg-gold" },
-  blocked: { label: "Blocked", className: "bg-ember/10 text-ember", dot: "bg-ember" },
+  live: {
+    label: "Live",
+    className: "bg-emerald-500/12 text-emerald-700 ring-emerald-500/25",
+    dot: "bg-emerald-500",
+  },
+  ready: { label: "Ready", className: "bg-cyan/18 text-[#0a5b7d] ring-cyan/40", dot: "bg-cyan" },
+  draft: { label: "Draft", className: "bg-gold/20 text-amber-800 ring-gold/40", dot: "bg-gold" },
+  blocked: { label: "Blocked", className: "bg-ember/10 text-ember ring-ember/25", dot: "bg-ember" },
   "not-connected": {
     label: "Not connected",
-    className: "bg-slate-100 text-slate-500",
-    dot: "bg-slate-400",
+    className: "bg-navy/6 text-navy/55 ring-navy/12",
+    dot: "bg-navy/35",
   },
 };
 
@@ -22,7 +37,7 @@ export function StatusPill({ status, className }: { status: Status; className?: 
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.7rem] font-semibold",
+        "inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.68rem] font-bold ring-1 ring-inset",
         s.className,
         className,
       )}
@@ -41,84 +56,116 @@ export function Panel({
   action,
   children,
   className,
+  /** Drop the inner padding when the content manages its own. */
+  flush = false,
 }: {
   title?: string;
   subtitle?: ReactNode;
   action?: ReactNode;
   children: ReactNode;
   className?: string;
+  flush?: boolean;
 }) {
   return (
     <section
       className={cn(
-        "min-w-0 rounded-2xl bg-white shadow-[0_1px_2px_rgb(10_35_82/0.04),0_12px_28px_-18px_rgb(10_35_82/0.35)]",
+        "min-w-0 overflow-hidden rounded-2xl bg-white shadow-[0_1px_2px_rgb(7_26_61/0.05),0_16px_36px_-22px_rgb(7_26_61/0.4)]",
         className,
       )}
     >
       {(title || action) && (
-        <header className="flex flex-wrap items-start justify-between gap-3 border-b border-slate-100 px-5 py-4">
-          <div>
+        <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3 px-5 pb-3.5 pt-4.5">
+          <div className="min-w-0">
             {title && (
-              <h2 className="font-display text-sm font-bold tracking-tight text-slate-900">
+              <h2 className="flex items-center gap-2.5 font-display text-[0.95rem] font-extrabold tracking-[-0.015em] text-navy">
+                <span
+                  className="h-3.5 w-[3px] shrink-0 rounded-full bg-blue"
+                  aria-hidden="true"
+                />
                 {title}
               </h2>
             )}
             {subtitle && (
-              <p className="mt-1 text-xs leading-relaxed text-slate-500">{subtitle}</p>
+              <p className="mt-1.5 max-w-prose pl-[1.4rem] text-[0.76rem] leading-relaxed text-navy/50">
+                {subtitle}
+              </p>
             )}
           </div>
           {action}
         </header>
       )}
-      <div className="p-5">{children}</div>
+      <div className={cn(flush ? "" : "px-5 pb-5", !title && !action && "pt-5")}>
+        {children}
+      </div>
     </section>
   );
 }
 
+/**
+ * A metric tile. The number is the graphic — display weight, tabular figures,
+ * tight tracking — and the accent bar down the left is the only colour, so a
+ * row of these reads at a glance instead of needing to be parsed.
+ */
 export function StatCard({
   label,
   value,
   hint,
   tone = "default",
   icon,
+  className,
 }: {
   label: string;
   value: ReactNode;
   hint?: string;
   tone?: "default" | "good" | "warn" | "bad";
   icon?: ReactNode;
+  className?: string;
 }) {
   const tones = {
-    default: { text: "text-slate-900", tile: "bg-blue/10 text-blue" },
-    good: { text: "text-emerald-600", tile: "bg-emerald-50 text-emerald-600" },
-    warn: { text: "text-amber-600", tile: "bg-gold/15 text-amber-600" },
-    bad: { text: "text-ember", tile: "bg-ember/10 text-ember" },
+    default: { bar: "bg-blue", text: "text-navy", ghost: "text-blue/15" },
+    good: { bar: "bg-emerald-500", text: "text-emerald-600", ghost: "text-emerald-500/15" },
+    warn: { bar: "bg-gold", text: "text-amber-600", ghost: "text-gold/20" },
+    bad: { bar: "bg-ember", text: "text-ember", ghost: "text-ember/15" },
   }[tone];
 
   return (
-    <div className="min-w-0 rounded-2xl bg-white p-5 shadow-[0_1px_2px_rgb(10_35_82/0.04),0_12px_28px_-18px_rgb(10_35_82/0.35)]">
-      <div className="flex items-start gap-3">
-        {icon && (
-          <span className={cn("grid size-9 shrink-0 place-items-center rounded-full", tones.tile)}>
-            {icon}
-          </span>
+    <div
+      className={cn(
+        "relative min-w-0 overflow-hidden rounded-2xl bg-white px-5 py-4.5 shadow-[0_1px_2px_rgb(7_26_61/0.05),0_16px_36px_-22px_rgb(7_26_61/0.4)]",
+        className,
+      )}
+    >
+      <span
+        className={cn("absolute inset-y-4 left-0 w-[3px] rounded-r-full", tones.bar)}
+        aria-hidden="true"
+      />
+      {icon && (
+        <span className={cn("absolute right-4 top-4 [&>svg]:size-7", tones.ghost)}>
+          {icon}
+        </span>
+      )}
+      <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-navy/40">
+        {label}
+      </p>
+      <p
+        className={cn(
+          "mt-2 font-display text-[2rem] font-extrabold leading-none tracking-[-0.035em] tabular-nums",
+          tones.text,
         )}
-        <div className="min-w-0">
-          <p className="text-[0.72rem] font-semibold text-slate-500">{label}</p>
-          <p className={cn("mt-1 font-display text-[1.75rem] font-extrabold leading-none", tones.text)}>
-            {value}
-          </p>
-        </div>
-      </div>
-      {hint && <p className="mt-3 text-xs leading-snug text-slate-500">{hint}</p>}
+      >
+        {value}
+      </p>
+      {hint && (
+        <p className="mt-2.5 text-[0.72rem] leading-snug text-navy/45">{hint}</p>
+      )}
     </div>
   );
 }
 
 /**
- * The one card on a screen that is not white — a brand-blue panel for the
- * thing the reader should do next. Modelled on the feature cell in a good
- * dashboard: it is how a flat grid of white cards gets a focal point.
+ * The one card on a screen that is not white. Every page gets at most one —
+ * it is how a grid of white tiles acquires a focal point and how the brand
+ * gets into a tool that is otherwise all data.
  */
 export function FeatureCard({
   eyebrow,
@@ -138,25 +185,91 @@ export function FeatureCard({
   return (
     <div
       className={cn(
-        "band-ocean grain relative flex min-w-0 flex-col overflow-hidden rounded-2xl p-6 text-white",
+        "band-navy grain edge-lit relative flex min-w-0 flex-col overflow-hidden rounded-2xl p-6 text-white shadow-[0_20px_44px_-24px_rgb(7_26_61/0.8)]",
         className,
       )}
     >
-      <div className="thermal-rule absolute inset-x-0 top-0 h-[3px] rounded-none" aria-hidden="true" />
-      {eyebrow && (
-        <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
-          {eyebrow}
+      <div
+        className="grid-lines pointer-events-none absolute inset-0"
+        aria-hidden="true"
+      />
+      <div className="relative">
+        {eyebrow && (
+          <p className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+            {eyebrow}
+          </p>
+        )}
+        <p className="mt-3 font-display text-[1.35rem] font-extrabold leading-[1.1] tracking-[-0.025em]">
+          {title}
         </p>
-      )}
-      <p className="mt-3 font-display text-lg font-extrabold leading-tight">{title}</p>
-      <p className="mt-2 text-sm leading-relaxed text-white/72">{body}</p>
-      <Link
-        href={href}
-        className="mt-5 inline-flex w-fit items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-semibold text-navy transition-colors hover:bg-cyan-light"
-      >
-        {action}
-      </Link>
+        <p className="mt-2.5 text-[0.82rem] leading-relaxed text-white/70">{body}</p>
+        <Link
+          href={href}
+          className="mt-5 inline-flex w-fit items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[0.8rem] font-bold text-navy transition-colors hover:bg-cyan-light"
+        >
+          {action}
+        </Link>
+      </div>
     </div>
+  );
+}
+
+/**
+ * Dark instrument card — a readout, not a call to action. Used where a figure
+ * needs to carry weight on its own.
+ */
+export function Instrument({
+  label,
+  value,
+  footnote,
+  children,
+  className,
+}: {
+  label: string;
+  value?: ReactNode;
+  footnote?: string;
+  children?: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "band-abyss grain edge-lit relative min-w-0 overflow-hidden rounded-2xl p-5 text-white shadow-[0_20px_44px_-24px_rgb(7_26_61/0.8)]",
+        className,
+      )}
+    >
+      <div className="grid-lines pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div className="relative">
+        <p className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+          {label}
+        </p>
+        {value !== undefined && (
+          <p className="mt-3 font-display text-[2.4rem] font-extrabold leading-none tracking-[-0.04em] tabular-nums">
+            {value}
+          </p>
+        )}
+        {children}
+        {footnote && (
+          <p className="mt-3 font-mono text-[0.6rem] uppercase leading-relaxed tracking-[0.1em] text-white/45">
+            {footnote}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/** Small uppercase label for a group of things inside a panel. */
+export function Micro({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <p
+      className={cn(
+        "font-display text-[0.58rem] font-extrabold uppercase tracking-[0.18em] text-navy/35",
+        className,
+      )}
+    >
+      {children}
+    </p>
   );
 }
 
@@ -173,19 +286,19 @@ export function Table({
     <div className="-mx-5 overflow-x-auto" data-wide="">
       <table className="w-full min-w-[42rem] border-collapse text-left text-sm">
         <thead>
-          <tr className="border-b border-slate-200">
+          <tr className="border-y border-navy/8 bg-navy/[0.02]">
             {columns.map((c) => (
               <th
                 key={c}
                 scope="col"
-                className="px-5 py-2.5 text-xs font-semibold uppercase tracking-wide text-slate-500"
+                className="px-5 py-2.5 font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-navy/40"
               >
                 {c}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100">{children}</tbody>
+        <tbody className="divide-y divide-navy/6">{children}</tbody>
       </table>
     </div>
   );
@@ -203,8 +316,8 @@ export function Td({
   return (
     <td
       className={cn(
-        "px-5 py-3 align-top",
-        muted ? "text-slate-500" : "text-slate-700",
+        "px-5 py-3 align-top text-[0.82rem]",
+        muted ? "text-navy/55" : "text-navy/80",
         className,
       )}
     >
@@ -229,15 +342,18 @@ export function NotConnected({
   steps: string[];
 }) {
   return (
-    <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50/60 p-6">
-      <p className="font-display text-sm font-bold text-slate-900">
+    <div className="rounded-xl bg-navy/[0.03] p-5 ring-1 ring-inset ring-navy/8">
+      <p className="flex items-center gap-2 font-display text-[0.88rem] font-extrabold text-navy">
+        <span className="size-1.5 rounded-full bg-ember" aria-hidden="true" />
         {service} is not connected
       </p>
-      <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{what}</p>
-      <ol className="mt-4 space-y-1.5">
+      <p className="mt-2 max-w-prose text-[0.82rem] leading-relaxed text-navy/60">
+        {what}
+      </p>
+      <ol className="mt-4 space-y-2">
         {steps.map((s, i) => (
-          <li key={s} className="flex gap-2.5 text-sm text-slate-600">
-            <span className="grid size-5 shrink-0 place-items-center rounded-full bg-white text-[0.65rem] font-bold text-slate-500 ring-1 ring-slate-300">
+          <li key={s} className="flex gap-3 text-[0.8rem] text-navy/70">
+            <span className="grid size-5 shrink-0 place-items-center rounded-full bg-white font-mono text-[0.6rem] font-bold text-navy/45 ring-1 ring-navy/10">
               {i + 1}
             </span>
             {s}

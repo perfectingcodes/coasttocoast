@@ -39,11 +39,11 @@ export default function AdminGoogle() {
           ]}
         />
 
-        <div className="mt-5 rounded-lg border border-slate-200 p-4">
-          <p className="font-display text-sm font-bold text-slate-900">
+        <div className="mt-5 rounded-lg border border-navy/10 p-4">
+          <p className="font-display text-sm font-bold text-navy">
             NAP consistency
           </p>
-          <p className="mt-1 text-xs leading-relaxed text-slate-600">
+          <p className="mt-1 text-xs leading-relaxed text-navy/60">
             Name, address and phone must match character-for-character across
             the profile, the site and every directory. Inconsistency is one of
             the most common causes of weak local ranking.
@@ -56,8 +56,8 @@ export default function AdminGoogle() {
               ["Licence", business.license],
             ].map(([k, v]) => (
               <div key={k} className="flex gap-3">
-                <dt className="w-20 shrink-0 text-xs text-slate-500">{k}</dt>
-                <dd className="font-mono text-xs text-slate-900">{v}</dd>
+                <dt className="w-20 shrink-0 text-xs text-navy/50">{k}</dt>
+                <dd className="font-mono text-xs text-navy">{v}</dd>
               </div>
             ))}
           </dl>
@@ -69,17 +69,17 @@ export default function AdminGoogle() {
         subtitle="Feeds both local ranking and conversion rate."
         action={<StatusPill status={hasReviewData() ? "live" : "ready"} />}
       >
-        <p className="text-sm leading-relaxed text-slate-700">
+        <p className="text-sm leading-relaxed text-navy/75">
           The site is already built to display a rating and emit{" "}
-          <code className="rounded bg-slate-100 px-1 text-xs">aggregateRating</code>{" "}
+          <code className="rounded bg-navy/8 px-1 text-xs">aggregateRating</code>{" "}
           the moment there is a verified one. Until then it shows a neutral
           &ldquo;Reviews on Google&rdquo; link and no stars — deliberately, because
           publishing an invented rating is a Google policy violation and a
           manual-action risk.
         </p>
-        <div className="mt-4 rounded-lg bg-slate-50 p-4">
-          <p className="text-xs font-semibold text-slate-900">To switch it on</p>
-          <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
+        <div className="mt-4 rounded-lg bg-navy/[0.035] p-4">
+          <p className="text-xs font-semibold text-navy">To switch it on</p>
+          <p className="mt-1.5 text-xs leading-relaxed text-navy/60">
             Set <code className="text-[0.7rem]">rating</code>,{" "}
             <code className="text-[0.7rem]">count</code>,{" "}
             <code className="text-[0.7rem]">profileUrl</code> and{" "}
@@ -89,14 +89,14 @@ export default function AdminGoogle() {
             object.
           </p>
         </div>
-        <ul className="mt-4 space-y-2 text-sm text-slate-700">
+        <ul className="mt-4 space-y-2 text-sm text-navy/75">
           {[
             "Send a review request by SMS the same day the job closes — same-day requests convert far better than next-week ones",
             "Respond to every review within 48 hours, positive or not",
             "Never gate requests on the customer being happy; that violates Google's policy",
           ].map((t) => (
             <li key={t} className="flex gap-2.5">
-              <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-slate-400" aria-hidden="true" />
+              <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-navy/35" aria-hidden="true" />
               {t}
             </li>
           ))}
@@ -118,7 +118,7 @@ export default function AdminGoogle() {
           <Table columns={["Campaign", "Status", "Budget", "KPI"]}>
             {googleCampaigns.map((c) => (
               <tr key={c.name}>
-                <Td className="font-medium text-slate-900">{c.name}</Td>
+                <Td className="font-medium text-navy">{c.name}</Td>
                 <Td>
                   <StatusPill status={c.status} />
                 </Td>

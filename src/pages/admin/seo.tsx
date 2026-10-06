@@ -58,11 +58,11 @@ export default function AdminSeo() {
       lead="Measured from the built site, not estimated. Figures refresh when you run pnpm build && pnpm audit:seo."
     >
       {state === "missing" && (
-        <div className="flex items-start gap-3 rounded-lg border border-slate-300 bg-white px-4 py-3">
-          <FileWarning className="mt-0.5 size-4 shrink-0 text-slate-500" aria-hidden="true" />
-          <p className="text-sm leading-relaxed text-slate-600">
+        <div className="flex items-start gap-3 rounded-lg border border-navy/15 bg-white px-4 py-3">
+          <FileWarning className="mt-0.5 size-4 shrink-0 text-navy/50" aria-hidden="true" />
+          <p className="text-sm leading-relaxed text-navy/60">
             No audit report found. Run{" "}
-            <code className="rounded bg-slate-100 px-1.5 py-0.5 text-xs">
+            <code className="rounded bg-navy/8 px-1.5 py-0.5 text-xs">
               pnpm build &amp;&amp; pnpm audit:seo
             </code>{" "}
             to generate <code className="text-xs">seo-report.json</code>, then
@@ -101,7 +101,7 @@ export default function AdminSeo() {
         subtitle="Mean pairwise similarity within each generated page set, measured on main content with nav and footer stripped. Anything above 60% risks being treated as duplicate."
         action={
           report && (
-            <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
+            <span className="inline-flex items-center gap-1.5 text-xs text-navy/50">
               <RefreshCw className="size-3" aria-hidden="true" />
               {new Date(report.generatedAt).toLocaleString()}
             </span>
@@ -112,7 +112,7 @@ export default function AdminSeo() {
           <Table columns={["Page set", "Pages", "Mean", "Max", "Over 60%", "Median words"]}>
             {Object.entries(report.similarity).map(([label, s]) => (
               <tr key={label}>
-                <Td className="font-medium text-slate-900">{label}</Td>
+                <Td className="font-medium text-navy">{label}</Td>
                 <Td muted>{s.pages}</Td>
                 <Td>{pct(s.meanSimilarity)}</Td>
                 <Td>{pct(s.maxSimilarity)}</Td>
@@ -132,7 +132,7 @@ export default function AdminSeo() {
             ))}
           </Table>
         ) : (
-          <p className="text-sm text-slate-500">Waiting on the audit report…</p>
+          <p className="text-sm text-navy/50">Waiting on the audit report…</p>
         )}
       </Panel>
 
@@ -151,7 +151,7 @@ export default function AdminSeo() {
               "FAQPage on every service, city and service × city page",
               "speakable pointed at h1 and [data-answer] for answer engines",
             ].map((t) => (
-              <li key={t} className="flex gap-2.5 text-slate-700">
+              <li key={t} className="flex gap-2.5 text-navy/75">
                 <CheckCircle2
                   className="mt-0.5 size-4 shrink-0 text-emerald-600"
                   aria-hidden="true"
@@ -184,7 +184,7 @@ export default function AdminSeo() {
               "City pages render local facts as a real table, not styled divs",
               "Descriptions clamped to 158 chars on a word boundary",
             ].map((t) => (
-              <li key={t} className="flex gap-2.5 text-slate-700">
+              <li key={t} className="flex gap-2.5 text-navy/75">
                 <CheckCircle2
                   className="mt-0.5 size-4 shrink-0 text-emerald-600"
                   aria-hidden="true"
@@ -202,25 +202,25 @@ export default function AdminSeo() {
       >
         <Table columns={["Page set", "Count", "Generated from", "Layout"]}>
           <tr>
-            <Td className="font-medium text-slate-900">Service × city</Td>
+            <Td className="font-medium text-navy">Service × city</Td>
             <Td>{cityServicePages}</Td>
             <Td muted>{locations.length} cities × {services.length} services</Td>
             <Td muted>Narrow reading column, answer first</Td>
           </tr>
           <tr>
-            <Td className="font-medium text-slate-900">City landing</Td>
+            <Td className="font-medium text-navy">City landing</Td>
             <Td>{locations.length}</Td>
             <Td muted>content/site.ts locations</Td>
             <Td muted>Wide service matrix + fact table</Td>
           </tr>
           <tr>
-            <Td className="font-medium text-slate-900">Service</Td>
+            <Td className="font-medium text-navy">Service</Td>
             <Td>{services.length}</Td>
             <Td muted>content/site.ts services</Td>
             <Td muted>One layout per service detail.kind</Td>
           </tr>
           <tr>
-            <Td className="font-medium text-slate-900">Company & legal</Td>
+            <Td className="font-medium text-navy">Company & legal</Td>
             <Td>7</Td>
             <Td muted>Home, about, financing, contact, indexes, legal</Td>
             <Td muted>Bespoke</Td>
@@ -235,7 +235,7 @@ export default function AdminSeo() {
         <Table columns={["Term", "Intent", "Priority", "Target page"]}>
           {keywordTargets.map((k) => (
             <tr key={k.term}>
-              <Td className="font-medium text-slate-900">{k.term}</Td>
+              <Td className="font-medium text-navy">{k.term}</Td>
               <Td muted>{k.intent}</Td>
               <Td>
                 <span
@@ -244,7 +244,7 @@ export default function AdminSeo() {
                       ? "font-semibold text-rose-600"
                       : k.priority === "P1"
                         ? "font-semibold text-amber-600"
-                        : "text-slate-500"
+                        : "text-navy/50"
                   }
                 >
                   {k.priority}
@@ -268,7 +268,7 @@ export default function AdminSeo() {
         </Panel>
       )}
 
-      <p className="text-xs text-slate-500">
+      <p className="text-xs text-navy/50">
         NAP of record: {business.name} · {business.street}, {business.city},{" "}
         {business.state} {business.zip} · {business.phone}. Keep this identical
         everywhere it appears online.

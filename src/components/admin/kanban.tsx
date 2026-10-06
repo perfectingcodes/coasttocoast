@@ -74,9 +74,9 @@ export function CampaignBoard({ cards }: { cards: BoardCard[] }) {
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-navy/50">
           Drag a card to change its column.{" "}
-          <strong className="font-semibold text-slate-700">
+          <strong className="font-semibold text-navy/75">
             Moves are saved in this browser only
           </strong>{" "}
           — nobody else sees them, and clearing site data resets the board.
@@ -92,7 +92,7 @@ export function CampaignBoard({ cards }: { cards: BoardCard[] }) {
                 /* nothing to clear */
               }
             }}
-            className="rounded-full px-3 py-1 text-xs font-semibold text-slate-600 ring-1 ring-slate-300 transition-colors hover:bg-slate-100"
+            className="rounded-full px-3 py-1 text-xs font-semibold text-navy/60 ring-1 ring-navy/15 transition-colors hover:bg-navy/6"
           >
             Reset to the plan
           </button>
@@ -125,12 +125,12 @@ export function CampaignBoard({ cards }: { cards: BoardCard[] }) {
                 "w-[16.5rem] shrink-0 rounded-2xl p-3 ring-1 transition-colors",
                 over === col.status
                   ? "bg-blue/8 ring-blue/40"
-                  : "bg-slate-50 ring-slate-200/70",
+                  : "bg-navy/[0.035] ring-navy/10/70",
               )}
             >
               <header className="flex items-center justify-between gap-2 px-1 pb-3">
                 <StatusPill status={col.status} />
-                <span className="font-mono text-[0.7rem] tabular-nums text-slate-400">
+                <span className="font-mono text-[0.7rem] tabular-nums text-navy/40">
                   {String(inColumn.length).padStart(2, "0")}
                 </span>
               </header>
@@ -152,39 +152,39 @@ export function CampaignBoard({ cards }: { cards: BoardCard[] }) {
                     >
                       <div className="flex items-start gap-2">
                         <GripVertical
-                          className="mt-0.5 size-3.5 shrink-0 text-slate-300 transition-colors group-hover:text-slate-400"
+                          className="mt-0.5 size-3.5 shrink-0 text-navy/25 transition-colors group-hover:text-navy/40"
                           aria-hidden="true"
                         />
                         <div className="min-w-0">
-                          <p className="text-[0.82rem] font-semibold leading-snug text-slate-900">
+                          <p className="text-[0.82rem] font-semibold leading-snug text-navy">
                             {c.title}
                           </p>
                           <p className="mt-0.5 text-[0.7rem] font-medium text-blue">
                             {c.meta}
                           </p>
                           {c.note && (
-                            <p className="mt-1.5 text-[0.72rem] leading-snug text-slate-500">
+                            <p className="mt-1.5 text-[0.72rem] leading-snug text-navy/50">
                               {c.note}
                             </p>
                           )}
                         </div>
                       </div>
 
-                      <div className="mt-3 flex items-end justify-between gap-2 border-t border-slate-100 pt-2.5">
+                      <div className="mt-3 border-t border-navy/8 pt-2.5">
                         {c.footer && (
-                          <p className="min-w-0 font-mono text-[0.6rem] uppercase leading-snug tracking-[0.06em] text-slate-400">
+                          <p className="font-mono text-[0.6rem] uppercase leading-snug tracking-[0.06em] text-navy/40">
                             {c.footer}
                           </p>
                         )}
                         {/* Keyboard and screen-reader path to the same action.
                             Drag and drop on its own would leave this board
                             unusable without a pointer. */}
-                        <label className="shrink-0 self-end">
+                        <label className="mt-2 block">
                           <span className="sr-only">Move {c.title} to</span>
                           <select
                             value={statusOf(c)}
                             onChange={(e) => move(c.id, e.target.value as Status)}
-                            className="w-[7.4rem] rounded-md border-0 bg-slate-50 py-1 pl-2 pr-6 text-[0.65rem] font-semibold text-slate-500 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-blue"
+                            className="w-full rounded-md border-0 bg-navy/[0.035] py-1.5 pl-2 pr-6 text-[0.65rem] font-semibold text-navy/55 ring-1 ring-inset ring-navy/10 focus:ring-2 focus:ring-blue"
                           >
                             {COLUMNS.map((o) => (
                               <option key={o.status} value={o.status}>
@@ -199,7 +199,7 @@ export function CampaignBoard({ cards }: { cards: BoardCard[] }) {
                 ))}
 
                 {inColumn.length === 0 && (
-                  <li className="rounded-xl border border-dashed border-slate-200 px-3 py-6 text-center text-[0.72rem] text-slate-400">
+                  <li className="rounded-xl border border-dashed border-navy/10 px-3 py-6 text-center text-[0.72rem] text-navy/40">
                     Nothing here
                   </li>
                 )}
