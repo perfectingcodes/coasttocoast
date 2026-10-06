@@ -66,6 +66,11 @@ export interface Lead {
   source: "website" | "phone" | "manual";
   stage: Stage;
   notes: Note[];
+  /** Set the first time a lead is marked won — the review sequence counts
+   *  its days from here. */
+  wonAt?: number;
+  /** Ids of review-sequence steps already sent for this customer. */
+  reviewSteps?: string[];
 }
 
 export type EventKind =
@@ -242,7 +247,31 @@ export function captureLead(data: NewLead): Lead {
 export function updateLead(id: string, patch: Partial<Lead>) {
   mutate((crm) => ({
     ...crm,
-    leads: crm.leads.map((l) => (l.id === id ? { ...l, ...patch } : l)),
+    leads: crm.leads.map((l) => {
+      if (l.id !== id) return l;
+      const next = { ...l, ...patch };
+      // Stamp the win once. The review sequence dates every step off this,
+      // so re-marking a lead won must not restart the clock.
+      if (next.stage === "won" && !next.wonAt) next.wonAt = Date.now();
+      return next;
+    }),
+  }));
+}
+
+/** Record that one step of the review sequence went out for this customer. */
+export function toggleReviewStep(id: string, step: string) {
+  mutate((crm) => ({
+    ...crm,
+    leads: crm.leads.map((l) => {
+      if (l.id !== id) return l;
+      const done = l.reviewSteps ?? [];
+      return {
+        ...l,
+        reviewSteps: done.includes(step)
+          ? done.filter((s) => s !== step)
+          : [...done, step],
+      };
+    }),
   }));
 }
 

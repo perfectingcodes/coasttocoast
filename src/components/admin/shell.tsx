@@ -9,6 +9,7 @@ import {
   Lock,
   Megaphone,
   Menu,
+  Star,
   Users,
   Target,
   X,
@@ -77,6 +78,17 @@ const NAV: {
         label: "Campaigns",
         hint: "Paid search and Meta",
         Icon: Megaphone,
+      },
+    ],
+  },
+  {
+    group: "Resources",
+    items: [
+      {
+        href: "/admin/resources",
+        label: "Review sequence",
+        hint: "Templates and the rules",
+        Icon: Star,
       },
     ],
   },

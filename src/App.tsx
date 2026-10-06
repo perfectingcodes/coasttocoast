@@ -22,6 +22,7 @@ import AdminSeo from "@/pages/admin/seo";
 import AdminMarketing from "@/pages/admin/marketing";
 import AdminCampaigns from "@/pages/admin/campaigns";
 import AdminLeads from "@/pages/admin/leads";
+import AdminResources from "@/pages/admin/resources";
 import AdminGoogle from "@/pages/admin/google";
 import AdminTracking from "@/pages/admin/tracking";
 
@@ -52,6 +53,7 @@ function Routes() {
       <Route path="/admin/marketing" component={AdminMarketing} />
       <Route path="/admin/campaigns" component={AdminCampaigns} />
       <Route path="/admin/leads" component={AdminLeads} />
+      <Route path="/admin/resources" component={AdminResources} />
       <Route path="/admin/google" component={AdminGoogle} />
       <Route path="/admin/tracking" component={AdminTracking} />
 
