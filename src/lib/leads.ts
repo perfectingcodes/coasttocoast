@@ -83,7 +83,8 @@ export type EventKind =
   | "quote-open"
   | "quote-submit"
   | "financing"
-  | "chat";
+  | "chat"
+  | "offer";
 
 export const EVENT_LABELS: Record<EventKind, string> = {
   view: "Page view",
@@ -92,6 +93,7 @@ export const EVENT_LABELS: Record<EventKind, string> = {
   "quote-submit": "Sent a quote request",
   financing: "Used the financing estimator",
   chat: "Opened the chat",
+  offer: "Saw the $89 offer popup",
 };
 
 export interface SiteEvent {

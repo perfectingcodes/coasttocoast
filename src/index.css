@@ -783,6 +783,21 @@
       transform: translateX(-100%);
     }
   }
+
+  /* Modal entrance. Both are gated behind motion-safe: at the call site, so
+     a visitor who asked for less motion gets the dialog with no movement
+     rather than no dialog. */
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.985);
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     .marquee-track {
       animation: none;

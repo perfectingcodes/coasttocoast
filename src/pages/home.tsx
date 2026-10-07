@@ -40,6 +40,7 @@ import { SeasonScrubber } from "@/components/season-scrubber";
 import { SystemAgeCard } from "@/components/system-age";
 import { ServiceMap } from "@/components/service-map";
 import { CtaBand } from "@/components/cta-band";
+import { OfferPopup } from "@/components/offer-popup";
 import { FaqList } from "@/components/faq-list";
 import { ButtonLink } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
@@ -90,6 +91,10 @@ export default function Home() {
         <FaqSection />
         <HowItWorks />
         <CtaBand mascot />
+
+        {/* Homepage only. Waits for dwell, scroll depth or exit intent —
+            never fires on load. See components/offer-popup.tsx. */}
+        <OfferPopup />
       </main>
 
       <Footer />
@@ -531,7 +536,10 @@ function CleanAndTuneSection() {
   })();
 
   return (
-    <section className="relative isolate z-10 bg-white py-16 md:py-20">
+    <section
+      id="clean-and-tune"
+      className="relative isolate z-10 scroll-mt-28 bg-white py-16 md:py-20"
+    >
       <div className="shell">
         <div className="band-navy grain relative overflow-hidden rounded-[2rem] shadow-[0_40px_80px_-30px_rgb(5_15_38/0.6)] ring-1 ring-white/12">
           {/* Warm light behind the price, cool light behind the checklist. */}
