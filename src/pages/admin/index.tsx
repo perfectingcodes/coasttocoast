@@ -42,6 +42,18 @@ import { cn } from "@/lib/utils";
 
 const BLOCKERS = [
   {
+    what: "HVAC DBA not yet filed",
+    go: "/admin/google-ads",
+    why: "The Brand campaign and every [Brand] line of ad copy wait on the exact trading name. It is also the name the Business Profile has to be created under.",
+    who: "Client",
+  },
+  {
+    what: "Licence and insurance upgrade in progress",
+    go: "/admin/google-ads",
+    why: "We need the numbers that will be current on launch day plus a certificate of insurance. Local Services Ads is a licence check and an insurance check — no Google Guaranteed badge without both.",
+    who: "Client",
+  },
+  {
     what: "Google Business Profile not claimed",
     go: "/admin/google",
     why: "The highest-ROI asset in local search. Nothing in the local pack works without it, and it is what issues the review link.",

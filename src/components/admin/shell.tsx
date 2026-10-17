@@ -92,8 +92,8 @@ const NAV: { group: string; items: NavItem[] }[] = [
       },
       {
         href: "/admin/google-ads",
-        label: "Google Ads build",
-        hint: "The build sheet being worked to",
+        label: "Launch plan",
+        hint: "Google Ads, from Mon 19 Oct",
         Icon: Megaphone,
       },
       {
