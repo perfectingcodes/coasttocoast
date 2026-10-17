@@ -198,6 +198,14 @@ export const clientAsks: ClientAsk[] = [
     needBy: "Before the call-only campaign in month 2. Useful from day one.",
   },
   {
+    what: "Instagram and Meta Business access",
+    state: "waiting",
+    why: "Admin access on the Meta Business Suite covering the Instagram account and the Facebook page — partner access, not a shared password, so it survives a staff change.",
+    blocks:
+      "The Meta Pixel, and therefore retargeting. A retargeting audience needs roughly 30 days of traffic before it is big enough to run: installed 19 October it opens around 18 November, and every day access slips moves that date with it. Also blocks any posting schedule.",
+    needBy: "Today. The 30-day clock does not start until the Pixel is in.",
+  },
+  {
     what: "Google Business Profile claimed and verified",
     state: "waiting",
     why: "The highest-return asset in local search and the only thing that issues the review link. It also has to be the HVAC profile, not the roofing one.",

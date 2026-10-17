@@ -278,7 +278,27 @@ for the client to confirm**, not a commitment.
 | Env var | Used by | Purpose |
 | --- | --- | --- |
 | `VITE_QUOTE_ENDPOINT` | quote form | JSON `POST` target for lead submissions. Unset, the form falls back to opening a prefilled email so leads are never dropped. |
+| `VITE_LEADS_ENDPOINT` | CRM | JSON `POST` target for leads and site events. Unset, everything stays in the visitor's own browser and the dashboard CRM is device-local. |
+| `VITE_GA4_ID` | analytics | GA4 measurement ID, `G-XXXXXXXXXX`. Nothing loads without it. |
+| `VITE_META_PIXEL_ID` | analytics | Meta Pixel ID. Nothing loads without it — which is why the site currently needs no cookie banner. A retargeting audience needs ~30 days of traffic, so the day this is set is the day that clock starts. |
 | `SITE_URL` | prerender | Overrides the origin in `sitemap.xml` / `robots.txt`. Defaults to `business.url`, so set it only for staging deploys. |
+
+## Deploying
+
+The build writes a plain static tree to `dist/public` — 92 prerendered HTML
+pages plus `sitemap.xml`, `robots.txt`, `llms.txt` and `404.html`. No server,
+no runtime.
+
+| Host | What to do |
+| --- | --- |
+| **Netlify** | `netlify.toml` is committed. Connect the repo; build command and publish directory are already set. |
+| **Vercel** | `vercel.json` is committed. Import the repo; nothing else to configure. |
+| **Cloudflare Pages** | No file needed. Build command `pnpm run build`, output directory `dist/public`, Node 22. |
+| **Anything else** | `pnpm run build`, then upload `dist/public`. |
+
+Set the environment variables above in the host's dashboard, not in a
+committed file. After the first deploy, point the domain, force HTTPS, and
+submit `sitemap.xml` in Search Console.
 
 ## Before launch
 

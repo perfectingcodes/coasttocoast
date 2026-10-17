@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 import {
   BarChart3,
+  CalendarDays,
   ExternalLink,
   Gauge,
   Globe,
@@ -52,6 +53,12 @@ const NAV: { group: string; items: NavItem[] }[] = [
         hint: "What is live and what is blocked",
         Icon: LayoutDashboard,
         end: true,
+      },
+      {
+        href: "/admin/calendar",
+        label: "Schedule",
+        hint: "Every date to the 90-day review",
+        Icon: CalendarDays,
       },
       {
         href: "/admin/marketing",

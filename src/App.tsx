@@ -2,6 +2,7 @@ import { Route, Router as WouterRouter, Switch, useLocation } from "wouter";
 import { MotionConfig } from "framer-motion";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { TrafficTracker } from "@/components/traffic-tracker";
+import { Analytics } from "@/components/analytics";
 import { SupportBot } from "@/components/support-bot";
 import { HeadProvider, type HeadCollector } from "@/lib/head";
 
@@ -27,6 +28,7 @@ import AdminLeads from "@/pages/admin/leads";
 import AdminResources from "@/pages/admin/resources";
 import AdminGoogle from "@/pages/admin/google";
 import AdminGoogleAds from "@/pages/admin/google-ads";
+import AdminCalendar from "@/pages/admin/calendar";
 import AdminTracking from "@/pages/admin/tracking";
 
 function Routes() {
@@ -65,6 +67,7 @@ function Routes() {
       <Route path="/admin/campaigns" component={AdminCampaigns} />
       <Route path="/admin/leads" component={AdminLeads} />
       <Route path="/admin/resources" component={AdminResources} />
+      <Route path="/admin/calendar" component={AdminCalendar} />
       <Route path="/admin/google-ads" component={AdminGoogleAds} />
       <Route path="/admin/google" component={AdminGoogle} />
       <Route path="/admin/tracking" component={AdminTracking} />
@@ -102,6 +105,7 @@ export default function App({
         <WouterRouter ssrPath={ssrPath}>
           <ScrollToTop />
           <TrafficTracker />
+          <Analytics />
           <Routes />
           <SupportLauncher />
         </WouterRouter>

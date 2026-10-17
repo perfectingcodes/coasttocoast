@@ -53,6 +53,7 @@ export const adminRoutes: string[] = [
   "/admin/resources",
   "/admin/google",
   "/admin/google-ads",
+  "/admin/calendar",
   "/admin/tracking",
 ];
 
