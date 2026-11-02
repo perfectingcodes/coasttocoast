@@ -47,11 +47,11 @@ export default function AdminSocial() {
           hint="From today onward"
         />
         <StatCard
-          label="Artwork ready"
+          label="Use a brand creative"
           value={posts.length - needPhoto.length}
           tone="good"
           icon={<ImageIcon />}
-          hint="Uses the brand creatives"
+          hint="Red tile below = file not in the repo yet"
         />
         <StatCard
           label="Need a photo"
@@ -86,8 +86,8 @@ export default function AdminSocial() {
 
         <Panel
           className="lg:col-span-7"
-          title="The photographs we do not have"
-          subtitle="Five of these sixteen posts need a picture taken on a job. They are also the five that will outperform the rest."
+          title="Artwork still outstanding"
+          subtitle="Five posts need a photograph taken on a job — those are the five that will outperform the rest. Separately, any tile below showing 'Not uploaded' is a brand graphic that exists but is not in public/brand/social yet; see the README in that folder for the filenames."
         >
           <ul className="space-y-2.5">
             {needPhoto.map((p) => (
@@ -176,13 +176,15 @@ export default function AdminSocial() {
 
 function PostCard({ post }: { post: Post }) {
   const [copied, setCopied] = useState(false);
+  // An upload that is not there yet should be visible, not silent.
+  const [missing, setMissing] = useState(false);
   const d = asDate(post.date);
   const past = d < TODAY;
 
   return (
     <li
       className={cn(
-        "grid min-w-0 gap-4 rounded-xl p-4 ring-1 ring-inset sm:grid-cols-[7rem_minmax(0,1fr)]",
+        "grid min-w-0 gap-4 rounded-xl p-4 ring-1 ring-inset sm:grid-cols-[7rem_8rem_minmax(0,1fr)]",
         past ? "bg-navy/[0.015] opacity-60 ring-navy/6" : "bg-navy/[0.025] ring-navy/8",
       )}
     >
@@ -201,6 +203,46 @@ function PostCard({ post }: { post: Post }) {
         >
           {POST_KINDS[post.kind].label}
         </span>
+      </div>
+
+      {/* The artwork, 4:5 like the feed slot it goes into. */}
+      <div className="min-w-0">
+        {post.image && !missing ? (
+          <img
+            src={post.image}
+            alt={post.creative}
+            width={1080}
+            height={1350}
+            loading="lazy"
+            onError={() => setMissing(true)}
+            className="aspect-[4/5] w-full rounded-lg object-cover ring-1 ring-navy/10"
+          />
+        ) : (
+          <div
+            className={cn(
+              "grid aspect-[4/5] w-full place-items-center rounded-lg border border-dashed px-2 text-center",
+              post.ready ? "border-ember/40 bg-ember/5" : "border-gold/50 bg-gold/8",
+            )}
+          >
+            <span className="min-w-0">
+              <Camera
+                className={cn(
+                  "mx-auto size-4",
+                  post.ready ? "text-ember" : "text-amber-700",
+                )}
+                aria-hidden="true"
+              />
+              <span
+                className={cn(
+                  "mt-1.5 block font-mono text-[0.55rem] font-bold uppercase leading-snug tracking-[0.08em]",
+                  post.ready ? "text-ember" : "text-amber-700",
+                )}
+              >
+                {post.ready ? "Not uploaded" : "Photo needed"}
+              </span>
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="min-w-0">

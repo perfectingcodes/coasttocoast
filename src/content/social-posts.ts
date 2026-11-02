@@ -40,6 +40,13 @@ export interface Post {
   creative: string;
   /** Whether the creative exists or has to be shot. */
   ready: boolean;
+  /**
+   * Where the file lives under public/. The calendar renders it and falls
+   * back to a placeholder if it is not there yet, so a missing upload is
+   * visible rather than silent. See public/brand/social/README.md for the
+   * filenames.
+   */
+  image?: string;
   caption: string;
   /** Not part of the caption — a note for whoever schedules it. */
   note?: string;
@@ -51,6 +58,7 @@ export const posts: Post[] = [
     kind: "team",
     creative: "Meet Our Mascot",
     ready: true,
+    image: "/brand/social/meet-our-mascot.webp",
     caption: `Meet the face on the van.
 
 He turns up on every truck, every shirt and every invoice, and he has opinions about dirty condenser coils.
@@ -64,6 +72,7 @@ Give us a follow if you own a home down here. We post the things that save peopl
     kind: "advice",
     creative: "3 Things You Need To Know About Your AC",
     ready: true,
+    image: "/brand/social/3-things-about-your-ac.webp",
     caption: `Three things worth knowing about the system outside your house.
 
 One. It runs close to year-round here, so ten to fifteen years is a realistic life, not twenty.
@@ -79,6 +88,7 @@ Ask us anything in the comments. We answer them.`,
     kind: "area",
     creative: "Serving Naples Florida",
     ready: true,
+    image: "/brand/social/serving-naples.webp",
     caption: `Naples, we are out your way.
 
 Old Naples, Park Shore, Pelican Bay, North Naples and everything between. Same-day repair most days, and a real person on the phone at any hour.
@@ -106,6 +116,7 @@ If yours has not been looked at this year, it probably looks like the left.`,
     kind: "offer",
     creative: "Comfort Lives Here",
     ready: true,
+    image: "/brand/social/comfort-lives-here.webp",
     caption: `The eighty-nine dollar Clean and Tune.
 
 Ten points, a licensed technician, and a written report with the actual readings on it. Thermostat, drain line, capacitor, both coils, amp draws, refrigerant pressures.
@@ -133,6 +144,7 @@ If it has already shut off, that is a call rather than a DIY.`,
     kind: "area",
     creative: "We Service Estero Florida",
     ready: true,
+    image: "/brand/social/we-service-estero.webp",
     caption: `Estero and Bonita Springs, you are on the route.
 
 Closest part of our service area to the shop, which means shorter drive times and more same-day slots than anywhere else we cover.
@@ -156,6 +168,7 @@ Same person who diagnoses it quotes it, and the price goes in writing before any
     kind: "advice",
     creative: "Your Comfort Matters",
     ready: true,
+    image: "/brand/social/your-comfort-matters.webp",
     caption: `A cold snap is coming at some point, and that is when Florida systems fail.
 
 Heat mode has not run since February. The strips are dusty, the reversing valve has not moved in nine months, and the first forty-degree night is when everyone finds out at once.
@@ -169,6 +182,7 @@ Better to find out now than at six in the morning on the coldest day.`,
     kind: "work",
     creative: "Residential HVAC Services",
     ready: true,
+    image: "/brand/social/residential-hvac-services.webp",
     caption: `Repair, replacement, maintenance. That is the whole list.
 
 Repair is most of what we do and most of what we recommend. A failed part is a part, not a reason to sell you a system.
@@ -182,6 +196,7 @@ No commission, no pressure, no visit that ends in a sales pitch.`,
     kind: "area",
     creative: "Serving SWFL",
     ready: true,
+    image: "/brand/social/serving-swfl.webp",
     caption: `Lee, Collier, Charlotte and Sarasota.
 
 Nine towns on the route, one crew, the same pricing in all of them. We are based in Fort Myers and we are on the road most of the day.
@@ -206,6 +221,7 @@ Write the date on the edge of the new one in marker. It is the only way anyone r
     kind: "offer",
     creative: "Comfort Lives Here",
     ready: true,
+    image: "/brand/social/comfort-lives-here.webp",
     caption: `Booking the January tune-ups now.
 
 Eighty-nine dollars, ten points, written report. January and February are the easiest months to get a slot and the best time to find the thing that would have failed in June.
@@ -219,6 +235,7 @@ Link in bio, or call the number there.`,
     kind: "work",
     creative: "Hurricane Season Be Prepared",
     ready: true,
+    image: "/brand/social/hurricane-season.webp",
     caption: `Storm season is over. Now is when the work gets done.
 
 A condenser raised onto a proper stand survives water that writes off one sitting on the original slab. Hurricane-rated mounts and straps are a code requirement on new installs and a sensible retrofit on anything older.
@@ -244,6 +261,7 @@ Thank you to everyone who had us out this year. See you in January.`,
     kind: "advice",
     creative: "3 Things You Need To Know About Your AC",
     ready: true,
+    image: "/brand/social/3-things-about-your-ac.webp",
     caption: `An empty house in Florida is harder on a system than a busy one.
 
 Snowbird places sit closed for months with the thermostat pushed up to save money. Humidity climbs, the coil stays wet, and what you come back to in March is a smell in the ductwork.
