@@ -43,8 +43,8 @@ export interface Post {
   /**
    * Where the file lives under public/. The calendar renders it and falls
    * back to a placeholder if it is not there yet, so a missing upload is
-   * visible rather than silent. See public/brand/social/README.md for the
-   * filenames.
+   * visible rather than silent. All nine brand graphics landed on
+   * 2 November 2026; see brand/SOCIAL-ASSETS.md for the mapping.
    */
   image?: string;
   caption: string;

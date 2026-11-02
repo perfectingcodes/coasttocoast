@@ -87,7 +87,7 @@ export default function AdminSocial() {
         <Panel
           className="lg:col-span-7"
           title="Artwork still outstanding"
-          subtitle="Five posts need a photograph taken on a job — those are the five that will outperform the rest. Separately, any tile below showing 'Not uploaded' is a brand graphic that exists but is not in public/brand/social yet; see the README in that folder for the filenames."
+          subtitle="Five posts need a photograph taken on a job — those are the five that will outperform the rest. Separately, any tile below showing 'Not uploaded' is a brand graphic that has not been added to public/brand/social yet."
         >
           <ul className="space-y-2.5">
             {needPhoto.map((p) => (

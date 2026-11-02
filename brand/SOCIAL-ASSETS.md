@@ -1,11 +1,12 @@
 # Social creatives
 
-Drop the nine brand graphics here, named exactly as below. The social
+All nine are in `public/brand/social/`, added 2 November 2026.
+Named exactly as below — the social calendar reads these paths. The social
 calendar at `/admin/social` renders each post's artwork from this folder and
 shows a dashed placeholder for anything missing, so it is obvious at a glance
 what still has to be added.
 
-| Save as | The graphic |
+| File | The graphic |
 | --- | --- |
 | `meet-our-mascot.webp` | "MEET OUR MASCOT" — husky in blue coveralls, thumbs up, dark blue ground |
 | `3-things-about-your-ac.webp` | "3 THINGS YOU NEED TO KNOW ABOUT YOUR AC" — white ground, condenser bottom right |
