@@ -45,5 +45,4 @@ externalPort = 3000
 [deployment]
 deploymentTarget = "autoscale"
 build = ["pnpm", "run", "build"]
-publicDir = "dist/public"
 run = ["node", "server.mjs"]
