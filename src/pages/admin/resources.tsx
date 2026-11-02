@@ -647,11 +647,26 @@ function ReviewLinkSetup() {
         </div>
       </div>
 
-      <p className="mt-4 text-[0.74rem] leading-relaxed text-navy/50">
-        Stored in this browser, like everything else on this dashboard. It is a
-        public URL rather than a secret, so the only cost of that is pasting it
-        again on another machine.
-      </p>
+      <div className="mt-4 space-y-2 text-[0.74rem] leading-relaxed text-navy/50">
+        <p>
+          Stored in this browser, like everything else on this dashboard. It is
+          a public URL rather than a secret, so the only cost of that is
+          pasting it again on another machine.
+        </p>
+        <p className="rounded-lg bg-gold/10 p-3 text-navy/70 ring-1 ring-inset ring-gold/30">
+          <strong className="font-semibold">One thing this does not reach.</strong>{" "}
+          The link-in-bio page at{" "}
+          <a href="/links" className="font-semibold text-blue hover:underline">
+            /links
+          </a>{" "}
+          is a public page, so it cannot read a value stored in your browser.
+          To put a "Leave us a review" button there, the same URL has to go
+          into <code className="font-mono text-[0.7rem]">reviewLink.url</code>{" "}
+          in <code className="font-mono text-[0.7rem]">content/reviews.ts</code>{" "}
+          and be redeployed. Until then the button is hidden rather than
+          pointing somewhere wrong.
+        </p>
+      </div>
     </Panel>
   );
 }

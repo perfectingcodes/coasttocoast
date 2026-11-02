@@ -17,6 +17,7 @@ import Contact from "@/pages/contact";
 import Financing from "@/pages/financing";
 import LegalPage from "@/pages/legal";
 import LandingPageView from "@/pages/landing";
+import LinksPage from "@/pages/links";
 import { landingPages } from "@/content/landing";
 import NotFound from "@/pages/not-found";
 
@@ -55,6 +56,9 @@ function Routes() {
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/financing" component={Financing} />
+      {/* Link in bio. Noindexed and out of the sitemap — thin by design and
+          would only compete with the home page for the brand term. */}
+      <Route path="/links" component={LinksPage} />
       {/* Paid landing pages, each at the path the Google Ads build sheet
           points its ad groups and sitelinks at. Noindexed and excluded from
           the sitemap — see pages/landing.tsx. */}
@@ -93,7 +97,7 @@ function SupportLauncher() {
   // Paid pages now sit at top-level paths, so this checks the real list
   // rather than a prefix that stopped being true.
   const isPaid = landingPages.some((lp) => lp.path === location);
-  if (location.startsWith("/admin") || isPaid) return null;
+  if (location.startsWith("/admin") || isPaid || location === "/links") return null;
   return <SupportBot />;
 }
 

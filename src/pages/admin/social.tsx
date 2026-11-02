@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Camera, Check, Copy, ImageIcon, Instagram } from "lucide-react";
+import { Camera, Check, Copy, ExternalLink, ImageIcon, Instagram } from "lucide-react";
 import {
   POST_KINDS,
   posts,
@@ -133,6 +133,35 @@ export default function AdminSocial() {
           </ul>
         </Panel>
       </div>
+
+      <Panel
+        title="Link in bio"
+        subtitle="One page for the Instagram bio: the phone number first, then the handful of things somebody actually taps."
+      >
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="min-w-0">
+            <a
+              href="/links"
+              className="inline-flex items-center gap-1.5 font-mono text-[0.9rem] font-bold text-navy hover:text-blue"
+            >
+              coast2coastair.com/links
+              <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
+            </a>
+            <p className="mt-1.5 max-w-xl text-[0.78rem] leading-relaxed text-navy/55">
+              Short enough to type into a bio. White ground so it does not
+              fight the app it opened from, every target over 56px, and
+              noindexed so it cannot compete with the home page for the brand
+              term.
+            </p>
+          </div>
+          <a
+            href="/links"
+            className="shrink-0 rounded-full bg-blue px-4 py-2 text-[0.78rem] font-bold text-white transition-colors hover:bg-blue/90"
+          >
+            Preview
+          </a>
+        </div>
+      </Panel>
 
       <Panel
         title="The schedule"

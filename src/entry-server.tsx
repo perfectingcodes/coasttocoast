@@ -36,7 +36,12 @@ export const publicRoutes: string[] = [
  * Deliberately NOT disallowed in robots.txt: AdsBot has to be able to fetch a
  * landing page or the ad is disapproved.
  */
-export const adRoutes: string[] = landingPages.map((p) => p.path);
+export const adRoutes: string[] = [
+  ...landingPages.map((p) => p.path),
+  // The link-in-bio page. Same treatment: prerendered, noindexed, out of
+  // the sitemap, and deliberately not blocked in robots.txt.
+  "/links",
+];
 
 /**
  * Internal dashboard routes. Prerendered so they exist as real pages, but
