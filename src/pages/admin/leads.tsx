@@ -6,6 +6,7 @@ import {
   Phone,
   Plus,
   Trash2,
+  ShieldCheck,
   TriangleAlert,
   UserPlus,
 } from "lucide-react";
@@ -90,6 +91,11 @@ export default function AdminLeads() {
       title="Leads & CRM"
       lead="Every enquiry the website captures, the stage each one is at, and what visitors did before they got in touch."
     >
+      {/* Loss risk first. If there are leads in here and nowhere else, that
+          is the most urgent fact on the page — more urgent than the general
+          explanation of how the store works. */}
+      <LossWarning count={crm.leads.length} onExport={download} />
+
       {/* The single most important thing on this page. It is not a footnote. */}
       <div className="overflow-hidden rounded-2xl bg-gold/12 ring-1 ring-inset ring-gold/40">
         <div className="flex gap-3 px-5 py-4">
@@ -712,5 +718,60 @@ function LeadDetail({ lead, onClose }: { lead: Lead; onClose: () => void }) {
         </div>
       </form>
     </Panel>
+  );
+}
+
+/**
+ * Shown when leads exist and nothing is forwarding them off this device.
+ *
+ * The CRM banner below explains the architecture. This says the thing that
+ * actually matters today: there are N records here, they exist nowhere else,
+ * and clearing site data destroys them. One button fixes it.
+ */
+function LossWarning({ count, onExport }: { count: number; onExport: () => void }) {
+  const forwarding = Boolean(import.meta.env.VITE_LEADS_ENDPOINT);
+  if (count === 0) return null;
+
+  if (forwarding) {
+    return (
+      <div className="flex items-start gap-3 rounded-2xl bg-emerald-500/8 px-5 py-4 ring-1 ring-inset ring-emerald-500/25">
+        <ShieldCheck className="mt-0.5 size-4 shrink-0 text-emerald-700" aria-hidden="true" />
+        <p className="text-[0.82rem] leading-relaxed text-emerald-900">
+          <strong className="font-semibold">Forwarding is on.</strong> Every
+          lead here has also been POSTed to the configured endpoint, so these
+          records exist somewhere other than this browser.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-2xl bg-ember/8 ring-1 ring-inset ring-ember/30">
+      <div className="flex flex-wrap items-start gap-x-4 gap-y-3 px-5 py-4">
+        <TriangleAlert className="mt-0.5 size-4 shrink-0 text-ember" aria-hidden="true" />
+        <div className="min-w-0 flex-1">
+          <p className="font-display text-sm font-bold text-navy">
+            {count} {count === 1 ? "lead exists" : "leads exist"} only in this browser
+          </p>
+          <p className="mt-1.5 max-w-3xl text-xs leading-relaxed text-navy/70">
+            No forwarding endpoint is configured, so these records are not on a
+            server and not on anybody else's machine. Clearing site data, a
+            browser reset or a new laptop destroys them with no way back.
+            Export now, and set{" "}
+            <code className="rounded bg-white px-1 py-0.5 font-mono text-[0.68rem]">
+              VITE_LEADS_ENDPOINT
+            </code>{" "}
+            so this stops being a risk.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={onExport}
+          className="shrink-0 rounded-full bg-ember px-4 py-2 text-[0.76rem] font-bold text-white transition-opacity hover:opacity-90"
+        >
+          Export now
+        </button>
+      </div>
+    </div>
   );
 }

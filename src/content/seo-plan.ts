@@ -242,3 +242,104 @@ export const leadLevers: { lever: string; effect: string; owner: string }[] = [
     owner: "Elevate",
   },
 ];
+
+/* ------------------------------------------------------------- stages */
+
+/**
+ * The organic programme as stages rather than a task list.
+ *
+ * A checklist of forty items tells you nothing about whether you are
+ * winning. Five stages, each either finished or visibly part-done, tells you
+ * where the work actually is — and makes it obvious that the two unfinished
+ * ones are unfinished for reasons that are not ours.
+ */
+export interface StageItem {
+  task: string;
+  done: boolean;
+  note?: string;
+}
+
+export interface Stage {
+  n: number;
+  name: string;
+  premise: string;
+  items: StageItem[];
+}
+
+export const stages: Stage[] = [
+  {
+    n: 1,
+    name: "Technical foundations",
+    premise:
+      "The things that have to be right before anything else counts. Finished, and they stay finished.",
+    items: [
+      { task: "94 pages prerendered as static HTML, no client-side rendering for content", done: true },
+      { task: "Canonical on every page, pointing at the live domain", done: true, note: "Corrected to coast2coastair.com" },
+      { task: "sitemap.xml generated at build, admin and paid pages excluded", done: true },
+      { task: "robots.txt naming every crawler explicitly, /admin disallowed", done: true },
+      { task: "Titles and descriptions inside the truncation limits, audited on every build", done: true },
+      { task: "No duplicate titles or descriptions across 94 pages", done: true },
+      { task: "Content-similarity audit in the build — service×city at 26% mean", done: true },
+      { task: "Sitemap submitted and the property verified in Search Console", done: true },
+    ],
+  },
+  {
+    n: 2,
+    name: "On-page and structure",
+    premise:
+      "One page per thing somebody actually searches for, each answering before it asks.",
+    items: [
+      { task: "9 city pages, each with its own permit office, ZIPs and coastal exposure", done: true },
+      { task: "6 service pages", done: true },
+      { task: "54 service × city pages for the long tail", done: true },
+      { task: "A self-contained answer block at the top of every substantial page", done: true },
+      { task: "Local facts as real tables with row headers, not styled divs", done: true },
+      { task: "FAQ blocks on every service, city and service × city page", done: true },
+      { task: "Internal linking between city, service and city × service", done: true },
+      { task: "Question-shaped body headings on the service pages", done: false, note: "FAQs are question-shaped; body headings mostly are not. Assistants quote the heading that matches the question." },
+    ],
+  },
+  {
+    n: 3,
+    name: "Entity and answer engines",
+    premise:
+      "Being the source that gets quoted rather than the tenth blue link. For a local trade this is no longer a side bet.",
+    items: [
+      { task: "One linked JSON-LD @graph per page, not separate blocks", done: true },
+      { task: "HVACBusiness with geo, service radius and every city geocoded", done: true },
+      { task: "hasCredential for all three DBPR licences", done: true },
+      { task: "hasOfferCatalog across all six services", done: true },
+      { task: "speakable pointed at h1 and the answer block", done: true },
+      { task: "llms.txt generated at build from the content file", done: true },
+      { task: "parentOrganization declared to the contracting brand", done: true, note: "Two sites sharing a NAP read as two divisions when declared, and as a doorway attempt when not" },
+      { task: "aggregateRating — deliberately absent until there are real reviews", done: true, note: "Emitting a fabricated rating is a policy violation and a manual-action risk" },
+      { task: "A dated 'last reviewed' signal on the city pages", done: false, note: "Permit offices and ZIP coverage change; a visible date is both trust and citability" },
+    ],
+  },
+  {
+    n: 4,
+    name: "Local pack",
+    premise:
+      "Where 'near me' is actually won. The website cannot substitute for any of it.",
+    items: [
+      { task: "A consistent NAP published identically across all 94 pages and the schema", done: true },
+      { task: "Service area modelled as GeoCircle plus every city as a named place", done: true },
+      { task: "Business Profile claimed and verified", done: false, note: "Postcard verification in flight. Gates everything else in this stage." },
+      { task: "Profile categories, services and hours matched to the site", done: false, note: "Cannot be done before verification" },
+      { task: "Local citations with the NAP identical everywhere", done: false, note: "Starts once the profile is verified so the citations match it" },
+    ],
+  },
+  {
+    n: 5,
+    name: "Authority and freshness",
+    premise:
+      "What eventually wins the head terms. Slowest to move, and the only thing that does.",
+    items: [
+      { task: "Review request sequence built, four steps, with the compliance rules", done: true },
+      { task: "Review link captured and wired through every template", done: true, note: "Paste the link once and the whole sequence fills in" },
+      { task: "Reviews coming in at volume", done: false, note: "Blocked on the profile, same as stage 4" },
+      { task: "One seasonal guide a month", done: false, note: "Hurricane prep, pre-summer checklist, snowbird shutdown. Earns links and feeds the social calendar at the same time." },
+      { task: "Backlinks from local sources", done: false, note: "Supplier pages, chamber listings, the contracting site. Not started." },
+    ],
+  },
+];

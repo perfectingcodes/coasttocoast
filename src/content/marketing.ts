@@ -15,8 +15,8 @@ export type Status = "live" | "ready" | "draft" | "blocked" | "not-connected";
 export type Channel = "seo" | "google" | "meta" | "local" | "email" | "reviews";
 
 export const planMeta = {
-  version: "Draft 1",
-  drafted: "September 2026",
+  version: "Live",
+  drafted: "Updated 2 November 2026",
   owner: "Elevate Marketing",
   note: "Drafted from site content. Budgets, targets and account figures need the client's confirmation before anything is committed.",
 } as const;
@@ -273,9 +273,9 @@ export const trackingStack: {
   {
     name: "Google Analytics 4",
     purpose: "Traffic, landing pages, conversion paths",
-    status: "not-connected",
+    status: "ready",
     idLabel: "Measurement ID (G-XXXXXXX)",
-    note: "Nothing is installed on the site yet. No visitor data is being collected.",
+    note: "The loader is built into the site behind VITE_GA4_ID. Paste the measurement ID into the host and redeploy — nothing else to do.",
   },
   {
     name: "Google Ads conversion tag",
@@ -287,23 +287,23 @@ export const trackingStack: {
   {
     name: "Meta Pixel",
     purpose: "Retargeting audiences and conversion attribution",
-    status: "not-connected",
+    status: "ready",
     idLabel: "Pixel ID",
-    note: "Needed before the retargeting campaign can build an audience.",
+    note: "Loader built in behind VITE_META_PIXEL_ID. The 30-day audience clock starts the day it is live.",
   },
   {
     name: "Call tracking",
     purpose: "Attribute phone calls, which are most of this business's leads",
-    status: "not-connected",
+    status: "draft",
     idLabel: "Tracking number pool",
     note: `The site publishes ${business.phone} everywhere. Use dynamic number insertion so the real number stays the NAP of record for local SEO.`,
   },
   {
     name: "Google Search Console",
     purpose: "Index coverage, queries, structured-data errors",
-    status: "not-connected",
+    status: "live",
     idLabel: "Verified property",
-    note: "Verify and submit the sitemap as soon as the domain is live. This is the first thing to set up.",
+    note: "Property verified and sitemap submitted on publish day.",
   },
   {
     name: "Lead destination",

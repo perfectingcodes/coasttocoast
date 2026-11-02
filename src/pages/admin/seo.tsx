@@ -4,6 +4,7 @@ import { business, locations, services } from "@/content/site";
 import { keywordTargets } from "@/content/marketing";
 import {
   geoWork,
+  stages,
   leadLevers,
   seoPremise,
   targets,
@@ -121,6 +122,94 @@ export default function AdminSeo() {
               <p className="mt-2 text-[0.82rem] leading-relaxed text-navy/70">{v}</p>
             </div>
           ))}
+        </div>
+      </Panel>
+
+      {/* Stages, not a checklist. Forty ticks tell you nothing about whether
+          you are winning; five stages tell you where the work actually is. */}
+      <Panel
+        title="Where the programme stands"
+        subtitle="Five stages. The two that are unfinished are unfinished for reasons that sit with the client, which the notes say plainly."
+      >
+        <div className="space-y-4">
+          {stages.map((st) => {
+            const done = st.items.filter((i) => i.done).length;
+            const pct = Math.round((done / st.items.length) * 100);
+            const complete = done === st.items.length;
+            return (
+              <div
+                key={st.n}
+                className={cn(
+                  "min-w-0 rounded-xl p-4 ring-1 ring-inset",
+                  complete
+                    ? "bg-emerald-500/[0.05] ring-emerald-500/25"
+                    : "bg-navy/[0.025] ring-navy/8",
+                )}
+              >
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                  <p className="flex items-center gap-3 font-display text-[0.95rem] font-extrabold text-navy">
+                    <span
+                      className={cn(
+                        "grid size-6 shrink-0 place-items-center rounded-full font-mono text-[0.62rem]",
+                        complete
+                          ? "bg-emerald-500 text-white"
+                          : "bg-navy/10 text-navy/55",
+                      )}
+                    >
+                      {st.n}
+                    </span>
+                    {st.name}
+                  </p>
+                  <p className="shrink-0 font-mono text-[0.68rem] uppercase tracking-[0.1em] text-navy/45">
+                    {done} / {st.items.length}
+                  </p>
+                </div>
+
+                <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-navy/8">
+                  <div
+                    className={cn(
+                      "h-full rounded-full transition-all",
+                      complete ? "bg-emerald-500" : "bg-blue",
+                    )}
+                    style={{ width: `${pct}%` }}
+                  />
+                </div>
+
+                <p className="mt-3 text-[0.78rem] leading-relaxed text-navy/55">
+                  {st.premise}
+                </p>
+
+                <ul className="mt-3 space-y-1.5 border-t border-navy/8 pt-3">
+                  {st.items.map((i) => (
+                    <li key={i.task} className="flex gap-2.5">
+                      <span
+                        className={cn(
+                          "mt-1.5 size-1.5 shrink-0 rounded-full",
+                          i.done ? "bg-emerald-500" : "bg-gold",
+                        )}
+                        aria-hidden="true"
+                      />
+                      <span className="min-w-0">
+                        <span
+                          className={cn(
+                            "text-[0.8rem] leading-snug",
+                            i.done ? "text-navy/70" : "font-semibold text-navy",
+                          )}
+                        >
+                          {i.task}
+                        </span>
+                        {i.note && (
+                          <span className="mt-0.5 block text-[0.74rem] leading-relaxed text-navy/45">
+                            {i.note}
+                          </span>
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
         </div>
       </Panel>
 

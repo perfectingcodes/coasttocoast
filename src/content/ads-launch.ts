@@ -14,6 +14,30 @@ import { cleanAndTune } from "./site";
  */
 
 export const launch = {
+  /**
+   * PAUSED as of 2 November 2026.
+   *
+   * Not abandoned and not behind schedule — held. The two things the account
+   * is waiting on are both client-side and both outside our control, and
+   * spending into them would waste the learning period rather than shorten
+   * it: the DBA that the Brand campaign and half the ad copy are written
+   * against, and the Business Profile that supplies the location asset and
+   * the review link.
+   *
+   * The build is done. Campaigns, ad groups, keywords, negatives, RSAs and
+   * assets are all specified and ready to paste. Resuming is a Monday
+   * morning and an enable, not a rebuild.
+   */
+  status: "paused" as "paused" | "live" | "scheduled",
+  pausedSince: "2 November 2026",
+  pausedReason:
+    "Holding until the HVAC DBA is filed and the Business Profile is verified. Both are client-side, and enabling without them means paying new-advertiser prices for clicks that land without a map pin, without reviews and without a brand campaign to catch the name.",
+  resumeWhen: [
+    "The DBA is filed and we have the exact trading name",
+    "The Business Profile is verified and has issued the review link",
+  ],
+  resumeTakes:
+    "One morning. Everything is built — resuming is enabling two campaigns and swapping [Brand] for the real name.",
   startDate: "Monday 19 October 2026",
   startShort: "Mon 19 Oct",
   weekOneBudget: 300,

@@ -30,6 +30,7 @@ import {
   Td,
 } from "@/components/admin/ui";
 import { STAGES, ago, traction, useCrm } from "@/lib/leads";
+import { POST_KINDS, posts } from "@/content/social-posts";
 import { cn } from "@/lib/utils";
 
 /**
@@ -99,6 +100,8 @@ export default function AdminHome() {
   const month = new Date().toLocaleString("en-US", { month: "short" });
   const current = seasonality.find((s) => s.month === month);
   const pages = locations.length * services.length + locations.length + services.length + 7;
+  const today = new Date().toISOString().slice(0, 10);
+  const nextPosts = posts.filter((p) => p.date >= today).slice(0, 4);
 
   return (
     <AdminShell
@@ -118,11 +121,11 @@ export default function AdminHome() {
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
         <FeatureCard
           className="lg:col-span-5"
-          eyebrow="Start here"
-          title="Claim the Google Business Profile"
-          body="The highest-return item on the list and the one everything else depends on — the local pack, the review link, the map. Nothing downstream works until it is claimed."
-          action="Open the Google page"
-          href="/admin/google"
+          eyebrow="The one thing outstanding"
+          title="Everything is connected except the Business Profile"
+          body="It gates the local pack, the review link, Local Services Ads and the location asset on every ad — which is most of what is currently paused. Verification is in flight."
+          action="See the stack"
+          href="/admin/tools"
         />
 
         <div className="grid grid-cols-2 gap-5 lg:col-span-7">
@@ -148,14 +151,109 @@ export default function AdminHome() {
           <StatCard
             label="Tracking gaps"
             value={trackingBlocked.length}
-            tone={trackingBlocked.length ? "bad" : "good"}
-            hint="Nothing is measurable yet"
+            tone={trackingBlocked.length ? "warn" : "good"}
+            hint={trackingBlocked.length ? "Need an ID pasted into the host" : "All measurement live"}
             icon={<Gauge />}
           />
         </div>
       </div>
 
       {/* ------------------------------------------------ second rank */}
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+        <Panel
+          className="lg:col-span-7"
+          title="Traffic"
+          subtitle={`Page views a day over the last fortnight. ${t.views} views, ${t.calls} phone taps.`}
+          action={
+            <Link
+              href="/admin/analytics"
+              className="shrink-0 font-display text-[0.7rem] font-bold uppercase tracking-[0.1em] text-blue hover:underline"
+            >
+              Open
+            </Link>
+          }
+        >
+          <div className="flex h-28 items-end gap-1">
+            {t.byDay.map((d) => (
+              <div
+                key={d.day}
+                title={`${d.day}: ${d.count}`}
+                className="flex h-full min-w-0 flex-1 items-end overflow-hidden rounded-sm bg-navy/[0.06]"
+              >
+                <div
+                  className="w-full rounded-sm bg-gradient-to-t from-blue to-cyan"
+                  style={{
+                    height: `${(d.count / Math.max(1, ...t.byDay.map((x) => x.count))) * 100}%`,
+                  }}
+                  aria-hidden="true"
+                />
+              </div>
+            ))}
+          </div>
+          <div className="mt-2 flex justify-between font-mono text-[0.6rem] uppercase tracking-[0.1em] text-navy/40">
+            <span>{t.byDay[0]?.day}</span>
+            <span>Today</span>
+          </div>
+
+          <ul className="mt-5 grid grid-cols-2 gap-4 border-t border-navy/8 pt-4 sm:grid-cols-4">
+            {[
+              ["Views", t.views],
+              ["Phone taps", t.calls],
+              ["Forms reached", t.quoteOpens],
+              ["Requests sent", t.quoteSubmits],
+            ].map(([k, v]) => (
+              <li key={k as string} className="min-w-0">
+                <p className="font-display text-[1.4rem] font-extrabold leading-none tabular-nums text-navy">
+                  {v as number}
+                </p>
+                <p className="mt-1 text-[0.68rem] font-medium text-navy/50">{k as string}</p>
+              </li>
+            ))}
+          </ul>
+        </Panel>
+
+        <Panel
+          className="lg:col-span-5"
+          title="Next posts"
+          subtitle="Written and scheduled."
+          action={
+            <Link
+              href="/admin/social"
+              className="shrink-0 font-display text-[0.7rem] font-bold uppercase tracking-[0.1em] text-blue hover:underline"
+            >
+              Open
+            </Link>
+          }
+        >
+          <ul className="space-y-2.5">
+            {nextPosts.map((post) => (
+              <li
+                key={post.date}
+                className="flex min-w-0 items-baseline gap-3 border-b border-navy/6 pb-2.5 last:border-0 last:pb-0"
+              >
+                <span className="shrink-0 font-mono text-[0.66rem] font-bold uppercase tracking-[0.08em] text-blue">
+                  {new Date(`${post.date}T12:00:00`).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
+                <span className="min-w-0 flex-1 truncate text-[0.8rem] text-navy/75">
+                  {post.creative}
+                </span>
+                <span className="shrink-0 rounded-full bg-navy/6 px-2 py-0.5 text-[0.6rem] font-bold text-navy/50">
+                  {POST_KINDS[post.kind].label}
+                </span>
+              </li>
+            ))}
+          </ul>
+          {nextPosts.length === 0 && (
+            <p className="text-[0.8rem] text-navy/50">
+              The calendar runs to 29 December. Time to write the next batch.
+            </p>
+          )}
+        </Panel>
+      </div>
+
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
         <Panel
           className="lg:col-span-7"

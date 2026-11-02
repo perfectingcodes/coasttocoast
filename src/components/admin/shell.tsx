@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 import {
+  Activity,
   BarChart3,
   CalendarDays,
   ExternalLink,
@@ -11,6 +12,7 @@ import {
   Lock,
   Megaphone,
   Menu,
+  Plug,
   Star,
   Target,
   Users,
@@ -51,21 +53,21 @@ const NAV: { group: string; items: NavItem[] }[] = [
       {
         href: "/admin",
         label: "Home Base",
-        hint: "What is live and what is blocked",
+        hint: "Everything at a glance",
         Icon: LayoutDashboard,
         end: true,
+      },
+      {
+        href: "/admin/analytics",
+        label: "Analytics",
+        hint: "Pages, traffic and what people did",
+        Icon: Activity,
       },
       {
         href: "/admin/calendar",
         label: "Schedule",
         hint: "Every date to the 90-day review",
         Icon: CalendarDays,
-      },
-      {
-        href: "/admin/marketing",
-        label: "Marketing plan",
-        hint: "Objectives, channels, seasonality",
-        Icon: Target,
       },
     ],
   },
@@ -75,7 +77,7 @@ const NAV: { group: string; items: NavItem[] }[] = [
       {
         href: "/admin/leads",
         label: "Leads & CRM",
-        hint: "Enquiries and site traction",
+        hint: "Enquiries and the pipeline",
         Icon: Users,
       },
       {
@@ -86,8 +88,8 @@ const NAV: { group: string; items: NavItem[] }[] = [
       },
       {
         href: "/admin/resources",
-        label: "Resources",
-        hint: "Review sequence and templates",
+        label: "Reviews",
+        hint: "The request sequence and templates",
         Icon: Star,
       },
     ],
@@ -95,7 +97,7 @@ const NAV: { group: string; items: NavItem[] }[] = [
   {
     group: "Getting found",
     items: [
-      { href: "/admin/seo", label: "SEO & GEO", hint: "Live page audit", Icon: Gauge },
+      { href: "/admin/seo", label: "SEO & GEO", hint: "Five stages, live audit", Icon: Gauge },
       {
         // `end` matters: without it /admin/google-ads would light this up too.
         href: "/admin/google",
@@ -107,7 +109,7 @@ const NAV: { group: string; items: NavItem[] }[] = [
       {
         href: "/admin/google-ads",
         label: "Launch plan",
-        hint: "Google Ads, from Mon 19 Oct",
+        hint: "Google Ads — paused",
         Icon: Megaphone,
       },
       {
@@ -119,12 +121,24 @@ const NAV: { group: string; items: NavItem[] }[] = [
     ],
   },
   {
-    group: "Measurement",
+    group: "Operations",
     items: [
+      {
+        href: "/admin/tools",
+        label: "Connected tools",
+        hint: "The stack and its status",
+        Icon: Plug,
+      },
+      {
+        href: "/admin/marketing",
+        label: "Marketing plan",
+        hint: "Objectives, channels, seasonality",
+        Icon: Target,
+      },
       {
         href: "/admin/tracking",
         label: "Tracking",
-        hint: "Analytics and conversions",
+        hint: "Conversions and measurement",
         Icon: BarChart3,
       },
     ],

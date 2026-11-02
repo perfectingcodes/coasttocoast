@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Link } from "wouter";
 import {
   AlertTriangle,
-  CalendarDays,
   Check,
   CircleDot,
   Clock,
   Copy,
   DollarSign,
   ExternalLink,
+  PauseCircle,
   Target,
   TriangleAlert,
 } from "lucide-react";
@@ -59,12 +59,42 @@ export default function AdminGoogleAds() {
       title="Launch plan"
       lead={`Google Ads for the HVAC division, starting ${launch.startDate} on $${launch.weekOneBudget} in week one. Work down this page and paste as you go.`}
     >
+      {/* The state of the account, before anything else on the page. */}
+      <div className="overflow-hidden rounded-2xl bg-gold/12 ring-1 ring-inset ring-gold/40">
+        <div className="flex gap-3 px-5 py-4">
+          <PauseCircle className="mt-0.5 size-4 shrink-0 text-amber-700" aria-hidden="true" />
+          <div className="min-w-0">
+            <p className="font-display text-sm font-bold text-amber-950">
+              Paused since {launch.pausedSince} — held, not behind
+            </p>
+            <p className="mt-1.5 max-w-3xl text-xs leading-relaxed text-amber-900/90">
+              {launch.pausedReason}
+            </p>
+            <ul className="mt-2.5 flex flex-wrap gap-x-5 gap-y-1">
+              {launch.resumeWhen.map((r) => (
+                <li
+                  key={r}
+                  className="flex items-center gap-1.5 text-[0.74rem] font-semibold text-amber-900"
+                >
+                  <span className="size-1.5 rounded-full bg-amber-700" aria-hidden="true" />
+                  {r}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-2 text-xs leading-relaxed text-amber-900/80">
+              <strong className="font-semibold">{launch.resumeTakes}</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
         <StatCard
-          label="Go live"
-          value={launch.startShort}
-          icon={<CalendarDays />}
-          hint="Monday morning, never a Friday"
+          label="Account status"
+          value="Paused"
+          tone="warn"
+          icon={<PauseCircle />}
+          hint={`Build complete · since ${launch.pausedSince}`}
         />
         <StatCard
           label="Week 1 budget"
