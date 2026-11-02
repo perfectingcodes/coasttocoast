@@ -29,6 +29,7 @@ import AdminResources from "@/pages/admin/resources";
 import AdminGoogle from "@/pages/admin/google";
 import AdminGoogleAds from "@/pages/admin/google-ads";
 import AdminCalendar from "@/pages/admin/calendar";
+import AdminSocial from "@/pages/admin/social";
 import AdminTracking from "@/pages/admin/tracking";
 
 function Routes() {
@@ -68,6 +69,7 @@ function Routes() {
       <Route path="/admin/leads" component={AdminLeads} />
       <Route path="/admin/resources" component={AdminResources} />
       <Route path="/admin/calendar" component={AdminCalendar} />
+      <Route path="/admin/social" component={AdminSocial} />
       <Route path="/admin/google-ads" component={AdminGoogleAds} />
       <Route path="/admin/google" component={AdminGoogle} />
       <Route path="/admin/tracking" component={AdminTracking} />

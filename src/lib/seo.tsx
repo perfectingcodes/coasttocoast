@@ -223,6 +223,24 @@ export function businessNode(): Record<string, unknown> {
       priceCurrency: "USD",
       category: "HVAC maintenance",
     },
+    // Same LLC, different trade, different domain. parentOrganization is the
+    // honest shape: it tells Google the two sites are divisions of one
+    // business rather than two businesses sharing an address and a licence,
+    // which is what an undeclared pair looks like.
+    parentOrganization: {
+      "@type": "Organization",
+      name: business.legalName,
+      url: business.sister.url,
+      telephone: business.phone,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: business.street,
+        addressLocality: business.city,
+        addressRegion: business.state,
+        postalCode: business.zip,
+        addressCountry: "US",
+      },
+    },
     knowsAbout: [
       "air conditioning repair",
       "HVAC replacement",

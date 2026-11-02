@@ -72,9 +72,9 @@ const BLOCKERS = [
     who: "Elevate",
   },
   {
-    what: "Domain and email unconfirmed",
+    what: "Confirm the mailbox on the new domain",
     go: "/admin/seo",
-    why: "coasttocoastair.com and info@ come from the design comp, not from anything published.",
+    why: "The site is live on coast2coastair.com and publishes info@coast2coastair.com. Confirm that mailbox exists and is read, or the quote form's email fallback goes nowhere.",
     who: "Client",
   },
   {

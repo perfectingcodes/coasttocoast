@@ -2,8 +2,16 @@ import { useEffect, useState } from "react";
 import { CheckCircle2, FileWarning, RefreshCw } from "lucide-react";
 import { business, locations, services } from "@/content/site";
 import { keywordTargets } from "@/content/marketing";
+import {
+  geoWork,
+  leadLevers,
+  seoPremise,
+  targets,
+  type Tier,
+} from "@/content/seo-plan";
 import { AdminShell } from "@/components/admin/shell";
-import { Panel, StatCard, Table, Td } from "@/components/admin/ui";
+import { Micro, Panel, StatCard, Table, Td } from "@/components/admin/ui";
+import { cn } from "@/lib/utils";
 
 interface SeoReport {
   generatedAt: string;
@@ -95,6 +103,127 @@ export default function AdminSeo() {
           hint="Titles, descriptions, H1s, JSON-LD"
         />
       </div>
+
+      {/* The plan, before the measurements. Somebody opening this page wants
+          to know what we are going after before they want an audit score. */}
+      <Panel
+        title="Where this site actually stands"
+        subtitle="The premise the whole organic plan is built on."
+      >
+        <div className="grid gap-5 lg:grid-cols-3">
+          {[
+            ["Position", seoPremise.position],
+            ["What follows from it", seoPremise.consequence],
+            ["How it produces leads", seoPremise.leadLever],
+          ].map(([k, v]) => (
+            <div key={k} className="min-w-0">
+              <Micro>{k}</Micro>
+              <p className="mt-2 text-[0.82rem] leading-relaxed text-navy/70">{v}</p>
+            </div>
+          ))}
+        </div>
+      </Panel>
+
+      <Panel
+        title="What we are targeting"
+        subtitle="Grouped by when it is realistically winnable from where the domain stands today, not by guessed search volume — we have no volume data yet and inventing it would make this look more rigorous than it is."
+      >
+        {(["Now", "Quarter", "Year"] as Tier[]).map((tier) => {
+          const rows = targets.filter((t) => t.tier === tier);
+          if (!rows.length) return null;
+          return (
+            <div key={tier} className="mt-6 first:mt-0">
+              <Micro>
+                {tier === "Now"
+                  ? "Winnable now — thin competition, pages already built"
+                  : tier === "Quarter"
+                    ? "This quarter — needs the pages to age and a few links"
+                    : "A year out — paid covers these until then"}
+              </Micro>
+              <ul className="mt-3 space-y-2">
+                {rows.map((t) => (
+                  <li
+                    key={t.term}
+                    className="min-w-0 rounded-xl bg-navy/[0.025] p-3.5 ring-1 ring-inset ring-navy/8"
+                  >
+                    <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                      <p className="font-mono text-[0.82rem] font-semibold text-navy">
+                        {t.term}
+                      </p>
+                      <span className="shrink-0 rounded-full bg-white px-2.5 py-0.5 text-[0.62rem] font-bold text-navy/55 ring-1 ring-navy/12">
+                        {t.intent}
+                      </span>
+                    </div>
+                    <p className="mt-1.5 font-mono text-[0.68rem] text-blue">{t.page}</p>
+                    <p className="mt-1.5 text-[0.78rem] leading-relaxed text-navy/60">
+                      {t.why}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+      </Panel>
+
+      <Panel
+        title="What actually moves leads"
+        subtitle="Ordered by effect on booked jobs, not by effort. The first three are worth more than everything below them put together."
+      >
+        <ol className="space-y-3">
+          {leadLevers.map((l, i) => (
+            <li key={l.lever} className="flex gap-3.5">
+              <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-blue/10 font-mono text-[0.62rem] font-bold text-blue">
+                {i + 1}
+              </span>
+              <div className="min-w-0">
+                <p className="flex flex-wrap items-baseline gap-x-3">
+                  <span className="font-display text-[0.9rem] font-extrabold text-navy">
+                    {l.lever}
+                  </span>
+                  <span className="font-mono text-[0.62rem] uppercase tracking-[0.1em] text-navy/40">
+                    {l.owner}
+                  </span>
+                </p>
+                <p className="mt-1 text-[0.8rem] leading-relaxed text-navy/60">{l.effect}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </Panel>
+
+      <Panel
+        title="Answer engines"
+        subtitle="Being the source that gets quoted, rather than the tenth blue link. For a local trade this is no longer a side bet."
+      >
+        <ul className="grid gap-2.5 md:grid-cols-2">
+          {geoWork.map((g) => (
+            <li
+              key={g.item}
+              className={cn(
+                "min-w-0 rounded-xl p-3.5 ring-1 ring-inset",
+                g.state === "done"
+                  ? "bg-emerald-500/6 ring-emerald-500/20"
+                  : "bg-gold/8 ring-gold/35",
+              )}
+            >
+              <p className="flex items-start gap-2 text-[0.82rem] font-semibold text-navy">
+                <span
+                  className={cn(
+                    "mt-1.5 size-1.5 shrink-0 rounded-full",
+                    g.state === "done" ? "bg-emerald-500" : "bg-gold",
+                  )}
+                  aria-hidden="true"
+                />
+                {g.item}
+              </p>
+              <p className="mt-1 pl-3.5 text-[0.76rem] leading-relaxed text-navy/60">
+                {g.detail}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </Panel>
 
       <Panel
         title="Content uniqueness"

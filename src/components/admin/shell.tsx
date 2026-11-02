@@ -6,6 +6,7 @@ import {
   ExternalLink,
   Gauge,
   Globe,
+  Instagram,
   LayoutDashboard,
   Lock,
   Megaphone,
@@ -76,6 +77,12 @@ const NAV: { group: string; items: NavItem[] }[] = [
         label: "Leads & CRM",
         hint: "Enquiries and site traction",
         Icon: Users,
+      },
+      {
+        href: "/admin/social",
+        label: "Social calendar",
+        hint: "Instagram, written and dated",
+        Icon: Instagram,
       },
       {
         href: "/admin/resources",

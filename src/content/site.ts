@@ -16,10 +16,11 @@ export const business = {
   legalName: "Coast to Coast Contracting & Roofing LLC",
   tagline: "Florida Comfort. Coast to Coast.",
   promise: "Comfort Lives Here.",
-  url: "https://coasttocoastair.com", // ⚠️ CONFIRM final domain
+  /** Live since 17 October 2026. Note the numeral — coast2, not coastto. */
+  url: "https://coast2coastair.com",
   phone: "(239) 518-5928",
   phoneHref: "tel:+12395185928",
-  email: "info@coasttocoastair.com", // ⚠️ CONFIRM
+  email: "info@coast2coastair.com", // ⚠️ CONFIRM the mailbox exists on the new domain
   street: "7200 Bucks Ln",
   city: "Fort Myers",
   state: "FL",
@@ -30,6 +31,21 @@ export const business = {
   lng: -81.8226,
   hours: "Mon–Fri, 8am–5pm",
   emergency: "24/7 emergency service",
+  /**
+   * The contracting and roofing arm, trading on its own domain. Same legal
+   * entity, different trade. Declaring the relationship rather than leaving
+   * it implied matters for two reasons: Google already associates the
+   * licence numbers and the address across both, and an undeclared pair of
+   * sites sharing a NAP looks like a doorway attempt rather than two
+   * divisions.
+   */
+  sister: {
+    name: "Coastal SWFL",
+    url: "https://coastalswfl.com",
+    trade: "Contracting and roofing",
+    blurb:
+      "The contracting and roofing side of the same company, on its own site.",
+  },
   /** Florida Mechanical Contractor license — the one that covers HVAC work. */
   license: "CMC1251768",
   licenses: [

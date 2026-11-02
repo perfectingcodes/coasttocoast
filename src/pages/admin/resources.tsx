@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import {
   AtSign,
   Check,
   Copy,
   ExternalLink,
+  Link2,
   Handshake,
   MessageSquare,
   ShieldAlert,
@@ -24,6 +25,12 @@ import { landingPages } from "@/content/landing";
 import { AdminShell } from "@/components/admin/shell";
 import { Micro, NotConnected, Panel, StatCard } from "@/components/admin/ui";
 import { ago, toggleReviewStep, useCrm, type Lead } from "@/lib/leads";
+import {
+  checkReviewLink,
+  loadSettings,
+  saveSettings,
+  useSettings,
+} from "@/lib/admin-settings";
 import { cn } from "@/lib/utils";
 
 /**
@@ -46,6 +53,8 @@ const DAY = 86_400_000;
 
 export default function AdminResources() {
   const crm = useCrm();
+  const settings = useSettings();
+  const link = settings.reviewLink || reviewLink.url;
   const won = crm.leads.filter((l) => l.stage === "won" && l.wonAt);
 
   const due = won.flatMap((lead) =>
@@ -90,11 +99,13 @@ export default function AdminResources() {
         />
         <StatCard
           label="Review link"
-          value={reviewLink.url ? "Ready" : "Not set"}
-          tone={reviewLink.url ? "good" : "bad"}
-          hint="Google profile must be claimed first"
+          value={link ? "Ready" : "Not set"}
+          tone={link ? "good" : "bad"}
+          hint={link ? "Every template fills in from it" : "Google profile must be claimed first"}
         />
       </div>
+
+      <ReviewLinkSetup />
 
       {/* Every landing page in one place. This is what somebody comes to
           this page for when they ask "what is the link for the tune-up ad?",
@@ -261,7 +272,7 @@ export default function AdminResources() {
       {/* ----------------------------------------------------------- branch */}
       <Panel title={unhappyBranch.title}>
         <p className="text-sm leading-relaxed text-navy/60">{unhappyBranch.body}</p>
-        <Template className="mt-4" body={unhappyBranch.template} />
+        <Template className="mt-4" body={fillGeneric(unhappyBranch.template)} />
       </Panel>
 
       {/* ------------------------------------------------------------ rules */}
@@ -302,7 +313,7 @@ export default function AdminResources() {
                   {r.when}
                 </p>
               </div>
-              <Template className="mt-3" body={r.body} plain />
+              <Template className="mt-3" body={fillGeneric(r.body)} plain />
             </div>
           ))}
         </div>
@@ -310,8 +321,15 @@ export default function AdminResources() {
 
       {/* ------------------------------------------------------------- link */}
       <Panel title="The review link" subtitle="Every message above depends on it.">
-        {reviewLink.url ? (
-          <p className="break-all font-mono text-sm text-blue">{reviewLink.url}</p>
+        {link ? (
+          <a
+            href={link}
+            target="_blank"
+            rel="noreferrer"
+            className="break-all font-mono text-sm text-blue hover:underline"
+          >
+            {link}
+          </a>
         ) : (
           <NotConnected
             service="Google Business Profile"
@@ -382,7 +400,9 @@ function SequenceStep({
           </span>
         </div>
         <p className="mt-1.5 text-xs leading-relaxed text-navy/60">{step.why}</p>
-        {step.template && <Template className="mt-3" body={step.template} />}
+        {step.template && (
+          <Template className="mt-3" body={fillGeneric(step.template)} />
+        )}
       </div>
     </li>
   );
@@ -423,11 +443,13 @@ function DueRow({ lead, step, at }: { lead: Lead; step: ReviewStep; at: number }
 /** Fills what the dashboard actually knows. Anything it does not know stays
  *  a visible placeholder rather than becoming an empty gap in a real message. */
 function fill(template: string, lead: Lead) {
+  const s = loadSettings();
   const first = lead.name.trim().split(/\s+/)[0] || "{{first}}";
   return template
     .replaceAll("{{first}}", first)
     .replaceAll("{{city}}", lead.city || "{{city}}")
-    .replaceAll("{{link}}", reviewLink.url || "{{link}}");
+    .replaceAll("{{tech}}", s.techName || "{{tech}}")
+    .replaceAll("{{link}}", s.reviewLink || reviewLink.url || "{{link}}");
 }
 
 function Template({
@@ -479,5 +501,157 @@ function Template({
         )}
       </button>
     </div>
+  );
+}
+
+/**
+ * Fills the placeholders the dashboard knows regardless of which lead is in
+ * front of it. {{first}} and {{city}} stay visible — those are per customer
+ * and guessing at them is how a message goes out saying "Hi {{first}}".
+ */
+function fillGeneric(template: string) {
+  const s = loadSettings();
+  return template
+    .replaceAll("{{tech}}", s.techName || "{{tech}}")
+    .replaceAll("{{link}}", s.reviewLink || reviewLink.url || "{{link}}");
+}
+
+/**
+ * The one thing that has to be typed in for the review sequence to work.
+ *
+ * Paste the Google review link here and every template on this page, every
+ * due row below, and the sequence copy all fill in with it. That is the whole
+ * setup — there is nothing else to configure.
+ */
+function ReviewLinkSetup() {
+  const settings = useSettings();
+  const [url, setUrl] = useState("");
+  const [tech, setTech] = useState("");
+  const [touched, setTouched] = useState(false);
+
+  // Seed the inputs once the stored values arrive after mount.
+  useEffect(() => {
+    if (touched) return;
+    setUrl(settings.reviewLink);
+    setTech(settings.techName);
+  }, [settings, touched]);
+
+  const check = checkReviewLink(url);
+  const live = Boolean(settings.reviewLink);
+
+  return (
+    <Panel
+      title="Review link"
+      subtitle="Paste it once. Every template, every due row and the whole sequence fill in from here."
+      action={
+        <span
+          className={cn(
+            "shrink-0 rounded-full px-2.5 py-1 text-[0.64rem] font-bold ring-1 ring-inset",
+            live
+              ? "bg-emerald-500/12 text-emerald-700 ring-emerald-500/25"
+              : "bg-ember/10 text-ember ring-ember/25",
+          )}
+        >
+          {live ? "Live" : "Not set"}
+        </span>
+      }
+    >
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          saveSettings({ reviewLink: url.trim(), techName: tech.trim() });
+          setTouched(false);
+        }}
+        className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem_auto] lg:items-end"
+      >
+        <label className="min-w-0">
+          <span className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-navy/45">
+            Google review link
+          </span>
+          <div className="mt-1.5 flex items-center gap-2 rounded-lg bg-navy/[0.035] px-3 ring-1 ring-inset ring-navy/10 focus-within:ring-2 focus-within:ring-blue">
+            <Link2 className="size-4 shrink-0 text-navy/35" aria-hidden="true" />
+            <input
+              value={url}
+              onChange={(e) => {
+                setTouched(true);
+                setUrl(e.target.value);
+              }}
+              inputMode="url"
+              placeholder="https://g.page/r/…/review"
+              className="w-full border-0 bg-transparent py-2.5 font-mono text-[0.78rem] text-navy outline-none placeholder:text-navy/30"
+            />
+          </div>
+        </label>
+
+        <label className="min-w-0">
+          <span className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-navy/45">
+            Default technician name
+          </span>
+          <input
+            value={tech}
+            onChange={(e) => {
+              setTouched(true);
+              setTech(e.target.value);
+            }}
+            placeholder="e.g. Dave"
+            className="mt-1.5 w-full rounded-lg border-0 bg-navy/[0.035] px-3 py-2.5 text-[0.82rem] text-navy ring-1 ring-inset ring-navy/10 outline-none placeholder:text-navy/30 focus:ring-2 focus:ring-blue"
+          />
+        </label>
+
+        <button
+          type="submit"
+          className="h-[2.85rem] shrink-0 rounded-full bg-blue px-6 font-display text-[0.8rem] font-bold text-white transition-colors hover:bg-blue/90"
+        >
+          Save
+        </button>
+      </form>
+
+      {url.trim() && (
+        <p
+          className={cn(
+            "mt-3 flex gap-2 text-[0.78rem] leading-relaxed",
+            check.ok ? "text-emerald-700" : "text-ember",
+          )}
+        >
+          {check.ok ? (
+            <Check className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
+          ) : (
+            <ShieldAlert className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
+          )}
+          {check.note}
+        </p>
+      )}
+
+      <div className="mt-5 grid gap-4 border-t border-navy/8 pt-4 md:grid-cols-2">
+        <div>
+          <Micro>Where to find it</Micro>
+          <ol className="mt-2 space-y-1.5 text-[0.78rem] leading-relaxed text-navy/65">
+            <li>1. Open the Business Profile on Google Search or Maps while signed in as the owner.</li>
+            <li>2. Choose <strong className="font-semibold text-navy">Ask for reviews</strong>.</li>
+            <li>
+              3. Copy the short link it gives you. It looks like{" "}
+              <code className="font-mono text-[0.72rem]">g.page/r/…/review</code> and opens
+              the star box directly.
+            </li>
+          </ol>
+        </div>
+        <div>
+          <Micro>Why this one and not the profile URL</Micro>
+          <p className="mt-2 text-[0.78rem] leading-relaxed text-navy/65">
+            The profile URL drops people on the listing, where they have to
+            scroll, find the reviews, and press a button before they can type
+            anything. Most do not. The review link opens the five stars with
+            the cursor in the box, and that difference is most of the
+            conversion rate on the whole sequence.
+          </p>
+        </div>
+      </div>
+
+      <p className="mt-4 text-[0.74rem] leading-relaxed text-navy/50">
+        Stored in this browser, like everything else on this dashboard. It is a
+        public URL rather than a secret, so the only cost of that is pasting it
+        again on another machine.
+      </p>
+    </Panel>
   );
 }
