@@ -1,39 +1,23 @@
 import { useEffect, useState } from "react";
 
 /**
- * Lead capture and site-traction store.
- *
- * READ THIS BEFORE TRUSTING ANYTHING IT RETURNS.
- *
- * This site is a static build with no server and no database. There is
- * nowhere to put a lead except the visitor's own browser, so that is what
- * this does: every record below lives in localStorage on the device that
- * created it.
- *
- * What that means in practice:
- *   - A homeowner who fills in the quote form in Cape Coral writes a lead
- *     into THEIR browser. It is not sent anywhere and the office will never
- *     see it in the dashboard. The form still emails the office (see
- *     components/quote-form.tsx) — that email remains the real lead path.
- *   - The traction figures in the dashboard describe whoever is looking at
- *     the dashboard, not the public. Open /admin on a laptop that has never
- *     visited the site and the counters read zero.
- *   - Clearing site data erases all of it. There is no backup.
- *
- * It is still worth having. The office can log phone-in leads by hand and
- * work them through the pipeline on one machine, and the moment a backend
- * exists the shape below is what it has to accept — set VITE_LEADS_ENDPOINT
- * and every lead and event is POSTed to it as well, unchanged.
+ * PostgreSQL is the shared CRM source of truth. localStorage is a device cache
+ * and offline outbox; public leads are acknowledged only after the server
+ * confirms their database write.
  */
 
 const STORE = "cca.crm.v1";
 const EVENT_CAP = 400;
 
-/** Set VITE_LEADS_ENDPOINT to a URL that accepts a JSON POST to make any of
- *  this leave the device. Until then it does not. */
+/** Optional copy of records to an existing external intake endpoint. */
 const sink = import.meta.env.VITE_LEADS_ENDPOINT as string | undefined;
+const OUTBOX = "cca.crm.outbox.v1";
+const SYNC_CHANGED = "cca:crm-sync";
+type SyncState = "syncing" | "saved" | "offline";
+let syncState: SyncState = "syncing";
+let remoteReady = false;
 
-export const isConnected = Boolean(sink);
+export const isConnected = true;
 
 /* -------------------------------------------------------------- the shapes */
 
@@ -186,27 +170,89 @@ function saveCrm(next: Crm) {
   try {
     localStorage.setItem(STORE, JSON.stringify(next));
   } catch {
-    /* private browsing or a full quota — this session still works in memory,
-       it simply will not be here next time. */
+    syncState = "offline";
   }
   window.dispatchEvent(new CustomEvent(CHANGED));
+  if (remoteReady) void syncSnapshot(next);
 }
 
 function mutate(fn: (crm: Crm) => Crm) {
   saveCrm(fn(loadCrm()));
 }
 
-/** Fire-and-forget copy to a real backend, when one is configured. */
+function setSyncState(state: SyncState) {
+  syncState = state;
+  if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent(SYNC_CHANGED));
+}
+
+async function syncSnapshot(crm: Crm) {
+  setSyncState("syncing");
+  try {
+    const response = await fetch("/api/crm/sync", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ leads: crm.leads, events: crm.events }),
+    });
+    if (!response.ok) throw new Error("CRM sync failed");
+    localStorage.removeItem("cca.crm.pending");
+    setSyncState("saved");
+  } catch {
+    try {
+      localStorage.setItem("cca.crm.pending", JSON.stringify({ leads: crm.leads, events: crm.events }));
+    } catch { /* keep the in-memory CRM usable and report the sync state */ }
+    setSyncState("offline");
+  }
+}
+
+async function deliver(type: "lead" | "event", payload: unknown): Promise<boolean> {
+  try {
+    const response = await fetch(type === "lead" ? "/api/public/leads" : "/api/public/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ [type]: payload }),
+      keepalive: true,
+    });
+    if (!response.ok) throw new Error("Lead store unavailable");
+    if (sink) {
+      void fetch(sink, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type, payload }),
+        keepalive: true,
+      }).catch(() => {});
+    }
+    return true;
+  } catch {
+    try {
+      const pending = JSON.parse(localStorage.getItem(OUTBOX) || "[]") as { type: string; payload: unknown }[];
+      if (!pending.some((item) => (item.payload as { id?: string })?.id === (payload as { id?: string }).id)) {
+        pending.push({ type, payload });
+        localStorage.setItem(OUTBOX, JSON.stringify(pending.slice(-300)));
+      }
+    } catch { /* the form still reports that server storage failed */ }
+    return false;
+  }
+}
+
 function forward(type: "lead" | "event", payload: unknown) {
-  if (!sink) return;
-  void fetch(sink, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ type, payload }),
-    keepalive: true,
-  }).catch(() => {
-    /* Never let analytics break a page. */
-  });
+  void deliver(type, payload);
+}
+
+async function flushOutbox() {
+  if (typeof window === "undefined") return;
+  try {
+    const pending = JSON.parse(localStorage.getItem(OUTBOX) || "[]") as { type: "lead" | "event"; payload: unknown }[];
+    const remaining = [];
+    for (const item of pending) {
+      if (!(await deliver(item.type, item.payload))) remaining.push(item);
+    }
+    localStorage.setItem(OUTBOX, JSON.stringify(remaining));
+  } catch { /* retry on next connection */ }
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("online", () => void flushOutbox());
+  void flushOutbox();
 }
 
 /* --------------------------------------------------------------- tracking */
@@ -312,8 +358,11 @@ export function captureLead(data: NewLead): Lead {
     attribution: currentAttribution(),
   };
   mutate((crm) => ({ ...crm, leads: [lead, ...crm.leads] }));
-  forward("lead", lead);
   return lead;
+}
+
+export function persistLead(lead: Lead) {
+  return deliver("lead", lead);
 }
 
 export function updateLead(id: string, patch: Partial<Lead>) {
@@ -360,6 +409,7 @@ export function addNote(id: string, text: string) {
 
 export function deleteLead(id: string) {
   mutate((crm) => ({ ...crm, leads: crm.leads.filter((l) => l.id !== id) }));
+  void fetch(`/api/crm/leads/${encodeURIComponent(id)}`, { method: "DELETE" });
 }
 
 export function clearCrm() {
@@ -392,17 +442,57 @@ export function useCrm(): Crm {
 
   useEffect(() => {
     const read = () => setCrm(loadCrm());
-    read();
+    setCrm(loadCrm());
+    setSyncState("syncing");
+    void (async () => {
+      try {
+        const response = await fetch("/api/crm");
+        if (!response.ok) throw new Error("CRM fetch failed");
+        const remote = await response.json() as Crm;
+        const local = loadCrm();
+        const remoteLeadIds = new Set(remote.leads.map((lead) => lead.id));
+        const remoteEventIds = new Set(remote.events.map((event) => event.id));
+        const merged: Crm = {
+          leads: [...remote.leads, ...local.leads.filter((lead) => !remoteLeadIds.has(lead.id))],
+          events: [...remote.events, ...local.events.filter((event) => !remoteEventIds.has(event.id))],
+          visitor: local.visitor,
+        };
+        remoteReady = false;
+        saveCrm(merged);
+        remoteReady = true;
+        await syncSnapshot(merged);
+        await flushOutbox();
+        setCrm(merged);
+      } catch {
+        setSyncState("offline");
+      }
+    })();
     window.addEventListener(CHANGED, read);
     // Another tab writing the same key — keeps two open dashboards in step.
     window.addEventListener("storage", read);
+    const reconnect = () => {
+      void flushOutbox();
+      if (remoteReady) void syncSnapshot(loadCrm());
+    };
+    window.addEventListener("online", reconnect);
     return () => {
       window.removeEventListener(CHANGED, read);
       window.removeEventListener("storage", read);
+      window.removeEventListener("online", reconnect);
     };
   }, []);
 
   return crm;
+}
+
+export function useCrmSyncState(): SyncState {
+  const [state, setState] = useState<SyncState>(syncState);
+  useEffect(() => {
+    const update = () => setState(syncState);
+    window.addEventListener(SYNC_CHANGED, update);
+    return () => window.removeEventListener(SYNC_CHANGED, update);
+  }, []);
+  return state;
 }
 
 /* -------------------------------------------------------------- summaries */

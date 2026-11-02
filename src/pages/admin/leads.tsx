@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   ArrowUpRight,
   Download,
@@ -7,10 +7,10 @@ import {
   Plus,
   Trash2,
   ShieldCheck,
-  TriangleAlert,
+  Upload,
   UserPlus,
 } from "lucide-react";
-import { business, locations, services } from "@/content/site";
+import { locations, services } from "@/content/site";
 import { AdminShell } from "@/components/admin/shell";
 import { Panel, StatCard } from "@/components/admin/ui";
 import {
@@ -22,7 +22,7 @@ import {
   clearCrm,
   deleteLead,
   exportCrm,
-  isConnected,
+  useCrmSyncState,
   traction,
   updateLead,
   useCrm,
@@ -34,10 +34,7 @@ import { cn } from "@/lib/utils";
 /**
  * Leads & CRM.
  *
- * Every number on this page is read from the browser it is open in. That is
- * not a design choice, it is the only option a static site has — and the
- * banner at the top says so in those words rather than letting a client
- * assume the office is looking at a shared inbox. See lib/leads.ts.
+ * The page hydrates from PostgreSQL and retains a local cache for recovery.
  */
 
 const STAGE_STYLE: Record<Stage, { pill: string; dot: string; bar: string }> = {
@@ -65,9 +62,11 @@ function StagePill({ stage }: { stage: Stage }) {
 
 export default function AdminLeads() {
   const crm = useCrm();
+  const syncState = useCrmSyncState();
   const [filter, setFilter] = useState<Stage | "all">("all");
   const [selected, setSelected] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
+  const importInput = useRef<HTMLInputElement>(null);
 
   const t = useMemo(() => traction(crm.events), [crm.events]);
   const open = crm.leads.filter((l) => l.stage !== "won" && l.stage !== "lost");
@@ -86,53 +85,47 @@ export default function AdminLeads() {
     URL.revokeObjectURL(url);
   }
 
+  async function importBackup(file?: File) {
+    if (!file) return;
+    try {
+      const backup = JSON.parse(await file.text());
+      if (!Array.isArray(backup.leads) || !Array.isArray(backup.events)) {
+        throw new Error("That file is not a CRM JSON backup.");
+      }
+      const response = await fetch("/api/crm/import", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ leads: backup.leads, events: backup.events }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Import failed.");
+      window.location.reload();
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "Could not import this backup.");
+    } finally {
+      if (importInput.current) importInput.current.value = "";
+    }
+  }
+
   return (
     <AdminShell
       title="Leads & CRM"
       lead="Every enquiry the website captures, the stage each one is at, and what visitors did before they got in touch."
     >
-      {/* Loss risk first. If there are leads in here and nowhere else, that
-          is the most urgent fact on the page — more urgent than the general
-          explanation of how the store works. */}
-      <LossWarning count={crm.leads.length} onExport={download} />
-
-      {/* The single most important thing on this page. It is not a footnote. */}
-      <div className="overflow-hidden rounded-2xl bg-gold/12 ring-1 ring-inset ring-gold/40">
+      <div className="overflow-hidden rounded-2xl bg-white ring-1 ring-inset ring-navy/10">
         <div className="flex gap-3 px-5 py-4">
-          <TriangleAlert className="mt-0.5 size-4 shrink-0 text-amber-700" aria-hidden="true" />
+          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-emerald-700" aria-hidden="true" />
           <div className="min-w-0">
-            <p className="font-display text-sm font-bold text-amber-950">
-              This CRM holds data on this device only
+            <p className="font-display text-sm font-bold text-navy">
+              Leads are stored in the shared CRM database
             </p>
-            <p className="mt-1.5 text-xs leading-relaxed text-amber-900/90">
-              The site is a static build with no server and no database, so
-              there is nowhere to put a lead except the browser it was created
-              in. A homeowner who fills in the quote form writes a record into{" "}
-              <em>their</em> browser — it will never appear here. What you see
-              below is this machine, and clearing site data erases it with no
-              backup.{" "}
-              <strong className="font-semibold">
-                The emailed quote request is still the real lead path.
-              </strong>
-            </p>
-            <p className="mt-2 text-xs leading-relaxed text-amber-900/90">
-              Everything is already wired for the day that changes: set{" "}
-              <code className="rounded bg-gold/25 px-1 py-0.5 font-mono text-[0.68rem]">
-                VITE_LEADS_ENDPOINT
-              </code>{" "}
-              to a URL that accepts a JSON POST and every lead and event below
-              is forwarded to it, unchanged.{" "}
-              {isConnected ? (
-                <strong className="font-semibold text-emerald-800">
-                  An endpoint is configured — records are being forwarded.
-                </strong>
-              ) : (
-                <strong className="font-semibold">
-                  No endpoint is configured right now.
-                </strong>
-              )}
+            <p className="mt-1.5 text-xs leading-relaxed text-navy/60">
+              Website enquiries save centrally. The browser also keeps a cache and retries queued changes after a connection returns. Export a JSON backup periodically.
             </p>
           </div>
+          <span className={cn("ml-auto h-fit shrink-0 rounded-full px-2.5 py-1 text-[0.65rem] font-bold uppercase", syncState === "saved" ? "bg-emerald-50 text-emerald-700" : syncState === "syncing" ? "bg-blue/10 text-blue" : "bg-amber-100 text-amber-800")}>
+            {syncState === "saved" ? "Synced" : syncState === "syncing" ? "Syncing" : "Offline"}
+          </span>
         </div>
       </div>
 
@@ -171,6 +164,13 @@ export default function AdminLeads() {
         subtitle="Click a stage to filter the list below."
         action={
           <div className="flex gap-2">
+            <input
+              ref={importInput}
+              type="file"
+              accept="application/json,.json"
+              className="hidden"
+              onChange={(event) => void importBackup(event.currentTarget.files?.[0])}
+            />
             <button
               type="button"
               onClick={() => setAdding((v) => !v)}
@@ -187,6 +187,14 @@ export default function AdminLeads() {
             >
               <Download className="size-3.5" aria-hidden="true" />
               Export
+            </button>
+            <button
+              type="button"
+              onClick={() => importInput.current?.click()}
+              className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold text-navy/60 ring-1 ring-navy/15 transition-colors hover:bg-navy/6"
+            >
+              <Upload className="size-3.5" aria-hidden="true" />
+              Import
             </button>
           </div>
         }
@@ -428,7 +436,7 @@ export default function AdminLeads() {
             <button
               type="button"
               onClick={() => {
-                if (confirm("Erase every lead, note and event stored in this browser? This cannot be undone.")) {
+                if (confirm("Clear this device's cached copy? The shared CRM database will keep all records.")) {
                   clearCrm();
                   setSelected(null);
                 }
@@ -436,7 +444,7 @@ export default function AdminLeads() {
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-navy/40 transition-colors hover:text-ember"
             >
               <Trash2 className="size-3.5" aria-hidden="true" />
-              Erase everything stored here
+              Clear local cache
             </button>
           </div>
         )}
@@ -464,12 +472,12 @@ function EmptyLeads({ hasAny, onAdd }: { hasAny: boolean; onAdd: () => void }) {
   return (
     <div className="rounded-xl border border-dashed border-navy/15 bg-navy/[0.02] px-6 py-10 text-center">
       <p className="font-display text-sm font-bold text-navy">
-        {hasAny ? "No leads at this stage" : "No leads captured in this browser"}
+        {hasAny ? "No leads at this stage" : "No leads captured yet"}
       </p>
       <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-navy/50">
         {hasAny
           ? "Clear the stage filter above to see the rest."
-          : `This is expected and is not a fault. Quote requests are emailed to ${business.email} and are recorded in the visitor's own browser, not here. Use this pipeline for calls you take yourself.`}
+          : "Website enquiries and phone leads are saved to the shared CRM. New enquiries appear here after they are received."}
       </p>
       {!hasAny && (
         <button
@@ -503,7 +511,7 @@ function ManualLead({ onDone }: { onDone: () => void }) {
         Log a lead you took by phone
       </p>
       <p className="mt-1 text-xs text-navy/50">
-        Saved in this browser so it can be worked through the pipeline.
+        Saved to the shared CRM so the team can work it through the pipeline.
       </p>
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <Field name="name" label="Name" required />
@@ -728,50 +736,3 @@ function LeadDetail({ lead, onClose }: { lead: Lead; onClose: () => void }) {
  * actually matters today: there are N records here, they exist nowhere else,
  * and clearing site data destroys them. One button fixes it.
  */
-function LossWarning({ count, onExport }: { count: number; onExport: () => void }) {
-  const forwarding = Boolean(import.meta.env.VITE_LEADS_ENDPOINT);
-  if (count === 0) return null;
-
-  if (forwarding) {
-    return (
-      <div className="flex items-start gap-3 rounded-2xl bg-emerald-500/8 px-5 py-4 ring-1 ring-inset ring-emerald-500/25">
-        <ShieldCheck className="mt-0.5 size-4 shrink-0 text-emerald-700" aria-hidden="true" />
-        <p className="text-[0.82rem] leading-relaxed text-emerald-900">
-          <strong className="font-semibold">Forwarding is on.</strong> Every
-          lead here has also been POSTed to the configured endpoint, so these
-          records exist somewhere other than this browser.
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="rounded-2xl bg-ember/8 ring-1 ring-inset ring-ember/30">
-      <div className="flex flex-wrap items-start gap-x-4 gap-y-3 px-5 py-4">
-        <TriangleAlert className="mt-0.5 size-4 shrink-0 text-ember" aria-hidden="true" />
-        <div className="min-w-0 flex-1">
-          <p className="font-display text-sm font-bold text-navy">
-            {count} {count === 1 ? "lead exists" : "leads exist"} only in this browser
-          </p>
-          <p className="mt-1.5 max-w-3xl text-xs leading-relaxed text-navy/70">
-            No forwarding endpoint is configured, so these records are not on a
-            server and not on anybody else's machine. Clearing site data, a
-            browser reset or a new laptop destroys them with no way back.
-            Export now, and set{" "}
-            <code className="rounded bg-white px-1 py-0.5 font-mono text-[0.68rem]">
-              VITE_LEADS_ENDPOINT
-            </code>{" "}
-            so this stops being a risk.
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={onExport}
-          className="shrink-0 rounded-full bg-ember px-4 py-2 text-[0.76rem] font-bold text-white transition-opacity hover:opacity-90"
-        >
-          Export now
-        </button>
-      </div>
-    </div>
-  );
-}

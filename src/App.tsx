@@ -33,10 +33,12 @@ import AdminSocial from "@/pages/admin/social";
 import AdminAnalytics from "@/pages/admin/analytics";
 import AdminTools from "@/pages/admin/tools";
 import AdminTracking from "@/pages/admin/tracking";
+import AdminLogin from "@/pages/admin/login";
 
 function Routes() {
   return (
     <Switch>
+      <Route path="/admin/login" component={AdminLogin} />
       <Route path="/" component={Home} />
       <Route path="/services" component={ServicesIndex} />
       <Route path="/services/:slug">

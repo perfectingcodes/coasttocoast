@@ -9,6 +9,7 @@ import {
   Globe,
   Instagram,
   LayoutDashboard,
+  LogOut,
   Lock,
   Megaphone,
   Menu,
@@ -33,9 +34,7 @@ import { cn } from "@/lib/utils";
  * and it should read as a tool — dense, quiet, instrument-like — rather than
  * as a page.
  *
- * NOTE: static build, no server, so there is no authentication here. Every
- * admin route is noindexed, disallowed in robots.txt and kept out of the
- * sitemap, but anyone with the URL can open it.
+ * Admin routes are gated by the server-side CRM password session.
  */
 
 interface NavItem {
@@ -157,7 +156,7 @@ export function AdminShell({
   actions?: ReactNode;
   children: ReactNode;
 }) {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const [open, setOpen] = useState(false);
 
   const isActive = (href: string, end?: boolean) =>
@@ -289,7 +288,7 @@ export function AdminShell({
             <p className="mt-2 px-4 font-mono text-[0.58rem] uppercase leading-relaxed tracking-[0.12em] text-white/30">
               Lic. {business.license}
               <br />
-              {locations.length} cities · static build
+              {locations.length} cities · private admin
             </p>
           </div>
           </div>
@@ -327,6 +326,17 @@ export function AdminShell({
                 />
                 Live
               </span>
+              <button
+                type="button"
+                onClick={async () => {
+                  await fetch("/api/auth/logout", { method: "POST" });
+                  setLocation("/admin/login");
+                }}
+                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[0.65rem] font-bold text-navy/60 shadow-[0_1px_2px_rgb(7_26_61/0.06)] hover:text-navy"
+              >
+                <LogOut className="size-3.5" aria-hidden="true" />
+                Sign out
+              </button>
             </div>
           </header>
 
@@ -362,25 +372,12 @@ export function AdminShell({
   );
 }
 
-/** Permanent, deliberate. This must not quietly look like a secure system. */
+/** The CRM is protected by a server-validated password session. */
 function UnsecuredNotice() {
   return (
-    <details className="group overflow-hidden rounded-xl bg-gold/12 ring-1 ring-gold/40 open:pb-3">
-      <summary className="flex cursor-pointer list-none items-center gap-2.5 px-4 py-2 [&::-webkit-details-marker]:hidden">
-        <Lock className="size-3.5 shrink-0 text-amber-700" aria-hidden="true" />
-        <span className="text-[0.72rem] font-semibold text-amber-900">
-          No login on this dashboard — anyone with the URL can open it
-        </span>
-        <span className="ml-auto shrink-0 font-mono text-[0.6rem] font-bold uppercase tracking-[0.12em] text-amber-700 group-open:hidden">
-          Why
-        </span>
-      </summary>
-      <p className="max-w-3xl px-4 text-xs leading-relaxed text-amber-900/90">
-        The site is a static build with no server, so these pages are
-        noindexed, disallowed in robots.txt and excluded from the sitemap —
-        but none of that is access control. Keep credentials, customer data
-        and financials out until a real backend and authentication are added.
-      </p>
-    </details>
+    <p className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-800 ring-1 ring-emerald-200">
+      <Lock className="size-3.5" aria-hidden="true" />
+      Password protected · CRM records stored in the shared database
+    </p>
   );
 }
