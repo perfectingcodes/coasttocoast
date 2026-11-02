@@ -1,6 +1,12 @@
 import { useMemo, useState } from "react";
 import { Camera, Check, Copy, ImageIcon, Instagram } from "lucide-react";
-import { POST_KINDS, posts, type Post, type PostKind } from "@/content/social-posts";
+import {
+  POST_KINDS,
+  posts,
+  shotLists,
+  type Post,
+  type PostKind,
+} from "@/content/social-posts";
 import { socialPlan } from "@/content/calendar";
 import { AdminShell } from "@/components/admin/shell";
 import { Instrument, Panel, StatCard } from "@/components/admin/ui";
@@ -31,14 +37,14 @@ export default function AdminSocial() {
   return (
     <AdminShell
       title="Social calendar"
-      lead="Two posts a week, written and dated. Copy the caption, attach the artwork, schedule it. No hashtags and no composing required."
+      lead="One a day for thirty days from 3 November, then three a week. Copy the caption, attach the artwork, schedule it. No hashtags and no composing required."
     >
       <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
         <StatCard
           label="Posts written"
           value={posts.length}
           icon={<Instagram />}
-          hint="Through 29 December"
+          hint="Daily, 3 Nov – 2 Dec"
         />
         <StatCard
           label="Still to go out"
@@ -75,6 +81,7 @@ export default function AdminSocial() {
               "The first line has to work alone — Instagram cuts at about 125 characters.",
               "Plain sentences. No all-caps, no fake urgency, no claim the business cannot back.",
               "One ask, at the end, and not always the same ask.",
+              "Daily for thirty days, then three a week. Daily is a launch cadence — it earns a profile that looks alive and the thirty days of Pixel traffic a retargeting audience needs.",
             ].map((l) => (
               <li key={l} className="flex gap-2.5">
                 <Check className="mt-0.5 size-3.5 shrink-0 text-cyan" aria-hidden="true" />
@@ -86,27 +93,41 @@ export default function AdminSocial() {
 
         <Panel
           className="lg:col-span-7"
-          title="Artwork still outstanding"
-          subtitle="Five posts need a photograph taken on a job — those are the five that will outperform the rest. Separately, any tile below showing 'Not uploaded' is a brand graphic that has not been added to public/brand/social yet."
+          title="Shot lists"
+          subtitle={`${needPhoto.length} of the ${posts.length} posts need a photograph we do not have. Grouped into batches, that is two ordinary service visits and one replacement job rather than nine separate interruptions.`}
         >
-          <ul className="space-y-2.5">
-            {needPhoto.map((p) => (
+          <ul className="space-y-3">
+            {shotLists.map((sl) => (
               <li
-                key={p.date}
-                className="flex min-w-0 gap-3 rounded-xl bg-gold/8 p-3.5 ring-1 ring-inset ring-gold/35"
+                key={sl.name}
+                className="min-w-0 rounded-xl bg-gold/8 p-4 ring-1 ring-inset ring-gold/35"
               >
-                <Camera className="mt-0.5 size-4 shrink-0 text-amber-700" aria-hidden="true" />
-                <div className="min-w-0">
-                  <p className="text-[0.82rem] font-semibold text-navy">{p.creative}</p>
-                  <p className="mt-0.5 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-navy/45">
-                    Needed by {asDate(p.date).toLocaleDateString("en-US", { day: "numeric", month: "short" })}
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <p className="flex items-center gap-2 font-display text-[0.88rem] font-extrabold text-navy">
+                    <Camera className="size-3.5 shrink-0 text-amber-700" aria-hidden="true" />
+                    {sl.name}
                   </p>
-                  {p.note && (
-                    <p className="mt-1 text-[0.76rem] leading-relaxed text-navy/60">
-                      {p.note}
-                    </p>
-                  )}
+                  <p className="shrink-0 font-mono text-[0.64rem] uppercase tracking-[0.1em] text-amber-800">
+                    {sl.when}
+                  </p>
                 </div>
+                <ul className="mt-2.5 space-y-1 border-t border-gold/30 pt-2.5">
+                  {sl.shots.map((shot) => (
+                    <li
+                      key={shot}
+                      className="flex gap-2.5 text-[0.8rem] leading-snug text-navy/75"
+                    >
+                      <span
+                        className="mt-1.5 size-1.5 shrink-0 rounded-full bg-amber-700"
+                        aria-hidden="true"
+                      />
+                      {shot}
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-2.5 text-[0.76rem] leading-relaxed text-navy/55">
+                  {sl.note}
+                </p>
               </li>
             ))}
           </ul>
@@ -115,7 +136,7 @@ export default function AdminSocial() {
 
       <Panel
         title="The schedule"
-        subtitle="Tuesdays and Fridays. Copy the caption, attach the named artwork, schedule it."
+        subtitle="One a day. Copy the caption, attach the named artwork, schedule it."
         action={
           <div className="flex flex-wrap gap-1.5">
             <Chip active={filter === "all"} onClick={() => setFilter("all")}>

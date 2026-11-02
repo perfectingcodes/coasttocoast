@@ -406,11 +406,12 @@ export const schedule: Entry[] = [
 /* --------------------------------------------------------- social plan */
 
 /**
- * Instagram, once access lands. Two posts a week is the cadence a contractor
- * can actually sustain, and a sustained two beats an abandoned five.
+ * Instagram. Daily for the first thirty days to build the profile and the
+ * Pixel audience, then three a week — the cadence a contractor can actually
+ * sustain, and a sustained three beats an abandoned seven.
  */
 export const socialPlan = {
-  cadence: "Two posts a week, scheduled a fortnight ahead",
+  cadence: "Daily for the first thirty days, then three a week",
   need: [
     "Admin access on the Meta Business Suite covering Instagram and the Facebook page",
     "Real job photographs — before and after, the van, the team. This is the gap no agency can fill for you",
