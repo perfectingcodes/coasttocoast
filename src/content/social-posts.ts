@@ -1,14 +1,9 @@
 /**
  * The Instagram schedule.
  *
- * Daily for thirty days from 3 November, then it steps down.
- *
- * Daily is a launch cadence, not a forever cadence. It earns two things that
- * are worth the effort once: a profile that looks alive to anybody who
- * checks it after a recommendation, and thirty days of Pixel traffic, which
- * is exactly the window a retargeting audience needs before it can run. From
- * 3 December it drops to three a week, which a contractor can actually
- * sustain — and a sustained three beats an abandoned seven.
+ * The source includes alternate captions for some campaign dates, but the
+ * admin calendar displays each supplied graphic only once. Further posts
+ * should use new job photography rather than repeating an existing graphic.
  *
  * House style for every caption here, because it is the thing most
  * contractor accounts get wrong:
@@ -57,7 +52,7 @@ export interface Post {
   note?: string;
 }
 
-export const posts: Post[] = [
+const allPosts: Post[] = [
   {
     date: "2026-11-03",
     kind: "team",
@@ -458,13 +453,21 @@ We are dropping to three posts a week from here. Same stuff, less of it.`,
   },
 ];
 
+const usedArtwork = new Set<string>();
+export const posts: Post[] = allPosts.filter((post) => {
+  if (!post.image) return true;
+  if (usedArtwork.has(post.image)) return false;
+  usedArtwork.add(post.image);
+  return true;
+});
+
 /* ---------------------------------------------------------- shot lists */
 
 /**
  * The photographs the calendar needs, grouped so they can be taken in
  * batches rather than one at a time.
  *
- * Nine of the thirty posts need a picture we do not have. Chased
+ * Nine of the unique posts need a picture we do not have. Chased
  * individually that is nine interruptions; grouped it is two ordinary
  * service visits and one replacement job.
  */

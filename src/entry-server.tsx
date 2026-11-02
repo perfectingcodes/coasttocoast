@@ -41,8 +41,7 @@ export const adRoutes: string[] = landingPages.map((p) => p.path);
 /**
  * Internal dashboard routes. Prerendered so they exist as real pages, but
  * deliberately kept out of the sitemap and disallowed in robots.txt. They
- * carry noindex via the Seo component. There is no authentication on this
- * static build — see components/admin/shell.tsx.
+ * carry noindex via the Seo component. Server middleware protects access.
  */
 export const adminRoutes: string[] = [
   "/admin",
@@ -53,7 +52,6 @@ export const adminRoutes: string[] = [
   "/admin/resources",
   "/admin/google",
   "/admin/google-ads",
-  "/admin/calendar",
   "/admin/social",
   "/admin/analytics",
   "/admin/tools",

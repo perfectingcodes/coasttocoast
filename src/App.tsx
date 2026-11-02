@@ -28,7 +28,6 @@ import AdminLeads from "@/pages/admin/leads";
 import AdminResources from "@/pages/admin/resources";
 import AdminGoogle from "@/pages/admin/google";
 import AdminGoogleAds from "@/pages/admin/google-ads";
-import AdminCalendar from "@/pages/admin/calendar";
 import AdminSocial from "@/pages/admin/social";
 import AdminAnalytics from "@/pages/admin/analytics";
 import AdminTools from "@/pages/admin/tools";
@@ -64,15 +63,13 @@ function Routes() {
           {() => <LandingPageView path={lp.path} />}
         </Route>
       ))}
-      {/* Internal dashboard. No auth — static build. Noindexed, disallowed
-          in robots.txt and excluded from the sitemap. */}
+      {/* Internal dashboard. Server-protected and excluded from the sitemap. */}
       <Route path="/admin" component={AdminHome} />
       <Route path="/admin/seo" component={AdminSeo} />
       <Route path="/admin/marketing" component={AdminMarketing} />
       <Route path="/admin/campaigns" component={AdminCampaigns} />
       <Route path="/admin/leads" component={AdminLeads} />
       <Route path="/admin/resources" component={AdminResources} />
-      <Route path="/admin/calendar" component={AdminCalendar} />
       <Route path="/admin/social" component={AdminSocial} />
       <Route path="/admin/analytics" component={AdminAnalytics} />
       <Route path="/admin/tools" component={AdminTools} />

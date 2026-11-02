@@ -3,7 +3,6 @@ import { Link, useLocation } from "wouter";
 import {
   Activity,
   BarChart3,
-  CalendarDays,
   ExternalLink,
   Gauge,
   Globe,
@@ -61,12 +60,6 @@ const NAV: { group: string; items: NavItem[] }[] = [
         label: "Analytics",
         hint: "Pages, traffic and what people did",
         Icon: Activity,
-      },
-      {
-        href: "/admin/calendar",
-        label: "Schedule",
-        hint: "Every date to the 90-day review",
-        Icon: CalendarDays,
       },
     ],
   },

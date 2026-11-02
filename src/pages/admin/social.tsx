@@ -37,14 +37,14 @@ export default function AdminSocial() {
   return (
     <AdminShell
       title="Social calendar"
-      lead="One a day for thirty days from 3 November, then three a week. Copy the caption, attach the artwork, schedule it. No hashtags and no composing required."
+      lead="Unique posts only: each supplied graphic appears once. Copy the caption, attach distinct job photos where needed, and schedule it."
     >
       <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
         <StatCard
           label="Posts written"
           value={posts.length}
           icon={<Instagram />}
-          hint="Daily, 3 Nov – 2 Dec"
+          hint="Unique posts; one use per graphic"
         />
         <StatCard
           label="Still to go out"
@@ -57,7 +57,7 @@ export default function AdminSocial() {
           value={posts.length - needPhoto.length}
           tone="good"
           icon={<ImageIcon />}
-          hint="Red tile below = file not in the repo yet"
+          hint="Each supplied graphic appears once"
         />
         <StatCard
           label="Need a photo"
@@ -81,7 +81,7 @@ export default function AdminSocial() {
               "The first line has to work alone — Instagram cuts at about 125 characters.",
               "Plain sentences. No all-caps, no fake urgency, no claim the business cannot back.",
               "One ask, at the end, and not always the same ask.",
-              "Daily for thirty days, then three a week. Daily is a launch cadence — it earns a profile that looks alive and the thirty days of Pixel traffic a retargeting audience needs.",
+              "Each supplied graphic appears once. Use original job photos for the remaining posts rather than repeating artwork.",
             ].map((l) => (
               <li key={l} className="flex gap-2.5">
                 <Check className="mt-0.5 size-3.5 shrink-0 text-cyan" aria-hidden="true" />
