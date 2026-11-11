@@ -1039,8 +1039,8 @@ export const process = [
     image: "step-1-call",
   },
   {
-    title: "We document and quote",
-    body: "Every unit tagged, aged and photographed. The quote is written against that list rather than against a guess.",
+    title: "We walk the building",
+    body: "We check every heating and cooling unit and write down its age and condition. Your price is built from that list, not from a guess.",
     image: "step-2-quote",
   },
   {
@@ -1168,6 +1168,10 @@ export const generalFaqs = [
   },
   {
     group: "Agreements & pricing",
+    q: "What is an equipment walk?",
+    a: "A site visit. A technician checks every heating and cooling unit in the building — rooftop units, air handlers, split systems — and writes down the make, the age and the condition of each one, with a photograph. You get that as a single list. It is free, and nothing has to be signed.",
+  },
+  {
     q: "Is the equipment walk really free?",
     a: "Yes. We list, age and photograph every unit on site, and the list is yours to keep whether or not you sign an agreement with us.",
   },

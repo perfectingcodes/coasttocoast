@@ -23,7 +23,7 @@ export default function NotFound() {
         <Section>
           <div className="flex flex-wrap gap-3">
             <ButtonLink href="/">Back home</ButtonLink>
-            <ButtonLink href="/contact" variant="ghost">
+            <ButtonLink href="/contact" popup="quote" variant="ghost">
               Contact us
             </ButtonLink>
           </div>

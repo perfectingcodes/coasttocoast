@@ -49,6 +49,7 @@ export const adRoutes: string[] = [
  * carry noindex via the Seo component. Server middleware protects access.
  */
 export const adminRoutes: string[] = [
+  "/admin/login",
   "/admin",
   "/admin/seo",
   "/admin/marketing",

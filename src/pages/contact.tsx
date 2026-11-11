@@ -5,6 +5,7 @@ import { Section } from "@/components/section";
 import { QuoteForm } from "@/components/quote-form";
 import { GoogleReviewCard } from "@/components/google-reviews";
 import { Seo, breadcrumbNode } from "@/lib/seo";
+import { walk } from "@/lib/booking";
 
 export default function Contact() {
   return (
@@ -58,6 +59,14 @@ export default function Contact() {
               </dl>
 
               <div className="card mt-10 p-6">
+                <p className="eyebrow">Booking an equipment walk?</p>
+                <p className="mt-3 leading-relaxed text-navy/75">{walk.oneLine}</p>
+                <p className="mt-3 text-sm font-semibold text-navy">
+                  {walk.terms.join(" · ")}
+                </p>
+              </div>
+
+              <div className="card mt-5 p-6">
                 <p className="eyebrow">Emergency?</p>
                 <p className="mt-3 text-navy/75 leading-relaxed">
                   Call instead of using the form. The line is answered by a person

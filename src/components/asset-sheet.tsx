@@ -38,7 +38,10 @@ const TONE: Record<Condition, { dot: string; text: string }> = {
 
 export function AssetSheet({ className }: { className?: string }) {
   return (
-    <figure className={cn("relative", className)}>
+    // A container, so the rows reflow on the width this sheet is actually
+    // given. Beside a photograph on a laptop it gets 300px in a 1024px
+    // window, and a window-width breakpoint cannot know that.
+    <figure className={cn("@container relative", className)}>
       {/* Registration marks, the way a plate is positioned on a press sheet. */}
       <span
         className="pointer-events-none absolute -left-3 -top-3 size-6 border-l border-t border-ember/60"
@@ -52,7 +55,7 @@ export function AssetSheet({ className }: { className?: string }) {
       <div className="glass-instrument relative overflow-hidden">
         <div className="thermal-rule absolute inset-x-0 top-0 rounded-none" aria-hidden="true" />
 
-        <div className="flex items-center justify-between gap-4 border-b border-white/12 px-5 pb-3 pt-5">
+        <div className="flex items-center justify-between gap-4 border-b border-white/12 px-4 pb-3 pt-5 @md:px-5">
           <p className="font-mono text-[0.66rem] font-semibold uppercase tracking-[0.12em] text-cyan">
             Asset list
           </p>
@@ -65,7 +68,7 @@ export function AssetSheet({ className }: { className?: string }) {
           {ROWS.map((r) => (
             <li
               key={r.tag}
-              className="grid grid-cols-[3.4rem_minmax(0,1fr)_auto] items-start gap-x-3 border-b border-white/8 px-5 py-3 last:border-b-0"
+              className="grid grid-cols-[3.4rem_minmax(0,1fr)] items-start gap-x-3 border-b border-white/8 px-4 py-3 last:border-b-0 @md:grid-cols-[3.4rem_minmax(0,1fr)_auto] @md:px-5"
             >
               <span className="pt-0.5 font-mono text-[0.72rem] font-semibold text-white">
                 {r.tag}
@@ -78,13 +81,15 @@ export function AssetSheet({ className }: { className?: string }) {
                   {r.spec}
                 </span>
               </span>
-              <span className="text-right">
+              {/* Narrow: age and condition drop to a line under the unit.
+                  Wide: they stand as a right-hand column. */}
+              <span className="col-start-2 mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 @md:col-start-3 @md:mt-0 @md:block @md:text-right">
                 <span className="block font-mono text-[0.72rem] tabular-nums text-white/80">
                   {r.age} yr
                 </span>
                 <span
                   className={cn(
-                    "mt-0.5 flex items-center justify-end gap-1.5 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.08em]",
+                    "flex items-center gap-1.5 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.08em] @md:mt-0.5 @md:justify-end",
                     TONE[r.condition].text,
                   )}
                 >
@@ -96,7 +101,7 @@ export function AssetSheet({ className }: { className?: string }) {
           ))}
         </ul>
 
-        <figcaption className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-white/12 bg-white/[0.04] px-5 py-3 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-white/50">
+        <figcaption className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-white/12 bg-white/[0.04] px-4 py-3 @md:px-5 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-white/50">
           <span>{ROWS.length} units · tagged, aged, photographed</span>
           <span>Illustrative — not a real site</span>
         </figcaption>

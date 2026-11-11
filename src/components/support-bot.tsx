@@ -132,7 +132,13 @@ export function SupportBot() {
   }, [open]);
 
   return (
-    <div ref={panelRef} className="fixed bottom-4 right-4 z-[60] print:hidden md:bottom-6 md:right-6">
+    // On a phone the launcher takes the right-hand slot of the bottom bar
+    // and arrives with it. Floating on its own it sat on top of the hero copy.
+    <div
+      ref={panelRef}
+      data-open={open || undefined}
+      className="ask-launcher fixed bottom-[max(0.625rem,env(safe-area-inset-bottom))] right-3 z-[60] print:hidden md:bottom-5 md:right-4 2xl:bottom-6 2xl:right-6"
+    >
       {open && (
         <div
           id="ask-coast-panel"
@@ -258,7 +264,10 @@ export function SupportBot() {
         aria-controls="ask-coast-panel"
         aria-label={open ? "Close Ask Coast" : "Open Ask Coast — get answers"}
         className={cn(
-          "group flex items-center gap-2.5 rounded-full p-2 transition-all duration-300 sm:py-2 sm:pl-2 sm:pr-4",
+          // A circle until the page has a margin wide enough to hold the
+          // label: as a 150px pill it covered the right edge of the content
+          // at every laptop width.
+          "group flex items-center gap-2.5 rounded-full p-1.5 transition-all duration-300 2xl:p-2 2xl:pr-4",
           "bg-navy text-white shadow-[0_16px_40px_-12px_rgb(5_15_38/0.7)] ring-1 ring-white/15",
           "hover:-translate-y-0.5 hover:bg-navy-soft",
         )}
@@ -269,7 +278,7 @@ export function SupportBot() {
             alt=""
             width={256}
             height={289}
-            className="size-11 object-contain md:size-12"
+            className="size-9 object-contain md:size-10 2xl:size-12"
           />
           {!open && (
             <span
@@ -278,7 +287,7 @@ export function SupportBot() {
             />
           )}
         </span>
-        <span className="hidden font-display text-sm font-extrabold sm:block">
+        <span className="hidden font-display text-sm font-extrabold 2xl:block">
           {open ? "Close" : "Ask Coast"}
         </span>
 

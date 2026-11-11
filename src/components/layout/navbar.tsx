@@ -18,6 +18,7 @@ import {
   services,
 } from "@/content/site";
 import { Icon } from "@/components/icon";
+import { useBooking } from "@/lib/booking";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -46,6 +47,7 @@ function isActive(pathname: string, href: string) {
 export function Navbar() {
   const [location] = useLocation();
   const [open, setOpen] = useState(false);
+  const booking = useBooking();
 
   // Close the mobile sheet on navigation.
   useEffect(() => setOpen(false), [location]);
@@ -75,7 +77,7 @@ export function Navbar() {
               </span>
             </span>
             <span className="hidden h-4 w-px bg-white/20 sm:block" aria-hidden="true" />
-            <ul className="hidden items-center gap-3 sm:flex">
+            <ul className="-mr-2 hidden items-center sm:flex">
               {socials.map(({ href, label, Icon }) => (
                 <li key={label}>
                   <a
@@ -83,7 +85,7 @@ export function Navbar() {
                     target="_blank"
                     rel="noreferrer noopener"
                     aria-label={label}
-                    className="block text-white/65 transition-colors hover:text-cyan"
+                    className="grid size-9 place-items-center text-white/65 transition-colors hover:text-cyan"
                   >
                     <Icon className="size-4" />
                   </a>
@@ -97,19 +99,23 @@ export function Navbar() {
       {/* ------------------------------------------------------- main bar */}
       <div className="bg-white shadow-[0_1px_0_rgb(11_37_69/0.08),0_8px_24px_-16px_rgb(11_37_69/0.35)]">
         <div className="shell flex h-20 items-center justify-between gap-4 lg:h-24">
-          {/* The lockup deliberately overhangs the bar, as in the brand sheet. */}
+          {/* The lockup sits inside the bar. It used to hang 50px below it,
+              which looks right on a brand sheet and wrong on a sticky header:
+              it rode down the page on top of headings, photographs and
+              buttons. */}
           <Link href="/" aria-label={`${business.name} — home`} className="shrink-0">
             {/* Badge lockup, no mascot — the mascot has its own moments further
                 down the page and the header reads cleaner without it. */}
             <img
               src="/brand/logo-badge.webp"
               srcSet="/brand/logo-badge-sm.webp 400w, /brand/logo-badge.webp 1000w"
-              sizes="(min-width: 1280px) 168px, (min-width: 1024px) 150px, 108px"
+              sizes="(min-width: 1024px) 96px, 80px"
               alt={`${business.name} — heating, cooling and mechanical`}
               width={1000}
               height={922}
               fetchPriority="high"
-              className="h-[4.75rem] w-auto drop-shadow-[0_8px_18px_rgb(11_37_69/0.3)] sm:h-24 lg:h-[8.5rem] lg:-mb-12 lg:drop-shadow-[0_16px_30px_rgb(11_37_69/0.45)] xl:h-[9.5rem] xl:-mb-14"
+              decoding="sync"
+              className="h-[4.25rem] w-auto drop-shadow-[0_4px_10px_rgb(11_37_69/0.22)] lg:h-[5.25rem]"
             />
           </Link>
 
@@ -234,6 +240,12 @@ export function Navbar() {
             {/* The offer, carried over from the desktop panel. */}
             <Link
               href="/contact"
+              onClick={(e) => {
+                if (!booking || location === "/contact") return;
+                e.preventDefault();
+                setOpen(false);
+                booking.open("walk", "Menu offer");
+              }}
               className="band-navy grain mt-5 flex items-center gap-4 overflow-hidden rounded-card p-4 text-white"
             >
               <span className="display shrink-0 text-2xl">Free</span>
@@ -248,7 +260,7 @@ export function Navbar() {
               <ArrowRight className="size-4 shrink-0 text-cyan" aria-hidden="true" />
             </Link>
 
-            <div className="mt-4 grid gap-2.5 pb-2">
+            <div className="mt-4 grid gap-2.5 pb-2" onClick={() => setOpen(false)}>
               <ButtonLink href="/contact" size="lg">
                 Book a walk
                 <ArrowRight className="size-4" aria-hidden="true" />
@@ -297,6 +309,8 @@ function NavLink({
  * doing none of the selling the dropdown is well placed to do.
  */
 function ServicesMenu({ active }: { active: boolean }) {
+  const booking = useBooking();
+  const [location] = useLocation();
   return (
     <div className="group relative">
       <Link
@@ -358,6 +372,13 @@ function ServicesMenu({ active }: { active: boolean }) {
             {/* Featured offer */}
             <Link
               href="/contact"
+              onClick={(e) => {
+                if (!booking || location === "/contact") return;
+                e.preventDefault();
+                // Drop focus so the hover panel closes behind the pop-up.
+                (document.activeElement as HTMLElement | null)?.blur();
+                booking.open("walk", "Services menu offer");
+              }}
               className="band-navy grain group/offer relative flex flex-col justify-center overflow-hidden p-6 text-white"
             >
               <span className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-gold">
@@ -370,7 +391,7 @@ function ServicesMenu({ active }: { active: boolean }) {
                 Equipment walk &amp; asset list
               </span>
               <span className="mt-2 text-xs leading-relaxed text-white/60">
-                Every unit tagged, aged and photographed. Yours to keep.
+                We check every unit and hand you the list. Yours to keep.
               </span>
               <span className="mt-4 inline-flex items-center gap-1.5 font-mono text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-cyan">
                 Book a walk

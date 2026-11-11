@@ -33,6 +33,8 @@ import { ServiceMap } from "@/components/service-map";
 import { CtaBand } from "@/components/cta-band";
 import { FaqList } from "@/components/faq-list";
 import { ButtonLink } from "@/components/ui/button";
+import { WalkTerms } from "@/components/booking-dialog";
+import { walk } from "@/lib/booking";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Seo, breadcrumbNode, faqNode } from "@/lib/seo";
@@ -172,6 +174,14 @@ function Hero() {
               </span>
             </a>
           </div>
+
+          {/* "Equipment walk" is our name for it, not the visitor's. Say what
+              it is in the same breath as the button that offers it. */}
+          <p className="mt-3.5 max-w-md text-sm leading-relaxed text-white/75">
+            <span className="font-semibold text-white">What is that?</span> A
+            free visit. We check every unit in your building and hand you
+            the list.
+          </p>
 
           {/* The paperwork questions, answered before they are asked. */}
           <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-4 border-t border-white/25 pt-5 sm:gap-x-6">
@@ -315,7 +325,7 @@ function ServicesSection() {
         <div className="mt-12 grid gap-5 lg:grid-cols-3">
           <Reveal className="lg:row-span-2">
             <div className="band-navy grain edge-lit relative flex h-full flex-col overflow-hidden rounded-card p-8">
-              <Pill icon={<Zap className="size-3.5 text-gold" />} className="relative">
+              <Pill icon={<Zap className="size-3.5 text-gold" />} className="relative self-start">
                 The agreement
               </Pill>
               <h3 className="mt-6 text-3xl leading-[1.08] text-white">
@@ -643,8 +653,8 @@ function WhyUsSection() {
               How we start
             </SectionEyebrow>
             <h2 className="poster mt-4 text-[clamp(2rem,4.4vw,3.1rem)] text-white">
-              The first thing we build
-              <span className="block text-chill">is the record.</span>
+              It starts with a free
+              <span className="block text-chill">equipment walk.</span>
             </h2>
           </div>
 
@@ -667,25 +677,40 @@ function WhyUsSection() {
         <div className="thermal-rule mt-10 w-full opacity-70" aria-hidden="true" />
 
         {/* ------------------------------------------ statement + artefact */}
-        <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-14">
+        <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start lg:gap-14">
           <div>
             <p className="font-mono text-[0.66rem] font-semibold uppercase tracking-[0.12em] text-orange-light">
-              The equipment walk
+              What is an equipment walk?
             </p>
-            <p className="mt-5 font-display text-[clamp(1.3rem,2.3vw,1.8rem)] font-bold leading-[1.28] text-white">
-              Most buildings have no single list of what is on the roof. The
-              first visit builds one —{" "}
-              <span className="text-chill">every unit tagged, aged and photographed</span>{" "}
-              — and the agreement is written against what is actually there.
-            </p>
-            <p className="mt-5 max-w-xl leading-relaxed text-white/70">
-              The walk is free and the list is yours to keep whether or not
-              you sign anything. It is the document an owner, a board and an
-              insurer all end up asking for.
+            {/* One sentence a person could repeat to their boss. The clever
+                version of this paragraph explained why the list matters
+                before it had said what the visit is. */}
+            <p className="mt-4 font-display text-[clamp(1.2rem,2vw,1.55rem)] font-bold leading-[1.32] text-white">
+              {walk.oneLine}
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-              <ButtonLink href="/contact" variant="primary">
+            <ol className="mt-8 grid gap-5">
+              {walk.steps.map((step, i) => (
+                <li key={step.title} className="flex gap-4">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/10 font-mono text-sm font-semibold text-cyan ring-1 ring-inset ring-white/20">
+                    {i + 1}
+                  </span>
+                  <div className="min-w-0 pt-0.5">
+                    <h3 className="font-display text-base font-extrabold leading-tight text-white">
+                      {step.title}
+                    </h3>
+                    <p className="mt-1 text-sm leading-relaxed text-white/70">
+                      {step.body}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+
+            <WalkTerms className="mt-8 border-t border-white/15 pt-5 text-white/90" />
+
+            <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <ButtonLink href="/contact" variant="primary" size="lg">
                 Book an equipment walk
                 <ArrowRight className="size-4" aria-hidden="true" />
               </ButtonLink>
@@ -699,24 +724,29 @@ function WhyUsSection() {
             </div>
           </div>
 
-          <div className="mx-auto grid w-full max-w-lg gap-4 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:items-stretch lg:mx-0 lg:max-w-none">
-            {/* What "tagged" means, photographed: the label on this unit
-                reads AC UNIT-27. It sits beside the sheet, not over it. */}
-            <figure className="relative overflow-hidden rounded-card ring-1 ring-white/20">
-              <img
-                src="/brand/photo-unit-tagged-640.webp"
-                alt="A rooftop condenser on a stand, labelled AC UNIT-27"
-                width={640}
-                height={853}
-                loading="lazy"
-                className="h-44 w-full object-cover object-[50%_28%] sm:h-full"
-              />
-              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgb(5_15_38/0.92)] to-transparent px-3 pb-2.5 pt-10 font-mono text-[0.62rem] font-semibold uppercase leading-relaxed tracking-[0.1em] text-white/85">
-                Tagged on site
-                <span className="block font-normal text-white/55">AC Unit-27</span>
-              </figcaption>
-            </figure>
-            <AssetSheet />
+          <div>
+            <p className="font-mono text-[0.66rem] font-semibold uppercase tracking-[0.12em] text-white/60">
+              What you get at the end
+            </p>
+            <div className="mx-auto mt-4 grid w-full max-w-lg gap-4 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:items-stretch lg:mx-0 lg:max-w-none lg:grid-cols-1 xl:grid-cols-[9.5rem_minmax(0,1fr)]">
+              {/* What "tagged" means, photographed: the label on this unit
+                  reads AC UNIT-27. It sits beside the sheet, not over it. */}
+              <figure className="relative overflow-hidden rounded-card ring-1 ring-white/20">
+                <img
+                  src="/brand/photo-unit-tagged-640.webp"
+                  alt="A rooftop condenser on a stand, labelled AC UNIT-27"
+                  width={640}
+                  height={853}
+                  loading="lazy"
+                  className="h-44 w-full object-cover object-[50%_28%] sm:h-full lg:h-44 xl:h-full"
+                />
+                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgb(5_15_38/0.92)] to-transparent px-3 pb-2.5 pt-10 font-mono text-[0.62rem] font-semibold uppercase leading-relaxed tracking-[0.1em] text-white/85">
+                  Tagged on site
+                  <span className="block font-normal text-white/55">AC Unit-27</span>
+                </figcaption>
+              </figure>
+              <AssetSheet />
+            </div>
           </div>
         </div>
 

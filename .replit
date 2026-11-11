@@ -45,4 +45,4 @@ externalPort = 3000
 [deployment]
 deploymentTarget = "autoscale"
 build = ["pnpm", "run", "build"]
-run = ["node", "server.mjs"]
+run = ["sh", "-c", "NODE_ENV=production node server.mjs"]

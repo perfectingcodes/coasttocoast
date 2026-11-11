@@ -76,7 +76,7 @@ export default function Financing() {
                 </p>
               </div>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <ButtonLink href="/contact">
+                <ButtonLink href="/contact" popup="quote">
                   Request a quote
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </ButtonLink>
@@ -103,7 +103,7 @@ export default function Financing() {
                 of a maintenance visit.
               </p>
               <div className="mt-7">
-                <ButtonLink href="/contact">Book a visit</ButtonLink>
+                <ButtonLink href="/contact" popup="quote">Book a visit</ButtonLink>
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { useBooking, type BookingIntent } from "@/lib/booking";
 
 type Variant =
   | "primary"
@@ -74,12 +75,35 @@ export function ButtonLink({
   variant,
   size,
   className,
+  popup = "walk",
   children,
-}: CommonProps & { href: string }) {
+}: CommonProps & {
+  href: string;
+  /** A link to /contact opens the form in a pop-up instead of leaving the
+   *  page. `quote` opens the full request form; `false` keeps a plain link. */
+  popup?: BookingIntent | false;
+}) {
+  const booking = useBooking();
+  const [location] = useLocation();
   const cls = cn(buttonClass(variant, size), className);
   if (href.startsWith("/")) {
+    // The href stays real: before hydration, in a new tab, or with scripts
+    // blocked, the button still lands on the contact page and its form.
+    const intercept =
+      href === "/contact" && popup && booking && location !== "/contact";
     return (
-      <Link href={href} className={cls}>
+      <Link
+        href={href}
+        className={cls}
+        onClick={
+          intercept
+            ? (event: React.MouseEvent) => {
+                event.preventDefault();
+                booking.open(popup, typeof children === "string" ? children : undefined);
+              }
+            : undefined
+        }
+      >
         {children}
       </Link>
     );

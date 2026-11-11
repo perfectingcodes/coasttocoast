@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { ArrowRight, LockKeyhole } from "lucide-react";
+import { Seo } from "@/lib/seo";
 
 export default function AdminLogin() {
   const [, setLocation] = useLocation();
@@ -32,6 +33,12 @@ export default function AdminLogin() {
 
   return (
     <main className="grid min-h-screen place-items-center bg-[#eaf1fb] px-5 py-12">
+      <Seo
+        title="Sign in · Coast to Coast Air Admin"
+        description="Sign-in for the Coast to Coast Air team dashboard. This is a private page and is not part of the public website."
+        path="/admin/login"
+        noindex
+      />
       <form onSubmit={submit} className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl ring-1 ring-navy/10">
         <span className="grid size-12 place-items-center rounded-2xl bg-blue/10 text-blue">
           <LockKeyhole aria-hidden="true" />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { business, locations, services } from "@/content/site";
 import { Button } from "@/components/ui/button";
@@ -20,11 +20,21 @@ type State = "idle" | "sending" | "sent" | "error";
 export function QuoteForm({
   defaultService,
   defaultCity,
+  variant = "full",
+  plain = false,
 }: {
   defaultService?: string;
   defaultCity?: string;
+  /** `walk` is the short form the pop-up uses: no service menu, because the
+   *  person has already said what they want by pressing "Book a walk". */
+  variant?: "full" | "walk";
+  /** Drop the card frame when the form already sits inside one. */
+  plain?: boolean;
 }) {
   const [state, setState] = useState<State>("idle");
+  const messageId = useId();
+  const isWalk = variant === "walk";
+  const frame = plain ? "text-navy" : "card p-6 text-navy md:p-8";
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -55,13 +65,10 @@ export function QuoteForm({
     }
     track("quote-submit", data.service);
 
+    // The request is already stored by this point. This used to open the
+    // visitor's own mail app as well, which read as the form having failed.
     if (!endpoint) {
-      const body = Object.entries(data)
-        .map(([k, v]) => `${k}: ${v}`)
-        .join("\n");
-      window.location.href = `mailto:${business.email}?subject=${encodeURIComponent(
-        "Quote request from the website",
-      )}&body=${encodeURIComponent(body)}`;
+      form.reset();
       setState("sent");
       return;
     }
@@ -82,7 +89,10 @@ export function QuoteForm({
 
   if (state === "sent") {
     return (
-      <div className="card p-8 text-center text-navy">
+      <div
+        role="status"
+        className={cn("text-center text-navy", plain ? "py-6" : "card p-8")}
+      >
         <CheckCircle2 className="mx-auto size-10 text-blue" aria-hidden="true" />
         <h3 className="mt-4 text-xl">Request received</h3>
         <p className="mt-2 text-navy/70 leading-relaxed">
@@ -101,12 +111,25 @@ export function QuoteForm({
     // text-navy is explicit, not inherited: this form is dropped onto dark
     // grounds (the paid landing heroes) where inheriting would make every
     // label white on a white card.
-    <form onSubmit={onSubmit} className="card p-6 text-navy md:p-8">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Name" name="name" autoComplete="name" required />
-        <Field label="Phone" name="phone" type="tel" autoComplete="tel" required />
+    <form onSubmit={onSubmit} className={frame}>
+      <div className={cn("grid", isWalk ? "grid-cols-2 gap-x-3 gap-y-3.5" : "gap-4 sm:grid-cols-2")}>
         <Field
-          label="Company or property"
+          label="Name"
+          name="name"
+          autoComplete="name"
+          required
+          className={isWalk ? "col-span-2 sm:col-span-1" : undefined}
+        />
+        <Field
+          label="Phone"
+          name="phone"
+          type="tel"
+          autoComplete="tel"
+          required
+          className={isWalk ? "col-span-2 sm:col-span-1" : undefined}
+        />
+        <Field
+          label={isWalk ? "Company / property" : "Company or property"}
           name="company"
           autoComplete="organization"
           placeholder="Optional"
@@ -115,14 +138,15 @@ export function QuoteForm({
           label="Units on site"
           name="units"
           inputMode="numeric"
-          placeholder="A rough count is fine"
+          placeholder={isWalk ? "Rough count" : "A rough count is fine"}
         />
         <Field
           label="Email"
           name="email"
           type="email"
           autoComplete="email"
-          className="sm:col-span-2"
+          placeholder={isWalk ? "Optional" : undefined}
+          className={isWalk ? undefined : "sm:col-span-2"}
         />
         <Select label="City" name="city" defaultValue={defaultCity}>
           <option value="">Select your city</option>
@@ -133,25 +157,33 @@ export function QuoteForm({
           ))}
           <option value="Other">Somewhere else in Southwest Florida</option>
         </Select>
-        <Select label="What do you need?" name="service" defaultValue={defaultService}>
-          <option value="">Select a service</option>
-          {services.map((s) => (
-            <option key={s.slug} value={s.name}>
-              {s.name}
-            </option>
-          ))}
-          <option value="Not sure">Not sure yet</option>
-        </Select>
-        <div className="sm:col-span-2">
-          <label htmlFor="message" className="text-sm font-semibold">
-            Details
+        {isWalk ? (
+          <input type="hidden" name="service" value="Equipment walk" readOnly />
+        ) : (
+          <Select label="What do you need?" name="service" defaultValue={defaultService}>
+            <option value="">Select a service</option>
+            {services.map((s) => (
+              <option key={s.slug} value={s.name}>
+                {s.name}
+              </option>
+            ))}
+            <option value="Not sure">Not sure yet</option>
+          </Select>
+        )}
+        <div className="col-span-2">
+          <label htmlFor={messageId} className="text-sm font-semibold">
+            {isWalk ? "Anything we should know?" : "Details"}
           </label>
           <textarea
-            id="message"
+            id={messageId}
             name="message"
-            rows={4}
-            placeholder="What equipment, what is it doing, and how soon do you need someone?"
-            className="mt-1.5 w-full rounded-2xl border border-navy/15 bg-white px-4 py-3 text-sm outline-none transition-colors placeholder:text-navy/40 focus:border-blue"
+            rows={isWalk ? 2 : 4}
+            placeholder={
+              isWalk
+                ? "Roof access, the best time to visit, a unit already giving trouble."
+                : "What equipment, what is it doing, and how soon do you need someone?"
+            }
+            className={fieldClass}
           />
         </div>
       </div>
@@ -168,13 +200,13 @@ export function QuoteForm({
       <Button
         type="submit"
         size="lg"
-        className="mt-6 w-full"
+        className={cn("w-full", isWalk ? "mt-5" : "mt-6")}
         disabled={state === "sending"}
       >
         {state === "sending" && (
           <Loader2 className="size-4 animate-spin" aria-hidden="true" />
         )}
-        {state === "sending" ? "Sending…" : "Send request"}
+        {state === "sending" ? "Sending…" : isWalk ? "Book my equipment walk" : "Send request"}
       </Button>
       <p className="mt-3 text-center text-xs text-navy/55">
         No obligation. We never sell your information.
@@ -211,8 +243,10 @@ export function AttributionFields() {
   );
 }
 
+// 16px on phones: iOS zooms the whole page into any field set smaller, and
+// does not zoom back out afterwards.
 const fieldClass =
-  "mt-1.5 w-full rounded-2xl border border-navy/15 bg-white px-4 py-3 text-sm outline-none transition-colors placeholder:text-navy/40 focus:border-blue";
+  "mt-1.5 w-full min-w-0 rounded-[0.7rem] border border-navy/15 bg-white px-3.5 py-3 text-base outline-none transition-colors placeholder:text-navy/40 focus:border-blue focus:ring-2 focus:ring-blue/15 md:text-sm";
 
 function Field({
   label,
@@ -220,12 +254,16 @@ function Field({
   className,
   ...rest
 }: { label: string; name: string; className?: string } & React.ComponentProps<"input">) {
+  // Generated, not the field name: the pop-up can put a second copy of this
+  // form on a page that already has one, and two inputs sharing an id send
+  // a label's tap to the wrong field.
+  const id = useId();
   return (
     <div className={className}>
-      <label htmlFor={name} className="text-sm font-semibold">
+      <label htmlFor={id} className="text-sm font-semibold">
         {label}
       </label>
-      <input id={name} name={name} className={fieldClass} {...rest} />
+      <input id={id} name={name} className={fieldClass} {...rest} />
     </div>
   );
 }
@@ -241,12 +279,13 @@ function Select({
   children: React.ReactNode;
   defaultValue?: string;
 }) {
+  const id = useId();
   return (
     <div>
-      <label htmlFor={name} className="text-sm font-semibold">
+      <label htmlFor={id} className="text-sm font-semibold">
         {label}
       </label>
-      <select id={name} name={name} defaultValue={defaultValue} className={fieldClass}>
+      <select id={id} name={name} defaultValue={defaultValue} className={fieldClass}>
         {children}
       </select>
     </div>
@@ -286,13 +325,10 @@ export function QuickQuote({
     }
     track("quote-submit", service ?? "Quick form");
 
+    // The request is already stored by this point. This used to open the
+    // visitor's own mail app as well, which read as the form having failed.
     if (!endpoint) {
-      const body = Object.entries(data)
-        .map(([k, v]) => `${k}: ${v}`)
-        .join("\n");
-      window.location.href = `mailto:${business.email}?subject=${encodeURIComponent(
-        "Callback request from the website",
-      )}&body=${encodeURIComponent(body)}`;
+      form.reset();
       setState("sent");
       return;
     }

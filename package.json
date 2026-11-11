@@ -12,7 +12,8 @@
     "serve": "NODE_ENV=production node server.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "audit:seo": "node scripts/audit-seo.mjs",
-    "audit:viewport": "node scripts/viewport-audit.mjs"
+    "audit:viewport": "node scripts/viewport-audit.mjs",
+    "audit:load": "node scripts/audit-load.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

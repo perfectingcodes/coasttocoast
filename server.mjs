@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import express from "express";
@@ -224,12 +225,51 @@ app.use((req, res, next) => {
   next();
 });
 
-if (process.env.NODE_ENV === "production") {
+// A published deployment is production whether or not NODE_ENV was set for
+// it. Without this, a deploy that forgets the variable silently serves the
+// site through the Vite dev server: hundreds of unbundled requests per page
+// and no prerendered HTML at all.
+const isProduction =
+  process.env.NODE_ENV === "production" || process.env.REPLIT_DEPLOYMENT === "1";
+
+if (isProduction) {
   const publicDir = path.join(root, "dist/public");
-  app.use(express.static(publicDir, { index: false }));
-app.get("/{*splat}", (req, res) => {
+
+  /**
+   * Serve each route its own prerendered page.
+   *
+   * The build writes a real index.html for every route — /services/cooling,
+   * /locations/naples and so on, each with its own title, canonical, schema
+   * and markup. This used to hand back the HOME page's HTML for every URL
+   * instead, which did two kinds of damage: search engines were told that
+   * every page on the site is the home page, and visitors got the home page
+   * painted first and then swapped for the page they asked for — the source
+   * of images flashing, overlapping and failing to settle.
+   */
+  app.use((req, res, next) => {
+    if (req.method !== "GET" && req.method !== "HEAD") return next();
+    if (req.path.startsWith("/api/") || path.extname(req.path)) return next();
+    const clean = path.posix.normalize(req.path).replace(/\/+$/, "");
+    const file = path.join(publicDir, clean, "index.html");
+    if (!file.startsWith(publicDir) || !fs.existsSync(file)) return next();
+    // Pages are small and change on every deploy; never let a browser hold a
+    // stale one.
+    res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
+    res.sendFile(file);
+  });
+
+  // Fingerprinted bundles can be cached forever; brand images for a week.
+  app.use(
+    "/assets",
+    express.static(path.join(publicDir, "assets"), { immutable: true, maxAge: "1y", index: false }),
+  );
+  app.use(express.static(publicDir, { index: false, redirect: false, maxAge: "7d" }));
+
+  // Anything left is not a page. Say so with a 404 rather than quietly
+  // serving the home page under a URL that does not exist.
+  app.use((req, res) => {
     if (req.path.startsWith("/api/")) return res.status(404).json({ error: "Not found." });
-    res.sendFile(path.join(publicDir, "index.html"));
+    res.status(404).sendFile(path.join(publicDir, "404.html"));
   });
 } else {
   const { createServer } = await import("vite");

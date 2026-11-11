@@ -193,7 +193,7 @@ export function PaymentCalculator({ className }: { className?: string }) {
               labels out of their pills. */}
           <div className="@container mt-6">
             <div className="flex flex-col gap-3 @md:flex-row">
-              <ButtonLink href="/contact" className="w-full @md:flex-1">
+              <ButtonLink href="/contact" popup="quote" className="w-full @md:flex-1">
                 Get a real quote
                 <ArrowRight className="size-4 shrink-0" aria-hidden="true" />
               </ButtonLink>

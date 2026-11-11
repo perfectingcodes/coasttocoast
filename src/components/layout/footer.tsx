@@ -9,7 +9,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="band-ocean relative overflow-hidden text-white/75">
+    <footer className="band-ocean relative overflow-hidden pb-[4.75rem] text-white/75 md:pb-0">
       {/* Commissioned coastal scene, dropped back so type stays legible. */}
       <picture>
         <source media="(min-width: 768px)" srcSet="/brand/footer-scene.webp" />

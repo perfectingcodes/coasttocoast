@@ -4,6 +4,7 @@ import { ScrollToTop } from "@/components/scroll-to-top";
 import { TrafficTracker } from "@/components/traffic-tracker";
 import { Analytics } from "@/components/analytics";
 import { SupportBot } from "@/components/support-bot";
+import { BookingProvider, MobileActionBar } from "@/components/booking-dialog";
 import { HeadProvider, type HeadCollector } from "@/lib/head";
 
 import Home from "@/pages/home";
@@ -112,11 +113,14 @@ export default function App({
     <MotionConfig reducedMotion="user">
       <HeadProvider collector={head}>
         <WouterRouter ssrPath={ssrPath}>
-          <ScrollToTop />
-          <TrafficTracker />
-          <Analytics />
-          <Routes />
-          <SupportLauncher />
+          <BookingProvider>
+            <ScrollToTop />
+            <TrafficTracker />
+            <Analytics />
+            <Routes />
+            <SupportLauncher />
+            <MobileActionBar />
+          </BookingProvider>
         </WouterRouter>
       </HeadProvider>
     </MotionConfig>
