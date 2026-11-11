@@ -36,7 +36,15 @@ export function CtaBand({
         <SunsetScenery />
       </div>
 
-      <div className={cn("shell relative py-14 md:py-16", mascot && "pb-52 sm:pb-60 md:pb-64 xl:pb-72")}>
+      <div
+        className={cn(
+          "shell relative py-14 md:py-16",
+          // Room for the mascot under the copy. Below `lg` the padding is
+          // taller than he is, so he can never reach the phone number; from
+          // `lg` the copy sits either side of him instead.
+          mascot && "pb-56 sm:pb-64 md:pb-72 xl:pb-80",
+        )}
+      >
         <div className="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl">
             <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.12em] text-white/80">
@@ -64,6 +72,13 @@ export function CtaBand({
       </div>
 
       {mascot && <SurfacingMascot />}
+
+      {/* The waterline. A hard orange-to-blue edge read as two pages butted
+          together; one light rule makes it a horizon. */}
+      <div
+        className="absolute inset-x-0 bottom-0 z-10 h-px bg-white/45"
+        aria-hidden="true"
+      />
 
       {/* Water line into the footer — painted in the footer's first stop, so
           the join reads as one body of water rather than as a dark band. */}
@@ -126,12 +141,12 @@ function SurfacingMascot() {
       <img
         src="/brand/mascot-bust.webp"
         srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
-        sizes="(min-width: 1280px) 368px, (min-width: 768px) 320px, 240px"
+        sizes="(min-width: 1280px) 368px, (min-width: 1024px) 320px, (min-width: 768px) 288px, 256px"
         alt=""
         width={800}
         height={849}
         loading="lazy"
-        className="w-60 translate-y-[7%] sm:w-72 md:w-80 xl:w-[23rem]"
+        className="w-52 translate-y-[7%] sm:w-64 md:w-72 lg:w-80 xl:w-[23rem]"
       />
     </div>
   );
