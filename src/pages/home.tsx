@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import {
+  Clock,
   ArrowRight,
   ArrowUpRight,
   CalendarCheck,
@@ -14,6 +15,7 @@ import {
   bestServiceMonths,
   business,
   cleanAndTune,
+  segments,
   countyList,
   generalFaqs,
   googleReviews,
@@ -70,7 +72,7 @@ export default function Home() {
     <div className="flex min-h-dvh flex-col">
       <Seo
         title={`HVAC in Southwest Florida | ${business.name}`}
-        description={`Licensed HVAC across ${business.city}, Naples, Cape Coral and all of Southwest Florida. Repair, replacement, ${cleanAndTune.price} Clean & Tune, 24/7 emergency. Call ${business.phone}.`}
+        description={`Commercial and mechanical HVAC across ${countyList} counties — rooftop units, air handlers, ductwork and service agreements with a written response window. Licensed ${business.license}. Call ${business.phone}.`}
         path="/"
         nodes={[
           faqNode("/", generalFaqs),
@@ -83,9 +85,15 @@ export default function Home() {
         <Hero />
         <TrustStrip />
         <ServicesSection />
+        <SegmentsSection />
+        <WhyUsSection />
+        {/* The $89 offer is the residential acquisition tool and it still
+            converts, but it cannot sit fourth on a page selling mechanical
+            contracts — a facility manager reading it decides we are a
+            residential outfit. Demoted below the proof, and labelled as the
+            residential lane rather than as the headline. */}
         <CleanAndTuneSection />
         <FinancingSection />
-        <WhyUsSection />
         <TestimonialsSection />
         <ServiceMap />
         <FaqSection />
@@ -111,8 +119,8 @@ export default function Home() {
  * not as a list of statistics.
  */
 const HERO_PROOF = [
-  { v: "Same-day", k: "Appointments" },
-  { v: cleanAndTune.price, k: "Clean & Tune" },
+  { v: "24/7", k: "Answered live" },
+  { v: "COI", k: "On request" },
 ] as const;
 
 function Hero() {
@@ -138,36 +146,37 @@ function Hero() {
           {/* The divider only appears once both halves are on one line —
               wrapped, it left a pipe hanging off the end of the first line. */}
           <p className="font-display text-[0.68rem] font-extrabold uppercase tracking-[0.24em] text-white">
-            Southwest Florida HVAC
+            Commercial &amp; Mechanical HVAC
             <span className="mx-3 hidden h-3 w-px align-middle sm:inline-block sm:bg-cyan/70" aria-hidden="true" />
             <span className="block text-orange-light sm:inline">Lic. {business.license}</span>
           </p>
           <div className="thermal-rule mt-5 w-20" aria-hidden="true" />
 
-          {/* The break was after "Comfort", which left a short line over a
-              long one and split the subject from its verb. Long over short
-              rags better, and it drops the accent word onto its own line
-              where it can carry the weight. */}
-          <h1 className="poster mt-5 text-[clamp(2.7rem,5vw,4.2rem)] leading-[0.88] text-white drop-shadow-[0_4px_18px_rgb(3_18_48/0.45)]">
-            Comfort lives
+          {/* A homeowner is buying comfort. A facility manager is buying the
+              absence of a problem, so the headline names what goes wrong
+              rather than what goes right. Long line over short rags better
+              and drops the accent onto its own line. */}
+          <h1 className="poster mt-5 text-[clamp(2.4rem,4.6vw,3.9rem)] leading-[0.9] text-white drop-shadow-[0_4px_18px_rgb(3_18_48/0.45)]">
+            When it goes down,
             <span className="mt-1 block">
-              <span className="text-pop">here</span>
+              <span className="text-pop">business stops</span>
               <span className="text-cyan">.</span>
             </span>
           </h1>
 
           <p className="mt-5 max-w-lg text-[1.05rem] leading-relaxed text-white/90">
-            Home AC repair, replacement and maintenance across {countyList}{" "}
-            counties. A{" "}
+            Mechanical and commercial HVAC across {countyList} counties —
+            rooftop units, air handlers, ductwork and controls. Service
+            agreements with a{" "}
             <span className="font-semibold text-white">
-              flat price in writing before we start
-            </span>{" "}
-            — and a real person answers, day or night.
+              response window written in, not implied
+            </span>
+            , and every unit on your site documented.
           </p>
 
           <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
             <ButtonLink href="/contact" variant="primary" size="lg">
-              Book Service Today
+              Book an equipment walk
               <ArrowRight className="size-4" aria-hidden="true" />
             </ButtonLink>
 
@@ -526,6 +535,85 @@ function ServicesSection() {
  * would tear, with the price struck in gold on navy. A flat panel with a
  * price on it is a price list; this is an offer.
  */
+/**
+ * Who this business is for, now that it leads with mechanical work.
+ *
+ * Six segments rather than one "commercial" claim, because what a restaurant
+ * needs is nothing like what an HOA board needs and a page that addresses
+ * both addresses neither. Each card names the buyer, what is actually broken
+ * for them, and the sales cycle — which is the number that stops anyone
+ * expecting commercial work to close like a same-day repair.
+ */
+function SegmentsSection() {
+  return (
+    <section className="relative isolate overflow-hidden bg-white py-16 md:py-20">
+      <div className="grid-lines-light pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div className="shell relative">
+        <SectionEyebrow index={2}>Who we work with</SectionEyebrow>
+        <h2 className="poster mt-4 max-w-3xl text-[clamp(1.9rem,3.8vw,2.9rem)]">
+          Six kinds of building, six different problems
+          <span className="text-ember">.</span>
+        </h2>
+        <p className="mt-4 max-w-2xl leading-relaxed text-navy/70">
+          Commercial work is not residential work at a larger scale. Each of
+          these buys differently, on a different cycle, for a different
+          reason — so we have said what the cycle actually is rather than
+          implying everything closes this week.
+        </p>
+
+        <ul className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {segments.map((seg, i) => (
+            <li
+              key={seg.slug}
+              className="group relative flex min-w-0 flex-col overflow-hidden rounded-card bg-white p-6 ring-1 ring-navy/10 transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-22px_rgb(7_26_61/0.5)] hover:ring-blue/35"
+            >
+              <span
+                className="absolute inset-x-6 top-0 h-[3px] rounded-b-full bg-gradient-to-r from-cyan to-blue opacity-0 transition-opacity group-hover:opacity-100"
+                aria-hidden="true"
+              />
+              <p className="flex items-baseline gap-3">
+                <span className="font-mono text-[0.7rem] font-bold tabular-nums text-ember">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="font-display text-[1.05rem] font-extrabold leading-tight text-navy">
+                  {seg.name}
+                </span>
+              </p>
+              <p className="mt-1 pl-8 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-blue">
+                {seg.buyer}
+              </p>
+
+              <p className="mt-4 text-[0.9rem] leading-relaxed text-navy/70">
+                {seg.pain}
+              </p>
+              <p className="mt-3 border-t border-navy/10 pt-3 text-[0.9rem] leading-relaxed text-navy/80">
+                {seg.offer}
+              </p>
+
+              <p className="mt-4 flex items-center gap-2 font-mono text-[0.6rem] uppercase tracking-[0.1em] text-navy/40">
+                <Clock className="size-3 shrink-0" aria-hidden="true" />
+                {seg.cycle}
+              </p>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-10 flex flex-wrap items-center gap-4">
+          <ButtonLink href="/contact" size="lg">
+            Book an equipment walk
+            <ArrowRight className="size-4" aria-hidden="true" />
+          </ButtonLink>
+          <p className="max-w-sm text-[0.85rem] leading-relaxed text-navy/55">
+            Every unit listed, aged and photographed, with filter and belt
+            sizes on file. Most buildings do not have this. No charge and no
+            obligation to put us on an agreement.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function CleanAndTuneSection() {
   // Derived, never hard-coded, so the sash cannot drift from the prices shown.
   const savings = (() => {

@@ -25,6 +25,7 @@ import { business, cleanAndTune } from "./site";
 
 export type Variant =
   | "repair"
+  | "agreements"
   | "offer"
   | "plans"
   | "replacement"
@@ -485,15 +486,27 @@ export const landingPages: LandingPage[] = [
     },
   },
   {
-    path: "/lp/commercial-hvac",
-    plan: "meta",
-    adGroups: [],
-    campaign: "Site retargeting",
-    platform: "Meta",
+    path: "/commercial-hvac",
+    plan: "google-ads",
+    adGroups: ["Commercial HVAC", "Rooftop Units"],
+    campaign: "Search — Commercial Service",
+    platform: "Google Ads",
     variant: "commercial",
-    adHeadline: "Commercial HVAC With A Real Response Time",
-    terms: ["commercial hvac near me", "rooftop unit service", "hvac service contract"],
-    requirements: ["Sectors served", "Service agreements", "Response time"],
+    adHeadline: "Commercial HVAC in Naples — Response Time In Writing",
+    terms: [
+      "commercial hvac naples",
+      "rooftop unit repair",
+      "rtu repair",
+      "commercial hvac contractor",
+      "commercial ac repair near me",
+    ],
+    requirements: [
+      "Sectors served",
+      "Service agreements",
+      "Response window in writing",
+      "Free equipment walk as the CTA",
+      "Licence and COI",
+    ],
     title: `Commercial HVAC | ${business.name}`,
     description: `Rooftop units, split systems and service agreements for restaurants, offices, HOAs and senior housing. Licensed ${business.license}. Call ${business.phone}.`,
     eyebrow: "Commercial",
@@ -554,6 +567,90 @@ export const landingPages: LandingPage[] = [
     close: {
       title: "Book an equipment walk",
       body: "Tell us roughly how many units and where. We will come and put an asset list and a real number in front of you.",
+    },
+  },
+  {
+    path: "/service-agreements",
+    plan: "google-ads",
+    adGroups: ["Service Contracts", "Property & HOA"],
+    campaign: "Search — Service Agreements",
+    platform: "Google Ads",
+    variant: "agreements",
+    adHeadline: "HVAC Service Agreements — Response Window In Writing",
+    terms: [
+      "hvac service contract",
+      "commercial hvac maintenance contract",
+      "hvac for property management",
+      "hoa hvac contractor",
+      "multi building hvac service",
+    ],
+    requirements: [
+      "What is in the agreement",
+      "Response window stated",
+      "Multi-building and portfolio",
+      "Free walk before anything is quoted",
+      "Pricing — NOT SET, quoted after the walk",
+    ],
+    title: `HVAC Service Agreements | ${business.name}`,
+    description: `Planned maintenance agreements for commercial property across ${adMarketLine} — visit frequency, scope and response window written in. Licensed ${business.license}.`,
+    eyebrow: "Service agreements",
+    h1: "A response window you can hold us to.",
+    sub: "Most maintenance agreements promise priority and define nothing. Ours names the visit frequency, what each visit covers, and the window we answer a breakdown in — because that is the only part you can actually enforce.",
+    proof: ["Response window in writing", "No overtime charges", "Every unit documented"],
+    lead: "book",
+    steps: [
+      {
+        title: "We walk the equipment first",
+        body: "Every unit listed, aged and photographed, with filter sizes, belt sizes and refrigerant type on file. No charge, and no obligation to sign anything after it.",
+      },
+      {
+        title: "The agreement is written against what is there",
+        body: "Not a template. Visit frequency set by what the equipment and the building actually need, and priced off the asset list rather than off a guess.",
+      },
+      {
+        title: "Planned work in your quiet hours",
+        body: "Scheduled around trading hours, service hours or residents rather than around our van.",
+      },
+    ],
+    reasons: [
+      {
+        title: "A number instead of the word 'priority'",
+        body: "Every contractor says priority service. Ours says a window, in the agreement, and that is the thing you can hold somebody to when the floor is closed.",
+      },
+      {
+        title: "An asset list you keep either way",
+        body: "Most buildings have no record of what equipment is in them. We build one on the first walk, and you keep it whether or not you sign — it is useful to you and it is honest proof we actually looked.",
+      },
+      {
+        title: "No overtime charge",
+        body: "An after-hours call on an agreement is charged at the normal rate. Over a year that is worth more than most of the discount lines on a maintenance contract.",
+      },
+      {
+        title: "Built for several addresses",
+        body: "Portfolios and HOA communities on one agreement, one point of contact, one invoice, and reporting a board or an owner will actually read.",
+      },
+    ],
+    faqs: [
+      {
+        q: "What does an agreement cost?",
+        a: "It is priced off the asset list, because a building with four rooftop units and one with twenty are not the same contract. The walk that produces that list is free, and the number comes after it.",
+      },
+      {
+        q: "What is actually in each visit?",
+        a: "Filters and belts, coil cleaning, electrical and amp draws, refrigerant pressures, control checks, condensate, and a written report per visit. The exact scope is listed in the agreement rather than left to interpretation.",
+      },
+      {
+        q: "What response time do you commit to?",
+        a: "It is written into the agreement and it varies by what the building needs — a restaurant floor and a storage facility are not the same urgency. We will not quote a number before we have seen the site.",
+      },
+      {
+        q: "Can you cover several buildings?",
+        a: "Yes. Multi-building and HOA portfolios are a large part of the commercial work, on one agreement with one contact and one invoice.",
+      },
+    ],
+    close: {
+      title: "Book the equipment walk",
+      body: "Tell us roughly how many units and where. We will come and build the asset list, then quote against it.",
     },
   },
 ];

@@ -146,6 +146,21 @@ export interface Service {
   seoShort?: string;
   /** Drives which layout this service page renders. */
   detail: ServiceDetail;
+  /**
+   * Which lane this service belongs to since the November 2026 repositioning
+   * toward mechanical and commercial work.
+   *
+   * `lead` services are what the business is now selling: mechanical systems
+   * and commercial contracts. They come first everywhere — nav, cards,
+   * sitemap order, schema offer catalogue.
+   *
+   * `support` services are the residential lines. They are deliberately kept
+   * rather than deleted: they are the only organic asset the domain has, the
+   * 54 service-by-city pages built on them are what currently rank, and
+   * residential cash flow is what funds a commercial sales cycle that runs
+   * three to nine months. Demoted, not removed.
+   */
+  tier: "lead" | "support";
   /** Shown as a card on the home page. The rest are linked below the grid. */
   featured?: boolean;
   /** One line under the card title. */
@@ -162,9 +177,10 @@ export interface Service {
   faqs: { q: string; a: string }[];
 }
 
-export const services: Service[] = [
+const servicesRaw: Service[] = [
   {
     slug: "heating",
+    tier: "support",
     featured: true,
     name: "Heating Services",
     short: "Heating",
@@ -217,6 +233,7 @@ export const services: Service[] = [
   },
   {
     slug: "cooling",
+    tier: "support",
     featured: true,
     name: "Cooling Services",
     short: "Cooling",
@@ -266,6 +283,7 @@ export const services: Service[] = [
   },
   {
     slug: "mechanical",
+    tier: "lead",
     name: "Mechanical Services",
     short: "Mechanical",
     menuLine: "Commercial and residential systems",
@@ -321,6 +339,7 @@ export const services: Service[] = [
   },
   {
     slug: "repairs-maintenance",
+    tier: "lead",
     featured: true,
     name: "Repairs & Maintenance",
     short: "Repairs & Maintenance",
@@ -352,6 +371,7 @@ export const services: Service[] = [
   },
   {
     slug: "commercial-hvac",
+    tier: "lead",
     name: "Commercial HVAC",
     short: "Commercial",
     menuLine: "Keeping your doors open",
@@ -423,6 +443,7 @@ export const services: Service[] = [
   },
   {
     slug: "indoor-air-quality",
+    tier: "support",
     featured: true,
     name: "Indoor Air Quality",
     short: "Air Quality",
@@ -550,6 +571,22 @@ export const cleanAndTune = {
     "Inspect system condition and provide recommendations",
   ],
 } as const;
+
+/**
+ * Lead services first, residential after, original order preserved inside
+ * each tier. Everything downstream — the nav, the home cards, the schema
+ * offer catalogue, the order the 54 service-by-city pages are generated in —
+ * reads this, so the repositioning happens once here rather than in a dozen
+ * components.
+ */
+export const services: Service[] = [
+  ...servicesRaw.filter((s) => s.tier === "lead"),
+  ...servicesRaw.filter((s) => s.tier === "support"),
+];
+
+/** The commercial lanes, for anywhere that wants them on their own. */
+export const leadServices = services.filter((s) => s.tier === "lead");
+export const supportServices = services.filter((s) => s.tier === "support");
 
 // ----------------------------------------------------------------- locations
 
@@ -872,24 +909,24 @@ export const countyList = (() => {
 /** `tag` is the same claim as `body`, compressed to a spec-sheet value. */
 export const whyUs = [
   {
-    title: "Certified technicians",
-    tag: "On staff",
-    body: "Licensed mechanical contractors on staff — never subcontracted.",
+    title: "Licensed mechanical contractor",
+    tag: `CMC ${business.license.replace("CMC", "")}`,
+    body: "Mechanical, residential and certified contractor licences, all three published. Certificates of insurance on request, naming you as additional insured.",
   },
   {
-    title: "Flat-rate pricing",
-    tag: "In writing",
-    body: "The price is in writing before work starts, and it does not move.",
+    title: "Response time in writing",
+    tag: "In the agreement",
+    body: "A service agreement names the window we answer in, not a promise of priority. That is the number you can hold us to.",
   },
   {
-    title: "Locally owned",
-    tag: `${business.city} based`,
-    body: "Fort Myers based. We answer our own phones, day and night.",
+    title: "Every unit on file",
+    tag: "Asset list",
+    body: "Make, model, age, refrigerant, filter and belt sizes, photographed. Most buildings do not have this, and it is the first thing we build.",
   },
   {
-    title: "All of Southwest Florida",
+    title: "One contractor, documented",
     tag: `${locations.length} cities`,
-    body: `${countyList} counties — Venice down through Naples.`,
+    body: `Service history your insurer, your board and your landlord all ask for. ${countyList} counties, one point of contact, one invoice.`,
   },
 ] as const;
 
@@ -930,6 +967,65 @@ export const testimonials: {
     city: "Cape Coral, FL",
   },
 ];
+
+/**
+ * Who the business is selling to since the November 2026 repositioning.
+ *
+ * Written as segments rather than industries because what a restaurant needs
+ * is nothing like what an HOA board needs, and a page that says "commercial
+ * HVAC" to both says nothing to either. Each of these buys differently, on a
+ * different cycle, for a different reason.
+ */
+export const segments = [
+  {
+    slug: "property-management",
+    name: "Property management",
+    buyer: "Portfolio or regional manager",
+    pain: "Several buildings, no single record of what equipment is in them, and a different contractor at each.",
+    offer: "One agreement across the portfolio, one asset list, one invoice, and reporting an owner will read.",
+    cycle: "Two to four months. Usually starts with one building as a trial.",
+  },
+  {
+    slug: "hoa",
+    name: "HOA and community associations",
+    buyer: "Board, or the managing agent",
+    pain: "Budget and reserve-study questions nobody can answer because the equipment was never documented.",
+    offer: "Condition reporting across every building, aged and costed, in a format a board can approve against.",
+    cycle: "Three to nine months. Moves at the speed of board meetings.",
+  },
+  {
+    slug: "restaurants-retail",
+    name: "Restaurants and retail",
+    buyer: "Owner or operations manager",
+    pain: "Rooftop units nobody has looked at, make-up air fighting the exhaust, and a failure that closes the floor.",
+    offer: "Scheduled service around trading hours, and an out-of-hours rate agreed in advance rather than invented at 11pm.",
+    cycle: "Days to weeks. The fastest-closing segment, usually off a breakdown.",
+  },
+  {
+    slug: "senior-living",
+    name: "Assisted living and senior housing",
+    buyer: "Facilities director",
+    pain: "A cooling failure is a resident-safety event and a regulatory one, not an inconvenience.",
+    offer: "Named response windows, planned work outside occupied hours, and temporary cooling while parts ship.",
+    cycle: "Three to six months, and heavily reference-driven.",
+  },
+  {
+    slug: "medical-professional",
+    name: "Medical and professional offices",
+    buyer: "Practice manager",
+    pain: "Humidity and filtration are an operating requirement, and the system was specified for an office.",
+    offer: "Humidity held inside a stated band, filtration upgrades, after-hours work.",
+    cycle: "One to three months.",
+  },
+  {
+    slug: "general-contractors",
+    name: "General contractors",
+    buyer: "Project manager or estimator",
+    pain: "A mechanical sub who bids late, shows up late, and cannot produce a permit record.",
+    offer: "Bid-ready mechanical scope, permits pulled, inspections met, and a schedule that holds.",
+    cycle: "Project by project. Relationship compounds across jobs.",
+  },
+] as const;
 
 export const process = [
   {

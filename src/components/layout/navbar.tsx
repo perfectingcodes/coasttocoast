@@ -147,7 +147,7 @@ export function Navbar() {
             </a>
 
             <ButtonLink href="/contact" className="hidden md:inline-flex">
-              Schedule Service
+              Book a walk
               <ArrowRight className="size-4" aria-hidden="true" />
             </ButtonLink>
 
@@ -251,7 +251,7 @@ export function Navbar() {
 
             <div className="mt-4 grid gap-2.5 pb-2">
               <ButtonLink href="/contact" size="lg">
-                Schedule Service
+                Book a walk
                 <ArrowRight className="size-4" aria-hidden="true" />
               </ButtonLink>
               <ButtonLink href={business.phoneHref} variant="ghost" size="lg">

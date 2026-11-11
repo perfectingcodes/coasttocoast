@@ -65,6 +65,7 @@ const ACCENT: Record<
   replacement: { text: "text-blue", rule: "bg-blue", ghost: "text-blue/10", tint: "bg-blue/10 text-blue" },
   storm: { text: "text-ember", rule: "bg-ember", ghost: "text-ember/10", tint: "bg-ember/10 text-ember" },
   commercial: { text: "text-blue", rule: "bg-blue", ghost: "text-blue/10", tint: "bg-blue/10 text-blue" },
+  agreements: { text: "text-cyan", rule: "bg-cyan", ghost: "text-cyan/15", tint: "bg-cyan/18 text-[#0a5b7d]" },
 };
 
 /**
@@ -134,6 +135,15 @@ const PHOTO: Record<
     alt: "Air conditioning equipment serviced by Coast to Coast Air",
     caption: "Rooftop units fail on belts, bearings and controls — not on what a house fails on.",
   },
+  agreements: {
+    src: "/brand/photo-condenser.webp",
+    small: "/brand/photo-condenser-640.webp",
+    w: 1024,
+    h: 688,
+    focus: "45% 50%",
+    alt: "Commercial air conditioning equipment under a service agreement",
+    caption: "Every contractor says priority. An agreement says a window, and that is the part you can enforce.",
+  },
 };
 
 const GROUND: Record<LandingPage["variant"], string> = {
@@ -143,6 +153,7 @@ const GROUND: Record<LandingPage["variant"], string> = {
   replacement: "band-navy",
   storm: "band-abyss",
   commercial: "band-navy",
+  agreements: "band-abyss",
 };
 
 export default function LandingPageView({ path }: { path: string }) {
@@ -190,7 +201,9 @@ export default function LandingPageView({ path }: { path: string }) {
         {page.variant === "plans" && <PlanTiers index={step()} />}
         {page.variant === "replacement" && <FinanceBlock index={step()} />}
         {page.variant === "storm" && <StormCities index={step()} />}
-        {page.variant === "commercial" && <SectorGrid index={step()} />}
+        {(page.variant === "commercial" || page.variant === "agreements") && (
+          <SectorGrid index={step()} />
+        )}
 
         {/* Tab 10 asks for reviews on the repair page. Only quotes we
             actually hold are rendered — see the note in site.ts. */}
@@ -1128,6 +1141,7 @@ function serviceFor(page: LandingPage) {
     case "storm":
       return "Mechanical Services";
     case "commercial":
+    case "agreements":
       return "Commercial HVAC";
   }
 }

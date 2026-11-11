@@ -21,16 +21,16 @@ import { locations } from "./site";
 
 export const seoPremise = {
   position:
-    "A new domain with 77 clean pages, no backlinks and no reviews. That combination ranks for long-tail city and service terms within a quarter, and for head terms like 'ac repair naples' not for a year or more without links and a review base.",
+    "77 pages of residential content on a domain with no backlinks, now selling commercial and mechanical work. Those two facts pull in opposite directions and the plan has to hold both: the residential pages are the only thing that ranks, and none of them speak to a facility manager.",
   consequence:
-    "So the organic plan goes after the long tail deliberately — service-by-city pages where the competition is thin — while paid buys the head terms that organic cannot reach yet. Spending effort on 'ac repair' organically in month one is effort spent losing.",
+    "So nothing gets deleted. The 54 service-by-city pages keep earning while new commercial pages are built beside them — commercial search volume is a small fraction of residential and would not replace that traffic for years. Organic goes after commercial terms because they are genuinely uncontested, not because they are large.",
   leadLever:
-    "Every organic page carries the same two conversion paths as the paid pages: the phone number in the header and a form. The difference is that organic traffic arrives colder, so the page has to answer the question before it asks for anything.",
+    "Commercial organic converts differently. A homeowner calls from a city page; a property manager reads three pages, checks the licence, and fills in a form a week later. So the commercial pages lead with the free equipment walk rather than a phone number — it is the only ask that is reasonable at that stage.",
 };
 
 /* ---------------------------------------------------------- the targets */
 
-export type Intent = "Emergency" | "Offer" | "Research" | "B2B" | "Local pack";
+export type Intent = "Downtime" | "Contract" | "Project" | "Research" | "Local pack";
 export type Tier = "Now" | "Quarter" | "Year";
 
 export interface Target {
@@ -45,88 +45,81 @@ export interface Target {
 
 export const targets: Target[] = [
   {
+    term: "commercial hvac {city}",
+    intent: "Contract",
+    tier: "Quarter",
+    page: "/locations/{city}/commercial-hvac",
+    why: "The core commercial term and far less contested than its residential equivalent. The 9 city × commercial pages already exist — they need depth and links rather than creation.",
+  },
+  {
+    term: "rooftop unit repair {city}",
+    intent: "Downtime",
+    tier: "Now",
+    page: "/commercial-hvac",
+    why: "Almost nobody targets equipment-level terms. A search this specific is a facility person with a problem, and the competition is close to zero.",
+  },
+  {
+    term: "hvac service contract {city}",
+    intent: "Contract",
+    tier: "Quarter",
+    page: "/service-agreements",
+    why: "High intent — they have decided they want an agreement and are choosing who with. New page, so it needs a quarter to age.",
+  },
+  {
+    term: "mechanical contractor {city}",
+    intent: "Project",
+    tier: "Quarter",
+    page: "/services/mechanical",
+    why: "The licence term. CMC1251768 is published on every page, which is a real differentiator against outfits that only say 'HVAC'.",
+  },
+  {
+    term: "hoa hvac contractor {county}",
+    intent: "Contract",
+    tier: "Now",
+    page: "/service-agreements",
+    why: "Genuinely under-served, and the highest-value lane in the account. One HOA portfolio is worth a year of residential work.",
+  },
+  {
+    term: "property management hvac vendor",
+    intent: "Contract",
+    tier: "Now",
+    page: "/service-agreements",
+    why: "Thin competition and an exact-fit buyer. Slow to convert and worth more than anything else when it does.",
+  },
+  {
+    term: "make up air unit repair",
+    intent: "Downtime",
+    tier: "Now",
+    page: "/services/mechanical",
+    why: "Restaurant-specific mechanical. Low volume, no competition, and it signals we are not a residential outfit in disguise.",
+  },
+  {
+    term: "commercial hvac maintenance cost",
+    intent: "Research",
+    tier: "Now",
+    page: "/service-agreements",
+    why: "Question-shaped and nobody answers it honestly. Our answer — it is priced off the asset list — is both true and differentiating.",
+  },
+  {
+    term: "restaurant ac repair {city}",
+    intent: "Downtime",
+    tier: "Now",
+    page: "/commercial-hvac",
+    why: "The fastest-closing commercial segment. A closed floor buys today.",
+  },
+  {
     term: "ac repair {city}",
-    intent: "Emergency",
+    intent: "Downtime",
     tier: "Year",
     page: "/locations/{city}/cooling",
-    why: "The most valuable term in the category and the most contested. Needs links and a review base. Paid owns this one until then.",
+    why: "Residential, retained. Still the largest traffic source the domain has and it funds the commercial wait. Not where new effort goes.",
   },
   {
     term: "hvac company near me",
     intent: "Local pack",
     tier: "Year",
     page: "Google Business Profile",
-    why: "Not a page at all — this is won in the map pack, which is the Business Profile, proximity and review count. Nothing on the website moves it.",
-  },
-  {
-    term: "ac not cooling {city}",
-    intent: "Emergency",
-    tier: "Quarter",
-    page: "/locations/{city}/cooling",
-    why: "Symptom phrasing is longer and thinner on competition than 'ac repair', and it converts as well. The city pages already carry the four common causes.",
-  },
-  {
-    term: "ac tune up {city}",
-    intent: "Offer",
-    tier: "Quarter",
-    page: "/locations/{city}/repairs-maintenance",
-    why: "A published price on the page is a genuine differentiator — most competitors say 'call for a quote'. That wins the click even from position four.",
-  },
-  {
-    term: "ac maintenance plan {city}",
-    intent: "Offer",
-    tier: "Quarter",
-    page: "/maintenance-plans",
-    why: "Recurring revenue, and the search implies somebody already decided they want one. Blocked on plan pricing being published.",
-  },
-  {
-    term: "ac replacement permit {county}",
-    intent: "Research",
-    tier: "Now",
-    page: "/locations/{city}/mechanical",
-    why: "Almost nobody writes this properly. We name the issuing office per city, which is the answer to the question, so it is winnable now.",
-  },
-  {
-    term: "hvac {city} fl",
-    intent: "Research",
-    tier: "Quarter",
-    page: "/locations/{city}",
-    why: "Broad and mid-intent. The city pages are built for exactly this and already rank-ready.",
-  },
-  {
-    term: "ac drain line clogged {city}",
-    intent: "Emergency",
-    tier: "Now",
-    page: "/locations/{city}/cooling",
-    why: "The single most common Florida call, and barely anybody targets it. Thin competition, real intent, cheap job that opens a relationship.",
-  },
-  {
-    term: "how often service ac florida",
-    intent: "Research",
-    tier: "Now",
-    page: "/services/repairs-maintenance",
-    why: "Question-shaped, which is what answer engines quote. Our pages already answer it with a reason specific to this climate.",
-  },
-  {
-    term: "salt air ac corrosion {city}",
-    intent: "Research",
-    tier: "Now",
-    page: "/locations/{city}",
-    why: "Coastal-specific and genuinely under-served. Every city page carries its own salt exposure, which almost no competitor does.",
-  },
-  {
-    term: "commercial hvac {city}",
-    intent: "B2B",
-    tier: "Quarter",
-    page: "/locations/{city}/commercial-hvac",
-    why: "Fewer searches, far higher value, and long sales cycles. Worth holding a page for even at low volume.",
-  },
-  {
-    term: "indoor air quality {city} fl",
-    intent: "Research",
-    tier: "Quarter",
-    page: "/locations/{city}/indoor-air-quality",
-    why: "Humidity and post-storm duct concerns make this more live here than in most markets.",
+    why: "Won in the map pack, not on the site. The profile needs the commercial categories added once it is verified.",
   },
 ];
 
