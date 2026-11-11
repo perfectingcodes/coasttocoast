@@ -96,7 +96,7 @@ export function ServiceHead({
 }) {
   return (
     <div className="mt-12 first:mt-0">
-      <p className="flex items-center gap-3 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-navy/45">
+      <p className="flex items-center gap-3 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-navy/45">
         <span className="tabular-nums text-ember">
           {String(index).padStart(2, "0")}
         </span>
@@ -129,7 +129,7 @@ function LifespanScale({ from, to, max = 20 }: { from: number; to: number; max?:
 
   return (
     <figure className="band-navy grain edge-lit relative overflow-hidden rounded-card p-7 text-white md:p-9">
-      <figcaption className="font-display text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+      <figcaption className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-cyan">
         The life of a system here
       </figcaption>
       <p className="poster mt-3 text-[clamp(1.6rem,3vw,2.2rem)]">
@@ -219,7 +219,7 @@ export function LifespanBody({ service, answer }: BodyProps) {
           <aside className="card overflow-hidden lg:sticky lg:top-28">
             <div className="thermal-rule h-[3px] rounded-none" aria-hidden="true" />
             <div className="px-6 pb-2 pt-6">
-              <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-ember">
+              <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-ember">
                 Check for these
               </p>
               <h2 className="poster mt-2.5 text-xl">{d.signsHeading}</h2>
@@ -352,7 +352,7 @@ export function OfferBody({ service, answer }: BodyProps) {
       <section className="shell py-14 md:py-18">
         <div className="card overflow-hidden lg:grid lg:grid-cols-[0.8fr_1.2fr]">
           <div className="band-navy flex flex-col justify-center p-8 text-white md:p-10">
-            <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.22em] text-cyan">
+            <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.12em] text-cyan">
               Published price
             </p>
             <p className="mt-4 flex items-baseline gap-2">
@@ -682,7 +682,7 @@ export function ServiceHeroAside({ service }: { service: Service }) {
   if (d.kind === "lifespan") {
     return (
       <div className={panel}>
-        <p className="font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
+        <p className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
           Cooling in this climate
         </p>
         {/* One column below 360px — two 78px cells cannot hold a word like
@@ -714,7 +714,7 @@ export function ServiceHeroAside({ service }: { service: Service }) {
   if (d.kind === "credential") {
     return (
       <div className={panel}>
-        <p className="flex items-center gap-2 font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
+        <p className="flex items-center gap-2 font-mono text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
           <ShieldCheck className="size-3.5" aria-hidden="true" />
           Florida licensed &amp; insured
         </p>
@@ -739,7 +739,7 @@ export function ServiceHeroAside({ service }: { service: Service }) {
   if (d.kind === "offer") {
     return (
       <div className="rounded-card border border-gold/30 bg-white/10 p-7 text-center backdrop-blur-sm">
-        <p className="font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-gold">
+        <p className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.2em] text-gold">
           Published price
         </p>
         <p className="display mt-3 text-6xl text-white">{cleanAndTune.price}</p>
@@ -756,7 +756,7 @@ export function ServiceHeroAside({ service }: { service: Service }) {
   if (d.kind === "segments") {
     return (
       <div className={panel}>
-        <p className="font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
+        <p className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
           Property types we cover
         </p>
         <ul className="mt-5 flex flex-wrap gap-2">
@@ -780,7 +780,7 @@ export function ServiceHeroAside({ service }: { service: Service }) {
   if (d.kind === "symptoms") {
     return (
       <div className={panel}>
-        <p className="font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
+        <p className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
           Target indoor humidity
         </p>
         <p className="display mt-3 text-5xl text-white">45–55%</p>
@@ -797,7 +797,7 @@ export function ServiceHeroAside({ service }: { service: Service }) {
   if (d.kind === "seasonal") {
     return (
       <div className={panel}>
-        <p className="font-display text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-gold">
+        <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-gold">
           Checked on every maintenance visit
         </p>
         <AsideRows items={d.items.map((it) => it.title)} tone="text-gold" />

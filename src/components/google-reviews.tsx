@@ -115,13 +115,13 @@ export function GoogleSeal({ className }: { className?: string }) {
             <span className="poster block text-[1.15rem] leading-none text-white">
               {googleReviews.rating!.toFixed(1)}
             </span>
-            <span className="mt-1 block font-display text-[0.55rem] font-extrabold uppercase tracking-[0.16em] text-cyan-light">
+            <span className="mt-1 block font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-cyan-light">
               {googleReviews.count} Google reviews
             </span>
           </>
         ) : (
           <>
-            <span className="block font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/70">
+            <span className="block font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/70">
               Reviews on
             </span>
             <span className="block font-display text-sm font-extrabold uppercase tracking-[0.06em] text-white">

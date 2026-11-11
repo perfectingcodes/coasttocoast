@@ -40,7 +40,7 @@ export function FaqList({
         <div key={g.name ?? gi} className={cn(gi > 0 && "mt-12")}>
           {g.name && (
             <div className="mb-4 flex items-center gap-4">
-              <p className="font-display text-[0.66rem] font-extrabold uppercase tracking-[0.22em] text-navy">
+              <p className="font-mono text-[0.66rem] font-semibold uppercase tracking-[0.12em] text-navy">
                 {g.name}
               </p>
               <span

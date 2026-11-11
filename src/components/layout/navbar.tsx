@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import {
   business,
-  cleanAndTune,
   countyList,
   locations,
   nav,
@@ -71,7 +70,7 @@ export function Navbar() {
           <div className="flex flex-1 items-center justify-end gap-4">
             <span className="inline-flex items-center gap-2">
               <Clock className="size-3.5 text-orange" aria-hidden="true" />
-              <span className="font-display text-[0.7rem] font-bold uppercase tracking-[0.16em] text-orange">
+              <span className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.12em] text-orange">
                 24/7 Emergency Service
               </span>
             </span>
@@ -137,7 +136,7 @@ export function Navbar() {
             >
               <Phone className="size-3.5 shrink-0 text-orange" aria-hidden="true" />
               <span>
-                <span className="block font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-navy/45">
+                <span className="block font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/45">
                   24/7 · Call now
                 </span>
                 <span className="block font-display text-sm font-extrabold text-navy">
@@ -232,18 +231,18 @@ export function Navbar() {
               ))}
             </ul>
 
-            {/* The live offer, carried over from the desktop panel. */}
+            {/* The offer, carried over from the desktop panel. */}
             <Link
-              href="/services/repairs-maintenance"
+              href="/contact"
               className="band-navy grain mt-5 flex items-center gap-4 overflow-hidden rounded-card p-4 text-white"
             >
-              <span className="poster shrink-0 text-3xl">{cleanAndTune.price}</span>
+              <span className="display shrink-0 text-2xl">Free</span>
               <span className="min-w-0 flex-1">
-                <span className="block font-display text-[0.55rem] font-extrabold uppercase tracking-[0.2em] text-gold">
-                  Limited-time offer
+                <span className="block font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-gold">
+                  For commercial property
                 </span>
-                <span className="mt-0.5 block font-display text-sm font-extrabold">
-                  {cleanAndTune.name}
+                <span className="mt-0.5 block font-display text-sm font-bold">
+                  Equipment walk &amp; asset list
                 </span>
               </span>
               <ArrowRight className="size-4 shrink-0 text-cyan" aria-hidden="true" />
@@ -358,42 +357,33 @@ function ServicesMenu({ active }: { active: boolean }) {
 
             {/* Featured offer */}
             <Link
-              href="/services/repairs-maintenance"
+              href="/contact"
               className="band-navy grain group/offer relative flex flex-col justify-center overflow-hidden p-6 text-white"
             >
-              <span className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.2em] text-gold">
-                Limited-time offer
+              <span className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-gold">
+                For commercial property
               </span>
-              <span className="poster mt-2 text-4xl text-white">
-                {cleanAndTune.price}
+              <span className="display mt-2 text-3xl text-white">
+                Free walk
               </span>
-              <span className="mt-1 font-display text-sm font-extrabold text-white">
-                {cleanAndTune.name}
+              <span className="mt-1 font-display text-sm font-bold text-white">
+                Equipment walk &amp; asset list
               </span>
               <span className="mt-2 text-xs leading-relaxed text-white/60">
-                A 10-point service, twice a year.
+                Every unit tagged, aged and photographed. Yours to keep.
               </span>
-              <span className="mt-4 inline-flex items-center gap-1.5 font-display text-[0.65rem] font-extrabold uppercase tracking-[0.14em] text-cyan">
-                Book a visit
+              <span className="mt-4 inline-flex items-center gap-1.5 font-mono text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-cyan">
+                Book a walk
                 <ArrowRight
                   className="size-3.5 transition-transform group-hover/offer:translate-x-0.5"
                   aria-hidden="true"
                 />
               </span>
-              <img
-                src="/brand/mascot-service.webp"
-                srcSet="/brand/mascot-service-sm.webp 450w, /brand/mascot-service.webp 900w"
-                sizes="120px"
-                alt=""
-                width={900}
-                height={904}
-                className="pointer-events-none absolute -bottom-3 -right-4 w-28 opacity-90"
-              />
             </Link>
           </div>
 
           <div className="flex items-center justify-between border-t border-navy/8 bg-foam px-5 py-3">
-            <span className="font-display text-[0.62rem] font-extrabold uppercase tracking-[0.16em] text-navy/45">
+            <span className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/45">
               Serving {locations.length} cities · {countyList}
             </span>
             <Link href="/services" className="link-arrow">

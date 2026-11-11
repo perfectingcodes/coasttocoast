@@ -216,7 +216,7 @@ export function AdminShell({
           >
             {NAV.map((group, gi) => (
               <div key={group.group} className={cn(gi > 0 && "mt-6")}>
-                <p className="px-3 pb-2 font-display text-[0.56rem] font-extrabold uppercase tracking-[0.2em] text-white/35">
+                <p className="px-3 pb-2 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-white/35">
                   {group.group}
                 </p>
                 <ul className="space-y-0.5">
@@ -338,7 +338,7 @@ export function AdminShell({
 
             <div className="mt-6 flex flex-wrap items-end justify-between gap-x-10 gap-y-5">
               <div className="min-w-0">
-                <p className="flex items-center gap-2.5 font-display text-[0.58rem] font-extrabold uppercase tracking-[0.2em] text-blue">
+                <p className="flex items-center gap-2.5 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-blue">
                   {section}
                   <span
                     className="thermal-rule inline-block h-[2px] w-9"

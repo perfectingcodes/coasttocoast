@@ -3,7 +3,6 @@ import { Link } from "wouter";
 import { ArrowUpRight, Phone, Search, X } from "lucide-react";
 import {
   business,
-  cleanAndTune,
   generalFaqs,
   locations,
   services,
@@ -246,8 +245,7 @@ export function SupportBot() {
 
             <p className="mt-3 text-[0.65rem] leading-relaxed text-navy/40">
               Searches our published answers — it never invents one. For
-              anything specific to your system, call {business.phone}. The{" "}
-              {cleanAndTune.name} is {cleanAndTune.price}.
+              anything specific to your building, call {business.phone}.
             </p>
           </div>
         </div>

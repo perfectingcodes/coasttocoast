@@ -34,14 +34,29 @@
   --color-mist: #e3edf9;
   --color-slateish: #5b7394;
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+  /* ------------------------------------------------------------ typography
+     One family, and width is the hierarchy.
+
+     Mona Sans is a variable grotesque with a width axis, so the same
+     letterforms carry body copy at normal width and headlines at expanded
+     width. Expanded sans is what equipment nameplates and data plates are set
+     in, which is the reference: a mechanical contractor's headlines should
+     look like they were stamped on the unit, not shouted from a flyer.
+
+     The technical layer — licence numbers, coordinates, spec rows, anything
+     that is data rather than prose — is IBM Plex Mono. Before this the mono
+     was whatever the visitor's OS shipped, which meant the "engineering
+     drawing" detail looked different on every machine.
+
+     The previous system was Archivo 900 in capitals over Inter. It was bold,
+     and on a site selling to property managers and contractors it was also
+     loud. Same vibe, lower volume. */
+  --font-sans: "Mona Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     sans-serif;
-  /* One family carries the whole brand voice. Archivo is a heavy neo-grotesque
-     with genuine presence at 900 — it reads as a considered corporate face
-     rather than as a poster font, which is the difference between looking
-     bold and looking loud. Inter handles body copy. */
-  --font-poster: "Archivo", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-poster: "Mona Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Mona Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas,
+    monospace;
 
   --radius-card: 1.25rem;
   --radius-xl: 1.75rem;
@@ -65,6 +80,9 @@
     background: white;
     color: var(--color-navy);
     font-family: var(--font-sans);
+    /* A touch over regular. Mona Sans at 400 runs light, and most of the
+       body copy on this site sits reversed out of a blue ground. */
+    font-weight: 430;
     -webkit-font-smoothing: antialiased;
     text-wrap: pretty;
   }
@@ -74,8 +92,9 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    font-weight: 750;
+    font-stretch: 108%;
+    letter-spacing: -0.022em;
     text-wrap: balance;
   }
 
@@ -403,10 +422,10 @@
     display: inline-flex;
     align-items: center;
     gap: 0.625rem;
-    font-family: var(--font-display);
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.2em;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--color-blue);
   }
@@ -432,15 +451,17 @@
     opacity: 0.55;
   }
 
-  /* The site's loudest voice. Deliberately oversized and tightly leaded, so
-     a headline reads as a graphic object rather than as a sentence. */
+  /* The headline voice. Expanded width, heavy but not black, and in sentence
+     case — capitals are kept for the small technical labels, where they read
+     as a stamp rather than as shouting. The nameplate on a rooftop unit is the
+     model: wide, plain, and confident enough not to raise its voice. */
   .poster {
     font-family: var(--font-poster);
-    font-weight: 900;
-    letter-spacing: -0.038em;
-    line-height: 0.88;
-    text-transform: uppercase;
-    font-feature-settings: "ss01";
+    font-weight: 800;
+    font-stretch: 118%;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    text-wrap: balance;
   }
 
   /* Outlined variant — used for the word that is *not* the emphasis, so the
@@ -458,7 +479,8 @@
   .display {
     font-family: var(--font-display);
     font-weight: 800;
-    letter-spacing: -0.025em;
+    font-stretch: 112%;
+    letter-spacing: -0.03em;
     line-height: 0.95;
   }
 
@@ -466,19 +488,18 @@
      handwriting font undercuts everything else on the page. */
   .brandline {
     font-family: var(--font-display);
-    font-weight: 900;
-    font-style: italic;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-    line-height: 1;
+    font-weight: 800;
+    font-stretch: 118%;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
   }
 
   /* Accent fills for the key phrase in a headline. */
+  /* Accent word on a dark ground. Flat, like the orange one: gradient-clipped
+     type only paints inside the line box, and with headlines now in sentence
+     case that shaved the bottom off every g, p and y. */
   .text-chill {
-    background: linear-gradient(180deg, #8eeaff 0%, #2bd9ff 52%, #1668e3 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: #6fe6ff;
   }
   /* Key word on the blue ground. Flat, saturated orange — the same family as
      the buttons, so the word and the action read as one accent. No keyline
@@ -499,10 +520,7 @@
   }
 
   .text-ember {
-    background: linear-gradient(180deg, #ffb020 0%, #ff6a13 55%, #ff4d00 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: #ff5a0a;
   }
 
   /* Hand-drawn underline under a key phrase. */

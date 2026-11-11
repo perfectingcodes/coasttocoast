@@ -42,7 +42,7 @@ function SectionHead({
 }) {
   return (
     <div className="mt-14 first:mt-0">
-      <p className="flex items-center gap-3 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-navy/45">
+      <p className="flex items-center gap-3 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-navy/45">
         <span className="tabular-nums text-ember">
           {String(index).padStart(2, "0")}
         </span>
@@ -165,7 +165,7 @@ export default function CityServicePage({
           {/* ------------------------------------------------------- rail */}
           <aside className="min-w-0 lg:sticky lg:top-28">
             <div className="band-navy grain edge-lit relative overflow-hidden rounded-card p-6 text-white">
-              <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+              <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-cyan">
                 Book it
               </p>
               <p className="poster mt-3 text-2xl">
@@ -202,7 +202,7 @@ export default function CityServicePage({
               />
             </div>
 
-            <p className="mt-8 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-navy/45">
+            <p className="mt-8 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-navy/45">
               Other services in {loc.city}
             </p>
             <ul className="mt-3 grid gap-1.5">

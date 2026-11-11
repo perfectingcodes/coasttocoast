@@ -112,7 +112,7 @@ export default function ServicePage({ slug }: { slug: string }) {
         {showProcess && (
           <section className="band-navy py-14 text-white md:py-18">
             <div className="shell">
-              <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.24em] text-cyan">
+              <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.12em] text-cyan">
                 How it works
               </p>
               <h2 className="mt-3 text-2xl text-white md:text-3xl">

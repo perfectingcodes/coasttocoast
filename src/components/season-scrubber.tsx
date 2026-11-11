@@ -52,7 +52,7 @@ export function SeasonScrubber({ className }: { className?: string }) {
       <div className="flex items-center justify-between gap-3">
         <span className="flex min-w-0 items-center gap-2">
           <Thermometer className="size-3 shrink-0 text-cyan" aria-hidden="true" />
-          <span className="truncate font-display text-[0.5rem] font-extrabold uppercase tracking-[0.13em] text-white/58">
+          <span className="truncate font-mono text-[0.62rem] font-semibold uppercase tracking-[0.13em] text-white/58">
             Right now · {business.city}
           </span>
         </span>
@@ -71,7 +71,7 @@ export function SeasonScrubber({ className }: { className?: string }) {
           </span>
           <span
             className={cn(
-              "font-display text-[0.56rem] font-extrabold uppercase tracking-[0.08em]",
+              "font-mono text-[0.62rem] font-semibold uppercase tracking-[0.08em]",
               LOAD_TONE[s.load],
             )}
           >
@@ -80,14 +80,14 @@ export function SeasonScrubber({ className }: { className?: string }) {
         </span>
 
         {isToday ? (
-          <span className="shrink-0 rounded-full bg-cyan/15 px-1.5 py-px font-display text-[0.46rem] font-extrabold uppercase tracking-[0.12em] text-cyan ring-1 ring-cyan/30">
+          <span className="shrink-0 rounded-full bg-cyan/15 px-1.5 py-px font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-cyan ring-1 ring-cyan/30">
             Today
           </span>
         ) : (
           <button
             type="button"
             onClick={() => setMonth(today)}
-            className="flex shrink-0 items-center gap-1 rounded-full px-1.5 py-px font-display text-[0.46rem] font-extrabold uppercase tracking-[0.12em] text-white/60 ring-1 ring-white/20 transition-colors hover:text-white hover:ring-white/40"
+            className="flex shrink-0 items-center gap-1 rounded-full px-1.5 py-px font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/60 ring-1 ring-white/20 transition-colors hover:text-white hover:ring-white/40"
           >
             <RotateCcw className="size-2" aria-hidden="true" />
             Today
@@ -146,7 +146,7 @@ export function SeasonScrubber({ className }: { className?: string }) {
           <span
             key={m}
             className={cn(
-              "flex-1 text-center font-display text-[0.44rem] font-extrabold uppercase transition-colors",
+              "flex-1 text-center font-mono text-[0.62rem] font-semibold uppercase transition-colors",
               i === month ? "text-white" : "text-white/30",
             )}
           >

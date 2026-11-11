@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { ArrowRight, MapPin, Phone } from "lucide-react";
-import { business, cleanAndTune, locationBySlug, locations, services } from "@/content/site";
+import { business, locationBySlug, locations, services } from "@/content/site";
 import { cityAnswer, cityFacts, cityFaqs, saltNote } from "@/content/local";
 import { SiteLayout } from "@/components/layout/site-layout";
 import { AnswerBlock, FactTable } from "@/components/answer";
@@ -75,7 +75,7 @@ export default function LocationPage({ slug }: { slug: string }) {
     <>
       <Seo
         title={`HVAC in ${loc.city}, FL | ${business.name}`}
-        description={`HVAC in ${loc.city}, ${business.state} — repair, replacement and 24/7 emergency service across ${loc.county}. ${cleanAndTune.price} Clean & Tune. Call ${business.phone}.`}
+        description={`Commercial and mechanical HVAC in ${loc.city}, ${business.state} — rooftop units, service agreements and 24/7 response across ${loc.county}. Licensed ${business.license}. Call ${business.phone}.`}
         path={path}
         geo={{ lat: loc.lat, lng: loc.lng, city: loc.city, county: loc.county }}
         nodes={[
@@ -101,7 +101,7 @@ export default function LocationPage({ slug }: { slug: string }) {
         aside={
           <div className="relative overflow-hidden rounded-card border border-white/20 bg-[linear-gradient(165deg,rgb(4_30_52/0.5),rgb(4_22_44/0.38))] p-6 pt-7 shadow-[0_24px_50px_-24px_rgb(3_14_34/0.9)] backdrop-blur-md">
             <div className="thermal-rule absolute inset-x-0 top-0 h-[3px] rounded-none" aria-hidden="true" />
-            <p className="font-display text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+            <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-cyan">
               {loc.city} at a glance
             </p>
             <dl className="mt-5">
@@ -115,7 +115,7 @@ export default function LocationPage({ slug }: { slug: string }) {
                   key={k}
                   className="flex flex-col gap-0.5 border-t border-white/12 py-2.5 first:border-t-0 first:pt-0 sm:flex-row sm:items-baseline sm:gap-4"
                 >
-                  <dt className="font-display text-[0.55rem] font-extrabold uppercase tracking-[0.16em] text-white/50 sm:w-[7.5rem] sm:shrink-0">
+                  <dt className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/50 sm:w-[7.5rem] sm:shrink-0">
                     {k}
                   </dt>
                   <dd className="font-mono text-[0.78rem] leading-relaxed text-white/85">
@@ -132,7 +132,7 @@ export default function LocationPage({ slug }: { slug: string }) {
               <Phone className="size-4" aria-hidden="true" />
               {business.phone}
             </ButtonLink>
-            <ButtonLink href="#quote">Book a {cleanAndTune.price} Clean &amp; Tune</ButtonLink>
+            <ButtonLink href="#quote">Book an equipment walk</ButtonLink>
           </div>
         }
       >

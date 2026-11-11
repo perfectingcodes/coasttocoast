@@ -168,10 +168,10 @@ export function ServiceMap() {
     <section className="band-navy grain relative overflow-hidden py-14 md:py-16">
       <div className="shell relative">
         <div className="max-w-2xl">
-          <SectionEyebrow index={5} className="text-cyan">Where we work</SectionEyebrow>
+          <SectionEyebrow index={6} className="text-cyan">Where we work</SectionEyebrow>
           <h2 className="poster mt-4 text-[clamp(1.9rem,4.2vw,2.9rem)] text-white">
             We work
-            <span className="block text-chill">where you live.</span>
+            <span className="block text-chill">where your buildings are.</span>
           </h2>
           <p className="mt-4 leading-relaxed text-white/75 md:text-lg">
             Fort Myers based, {locations.length} towns on the route. Same crew,
@@ -495,13 +495,13 @@ export function ServiceMap() {
               ].map((k) => (
                 <li
                   key={k.label}
-                  className="flex items-center gap-2 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/58"
+                  className="flex items-center gap-2 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/58"
                 >
                   <span className={cn("size-2.5 rounded-full", k.c)} aria-hidden="true" />
                   {k.label}
                 </li>
               ))}
-              <li className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/48">
+              <li className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/48">
                 Tap a pin
               </li>
             </ul>
@@ -546,7 +546,7 @@ export function ServiceMap() {
                   ["Neighborhoods", active.neighborhoods.slice(0, 3).join(", ")],
                 ].map(([k, v]) => (
                   <div key={k}>
-                    <dt className="font-display text-[0.55rem] font-extrabold uppercase tracking-[0.16em] text-white/58 sm:text-[0.6rem]">
+                    <dt className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/58 sm:text-[0.6rem]">
                       {k}
                     </dt>
                     <dd className="mt-1 text-[0.8rem] leading-snug text-white/85 sm:text-sm">{v}</dd>
@@ -569,7 +569,7 @@ export function ServiceMap() {
             {/* Real links, not buttons: hovering previews the city on the map,
                 clicking goes to its page — so every city stays crawlable from
                 the home page and reachable without a pointer. */}
-            <p className="mt-6 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-white/55">
+            <p className="mt-6 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-white/55">
               Every city we cover
             </p>
             <ul className="mt-3 flex flex-wrap gap-2">

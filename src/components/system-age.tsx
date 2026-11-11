@@ -28,18 +28,18 @@ function verdictFor(years: number): Verdict {
     return {
       tone: "text-cyan",
       label: "Maintenance years",
-      body: "Service it twice a year",
+      body: "Keep it on a schedule",
     };
   if (years <= LIFE_TO)
     return {
       tone: "text-gold",
-      label: "Watch years",
-      body: "Know its condition now",
+      label: "Budget years",
+      body: "Document its condition",
     };
   return {
     tone: "text-orange-light",
     label: "Past the usual range",
-    body: "Get a second opinion",
+    body: "Plan the replacement",
   };
 }
 
@@ -61,8 +61,8 @@ export function SystemAgeCard({ className }: { className?: string }) {
     >
       <span className="flex items-center gap-2">
         <Gauge className="size-3 shrink-0 text-cyan" aria-hidden="true" />
-        <span className="truncate font-display text-[0.5rem] font-extrabold uppercase tracking-[0.13em] text-white/58">
-          How old is your system?
+        <span className="truncate font-mono text-[0.62rem] font-semibold uppercase tracking-[0.13em] text-white/58">
+          How old is the equipment?
         </span>
       </span>
 
@@ -94,7 +94,7 @@ export function SystemAgeCard({ className }: { className?: string }) {
         </div>
 
         <label htmlFor={id} className="sr-only">
-          System age in years
+          Equipment age in years
         </label>
         <input
           id={id}

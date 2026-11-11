@@ -32,6 +32,21 @@ export function QuoteForm({
     const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
     setState("sending");
 
+    // The two commercial fields ride inside the message rather than as new
+    // keys, so the lead record the CRM and the server already store keeps
+    // its shape. A property name and a unit count are the first two things
+    // anyone calling back wants to know.
+    const { company, units, ...rest } = data;
+    const context = [
+      company && `Company / property: ${company}`,
+      units && `Units on site: ${units}`,
+    ].filter(Boolean);
+    if (context.length) {
+      rest.message = [...context, rest.message].filter(Boolean).join("\n");
+    }
+    Object.keys(data).forEach((k) => delete data[k]);
+    Object.assign(data, rest);
+
     const lead = captureLead(data);
     const saved = await persistLead(lead);
     if (!saved) {
@@ -91,6 +106,18 @@ export function QuoteForm({
         <Field label="Name" name="name" autoComplete="name" required />
         <Field label="Phone" name="phone" type="tel" autoComplete="tel" required />
         <Field
+          label="Company or property"
+          name="company"
+          autoComplete="organization"
+          placeholder="Optional"
+        />
+        <Field
+          label="Units on site"
+          name="units"
+          inputMode="numeric"
+          placeholder="A rough count is fine"
+        />
+        <Field
           label="Email"
           name="email"
           type="email"
@@ -123,7 +150,7 @@ export function QuoteForm({
             id="message"
             name="message"
             rows={4}
-            placeholder="What is the system doing? When did it start?"
+            placeholder="What equipment, what is it doing, and how soon do you need someone?"
             className="mt-1.5 w-full rounded-2xl border border-navy/15 bg-white px-4 py-3 text-sm outline-none transition-colors placeholder:text-navy/40 focus:border-blue"
           />
         </div>
@@ -147,7 +174,7 @@ export function QuoteForm({
         {state === "sending" && (
           <Loader2 className="size-4 animate-spin" aria-hidden="true" />
         )}
-        {state === "sending" ? "Sending…" : "Request my quote"}
+        {state === "sending" ? "Sending…" : "Send request"}
       </Button>
       <p className="mt-3 text-center text-xs text-navy/55">
         No obligation. We never sell your information.

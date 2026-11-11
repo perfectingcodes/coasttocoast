@@ -167,7 +167,7 @@ export default function AdminHome() {
           action={
             <Link
               href="/admin/analytics"
-              className="shrink-0 font-display text-[0.7rem] font-bold uppercase tracking-[0.1em] text-blue hover:underline"
+              className="shrink-0 font-mono text-[0.7rem] font-bold uppercase tracking-[0.1em] text-blue hover:underline"
             >
               Open
             </Link>
@@ -219,7 +219,7 @@ export default function AdminHome() {
           action={
             <Link
               href="/admin/social"
-              className="shrink-0 font-display text-[0.7rem] font-bold uppercase tracking-[0.1em] text-blue hover:underline"
+              className="shrink-0 font-mono text-[0.7rem] font-bold uppercase tracking-[0.1em] text-blue hover:underline"
             >
               Open
             </Link>
@@ -298,7 +298,7 @@ export default function AdminHome() {
           action={
             <Link
               href="/admin/leads"
-              className="shrink-0 font-display text-[0.7rem] font-bold uppercase tracking-[0.1em] text-blue hover:underline"
+              className="shrink-0 font-mono text-[0.7rem] font-bold uppercase tracking-[0.1em] text-blue hover:underline"
             >
               Open
             </Link>
@@ -314,7 +314,7 @@ export default function AdminHome() {
               const I = Icon as typeof Users;
               return (
                 <div key={label as string} className="min-w-0">
-                  <p className="flex items-center gap-1.5 font-display text-[0.56rem] font-extrabold uppercase tracking-[0.16em] text-navy/35">
+                  <p className="flex items-center gap-1.5 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/35">
                     <I className="size-3" aria-hidden="true" />
                     {label as string}
                   </p>

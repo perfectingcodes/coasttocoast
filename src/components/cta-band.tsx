@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils";
  * sun on the horizon, palms at the edges, one action and one phone number.
  */
 export function CtaBand({
-  eyebrow = "Ready for a more comfortable tomorrow?",
-  title = "Let's Get Your Comfort Back on Track.",
-  cta = "Schedule Service",
+  eyebrow = "Ready when you are",
+  title = "Let's get your building on a schedule.",
+  cta = "Book an equipment walk",
   href = "/contact",
   mascot = false,
 }: {
@@ -39,7 +39,7 @@ export function CtaBand({
       <div className={cn("shell relative py-14 md:py-16", mascot && "pb-52 sm:pb-60 md:pb-64 xl:pb-72")}>
         <div className="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl">
-            <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.22em] text-white/80">
+            <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.12em] text-white/80">
               {eyebrow}
             </p>
             <h2 className="poster mt-4 text-[clamp(2.1rem,5.2vw,3.75rem)] text-white drop-shadow-[0_3px_14px_rgb(120_40_0/0.4)]">

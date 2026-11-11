@@ -74,7 +74,7 @@ export default function ServicesIndex() {
                           <Icon name={s.icon} className="size-8 md:size-9" />
                         </span>
                         <div>
-                          <p className="font-display text-[0.68rem] font-bold uppercase tracking-[0.2em] text-blue">
+                          <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.2em] text-blue">
                             0{i + 1} — {s.short}
                           </p>
                           <h2 className="mt-1.5 text-2xl md:text-3xl">{s.name}</h2>

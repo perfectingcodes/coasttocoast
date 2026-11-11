@@ -66,7 +66,7 @@ export function PaymentTeaser({ className }: { className?: string }) {
           <div className="mt-8">
             <label
               htmlFor={id}
-              className="flex items-baseline justify-between gap-4 font-display text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-navy/45"
+              className="flex items-baseline justify-between gap-4 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-navy/45"
             >
               System cost
               <span className="poster text-xl tracking-normal text-navy">
@@ -107,7 +107,7 @@ export function PaymentTeaser({ className }: { className?: string }) {
           </div>
 
           <fieldset className="mt-7">
-            <legend className="font-display text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-navy/45">
+            <legend className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-navy/45">
               Spread over
             </legend>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -158,7 +158,7 @@ export function PaymentTeaser({ className }: { className?: string }) {
           />
 
           <div className="relative">
-            <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+            <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-cyan">
               Estimated monthly payment
             </p>
             <p className="poster text-bullion mt-2 text-[clamp(2.8rem,6.5vw,4rem)] leading-[0.85] drop-shadow-[0_10px_28px_rgb(255_140_20/0.25)]">

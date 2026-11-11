@@ -144,7 +144,7 @@ export function StatCard({
           {icon}
         </span>
       )}
-      <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-navy/40">
+      <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/40">
         {label}
       </p>
       <p
@@ -195,7 +195,7 @@ export function FeatureCard({
       />
       <div className="relative">
         {eyebrow && (
-          <p className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+          <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-cyan">
             {eyebrow}
           </p>
         )}
@@ -240,7 +240,7 @@ export function Instrument({
     >
       <div className="grid-lines pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="relative">
-        <p className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+        <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-cyan">
           {label}
         </p>
         {value !== undefined && (
@@ -264,7 +264,7 @@ export function Micro({ children, className }: { children: ReactNode; className?
   return (
     <p
       className={cn(
-        "font-display text-[0.58rem] font-extrabold uppercase tracking-[0.18em] text-navy/35",
+        "font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/35",
         className,
       )}
     >
@@ -291,7 +291,7 @@ export function Table({
               <th
                 key={c}
                 scope="col"
-                className="px-5 py-2.5 font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-navy/40"
+                className="px-5 py-2.5 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/40"
               >
                 {c}
               </th>

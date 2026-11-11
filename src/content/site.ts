@@ -14,8 +14,8 @@ export const business = {
   name: "Coast to Coast Air",
   formalName: "Coast to Coast Air",
   legalName: "Coast to Coast Contracting & Roofing LLC",
-  tagline: "Florida Comfort. Coast to Coast.",
-  promise: "Comfort Lives Here.",
+  tagline: "Mechanical HVAC. Coast to Coast.",
+  promise: "Keeping buildings running.",
   /** Live since 17 October 2026. Note the numeral — coast2, not coastto. */
   url: "https://coast2coastair.com",
   phone: "(239) 518-5928",
@@ -74,7 +74,6 @@ export const nav = [
   { label: "Services", href: "/services" },
   { label: "Areas We Serve", href: "/locations" },
   { label: "About", href: "/about" },
-  { label: "Financing", href: "/financing" },
   { label: "Contact", href: "/contact" },
 ] as const;
 
@@ -181,7 +180,6 @@ const servicesRaw: Service[] = [
   {
     slug: "heating",
     tier: "support",
-    featured: true,
     name: "Heating Services",
     short: "Heating",
     menuLine: "Installation, repair and maintenance",
@@ -234,7 +232,6 @@ const servicesRaw: Service[] = [
   {
     slug: "cooling",
     tier: "support",
-    featured: true,
     name: "Cooling Services",
     short: "Cooling",
     menuLine: "AC systems and fast service",
@@ -284,11 +281,12 @@ const servicesRaw: Service[] = [
   {
     slug: "mechanical",
     tier: "lead",
+    featured: true,
     name: "Mechanical Services",
     short: "Mechanical",
-    menuLine: "Commercial and residential systems",
+    menuLine: "Ductwork, air handlers, controls",
     blurb:
-      "Expert mechanical solutions for commercial and residential systems.",
+      "Ductwork, air handlers, make-up air and controls — the systems behind the equipment, built to code and inspected.",
     intro:
       "Mechanical work is the part of HVAC that sits behind the equipment — ductwork, air handlers, condensate systems, electrical connections and the mounts holding it all down. We hold Florida Mechanical Contractor license CMC1251768 and do this work to code, with documentation.",
     icon: "cog",
@@ -344,15 +342,16 @@ const servicesRaw: Service[] = [
     name: "Repairs & Maintenance",
     short: "Repairs & Maintenance",
     seoShort: "AC Maintenance",
-    menuLine: "Routine maintenance and fast repairs",
+    menuLine: "Planned maintenance, fast repair",
     blurb:
-      "Prevent costly breakdowns with routine maintenance and fast, professional repairs.",
+      "Planned maintenance that keeps equipment out of emergency status, and fast repair when something fails anyway.",
     intro:
       "Twice-yearly maintenance is not upselling in this climate — humidity and near-year-round cooling put more strain on equipment here than almost anywhere else in the country. Our Clean & Tune is a 10-point service, priced flat, and it catches the failures that otherwise strand you in August.",
     icon: "wrench",
     accent: "blue",
     detail: { kind: "offer" },
     bullets: [
+      "Scheduled visits with a written report each time",
       "10-point Clean & Tune, twice a year",
       "Capacitor readings taken before they fail",
       "Condensate drain vacuum, flush and treatment",
@@ -372,11 +371,12 @@ const servicesRaw: Service[] = [
   {
     slug: "commercial-hvac",
     tier: "lead",
+    featured: true,
     name: "Commercial HVAC",
     short: "Commercial",
-    menuLine: "Keeping your doors open",
+    menuLine: "Rooftop units and agreements",
     blurb:
-      "Reliable commercial HVAC service that keeps your doors open and your customers comfortable.",
+      "Rooftop units and split systems kept running under a service agreement, with the response window written in.",
     intro:
       "For a business, an HVAC failure is lost revenue, not just discomfort. We service light commercial and multi-building properties across Southwest Florida — including HOA communities and assisted living facilities — with scheduled maintenance that keeps equipment out of emergency status.",
     icon: "building",
@@ -425,6 +425,7 @@ const servicesRaw: Service[] = [
       ],
     },
     bullets: [
+      "Service agreements with a named response window",
       "Light commercial repair, replacement and maintenance",
       "Multi-building and HOA community programs",
       "Assisted living and senior housing facilities",
@@ -579,8 +580,12 @@ export const cleanAndTune = {
  * reads this, so the repositioning happens once here rather than in a dozen
  * components.
  */
+const LEAD_ORDER = ["mechanical", "commercial-hvac", "repairs-maintenance"];
+
 export const services: Service[] = [
-  ...servicesRaw.filter((s) => s.tier === "lead"),
+  ...servicesRaw
+    .filter((s) => s.tier === "lead")
+    .sort((a, b) => LEAD_ORDER.indexOf(a.slug) - LEAD_ORDER.indexOf(b.slug)),
   ...servicesRaw.filter((s) => s.tier === "support"),
 ];
 
@@ -911,7 +916,7 @@ export const whyUs = [
   {
     title: "Licensed mechanical contractor",
     tag: `CMC ${business.license.replace("CMC", "")}`,
-    body: "Mechanical, residential and certified contractor licences, all three published. Certificates of insurance on request, naming you as additional insured.",
+    body: "Mechanical, residential and certified contractor licences, all three published. Certificates of insurance on request.",
   },
   {
     title: "Response time in writing",
@@ -1029,30 +1034,30 @@ export const segments = [
 
 export const process = [
   {
-    title: "Tell us what's happening",
-    body: "Two minutes on the phone or the form. We ask what the system is doing, not for your life story.",
+    title: "Book the walk",
+    body: "Two minutes on the phone or the form. Tell us roughly how many units and where, and we set a time that suits the building.",
     image: "step-1-call",
   },
   {
-    title: "We diagnose and price it",
-    body: "A technician finds the actual cause and gives you a flat price in writing before any work begins.",
+    title: "We document and quote",
+    body: "Every unit tagged, aged and photographed. The quote is written against that list rather than against a guess.",
     image: "step-2-quote",
   },
   {
-    title: "The work gets done right",
-    body: "Repairs finish the same visit whenever the part is on the truck, and we leave the space cleaner than we found it.",
+    title: "The work, on your schedule",
+    body: "Planned visits outside trading hours, and breakdowns answered inside the window the agreement names.",
     image: "step-3-work",
   },
   {
-    title: "We follow up",
-    body: "A check-in after the work, and a reminder when your next Clean & Tune comes due.",
+    title: "A report after every visit",
+    body: "Readings, condition and what is coming next, in a form you can forward to an owner or a board.",
     image: "step-4-followup",
   },
 ] as const;
 
 export const guarantees = [
   `Licensed and insured — Florida Mechanical Contractor #${business.license}`,
-  "Flat-rate pricing quoted in writing before work begins",
+  "Service agreements with the response window written in",
   "Permits pulled and inspections scheduled on every replacement",
   "Locally owned and operated out of Fort Myers",
 ] as const;
@@ -1135,6 +1140,11 @@ export const bestServiceMonths = (() => {
 export const generalFaqs = [
   {
     group: "Coverage & credentials",
+    q: "What kinds of property do you work on?",
+    a: "Commercial and multi-building property: restaurants and retail, medical and professional offices, HOA communities, assisted living, and managed portfolios. We also take mechanical scope for general contractors.",
+  },
+  {
+    group: "Coverage & credentials",
     q: "What areas do you serve?",
     a: `All of ${region} — ${countyList} counties, including ${locations
       .map((l) => l.city)
@@ -1144,42 +1154,47 @@ export const generalFaqs = [
   {
     group: "Coverage & credentials",
     q: "Are you licensed and insured?",
-    a: `Yes. Coast to Coast holds Florida Mechanical Contractor license ${business.license}, along with CRC1335475 and CCC1336116, and carries liability and workers' compensation coverage. Certificates are available on request.`,
+    a: `Yes. Coast to Coast holds Florida Mechanical Contractor license ${business.license}, along with CRC1335475 and CCC1336116, and carries liability and workers' compensation coverage. Certificates of insurance are available on request.`,
   },
   {
     group: "Coverage & credentials",
-    q: "How quickly can someone get out to me?",
-    a: `Same-day appointments across ${region} in most cases, and the line is answered by a person around the clock — ${business.emergency.toLowerCase()} is not an answering machine taking a message until Monday.`,
+    q: "How quickly do you respond to a breakdown?",
+    a: `The line is answered by a person around the clock — ${business.emergency.toLowerCase()} is not an answering machine taking a message. Under a service agreement the response window is written into the agreement itself; without one, most calls are attended the same day.`,
   },
   {
-    group: "What it costs",
-    q: "How will I know the price before you start?",
-    a: "A technician diagnoses the actual fault and puts a flat price in writing before anything is opened. It does not move because the job ran long, and there is no overtime markup.",
+    group: "Agreements & pricing",
+    q: "What does a service agreement cost?",
+    a: "It is priced off the asset list, because a building with four rooftop units and one with twenty are not the same contract. The equipment walk that produces that list is free, and the number comes after it.",
   },
   {
-    group: "What it costs",
-    q: "How much does AC maintenance cost?",
-    a: `Our AC Clean & Tune maintenance visit is ${cleanAndTune.price} ${cleanAndTune.unit}. It's a 10-point inspection and service covering the thermostat, filter, condensate drains, capacitor, coils and a full system diagnostic.`,
+    group: "Agreements & pricing",
+    q: "Is the equipment walk really free?",
+    a: "Yes. We list, age and photograph every unit on site, and the list is yours to keep whether or not you sign an agreement with us.",
   },
   {
-    group: "What it costs",
-    q: "Do you offer financing?",
-    a: "Yes, on system replacements and larger repairs, with decisions in most cases the same day and no prepayment penalty. Call us and we'll walk through the options.",
+    group: "Agreements & pricing",
+    q: "How is repair work priced?",
+    a: "A technician diagnoses the actual fault and puts a flat price in writing before anything is opened. It does not move because the job ran long.",
   },
   {
-    group: "Service & equipment",
-    q: "How often should I service my AC?",
-    a: "Twice a year. Southwest Florida's humidity and near-year-round cooling season put more strain on AC systems than cooler climates, so regular maintenance matters more here than it would up north. March and October — either side of the heat — are the two best months to book it.",
+    group: "Equipment & scope",
+    q: "What equipment do you work on?",
+    a: "Rooftop package units, split systems, air handlers, ductwork, make-up air and exhaust, condensate systems and controls — all major brands, in and out of warranty.",
   },
   {
-    group: "Service & equipment",
-    q: "Do you work on every brand?",
-    a: "We repair all major brands, in and out of warranty. If a system is still under manufacturer warranty we will tell you before quoting a replacement part.",
+    group: "Equipment & scope",
+    q: "Can you work outside our trading hours?",
+    a: "Yes. For restaurants, retail and medical offices we schedule planned work around opening hours wherever the job allows.",
   },
   {
-    group: "Service & equipment",
-    q: "Do I need a permit to replace my AC system?",
-    a: "Yes — Florida building code requires a permit for HVAC system replacement. We handle permitting as part of every replacement we install.",
+    group: "Equipment & scope",
+    q: "Do you handle permits and inspections?",
+    a: "Yes. Florida building code requires a permit for system replacement, and the issuing office differs by city. We pull it and meet the inspector.",
+  },
+  {
+    group: "Equipment & scope",
+    q: "Do you still do residential work?",
+    a: "Yes. Repair, replacement and maintenance for homes are all still offered across the same service area.",
   },
 ] as const;
 
@@ -1189,6 +1204,6 @@ export const generalFaqs = [
 export const stats = [
   { value: `${locations.length}`, label: "Southwest Florida cities served" },
   { value: `${business.licenses.length}`, label: "Florida contractor licenses held" },
-  { value: cleanAndTune.price, label: "AC Clean & Tune, 10-point service" },
+  { value: `${counties.length}`, label: "Counties covered under one agreement" },
   { value: "24/7", label: "Emergency service availability" },
 ] as const;

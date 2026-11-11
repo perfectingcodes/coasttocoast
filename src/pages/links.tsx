@@ -8,12 +8,11 @@ import {
   MapPin,
   Phone,
   Star,
-  Wallet,
+  Building2,
   Wrench,
 } from "lucide-react";
 import {
   business,
-  cleanAndTune,
   countyList,
   locations,
   region,
@@ -53,9 +52,9 @@ interface BioLink {
 export default function LinksPage() {
   const links: BioLink[] = [
     {
-      label: `Book the ${cleanAndTune.price} Clean & Tune`,
-      sub: "Ten points, written report, no upsell",
-      href: "/#clean-and-tune",
+      label: "Book a free equipment walk",
+      sub: "Every unit tagged, aged and photographed",
+      href: "/contact",
       Icon: CalendarCheck,
       primary: true,
     },
@@ -67,7 +66,7 @@ export default function LinksPage() {
     },
     {
       label: "What we do",
-      sub: "Repair, replacement, maintenance, air quality",
+      sub: "Mechanical, commercial service, agreements",
       href: "/services",
       Icon: Wrench,
     },
@@ -78,10 +77,10 @@ export default function LinksPage() {
       Icon: MapPin,
     },
     {
-      label: "Financing",
-      sub: "Work out the monthly figure before you commit",
-      href: "/financing",
-      Icon: Wallet,
+      label: "Commercial HVAC",
+      sub: "Rooftop units, agreements, after-hours work",
+      href: "/services/commercial-hvac",
+      Icon: Building2,
     },
     ...(reviewLink.url
       ? [
@@ -106,7 +105,7 @@ export default function LinksPage() {
     <>
       <Seo
         title={`${business.name} — HVAC in ${region}`}
-        description={`Licensed HVAC across ${region}. Call ${business.phone} for same-day repair, or book the ${cleanAndTune.price} Clean & Tune.`}
+        description={`Commercial and mechanical HVAC across ${region}. Call ${business.phone}, or book a free equipment walk.`}
         path="/links"
         noindex
       />
@@ -135,8 +134,8 @@ export default function LinksPage() {
               {business.name}
             </h1>
             <p className="mt-2 text-[0.92rem] leading-relaxed text-navy/65">
-              Licensed HVAC across {region}. Repair, replacement and
-              maintenance — with a real person on the phone at any hour.
+              Commercial and mechanical HVAC across {region} — with a real
+              person on the phone at any hour.
             </p>
             <div
               className="thermal-rule mx-auto mt-5 h-[3px] w-24"
@@ -249,7 +248,7 @@ export default function LinksPage() {
                 ["Counties", countyList],
               ].map(([k, v]) => (
                 <div key={k} className="flex gap-3">
-                  <dt className="w-[4.5rem] shrink-0 font-display text-[0.58rem] font-extrabold uppercase tracking-[0.14em] text-navy/40">
+                  <dt className="w-[4.5rem] shrink-0 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/40">
                     {k}
                   </dt>
                   <dd className="min-w-0 flex-1 leading-relaxed text-navy/70">{v}</dd>
@@ -260,7 +259,7 @@ export default function LinksPage() {
             <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t border-navy/10 pt-3.5">
               {business.licenses.map((l) => (
                 <li key={l.number} className="leading-tight">
-                  <span className="block font-display text-[0.52rem] font-extrabold uppercase tracking-[0.14em] text-navy/35">
+                  <span className="block font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/35">
                     {l.label}
                   </span>
                   <span className="mt-0.5 flex items-center gap-1.5">

@@ -32,7 +32,7 @@ export function AnswerBlock({
           like the most considered thing on the page. */}
       <div className="thermal-rule absolute inset-x-0 top-0 h-[3px] rounded-none" aria-hidden="true" />
 
-      <p className="flex items-center gap-2.5 font-display text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-navy/55">
+      <p className="flex items-center gap-2.5 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-navy/55">
         <Sparkles className="size-3.5 text-ember" aria-hidden="true" />
         {heading}
       </p>
@@ -67,7 +67,7 @@ export function FactTable({
             <tr key={r.label} className="group align-top border-b border-navy/8 last:border-b-0">
               <th
                 scope="row"
-                className="relative w-2/5 py-3.5 pl-6 pr-4 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-navy/50 md:w-[34%]"
+                className="relative w-2/5 py-3.5 pl-6 pr-4 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/50 md:w-[34%]"
               >
                 <span
                   className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full bg-ember/0 transition-colors duration-300 group-hover:bg-ember"

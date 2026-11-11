@@ -42,7 +42,7 @@ export function Footer() {
               loading="lazy"
             />
             <p className="mt-5 font-display text-lg font-extrabold leading-tight">
-              <span className="block text-cyan">Florida Comfort.</span>
+              <span className="block text-cyan">Mechanical HVAC.</span>
               <span className="block text-white">Coast to Coast.</span>
             </p>
             <p className="brandline mt-5 text-xl text-gold">{business.promise}</p>

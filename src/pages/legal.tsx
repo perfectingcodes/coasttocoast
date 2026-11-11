@@ -90,7 +90,7 @@ export default function LegalPage({ slug }: { slug: Slug }) {
               aria-label="On this page"
               className="lg:sticky lg:top-28"
             >
-              <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-navy/45">
+              <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-navy/45">
                 On this page
               </p>
               <ol className="mt-3 space-y-0.5">

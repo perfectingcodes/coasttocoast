@@ -100,7 +100,7 @@ export function SeasonCard({
       >
         <span className="flex items-center gap-2">
           <Thermometer className="size-4 text-cyan" aria-hidden="true" />
-          <span className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.18em] text-white/55">
+          <span className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/55">
             Right now · {business.city}
           </span>
         </span>
@@ -108,7 +108,7 @@ export function SeasonCard({
           {s.label}
         </span>
         <span className="flex items-center gap-2.5">
-          <span className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/58">
+          <span className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/58">
             Cooling load
           </span>
           {meter}
@@ -120,7 +120,7 @@ export function SeasonCard({
   return (
     <div className={cn("glass edge-lit p-5", className)}>
       <div className="flex items-center justify-between">
-        <p className="font-display text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-white/60">
+        <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-white/60">
           Right now · {business.city}
         </p>
         <Thermometer className="size-4 text-cyan" aria-hidden="true" />
@@ -132,7 +132,7 @@ export function SeasonCard({
       <p className="mt-1.5 text-xs leading-relaxed text-white/65">{s.note}</p>
 
       <div className="mt-4 flex items-center gap-2.5 border-t border-white/12 pt-3.5">
-        <span className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-white/50">
+        <span className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/50">
           Cooling load
         </span>
         {meter}
@@ -161,7 +161,7 @@ export function LicenceCard({ className }: { className?: string }) {
       </div>
       <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-white/12 pt-3.5">
         <div>
-          <dt className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/58">
+          <dt className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/58">
             Counties
           </dt>
           <dd className="mt-0.5 font-display text-base font-extrabold text-white">
@@ -169,7 +169,7 @@ export function LicenceCard({ className }: { className?: string }) {
           </dd>
         </div>
         <div>
-          <dt className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-white/58">
+          <dt className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/58">
             Cities
           </dt>
           <dd className="mt-0.5 font-display text-base font-extrabold text-white">
@@ -193,7 +193,7 @@ export function CityMarquee({ className }: { className?: string }) {
           {items.map((l, i) => (
             <span
               key={`${copy}-${l.slug}-${i}`}
-              className="flex shrink-0 items-center gap-2.5 font-display text-[0.7rem] font-extrabold uppercase tracking-[0.22em] text-white/52"
+              className="flex shrink-0 items-center gap-2.5 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-white/52"
             >
               <MapPin className="size-3 text-cyan/60" />
               {l.city}
@@ -224,7 +224,7 @@ export function TrustStrip({ className }: { className?: string }) {
             height={632}
             className="size-14 shrink-0"
           />
-          <p className="font-display text-[0.68rem] font-extrabold uppercase leading-tight tracking-[0.14em] text-navy">
+          <p className="font-mono text-[0.68rem] font-semibold uppercase leading-tight tracking-[0.12em] text-navy">
             Locally owned
             <span className="mt-0.5 block font-bold text-navy/45">
               {business.city}, {business.state}
@@ -237,7 +237,7 @@ export function TrustStrip({ className }: { className?: string }) {
         <ul className="flex flex-wrap gap-x-10 gap-y-4">
           {business.licenses.map((l) => (
             <li key={l.number} className="leading-tight">
-              <span className="block font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-navy/40">
+              <span className="block font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/40">
                 {l.label}
               </span>
               <span className="mt-1 flex items-center gap-1.5">
@@ -250,7 +250,7 @@ export function TrustStrip({ className }: { className?: string }) {
           ))}
         </ul>
 
-        <p className="ml-auto hidden font-display text-[0.62rem] font-extrabold uppercase tracking-[0.16em] text-navy/40 lg:block">
+        <p className="ml-auto hidden font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/40 lg:block">
           Insured · Bonded
           <span className="mt-0.5 block text-navy/25">
             Certificates on request

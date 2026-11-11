@@ -133,7 +133,7 @@ export function SiteLayout({
           >
             <div className={cn(!aside && "max-w-3xl")}>
               {(eyebrow || mark) && (
-                <p className="flex items-center gap-3 font-display text-[0.7rem] font-bold uppercase tracking-[0.24em] text-cyan md:text-xs">
+                <p className="flex items-center gap-3 font-mono text-[0.7rem] font-bold uppercase tracking-[0.12em] text-cyan md:text-xs">
                   {mark && (
                     <span
                       className="grid size-9 shrink-0 place-items-center rounded-xl bg-white/12 text-cyan ring-1 ring-inset ring-white/25"

@@ -1,28 +1,28 @@
 {
-  "generatedAt": "2026-11-11T20:30:29.314Z",
+  "generatedAt": "2026-11-11T20:49:10.575Z",
   "pages": 98,
   "problems": [],
   "similarity": {
     "service x city": {
       "pages": 54,
-      "meanSimilarity": 0.2608,
-      "maxSimilarity": 0.5573,
+      "meanSimilarity": 0.2634,
+      "maxSimilarity": 0.5616,
       "pairsOverThreshold": 0,
-      "medianWords": 713
+      "medianWords": 718
     },
     "city": {
       "pages": 9,
-      "meanSimilarity": 0.2767,
-      "maxSimilarity": 0.4488,
+      "meanSimilarity": 0.2919,
+      "maxSimilarity": 0.4627,
       "pairsOverThreshold": 0,
-      "medianWords": 747
+      "medianWords": 772
     },
     "service": {
       "pages": 6,
-      "meanSimilarity": 0.1405,
-      "maxSimilarity": 0.2418,
+      "meanSimilarity": 0.1541,
+      "maxSimilarity": 0.2563,
       "pairsOverThreshold": 0,
-      "medianWords": 737
+      "medianWords": 762
     }
   },
   "titles": {

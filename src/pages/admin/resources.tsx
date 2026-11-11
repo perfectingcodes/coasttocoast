@@ -565,7 +565,7 @@ function ReviewLinkSetup() {
         className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem_auto] lg:items-end"
       >
         <label className="min-w-0">
-          <span className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-navy/45">
+          <span className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/45">
             Google review link
           </span>
           <div className="mt-1.5 flex items-center gap-2 rounded-lg bg-navy/[0.035] px-3 ring-1 ring-inset ring-navy/10 focus-within:ring-2 focus-within:ring-blue">
@@ -584,7 +584,7 @@ function ReviewLinkSetup() {
         </label>
 
         <label className="min-w-0">
-          <span className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.16em] text-navy/45">
+          <span className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/45">
             Default technician name
           </span>
           <input

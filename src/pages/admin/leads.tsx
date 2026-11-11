@@ -359,7 +359,7 @@ export default function AdminLeads() {
 
         <div className="mt-7 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="min-w-0">
-            <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-navy/40">
+            <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/40">
               Most viewed pages
             </p>
             {t.topPages.length ? (
@@ -387,7 +387,7 @@ export default function AdminLeads() {
           </div>
 
           <div className="min-w-0">
-            <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-navy/40">
+            <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/40">
               Recent activity
             </p>
             {crm.events.length ? (
@@ -623,7 +623,7 @@ function LeadDetail({ lead, onClose }: { lead: Lead; onClose: () => void }) {
       }
     >
       <label className="block">
-        <span className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-navy/40">
+        <span className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/40">
           Stage
         </span>
         <select
@@ -673,7 +673,7 @@ function LeadDetail({ lead, onClose }: { lead: Lead; onClose: () => void }) {
         </blockquote>
       )}
 
-      <p className="mt-6 font-display text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-navy/40">
+      <p className="mt-6 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy/40">
         Call log
       </p>
       {lead.notes.length > 0 && (

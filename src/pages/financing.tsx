@@ -88,7 +88,7 @@ export default function Financing() {
             </div>
 
             <div className="band-navy flex flex-col justify-center p-8 text-white md:p-10">
-              <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.22em] text-cyan">
+              <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.12em] text-cyan">
                 Start here instead
               </p>
               <p className="mt-4 flex items-baseline gap-2">

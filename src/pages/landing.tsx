@@ -239,7 +239,7 @@ export default function LandingPageView({ path }: { path: string }) {
                   className="hidden size-[72px] shrink-0 object-contain drop-shadow-[0_10px_20px_rgb(3_12_32/0.25)] sm:block"
                 />
                 <div className="min-w-0">
-                  <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-blue">
+                  <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-blue">
                     {page.close.title}
                   </p>
                   <p className="mt-2 max-w-md leading-relaxed text-navy/70">
@@ -352,7 +352,7 @@ function AdFooter({ page }: { page: LandingPage }) {
                 Tab 3: Naples, Bonita Springs, Estero and North Naples only. */}
             {page.plan === "google-ads" && (
               <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1">
-                <span className="font-display text-[0.55rem] font-extrabold uppercase tracking-[0.18em] text-cyan">
+                <span className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-cyan">
                   Serving
                 </span>
                 {adMarkets.map((m) => (
@@ -423,7 +423,7 @@ function Hero({ page, form }: { page: LandingPage; form: React.ReactNode }) {
       <div className="grid-lines pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="shell relative grid items-center gap-10 py-12 md:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
         <div className="min-w-0">
-          <p className="flex items-center gap-3 font-display text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+          <p className="flex items-center gap-3 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-cyan">
             {page.eyebrow}
             <span className="thermal-rule inline-block h-[2px] w-10" aria-hidden="true" />
           </p>
@@ -520,7 +520,7 @@ function ResponseCard() {
   return (
     <div className="glass-instrument relative overflow-hidden p-7">
       <div className="thermal-rule absolute inset-x-0 top-0 rounded-none" aria-hidden="true" />
-      <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+      <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-cyan">
         Right now
       </p>
       <p className="poster mt-4 text-[3.4rem] leading-[0.82] text-white">
@@ -541,7 +541,7 @@ function ResponseCard() {
             key={k}
             className="flex flex-col gap-0.5 border-t border-white/10 py-2.5 first:border-t-0 first:pt-0 sm:flex-row sm:items-baseline sm:gap-4"
           >
-            <dt className="font-display text-[0.55rem] font-extrabold uppercase tracking-[0.16em] text-white/50 sm:w-[6.5rem] sm:shrink-0">
+            <dt className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/50 sm:w-[6.5rem] sm:shrink-0">
               {k}
             </dt>
             <dd className="font-mono text-[0.76rem] leading-relaxed text-white/85">{v}</dd>
@@ -639,7 +639,7 @@ function PhotoBand({ page }: { page: LandingPage }) {
         <div className="glass-instrument relative max-w-lg overflow-hidden p-7 md:p-9">
           <p className="flex items-center gap-3">
             <span className={cn("h-[3px] w-10 rounded-full", a.rule)} aria-hidden="true" />
-            <span className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+            <span className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-cyan">
               On the job
             </span>
           </p>
@@ -706,7 +706,7 @@ function Reasons({ page, index }: { page: LandingPage; index: number }) {
         <aside className="min-w-0 lg:sticky lg:top-24">
           <LicenceCard />
           <div className="glass mt-4 p-5">
-            <p className="font-display text-[0.58rem] font-extrabold uppercase tracking-[0.18em] text-cyan">
+            <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-cyan">
               Call it in
             </p>
             <a
@@ -912,7 +912,7 @@ function PlanTiers({ index }: { index: number }) {
             )}
             <p
               className={cn(
-                "font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em]",
+                "font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em]",
                 i === 0 ? "text-cyan" : "text-blue",
               )}
             >
@@ -980,7 +980,7 @@ function OfferDetail({ index }: { index: number }) {
         <div className="grid-lines pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="relative grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           <div className="min-w-0">
-            <p className="font-display text-[0.6rem] font-extrabold uppercase tracking-[0.2em] text-cyan">
+            <p className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-cyan">
               {cleanAndTune.name}
             </p>
             <p className="poster mt-4 text-[clamp(3rem,7vw,4.5rem)] leading-[0.8]">

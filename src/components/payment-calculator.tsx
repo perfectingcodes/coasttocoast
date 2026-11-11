@@ -146,7 +146,7 @@ export function PaymentCalculator({ className }: { className?: string }) {
 
         {/* ------------------------------------------------------ results */}
         <div className="band-navy grain relative flex flex-col justify-center p-6 text-white md:p-8">
-          <p className="font-display text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
+          <p className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cyan">
             Estimated monthly payment
           </p>
           <p className="poster mt-3 text-[clamp(2.8rem,7vw,4rem)] text-white">
