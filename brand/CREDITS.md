@@ -37,3 +37,27 @@ single highest-value photography for this site is the company's own: a
 technician at a job site, a van on a driveway, a finished install. Those beat
 any stock image for a local contractor and should replace the stock here when
 the client can supply them.
+
+## Supplied by the client — 11 November 2026
+
+Four photographs supplied directly, used on the home page, the inner-page
+hero and the commercial landing pages. Re-encoded to WebP through Pillow,
+which drops all metadata, so nothing from a phone on a client's roof (EXIF,
+location) is published.
+
+| File | Subject | Note |
+| --- | --- | --- |
+| `photo-rtu-service.webp` | Technician at a rooftop package unit, panel open | Home hero. Confirm usage rights if this is not the company's own photograph |
+| `photo-rtu.webp` | Large rooftop package unit | Field row, inner-page hero ground. Same note |
+| `photo-unit-tagged.webp` | Split condenser on a stand, tagged AC UNIT-27 | Phone photo from a job |
+| `photo-controls.webp` | Unit controller panel | Phone photo from a job |
+
+Manufacturer names are visible on the equipment in three of these. That is
+ordinary for service photography and no dealer relationship is claimed
+anywhere on the site.
+
+## Map data
+
+County boundaries on the coverage map are the U.S. Census Bureau 2023
+cartographic boundary file (1:500,000), public domain. Regenerate with
+`scripts/build-map.py`.

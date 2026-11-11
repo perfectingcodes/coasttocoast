@@ -1,0 +1,144 @@
+"""
+Builds src/content/map-geo.ts from the U.S. Census Bureau cartographic
+boundary file (counties, 1:500,000).
+
+The coverage map used to be a coastline traced by hand. This replaces it with
+the real county polygons, shoreline-clipped by the Census, projected with the
+same equirectangular projection the pins use — so the coast, the county lines
+and every city on them agree because they come from the same source.
+
+  curl -LO https://www2.census.gov/geo/tiger/GENZ2023/shp/cb_2023_us_county_500k.zip
+  unzip cb_2023_us_county_500k.zip -d cb
+  python3 scripts/build-map.py cb/cb_2023_us_county_500k
+
+Only needs re-running if the frame below changes. No dependencies.
+"""
+import math, struct, sys
+from pathlib import Path
+
+BOUNDS = dict(min_lat=25.80, max_lat=27.42, min_lng=-82.78, max_lng=-81.15)
+W = 560
+SERVICE = {"12115": "Sarasota", "12015": "Charlotte", "12071": "Lee", "12021": "Collier"}
+TOLERANCE = 0.4   # px, Douglas-Peucker
+MIN_AREA = 3.0    # px^2 — drops mangrove islets that would only be noise
+
+lat_span = BOUNDS["max_lat"] - BOUNDS["min_lat"]
+lng_span = BOUNDS["max_lng"] - BOUNDS["min_lng"]
+lat_mid = (BOUNDS["max_lat"] + BOUNDS["min_lat"]) / 2
+H = round(W * lat_span / (lng_span * math.cos(math.radians(lat_mid))))
+
+def project(lng, lat):
+    return ((lng - BOUNDS["min_lng"]) / lng_span * W, (BOUNDS["max_lat"] - lat) / lat_span * H)
+
+def read_dbf(path):
+    b = Path(path).read_bytes()
+    n, hlen, rlen = struct.unpack("<IHH", b[4:12])
+    fields, off = [], 32
+    while b[off] != 0x0D:
+        fields.append((b[off:off + 11].split(b"\0")[0].decode(), b[off + 16]))
+        off += 32
+    rows = []
+    for i in range(n):
+        rec, pos, row = b[hlen + i * rlen: hlen + (i + 1) * rlen], 1, {}
+        for name, length in fields:
+            row[name] = rec[pos:pos + length].decode("latin1").strip()
+            pos += length
+        rows.append(row)
+    return rows
+
+def read_shp(path):
+    b = Path(path).read_bytes()
+    off, shapes = 100, []
+    while off < len(b):
+        _, words = struct.unpack(">II", b[off:off + 8])
+        rec = b[off + 8: off + 8 + words * 2]
+        off += 8 + words * 2
+        if struct.unpack("<I", rec[:4])[0] != 5:
+            shapes.append(None)
+            continue
+        box = struct.unpack("<4d", rec[4:36])
+        nparts, npts = struct.unpack("<II", rec[36:44])
+        parts = list(struct.unpack(f"<{nparts}I", rec[44:44 + 4 * nparts])) + [npts]
+        pts = struct.unpack(f"<{npts * 2}d", rec[44 + 4 * nparts: 44 + 4 * nparts + 16 * npts])
+        rings = [[(pts[2 * j], pts[2 * j + 1]) for j in range(parts[k], parts[k + 1])] for k in range(nparts)]
+        shapes.append((box, rings))
+    return shapes
+
+def simplify(pts, tol):
+    if len(pts) < 3:
+        return pts
+    keep = [False] * len(pts)
+    keep[0] = keep[-1] = True
+    stack = [(0, len(pts) - 1)]
+    while stack:
+        a, b = stack.pop()
+        (x1, y1), (x2, y2) = pts[a], pts[b]
+        dx, dy = x2 - x1, y2 - y1
+        norm = math.hypot(dx, dy) or 1e-9
+        worst, idx = 0.0, -1
+        for i in range(a + 1, b):
+            d = abs(dy * (pts[i][0] - x1) - dx * (pts[i][1] - y1)) / norm
+            if d > worst:
+                worst, idx = d, i
+        if worst > tol:
+            keep[idx] = True
+            stack += [(a, idx), (idx, b)]
+    return [p for p, k in zip(pts, keep) if k]
+
+def simplify_ring(pts, tol):
+    """A ring starts and ends on the same point, which gives Douglas-Peucker a
+    zero-length baseline and makes it throw the whole ring away. Split at the
+    vertex farthest from the start and simplify the two halves."""
+    x0, y0 = pts[0]
+    k = max(range(len(pts)), key=lambda i: (pts[i][0] - x0) ** 2 + (pts[i][1] - y0) ** 2)
+    if k in (0, len(pts) - 1):
+        return pts
+    return simplify(pts[: k + 1], tol)[:-1] + simplify(pts[k:], tol)
+
+def area(pts):
+    return abs(sum(x1 * y2 - x2 * y1 for (x1, y1), (x2, y2) in zip(pts, pts[1:] + pts[:1]))) / 2
+
+base = sys.argv[1]
+rows, shapes = read_dbf(base + ".dbf"), read_shp(base + ".shp")
+out = []
+for row, shape in zip(rows, shapes):
+    if not shape or row["STATEFP"] != "12":
+        continue
+    (x0, y0, x1, y1), rings = shape
+    if x1 < BOUNDS["min_lng"] or x0 > BOUNDS["max_lng"] or y1 < BOUNDS["min_lat"] or y0 > BOUNDS["max_lat"]:
+        continue
+    d = []
+    for ring in rings:
+        pts = [project(lng, lat) for lng, lat in ring]
+        xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+        if max(xs) < -20 or min(xs) > W + 20 or max(ys) < -20 or min(ys) > H + 20:
+            continue
+        pts = simplify_ring(pts, TOLERANCE)
+        if len(pts) < 4 or area(pts) < MIN_AREA:
+            continue
+        d.append("M" + "L".join(f"{x:.1f} {y:.1f}" for x, y in pts) + "Z")
+    if d:
+        out.append((row["GEOID"], row["NAME"], row["GEOID"] in SERVICE, "".join(d)))
+
+out.sort(key=lambda r: (not r[2], r[1]))
+lines = [
+    "/**",
+    " * GENERATED by scripts/build-map.py — do not edit by hand.",
+    " *",
+    " * County polygons from the U.S. Census Bureau 2023 cartographic boundary",
+    " * file (1:500,000), shoreline-clipped, simplified to 0.4px and projected",
+    " * equirectangular into the frame below. Public domain.",
+    " */",
+    f"export const MAP_BOUNDS = {{ minLat: {BOUNDS['min_lat']}, maxLat: {BOUNDS['max_lat']}, minLng: {BOUNDS['min_lng']}, maxLng: {BOUNDS['max_lng']} }} as const;",
+    f"export const MAP_W = {W};",
+    f"export const MAP_H = {H};",
+    "",
+    "export const MAP_COUNTIES: { id: string; name: string; service: boolean; d: string }[] = [",
+]
+for gid, name, service, d in out:
+    lines.append(f'  {{ id: "{gid}", name: "{name}", service: {"true" if service else "false"}, d: "{d}" }},')
+lines.append("];")
+Path("src/content/map-geo.ts").write_text("\n".join(lines) + "\n")
+print(f"{len(out)} counties, frame {W}x{H}, {sum(len(r[3]) for r in out) / 1024:.1f} KB of path data")
+for gid, name, service, d in out:
+    print(f"  {name:12s} {'SERVICE' if service else '       '} {len(d) / 1024:5.1f} KB")

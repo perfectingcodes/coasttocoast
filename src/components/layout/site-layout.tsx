@@ -18,7 +18,7 @@ export interface Crumb {
  */
 const TONES = {
   default: {
-    wash: "bg-[linear-gradient(105deg,rgb(10_68_94/0.93)_0%,rgb(14_106_147/0.87)_45%,rgb(22_112_224/0.74)_100%)]",
+    wash: "bg-[linear-gradient(105deg,rgb(9_40_110/0.94)_0%,rgb(13_62_150/0.9)_48%,rgb(22_104_227/0.82)_100%)]",
     glow: "bg-cyan/28",
   },
   /** Heating — sunset warmth over the blue. */
@@ -28,27 +28,27 @@ const TONES = {
   },
   /** Cooling — the coldest, most electric treatment on the site. */
   cool: {
-    wash: "bg-[linear-gradient(105deg,rgb(10_78_108/0.93)_0%,rgb(15_123_164/0.87)_45%,rgb(22_118_214/0.74)_100%)]",
+    wash: "bg-[linear-gradient(105deg,rgb(9_40_110/0.94)_0%,rgb(13_62_150/0.9)_48%,rgb(22_104_227/0.82)_100%)]",
     glow: "bg-cyan/45",
   },
   /** Mechanical — desaturated steel. */
   steel: {
-    wash: "bg-[linear-gradient(105deg,rgb(30_44_70/0.94)_0%,rgb(50_74_114/0.9)_45%,rgb(76_106_152/0.8)_100%)]",
+    wash: "bg-[linear-gradient(105deg,rgb(6_26_78/0.95)_0%,rgb(10_46_118/0.92)_50%,rgb(16_78_176/0.86)_100%)]",
     glow: "bg-slateish/45",
   },
   /** Maintenance — the offer page, gold accent. */
   offer: {
-    wash: "bg-[linear-gradient(105deg,rgb(12_46_110/0.93)_0%,rgb(24_78_168/0.86)_42%,rgb(160_96_22/0.72)_100%)]",
+    wash: "bg-[linear-gradient(105deg,rgb(9_40_110/0.94)_0%,rgb(13_62_150/0.9)_48%,rgb(22_104_227/0.82)_100%)]",
     glow: "bg-gold/42",
   },
   /** Commercial — darkest and flattest, least consumer. */
   deep: {
-    wash: "bg-[linear-gradient(105deg,rgb(7_46_66/0.95)_0%,rgb(10_74_104/0.92)_50%,rgb(14_106_147/0.86)_100%)]",
+    wash: "bg-[linear-gradient(105deg,rgb(6_26_78/0.95)_0%,rgb(10_46_118/0.92)_50%,rgb(16_78_176/0.86)_100%)]",
     glow: "bg-blue/38",
   },
   /** Air quality — green-leaning aqua. */
   aqua: {
-    wash: "bg-[linear-gradient(105deg,rgb(5_66_78/0.93)_0%,rgb(9_104_118/0.86)_45%,rgb(12_124_134/0.74)_100%)]",
+    wash: "bg-[linear-gradient(105deg,rgb(9_40_110/0.94)_0%,rgb(13_62_150/0.9)_48%,rgb(22_104_227/0.82)_100%)]",
     glow: "bg-cyan-light/45",
   },
 } as const;
@@ -181,14 +181,16 @@ function HeroBackdrop({ tone }: { tone: HeroTone }) {
   const t = TONES[tone];
   return (
     <>
-      <picture>
-        <source media="(min-width: 640px)" srcSet="/brand/hero-coast-1200.webp" />
-        <img
-          src="/brand/hero-coast-760.webp"
-          alt=""
-          className="absolute inset-0 -z-20 size-full object-cover object-center opacity-30 mix-blend-luminosity"
-        />
-      </picture>
+      {/* A rooftop, not a beach. The palms-and-skyline photograph that used
+          to sit under every inner page said "holiday", which is the wrong
+          thing to say to somebody hiring a mechanical contractor. */}
+      <img
+        src="/brand/photo-rtu.webp"
+        srcSet="/brand/photo-rtu-640.webp 640w, /brand/photo-rtu.webp 1024w"
+        sizes="100vw"
+        alt=""
+        className="absolute inset-0 -z-20 size-full object-cover object-[50%_40%] opacity-25 mix-blend-luminosity"
+      />
       <div className={cn("absolute inset-0 -z-10", t.wash)} aria-hidden="true" />
       <div
         className={cn(

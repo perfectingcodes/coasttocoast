@@ -20,28 +20,9 @@ export function Wave({
   flip?: boolean;
   height?: number;
 }) {
-  return (
-    <div
-      className={className}
-      aria-hidden="true"
-      style={{ lineHeight: 0, transform: flip ? "scaleY(-1)" : undefined }}
-    >
-      <svg
-        viewBox="0 0 1440 120"
-        preserveAspectRatio="none"
-        style={{ display: "block", width: "100%", height }}
-      >
-        {swell && (
-          <path
-            fill={swell}
-            d="M0 62c140 34 260 44 420 22 132-18 214-46 352-46 150 0 232 32 372 44 118 10 218 2 296-16v54H0z"
-          />
-        )}
-        <path
-          fill={fill}
-          d="M0 84c150 26 268 30 430 8 138-19 216-44 350-44 146 0 236 30 372 42 116 10 210 4 288-12v42H0z"
-        />
-      </svg>
-    </div>
-  );
+  // Retired. Wavy section dividers are the single most recognisable mark of
+  // a template; sections now meet on a straight edge. The component and its
+  // call sites stay so the change is one line to reverse.
+  void className; void fill; void swell; void flip; void height;
+  return null;
 }

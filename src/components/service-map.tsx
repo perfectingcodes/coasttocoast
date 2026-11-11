@@ -1,562 +1,275 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { ArrowUpRight, MapPin, Phone } from "lucide-react";
-import { business, countyList, locations, type Location } from "@/content/site";
+import { ArrowUpRight, Phone } from "lucide-react";
+import { business, locations, type Location } from "@/content/site";
 import { saltNote } from "@/content/local";
-import { Pill, SectionEyebrow } from "@/components/brand";
+import { MAP_BOUNDS, MAP_COUNTIES, MAP_H, MAP_W } from "@/content/map-geo";
+import { SectionEyebrow } from "@/components/brand";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 /**
  * Coverage map.
  *
- * Pins and coastline share one equirectangular projection, so the shape of the
- * coast, the angle it runs at and the position of every city on it agree with
- * one another. The shore is a simplified read of the real coastline rather
- * than survey data — barrier islands are taken as the coast and the smaller
- * sounds are left out — which is what the panel says.
+ * Drawn as a chart rather than as an illustration. The county shapes are the
+ * U.S. Census Bureau's own cartographic boundaries (see scripts/build-map.py)
+ * and the pins run through the same projection, so the coastline, the county
+ * lines and every city on them agree because they come from one source —
+ * Charlotte Harbor, Pine Island and Sanibel are where they actually are.
+ *
+ * The furniture is a map's furniture: a graticule with its degrees marked, a
+ * scale bar, a north mark and a source line. No glow, no mascot, no animated
+ * route. A property manager looking at this should read it the way they read
+ * a site plan.
  */
 
-const BOUNDS = { minLat: 25.85, maxLat: 27.2, minLng: -82.58, maxLng: -81.55 };
-
-/** Projection width. The canvas is wider than the projection so a city label
- *  has room to sit east of its pin without being clipped at the edge. */
-const W = 440;
-const VIEW_W = 500;
-
-/**
- * Equirectangular, with the height derived from the latitude of the middle of
- * the frame rather than fixed. Stretching one axis to fill a chosen box is
- * what made the old outline look hand-drawn: at 26.5°N a degree of longitude
- * is only 0.895 of a degree of latitude, so the projection has to say so.
- */
-const LAT_SPAN = BOUNDS.maxLat - BOUNDS.minLat;
-const LNG_SPAN = BOUNDS.maxLng - BOUNDS.minLng;
-const LAT_MID = (BOUNDS.minLat + BOUNDS.maxLat) / 2;
-const H = Math.round(
-  (W * LAT_SPAN) / (LNG_SPAN * Math.cos((LAT_MID * Math.PI) / 180)),
-);
+const LAT_SPAN = MAP_BOUNDS.maxLat - MAP_BOUNDS.minLat;
+const LNG_SPAN = MAP_BOUNDS.maxLng - MAP_BOUNDS.minLng;
 
 function px(lat: number, lng: number) {
   return {
-    x: ((lng - BOUNDS.minLng) / LNG_SPAN) * W,
-    y: ((BOUNDS.maxLat - lat) / LAT_SPAN) * H,
+    x: ((lng - MAP_BOUNDS.minLng) / LNG_SPAN) * MAP_W,
+    y: ((MAP_BOUNDS.maxLat - lat) / LAT_SPAN) * MAP_H,
   };
 }
 
-function project(loc: Location) {
-  return px(loc.lat, loc.lng);
-}
+/** Graticule at every quarter degree; labelled at the halves. */
+const LATS = [26.0, 26.25, 26.5, 26.75, 27.0, 27.25];
+const LNGS = [-82.5, -82.25, -82.0, -81.75, -81.5, -81.25];
 
-/**
- * The Gulf shore from Manasota Key down to Cape Romano, as [lat, lng] pairs
- * read off the real coastline and run through the same projection as the
- * pins — so the shape, the angle of the coast and the position of every city
- * on it agree with one another.
- *
- * The barrier islands are taken as the coast, which is what a coverage map
- * should show, and the excursion in the middle is Charlotte Harbor: north-east
- * from Boca Grande Pass up to Punta Gorda and back down the far shore. It is
- * the feature that makes this stretch of coast recognisable, so it is the one
- * piece of inland water worth drawing at this size.
- */
-const GULF_SHORE: [number, number][] = [
-  [27.2, -82.52], // Casey Key
-  [27.16, -82.495],
-  [27.12, -82.47], // Nokomis Beach
-  [27.085, -82.458], // Venice Beach
-  [27.04, -82.432], // Caspersen Beach
-  [26.99, -82.405], // Manasota Key, north end
-  [26.95, -82.378],
-  [26.905, -82.355], // Englewood Beach
-  [26.865, -82.34], // Stump Pass
-  [26.82, -82.315],
-  [26.775, -82.29],
-  [26.735, -82.272], // Gasparilla Island
-  [26.715, -82.255], // Boca Grande Pass
-  // -- north-west shore of Charlotte Harbor, running inland --
-  [26.762, -82.236], // Cape Haze
-  [26.806, -82.216],
-  [26.852, -82.186],
-  [26.902, -82.142],
-  [26.948, -82.096], // head of the harbour, off Punta Gorda
-  [26.986, -82.058], // Peace River mouth
-  // -- and back out along the south-east shore --
-  [26.958, -82.028],
-  [26.908, -82.048],
-  [26.858, -82.068],
-  [26.802, -82.086], // Burnt Store
-  [26.742, -82.114],
-  [26.698, -82.152],
-  [26.668, -82.196],
-  // -- back out along the islands --
-  [26.64, -82.245], // Cayo Costa
-  [26.58, -82.228],
-  [26.52, -82.215], // North Captiva
-  [26.47, -82.19], // Captiva
-  [26.45, -82.15], // Blind Pass
-  [26.455, -82.105], // Sanibel, west end
-  [26.435, -82.05],
-  [26.435, -81.99], // Point Ybel
-  [26.455, -81.955], // Estero Island
-  [26.41, -81.895], // Big Carlos Pass
-  [26.365, -81.87], // Lovers Key
-  [26.325, -81.855], // Bonita Beach
-  [26.28, -81.845], // Barefoot Beach
-  [26.24, -81.835], // Wiggins Pass
-  [26.2, -81.825], // Vanderbilt Beach
-  [26.15, -81.812], // Naples Beach
-  [26.1, -81.795], // Gordon Pass
-  [26.05, -81.765], // Keewaydin
-  [25.99, -81.74],
-  [25.94, -81.725], // Marco Island
-  [25.88, -81.69], // Cape Romano
-  [25.85, -81.645],
+/** County names sit inland, where there is room and no pin. */
+const COUNTY_LABELS: { name: string; lat: number; lng: number }[] = [
+  { name: "Sarasota", lat: 27.14, lng: -82.2 },
+  { name: "Charlotte", lat: 26.83, lng: -81.76 },
+  { name: "Lee", lat: 26.735, lng: -81.68 },
+  { name: "Collier", lat: 26.12, lng: -81.42 },
 ];
 
-/** The Caloosahatchee, San Carlos Bay to the eastern edge of the frame. */
-const CALOOSAHATCHEE: [number, number][] = [
-  [26.45, -82.0],
-  [26.5, -81.968],
-  [26.535, -81.928],
-  [26.565, -81.898],
-  [26.61, -81.878],
-  [26.645, -81.868],
-  [26.685, -81.83],
-  [26.72, -81.78],
-  [26.732, -81.72],
-  [26.722, -81.64],
-  [26.712, -81.55],
-];
+/** Cities whose label reads better on the seaward side of the pin. */
+const LABEL_LEFT = new Set(["cape-coral", "port-charlotte"]);
 
-/** County lines, as latitudes. Both run close enough to east-west at this
- *  scale to draw as one. */
-const COUNTY_LINES = [26.945, 26.785, 26.322];
-
-/** Where each county's name sits, as the latitude of the middle of its band. */
-const COUNTY_LABELS = [
-  { lat: 27.09, name: "SARASOTA" },
-  { lat: 26.87, name: "CHARLOTTE" },
-  { lat: 26.56, name: "LEE" },
-  { lat: 26.15, name: "COLLIER" },
-] as const;
-
-function polyline(points: [number, number][]) {
-  return points
-    .map(([lat, lng], i) => {
-      const { x, y } = px(lat, lng);
-      return `${i === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`;
-    })
-    .join(" ");
-}
-
-/** Land: the shore, then round the eastern edge of the frame to close it. */
-const LAND = (() => {
-  const first = px(...GULF_SHORE[0]);
-  const last = px(...GULF_SHORE[GULF_SHORE.length - 1]);
-  return `${polyline(GULF_SHORE)} L${VIEW_W} ${last.y.toFixed(1)} L${VIEW_W} 0 L${first.x.toFixed(1)} 0 Z`;
-})();
+/** Twenty statute miles, in map units. One degree of latitude is 69.05 mi. */
+const MILES_20 = (20 / (LAT_SPAN * 69.05)) * MAP_H;
 
 export function ServiceMap() {
   const [activeSlug, setActiveSlug] = useState(
     locations.find((l) => l.focus)?.slug ?? locations[0].slug,
   );
   const active = locations.find((l) => l.slug === activeSlug)!;
-  const focusCities = locations.filter((l) => l.focus);
+  const shop = px(business.lat, business.lng);
 
   return (
-    <section className="band-navy grain relative overflow-hidden py-14 md:py-16">
+    <section className="relative overflow-hidden bg-navy-deep py-16 text-white md:py-24">
       <div className="shell relative">
-        <div className="max-w-2xl">
-          <SectionEyebrow index={6} className="text-cyan">Where we work</SectionEyebrow>
-          <h2 className="poster mt-4 text-[clamp(1.9rem,4.2vw,2.9rem)] text-white">
-            We work
-            <span className="block text-chill">where your buildings are.</span>
-          </h2>
-          <p className="mt-4 leading-relaxed text-white/75 md:text-lg">
-            Fort Myers based, {locations.length} towns on the route. Same crew,
-            same pricing and the same 24/7 line in every one of them.
+        <div className="grid gap-x-12 gap-y-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-end">
+          <div>
+            <SectionEyebrow index={6} className="text-cyan">
+              Where we work
+            </SectionEyebrow>
+            <h2 className="poster mt-4 text-[clamp(1.9rem,4.2vw,2.9rem)] text-white">
+              Four counties,
+              <span className="block text-chill">one crew.</span>
+            </h2>
+          </div>
+          <p className="max-w-xl leading-relaxed text-white/70 md:text-lg">
+            Based in {business.city} and on the road most of the day. The same
+            people, the same pricing and the same line answered around the
+            clock in every one of these {locations.length} towns.
           </p>
         </div>
 
-        {/* Fastest path for the three markets most visitors want. */}
-        <ul className="mt-6 flex flex-wrap gap-3">
-          {focusCities.map((l) => (
-            <li key={l.slug}>
-              <Link
-                href={`/locations/${l.slug}`}
-                onMouseEnter={() => setActiveSlug(l.slug)}
-                onFocus={() => setActiveSlug(l.slug)}
-                className="group flex items-center gap-2.5 rounded-full bg-white/10 px-4 py-2.5 ring-1 ring-orange/50 transition-colors hover:bg-white/16"
+        <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-12">
+          {/* ------------------------------------------------------- chart */}
+          <figure className="min-w-0">
+            <div className="overflow-hidden rounded-card ring-1 ring-white/14">
+              <svg
+                viewBox={`0 0 ${MAP_W} ${MAP_H}`}
+                className="block w-full"
+                role="img"
+                aria-label={`Coverage map: ${locations.length} Southwest Florida towns across Sarasota, Charlotte, Lee and Collier counties`}
               >
-                <MapPin className="size-4 text-orange" aria-hidden="true" />
-                <span className="font-display text-sm font-extrabold text-white">
-                  {l.city}
-                </span>
-                <ArrowUpRight
-                  className="size-3.5 text-white/50 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                  aria-hidden="true"
-                />
-              </Link>
-            </li>
-          ))}
-        </ul>
+                {/* Water */}
+                <rect width={MAP_W} height={MAP_H} fill="#050f26" />
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-center">
-          {/* --------------------------------------------------------- map */}
-          <div className="relative mx-auto w-full max-w-sm">
-            <svg
-              viewBox={`0 0 ${VIEW_W} ${H}`}
-              className="w-full"
-              role="img"
-              aria-label={`Coverage map of ${locations.length} Southwest Florida cities across ${countyList} counties, from Venice down to Naples`}
-            >
-              <defs>
-                <linearGradient id="map-land" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#1d59ad" stopOpacity="0.95" />
-                  <stop offset="100%" stopColor="#0d2f6b" stopOpacity="0.95" />
-                </linearGradient>
-                <linearGradient id="map-water" x1="0" y1="0" x2="0.6" y2="1">
-                  <stop offset="0%" stopColor="#06304a" />
-                  <stop offset="100%" stopColor="#03172b" />
-                </linearGradient>
-                <radialGradient id="map-glow" cx="0.5" cy="0.5" r="0.5">
-                  <stop offset="0%" stopColor="#2bd9ff" stopOpacity="0.45" />
-                  <stop offset="100%" stopColor="#2bd9ff" stopOpacity="0" />
-                </radialGradient>
-              </defs>
+                {/* Graticule */}
+                <g stroke="#ffffff" strokeOpacity="0.06" strokeWidth="1">
+                  {LATS.map((lat) => (
+                    <line key={lat} x1="0" x2={MAP_W} y1={px(lat, 0).y} y2={px(lat, 0).y} />
+                  ))}
+                  {LNGS.map((lng) => (
+                    <line key={lng} y1="0" y2={MAP_H} x1={px(0, lng).x} x2={px(0, lng).x} />
+                  ))}
+                </g>
 
-              {/* Gulf */}
-              <rect width={VIEW_W} height={H} fill="url(#map-water)" rx="18" />
-              <g stroke="#2bd9ff" strokeOpacity="0.12" strokeLinecap="round">
-                {Array.from({ length: 12 }, (_, i) => (
-                  <path
-                    key={i}
-                    d={`M8 ${52 + i * 52} q26 -10 52 0 t52 0`}
-                    fill="none"
-                    strokeWidth="2"
-                  />
-                ))}
-              </g>
+                {/* Land outside the service area */}
+                <g fill="#10305f" stroke="#ffffff" strokeOpacity="0.12" strokeWidth="0.8">
+                  {MAP_COUNTIES.filter((c) => !c.service).map((c) => (
+                    <path key={c.id} d={c.d} />
+                  ))}
+                </g>
 
-              <clipPath id="map-land-clip-full">
-                <rect width={VIEW_W} height={H} rx="18" />
-              </clipPath>
-
-              {/* Land */}
-              <clipPath id="map-land-clip">
-                <path d={LAND} />
-              </clipPath>
-              <path d={LAND} fill="url(#map-land)" />
-
-              {/* County lines, clipped to the land so they stop at the shore
-                  rather than running out over the Gulf. */}
-              <g clipPath="url(#map-land-clip)">
-                {COUNTY_LINES.map((lat) => {
-                  const { y } = px(lat, 0);
+                {/* The four counties. The one holding the selected town lifts. */}
+                {MAP_COUNTIES.filter((c) => c.service).map((c) => {
+                  const on = active.county.startsWith(c.name);
                   return (
-                    <line
-                      key={lat}
-                      x1="0"
-                      x2={VIEW_W}
-                      y1={y}
-                      y2={y}
-                      stroke="#2bd9ff"
-                      strokeOpacity="0.28"
-                      strokeWidth="1.5"
-                      strokeDasharray="7 7"
+                    <path
+                      key={c.id}
+                      d={c.d}
+                      fill={on ? "#1d6fe0" : "#14509f"}
+                      stroke="#7fdcff"
+                      strokeOpacity={on ? 0.95 : 0.55}
+                      strokeWidth={on ? 1.4 : 0.9}
+                      strokeLinejoin="round"
+                      className="transition-[fill,stroke-opacity] duration-300"
                     />
                   );
                 })}
-                <path
-                  d={polyline(CALOOSAHATCHEE)}
-                  fill="none"
-                  stroke="#04102a"
-                  strokeOpacity="0.55"
-                  strokeWidth="5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d={polyline(CALOOSAHATCHEE)}
-                  fill="none"
-                  stroke="#2bd9ff"
-                  strokeOpacity="0.22"
-                  strokeWidth="1"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </g>
 
-              <path
-                d={LAND}
-                fill="none"
-                stroke="#2bd9ff"
-                strokeOpacity="0.75"
-                strokeWidth="2.5"
-                strokeLinejoin="round"
-              />
-
-              {/* County names, set along their own band. */}
-              <g
-                fill="#ffffff"
-                fillOpacity="0.3"
-                fontSize="15"
-                fontWeight={800}
-                letterSpacing="2.5"
-                style={{ fontFamily: "Archivo, sans-serif" }}
-                className="select-none"
-              >
-                {COUNTY_LABELS.map((c) => (
-                  <text key={c.name} x={VIEW_W - 14} y={px(c.lat, 0).y} textAnchor="end">
-                    {c.name}
-                  </text>
-                ))}
-              </g>
-
-              {/* Frame, so the panel has an edge against the brighter band. */}
-              <rect
-                x="1"
-                y="1"
-                width={VIEW_W - 2}
-                height={H - 2}
-                rx="17"
-                fill="none"
-                stroke="#2bd9ff"
-                strokeOpacity="0.22"
-                strokeWidth="2"
-              />
-
-              {/* The run from the shop to the city being looked at. Both
-                  ends are real coordinates, so the line is the actual bearing
-                  — which is the point of drawing it at all. */}
-              {(() => {
-                const from = px(business.lat, business.lng);
-                const to = project(active);
-                return (
-                  <g>
-                    <line
-                      x1={from.x}
-                      y1={from.y}
-                      x2={to.x}
-                      y2={to.y}
-                      stroke="#ff6a13"
-                      strokeOpacity="0.28"
-                      strokeWidth="6"
-                      strokeLinecap="round"
-                    />
-                    <line
-                      x1={from.x}
-                      y1={from.y}
-                      x2={to.x}
-                      y2={to.y}
-                      stroke="#ff9d4d"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeDasharray="10 8"
-                      className="map-run"
-                    />
-                  </g>
-                );
-              })()}
-
-              {/* The shop itself. Everything on this map is measured from it,
-                  so it is the one marker that is never a city. */}
-              {(() => {
-                const { x, y } = px(business.lat, business.lng);
-                return (
-                  <g className="pointer-events-none">
-                    <circle cx={x} cy={y} r="15" fill="#ff6a13" fillOpacity="0.18" />
-                    <circle
-                      cx={x}
-                      cy={y}
-                      r="7.5"
-                      fill="#ff6a13"
-                      stroke="#fff"
-                      strokeWidth="3"
-                    />
-                  </g>
-                );
-              })()}
-
-              {/* Pins */}
-              {locations.map((l) => {
-                const { x, y } = project(l);
-                const isActive = l.slug === activeSlug;
-                // Cape Coral sits at the shop's own latitude, so its label ran
-                // straight through the shop marker. Anything that close flips
-                // to the seaward side, which is open water here.
-                const shop = px(business.lat, business.lng);
-                const nearShop =
-                  x < shop.x &&
-                  Math.abs(x - shop.x) < 80 &&
-                  Math.abs(y - shop.y) < 26;
-                // A label set to the right of a pin near the east edge runs
-                // off the panel and into the county name. Archivo at this
-                // weight averages ~0.56em per character, which is close
-                // enough to decide which side the label belongs on.
-                const labelWidth = l.city.length * 19 * 0.56;
-                const overflowsRight = x + 18 + labelWidth > VIEW_W - 12;
-                const flip = nearShop || overflowsRight;
-                return (
-                  <g key={l.slug}>
-                    {isActive && <circle cx={x} cy={y} r="46" fill="url(#map-glow)" />}
-                    {l.focus && !isActive && (
-                      <circle
-                        cx={x}
-                        cy={y}
-                        r="17"
-                        fill="none"
-                        stroke="#ff6a13"
-                        strokeOpacity="0.45"
-                        strokeWidth="2"
-                      />
-                    )}
-                    <g
-                      role="button"
-                      tabIndex={0}
-                      aria-label={`${l.city}, ${l.county}`}
-                      aria-pressed={isActive}
-                      onClick={() => setActiveSlug(l.slug)}
-                      onMouseEnter={() => setActiveSlug(l.slug)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          setActiveSlug(l.slug);
-                        }
-                      }}
-                      className="cursor-pointer outline-none focus-visible:[&>circle:nth-child(2)]:stroke-white"
-                    >
-                      {/* generous invisible hit area */}
-                      <circle cx={x} cy={y} r="26" fill="transparent" />
-                      {l.focus ? (
-                        /* The teardrop off the hero artwork, so the map and
-                           the graphic above it mark a place the same way. */
-                        <g
-                          className="transition-transform duration-200"
-                          style={{
-                            transform: isActive ? "scale(1.14)" : undefined,
-                            transformOrigin: `${x}px ${y}px`,
-                          }}
-                        >
-                          <path
-                            d={`M${x} ${y + 3} c-7.2 -9 -11 -13.6 -11 -18.4 a11 11 0 0 1 22 0 c0 4.8 -3.8 9.4 -11 18.4 z`}
-                            fill="#ff6a13"
-                            stroke="#04102a"
-                            strokeWidth="2.5"
-                            strokeLinejoin="round"
-                          />
-                          <circle cx={x} cy={y - 15.4} r="4" fill="#04102a" fillOpacity="0.85" />
-                        </g>
-                      ) : (
-                        <circle
-                          cx={x}
-                          cy={y}
-                          r="8"
-                          fill="#2bd9ff"
-                          stroke="#04102a"
-                          strokeWidth="3"
-                          className="transition-all duration-200"
-                          style={{
-                            transform: isActive ? "scale(1.25)" : undefined,
-                            transformOrigin: `${x}px ${y}px`,
-                          }}
-                        />
-                      )}
-                      <text
-                        x={x + (flip ? -1 : 1) * (l.focus ? 18 : 15)}
-                        y={y + 5}
-                        textAnchor={flip ? "end" : "start"}
-                        fill={isActive ? "#ffffff" : "rgba(255,255,255,0.72)"}
-                        fontSize="19"
-                        fontWeight={l.focus ? 800 : 600}
-                        /* A dark keyline under the type so a label crossing a
-                           pin, a county rule or the run stays readable. */
-                        stroke="#04102a"
-                        strokeWidth="4"
-                        strokeOpacity="0.85"
-                        paintOrder="stroke"
-                        className="pointer-events-none select-none"
-                        style={{ fontFamily: "Archivo, sans-serif" }}
-                      >
-                        {l.city}
-                      </text>
-                    </g>
-                  </g>
-                );
-              })}
-            </svg>
-
-            <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:mt-5 lg:pl-24">
-              {[
-                { c: "bg-orange ring-2 ring-white/70", label: "Our shop" },
-                { c: "bg-orange", label: "Focus markets" },
-                { c: "bg-cyan", label: "Also covered" },
-              ].map((k) => (
-                <li
-                  key={k.label}
-                  className="flex items-center gap-2 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/58"
+                {/* Degree marks, on the frame like a chart's. */}
+                <g
+                  fill="#ffffff"
+                  fillOpacity="0.38"
+                  className="select-none font-mono text-[11px]"
                 >
-                  <span className={cn("size-2.5 rounded-full", k.c)} aria-hidden="true" />
-                  {k.label}
-                </li>
-              ))}
-              <li className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/48">
-                Tap a pin
-              </li>
-            </ul>
+                  {[26.0, 26.5, 27.0].map((lat) => (
+                    <text key={lat} x={MAP_W - 8} y={px(lat, 0).y - 5} textAnchor="end">
+                      {lat.toFixed(1)}°N
+                    </text>
+                  ))}
+                  {[-82.5, -82.0, -81.5].map((lng) => (
+                    <text key={lng} x={px(0, lng).x + 5} y={MAP_H - 9}>
+                      {Math.abs(lng).toFixed(1)}°W
+                    </text>
+                  ))}
+                </g>
 
-            {/* The mascot stands in the Gulf, pointing back at the coast. */}
-            <img
-              src="/brand/mascot.webp"
-              srcSet="/brand/mascot-sm.webp 360w, /brand/mascot.webp 900w"
-              sizes="(min-width: 640px) 168px, 132px"
-              alt=""
-              width={900}
-              height={1513}
-              loading="lazy"
-              className="pointer-events-none absolute -bottom-10 -left-14 hidden w-36 drop-shadow-[0_18px_36px_rgb(5_15_38/0.85)] lg:block xl:-left-20 xl:w-44"
-            />
-          </div>
+                {/* County names */}
+                <g
+                  fill="#ffffff"
+                  fillOpacity="0.5"
+                  className="select-none font-mono text-[12px] font-semibold uppercase"
+                  style={{ letterSpacing: "0.16em" }}
+                >
+                  {COUNTY_LABELS.map((c) => {
+                    const { x, y } = px(c.lat, c.lng);
+                    return (
+                      <text key={c.name} x={x} y={y} textAnchor="middle">
+                        {c.name}
+                      </text>
+                    );
+                  })}
+                </g>
+
+                {/* Scale and north, in open water. */}
+                <g transform={`translate(28 ${MAP_H - 46})`}>
+                  <line x1="0" x2={MILES_20} y1="0" y2="0" stroke="#ffffff" strokeOpacity="0.7" strokeWidth="1.5" />
+                  <line x1="0" x2="0" y1="-5" y2="5" stroke="#ffffff" strokeOpacity="0.7" strokeWidth="1.5" />
+                  <line x1={MILES_20 / 2} x2={MILES_20 / 2} y1="-3" y2="3" stroke="#ffffff" strokeOpacity="0.7" strokeWidth="1.2" />
+                  <line x1={MILES_20} x2={MILES_20} y1="-5" y2="5" stroke="#ffffff" strokeOpacity="0.7" strokeWidth="1.5" />
+                  <text x="0" y="-11" fill="#ffffff" fillOpacity="0.6" className="select-none font-mono text-[11px]">
+                    20 mi
+                  </text>
+                </g>
+                <g transform="translate(34 40)" fill="none" stroke="#ffffff" strokeOpacity="0.6" strokeWidth="1.4">
+                  <path d="M0 14 L0 -12 M-5 -5 L0 -12 L5 -5" strokeLinecap="round" strokeLinejoin="round" />
+                  <text x="0" y="29" textAnchor="middle" stroke="none" fill="#ffffff" fillOpacity="0.6" className="select-none font-mono text-[11px]">
+                    N
+                  </text>
+                </g>
+
+                {/* The shop: a square, because it is not a town. */}
+                <g>
+                  <rect
+                    x={shop.x - 5}
+                    y={shop.y - 5}
+                    width="10"
+                    height="10"
+                    transform={`rotate(45 ${shop.x} ${shop.y})`}
+                    fill="#ffffff"
+                    stroke="#ff6a13"
+                    strokeWidth="2.5"
+                  />
+                  <text
+                    x={shop.x + 13}
+                    y={shop.y + 4}
+                    fill="#ffb48a"
+                    stroke="#06142e"
+                    strokeWidth="3.5"
+                    paintOrder="stroke"
+                    className="select-none font-mono text-[14px] font-semibold uppercase lg:text-[11px]"
+                    style={{ letterSpacing: "0.1em" }}
+                  >
+                    Shop
+                  </text>
+                </g>
+
+                {/* Towns */}
+                {locations.map((l) => (
+                  <Pin
+                    key={l.slug}
+                    loc={l}
+                    active={l.slug === activeSlug}
+                    onPick={() => setActiveSlug(l.slug)}
+                  />
+                ))}
+              </svg>
+            </div>
+
+            <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-white/45">
+              <span className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                <span className="flex items-center gap-1.5">
+                  <span className="size-2 rounded-full bg-orange" aria-hidden="true" />
+                  Focus markets
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="size-2 rounded-full bg-white" aria-hidden="true" />
+                  Also covered
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="size-2 rotate-45 bg-white ring-1 ring-orange" aria-hidden="true" />
+                  Our shop
+                </span>
+              </span>
+              <span>County boundaries: U.S. Census Bureau, 2023</span>
+            </figcaption>
+          </figure>
 
           {/* ------------------------------------------------ detail panel */}
-          <div>
-            <div className="glass edge-lit p-5 md:p-6">
-              <div className="flex flex-wrap items-center gap-3">
+          <div className="min-w-0">
+            <div className="rounded-card bg-white/[0.06] p-6 ring-1 ring-white/14 md:p-7">
+              <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[0.66rem] font-semibold uppercase tracking-[0.12em]">
+                <span className="text-white/50">{active.county}</span>
                 {active.focus && (
-                  <Pill icon={<MapPin className="size-3.5 text-orange" />}>
+                  <span className="flex items-center gap-1.5 text-orange-light">
+                    <span className="size-1.5 rounded-full bg-orange" aria-hidden="true" />
                     Focus market
-                  </Pill>
+                  </span>
                 )}
-                <span className="font-display text-xs font-extrabold uppercase tracking-[0.18em] text-white/50">
-                  {active.county}
-                </span>
-              </div>
+              </p>
 
-              <h3 className="poster mt-3 text-[1.75rem] text-white sm:text-3xl">
+              <h3 className="poster mt-3 text-[1.9rem] text-white sm:text-[2.2rem]">
                 {active.city}
-                <span className="text-cyan">.</span>
               </h3>
 
-              <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3.5 border-t border-white/12 pt-4">
+              <dl className="mt-6 grid grid-cols-1 gap-x-6 border-t border-white/12 sm:grid-cols-2">
                 {[
                   ["ZIP codes", active.zips.join(", ")],
                   ["Permits issued by", active.permitAuthority],
                   ["Coastal exposure", saltNote(active).short],
-                  ["Neighborhoods", active.neighborhoods.slice(0, 3).join(", ")],
+                  ["Districts", active.neighborhoods.slice(0, 3).join(", ")],
                 ].map(([k, v]) => (
-                  <div key={k}>
-                    <dt className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/58 sm:text-[0.6rem]">
+                  <div key={k} className="border-b border-white/10 py-3.5">
+                    <dt className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/45">
                       {k}
                     </dt>
-                    <dd className="mt-1 text-[0.8rem] leading-snug text-white/85 sm:text-sm">{v}</dd>
+                    <dd className="mt-1 text-[0.86rem] leading-snug text-white/88">{v}</dd>
                   </div>
                 ))}
               </dl>
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <ButtonLink href={`/locations/${active.slug}`}>
-                  {active.city} services
+                  {active.city} coverage
                   <ArrowUpRight className="size-4" aria-hidden="true" />
                 </ButtonLink>
                 <ButtonLink href={business.phoneHref} variant="outline">
@@ -566,43 +279,107 @@ export function ServiceMap() {
               </div>
             </div>
 
-            {/* Real links, not buttons: hovering previews the city on the map,
-                clicking goes to its page — so every city stays crawlable from
+            {/* Real links, not buttons: hovering previews the town on the map,
+                clicking goes to its page — so every town stays crawlable from
                 the home page and reachable without a pointer. */}
-            <p className="mt-6 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-white/55">
-              Every city we cover
+            <p className="mt-7 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/45">
+              Every town on the route
             </p>
-            <ul className="mt-3 flex flex-wrap gap-2">
+            <ul className="mt-3 grid grid-cols-2 gap-x-6 sm:grid-cols-3">
               {locations.map((l) => (
-                <li key={l.slug}>
+                <li key={l.slug} className="border-b border-white/10">
                   <Link
                     href={`/locations/${l.slug}`}
                     onMouseEnter={() => setActiveSlug(l.slug)}
                     onFocus={() => setActiveSlug(l.slug)}
                     aria-current={l.slug === activeSlug ? "true" : undefined}
                     className={cn(
-                      "flex min-h-9 items-center rounded-full px-3.5 py-2 font-display text-xs font-extrabold transition-colors",
-                      l.slug === activeSlug
-                        ? "bg-white text-navy"
-                        : l.focus
-                          ? "text-white ring-1 ring-orange/50 hover:bg-white/10"
-                          : "text-white/65 ring-1 ring-white/20 hover:bg-white/10",
+                      "flex min-h-11 items-center justify-between gap-2 text-[0.86rem] font-semibold transition-colors",
+                      l.slug === activeSlug ? "text-white" : "text-white/60 hover:text-white",
                     )}
                   >
-                    {l.city}
+                    <span className="flex min-w-0 items-center gap-2">
+                      <span
+                        className={cn(
+                          "size-1.5 shrink-0 rounded-full",
+                          l.focus ? "bg-orange" : "bg-white/50",
+                        )}
+                        aria-hidden="true"
+                      />
+                      <span className="truncate">{l.city}</span>
+                    </span>
+                    <ArrowUpRight
+                      className={cn(
+                        "size-3.5 shrink-0 transition-opacity",
+                        l.slug === activeSlug ? "text-cyan opacity-100" : "opacity-0",
+                      )}
+                      aria-hidden="true"
+                    />
                   </Link>
                 </li>
               ))}
             </ul>
-
-            <p className="mt-5 text-[0.7rem] leading-relaxed text-white/52">
-              Cities and coastline are plotted from real coordinates. The shore
-              is simplified for legibility and the county lines are approximate
-              — it is a coverage map, not a survey.
-            </p>
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function Pin({
+  loc,
+  active,
+  onPick,
+}: {
+  loc: Location;
+  active: boolean;
+  onPick: () => void;
+}) {
+  const { x, y } = px(loc.lat, loc.lng);
+  const left = LABEL_LEFT.has(loc.slug);
+  const r = loc.focus ? 5.5 : 4;
+
+  return (
+    <g
+      role="button"
+      tabIndex={0}
+      aria-label={`${loc.city}, ${loc.county}`}
+      aria-pressed={active}
+      onMouseEnter={onPick}
+      onFocus={onPick}
+      onClick={onPick}
+      className="cursor-pointer outline-none"
+    >
+      {/* A generous invisible target: the dot alone is far too small to tap. */}
+      <circle cx={x} cy={y} r="20" fill="transparent" />
+      {active && (
+        <circle cx={x} cy={y} r="12" fill="none" stroke="#ffffff" strokeOpacity="0.85" strokeWidth="1.2" />
+      )}
+      <circle
+        cx={x}
+        cy={y}
+        r={r}
+        fill={loc.focus ? "#ff6a13" : "#ffffff"}
+        stroke="#06142e"
+        strokeWidth="1.8"
+      />
+      <text
+        x={x + (left ? -1 : 1) * (active ? 17 : 11)}
+        y={y + 5}
+        textAnchor={left ? "end" : "start"}
+        fill="#ffffff"
+        fillOpacity={active ? 1 : 0.86}
+        stroke="#06142e"
+        strokeWidth="4"
+        strokeOpacity="0.9"
+        paintOrder="stroke"
+        className={cn(
+          "pointer-events-none select-none text-[19px] lg:text-[14.5px]",
+          active || loc.focus ? "font-bold" : "font-medium",
+        )}
+      >
+        {loc.city}
+      </text>
+    </g>
   );
 }

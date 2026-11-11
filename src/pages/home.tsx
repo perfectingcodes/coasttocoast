@@ -22,15 +22,12 @@ import {
 import { Icon } from "@/components/icon";
 import { Wave } from "@/components/wave";
 import { Reveal } from "@/components/reveal";
-import { GoogleSeal } from "@/components/google-reviews";
 import {
-  CityMarquee,
   Pill,
   SectionEyebrow,
   TrustStrip,
 } from "@/components/brand";
 import { SeasonScrubber } from "@/components/season-scrubber";
-import { SystemAgeCard } from "@/components/system-age";
 import { AssetSheet } from "@/components/asset-sheet";
 import { ServiceMap } from "@/components/service-map";
 import { CtaBand } from "@/components/cta-band";
@@ -102,27 +99,24 @@ export default function Home() {
 const HERO_PROOF = [
   { v: "24/7", k: "Answered live" },
   { v: "COI", k: "On request" },
+  { v: "CMC", k: "Mechanical licence" },
 ] as const;
 
 function Hero() {
   return (
     <section className="band-azure grain grid-lines relative isolate overflow-hidden">
-      {/* Only where the copy sits: the same teal, deeper, so white body copy
+      {/* Only where the copy sits: the same blue, deeper, so white body copy
           clears AA without the band losing its brightness anywhere else. */}
       <div
         className="pointer-events-none absolute inset-0 -z-10"
         aria-hidden="true"
         style={{
           background:
-            "linear-gradient(104deg, rgb(6 86 122 / 0.78) 0%, rgb(7 102 142 / 0.5) 34%, transparent 62%)",
+            "linear-gradient(104deg, rgb(9 46 122 / 0.62) 0%, rgb(11 58 142 / 0.34) 36%, transparent 62%)",
         }}
       />
 
-      <div className="shell relative grid grid-cols-1 items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.98fr)] lg:items-start lg:gap-8 lg:pb-10 lg:pt-20">
-        <span
-          className="pointer-events-none absolute inset-y-24 left-[calc(50%-0.75rem)] hidden w-px bg-gradient-to-b from-transparent via-white/18 to-transparent lg:block"
-          aria-hidden="true"
-        />
+      <div className="shell relative grid grid-cols-1 items-center gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:items-center lg:gap-14 lg:pb-14 lg:pt-20">
         <div className="max-w-xl">
           {/* The divider only appears once both halves are on one line —
               wrapped, it left a pipe hanging off the end of the first line. */}
@@ -161,25 +155,18 @@ function Hero() {
               <ArrowRight className="size-4" aria-hidden="true" />
             </ButtonLink>
 
-            <a href={business.phoneHref} className="group flex items-center gap-2.5">
-              <span className="relative">
-                <img
-                  src="/brand/avatar-husky.webp"
-                  alt=""
-                  width={256}
-                  height={289}
-                  className="size-11 object-contain transition-transform duration-300 group-hover:-translate-y-0.5"
-                />
-                <span
-                  className="absolute -right-0.5 bottom-0.5 size-2.5 rounded-full bg-cyan ring-2 ring-white/80"
-                  aria-hidden="true"
-                />
+            <a
+              href={business.phoneHref}
+              className="group flex min-h-12 items-center gap-3"
+            >
+              <span className="grid size-11 place-items-center rounded-[0.7rem] border border-white/35 text-white transition-colors group-hover:bg-white/10">
+                <Phone className="size-[1.1rem]" aria-hidden="true" />
               </span>
               <span className="leading-tight">
-                <span className="block font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-orange-light">
+                <span className="block font-mono text-[0.64rem] font-semibold uppercase tracking-[0.12em] text-white/65">
                   A person answers · 24/7
                 </span>
-                <span className="block font-display text-lg font-extrabold text-white transition-colors group-hover:text-orange-light">
+                <span className="block font-display text-lg font-bold text-white">
                   {business.phone}
                 </span>
               </span>
@@ -210,7 +197,7 @@ function Hero() {
                     <dt className="poster text-[1.15rem] leading-none text-white sm:text-[1.35rem]">
                       {p.v}
                     </dt>
-                    <dd className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-orange-light sm:mt-1">
+                    <dd className="font-mono text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-white/65 sm:mt-1">
                       {p.k}
                     </dd>
                   </div>
@@ -218,44 +205,50 @@ function Hero() {
               ))}
             </dl>
 
-            {/* Social proof as a mark rather than a pill, standing in the row
-                of proof beside the locally-owned seal. */}
-            <span className="hidden h-9 w-px bg-white/30 xl:block" aria-hidden="true" />
-            <GoogleSeal className="basis-full sm:basis-auto" />
           </div>
 
         </div>
 
-        <div className="relative">
-          {/* Two readings a building owner can act on, above and below the
-              artwork: what the season is doing to every system in the region
-              — which is also when planned work is cheapest to schedule — and
-              where their equipment sits against how long it lasts here. */}
-          <SeasonScrubber className="relative z-10 mb-3 sm:mb-0 sm:w-[76%]" />
-
-          <div className="rays-burst relative sm:-mt-4 lg:-mt-8">
-          {/* Warm core the rays radiate from, sitting under the artwork. */}
-          <div
-            className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange/35 blur-[80px]"
+        {/* A real technician on a real rooftop unit. The artwork that used to
+            sit here was a cartoon map — fine for a homeowner, wrong for
+            somebody deciding who gets the keys to their roof. */}
+        <figure className="relative">
+          <span
+            className="pointer-events-none absolute -left-3 -top-3 size-7 border-l border-t border-white/50"
             aria-hidden="true"
           />
-          <img
-            src="/brand/hero-map-mascot.webp"
-            srcSet="/brand/hero-map-mascot-sm.webp 600w, /brand/hero-map-mascot.webp 1200w"
-            sizes="(min-width: 1024px) 560px, 92vw"
-            alt="Coast to Coast Air covers Florida coast to coast from Fort Myers, with focus markets in Naples, Estero and Bonita Springs"
-            width={1200}
-            height={1026}
-            fetchPriority="high"
-            className="mx-auto w-full max-w-md drop-shadow-[0_28px_56px_rgb(3_18_48/0.55)] xl:max-w-lg"
+          <span
+            className="pointer-events-none absolute -bottom-3 -right-3 size-7 border-b border-r border-white/50"
+            aria-hidden="true"
           />
-
+          <div className="relative overflow-hidden rounded-card shadow-[0_30px_60px_-28px_rgb(3_14_40/0.9)] ring-1 ring-white/25">
+            <img
+              src="/brand/photo-rtu-service.webp"
+              srcSet="/brand/photo-rtu-service-640.webp 640w, /brand/photo-rtu-service.webp 1024w"
+              sizes="(min-width: 1024px) 540px, 92vw"
+              alt="A technician servicing a commercial rooftop package unit with the electrical panel open"
+              width={1024}
+              height={688}
+              fetchPriority="high"
+              className="aspect-[4/3] w-full object-cover object-[52%_50%] lg:aspect-[5/4.1]"
+            />
+            {/* Caption plate, the way a figure is labelled in a report. */}
+            <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-[rgb(5_15_38/0.88)] via-[rgb(5_15_38/0.5)] to-transparent px-5 pb-4 pt-14">
+              <span className="font-mono text-[0.64rem] font-semibold uppercase leading-relaxed tracking-[0.12em] text-white/85">
+                Rooftop package unit
+                <span className="block font-normal text-white/55">Electrical service, panel open</span>
+              </span>
+              <span className="font-mono text-[0.62rem] uppercase tracking-[0.12em] text-white/45">
+                Fig. 01
+              </span>
+            </figcaption>
           </div>
 
-          {/* The second reading sits under the graphic rather than stacked on
-              top of it, so the artwork has a card at each end. */}
-          <SystemAgeCard className="relative z-10 mt-3 sm:ml-auto sm:mt-0 sm:w-[58%] lg:-mt-4" />
-        </div>
+          {/* The one instrument kept from the old hero: what the season is
+              doing to every system in the region, which is also when planned
+              work is easiest to schedule. */}
+          <SeasonScrubber className="relative z-10 mt-4 w-full" />
+        </figure>
       </div>
 
       {/* Title block. A drawing is signed along its bottom edge; this band had
@@ -281,7 +274,6 @@ function Hero() {
         </div>
       </div>
 
-      <CityMarquee className="relative border-t border-white/25 pb-4 pt-3" />
     </section>
   );
 }
@@ -297,10 +289,6 @@ function ServicesSection() {
       {/* The hero's two blooms, at light-ground strength: the section is the
           warm end of the site meeting the cold end, which is the whole
           business. */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="absolute -right-40 -top-40 size-[34rem] rounded-full bg-cyan/12 blur-[130px]" />
-        <div className="absolute -bottom-48 -left-40 size-[32rem] rounded-full bg-orange/10 blur-[130px]" />
-      </div>
 
       <div className="shell relative">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:items-end">
@@ -351,41 +339,28 @@ function ServicesSection() {
                   </li>
                 ))}
               </ul>
-              {/* The one photograph in the library that is unmistakably this
-                  company's equipment. The previous image here was a European
-                  heat pump carrying another manufacturer's name. */}
-              <div className="relative z-10 mt-8 overflow-hidden rounded-xl ring-1 ring-white/15">
-                <img
-                  src="/brand/photo-condenser.webp"
-                  srcSet="/brand/photo-condenser-640.webp 640w, /brand/photo-condenser.webp 1024w"
-                  sizes="(min-width: 1280px) 340px, 90vw"
-                  alt="A Coast to Coast Air unit in Southwest Florida"
-                  width={1024}
-                  height={688}
-                  loading="lazy"
-                  className="h-28 w-full object-cover object-[50%_45%] xl:h-32"
-                />
-              </div>
+              <dl className="relative z-10 mt-8 border-t border-white/15">
+                {[
+                  ["Visits", "Frequency set per building"],
+                  ["Scope", "Listed visit by visit"],
+                  ["Response", "A named window"],
+                  ["After hours", "Rate agreed in advance"],
+                ].map(([k, v]) => (
+                  <div key={k} className="flex items-baseline justify-between gap-4 border-b border-white/12 py-2.5">
+                    <dt className="font-mono text-[0.64rem] font-semibold uppercase tracking-[0.12em] text-white/55">
+                      {k}
+                    </dt>
+                    <dd className="text-right text-[0.84rem] text-white/90">{v}</dd>
+                  </div>
+                ))}
+              </dl>
 
-              <div className="relative z-10 mt-6 flex flex-wrap gap-2.5">
+              <div className="relative z-10 mt-auto flex flex-wrap gap-2.5 pt-8">
                 <ButtonLink href="/contact" variant="onDark">
                   Book an equipment walk
                 </ButtonLink>
               </div>
 
-              {/* He leans in from the corner the card has spare. Clipped by the
-                  panel edge, so he reads as part of the card rather than as a
-                  sticker dropped on it. */}
-              <img
-                src="/brand/mascot-bust.webp"
-                srcSet="/brand/mascot-bust-sm.webp 400w, /brand/mascot-bust.webp 800w"
-                sizes="200px"
-                alt=""
-                width={800}
-                height={849}
-                loading="lazy"
-                className="pointer-events-none absolute -bottom-8 -right-2 hidden w-40 opacity-95 drop-shadow-[0_18px_36px_rgb(3_18_48/0.6)] sm:block lg:hidden xl:block xl:w-[9.5rem]"
-              />
             </div>
           </Reveal>
 
@@ -472,6 +447,8 @@ function ServicesSection() {
           ))}
         </div>
 
+        <FieldRow />
+
         {/* The rest of the catalogue, still linked from the home page. */}
         <div className="mt-8 flex flex-col items-start gap-3 border-t border-navy/10 pt-7 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6">
           <span className="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-navy/45">
@@ -500,6 +477,76 @@ function ServicesSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * Photographs from the work, set as numbered figures.
+ *
+ * Captions say what is in the frame and nothing more. No location is claimed
+ * for any of them.
+ */
+const FIELD: { src: string; small: string; w: number; h: number; alt: string; title: string; note: string; focus: string }[] = [
+  {
+    src: "/brand/photo-rtu.webp",
+    small: "/brand/photo-rtu-640.webp",
+    w: 1024,
+    h: 688,
+    alt: "A large commercial rooftop package unit with its condensate drain piped to the roof",
+    title: "Rooftop package units",
+    note: "Service, repair and replacement",
+    focus: "50% 50%",
+  },
+  {
+    src: "/brand/photo-controls.webp",
+    small: "/brand/photo-controls-640.webp",
+    w: 1200,
+    h: 1600,
+    alt: "An open unit control panel showing the controller boards, relays and terminal wiring",
+    title: "Controls and diagnostics",
+    note: "Controllers, sensors, wiring",
+    focus: "50% 38%",
+  },
+];
+
+function FieldRow() {
+  return (
+    <div className="mt-14">
+      <p className="flex items-center gap-4 font-mono text-[0.66rem] font-semibold uppercase tracking-[0.12em] text-navy/45">
+        From the field
+        <span className="h-px flex-1 bg-navy/12" aria-hidden="true" />
+      </p>
+      <div className="mt-5 grid gap-5 md:grid-cols-[1.55fr_1fr]">
+        {FIELD.map((f, i) => (
+          <figure key={f.src} className="group relative min-w-0 overflow-hidden rounded-card bg-navy ring-1 ring-navy/10">
+            <img
+              src={f.src}
+              srcSet={`${f.small} 640w, ${f.src} ${f.w}w`}
+              sizes="(min-width: 768px) 55vw, 92vw"
+              alt={f.alt}
+              width={f.w}
+              height={f.h}
+              loading="lazy"
+              className="h-64 w-full object-cover transition-transform duration-700 group-hover:scale-[1.02] md:h-[22rem]"
+              style={{ objectPosition: f.focus }}
+            />
+            <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-[rgb(5_15_38/0.9)] via-[rgb(5_15_38/0.45)] to-transparent px-5 pb-4 pt-16">
+              <span>
+                <span className="block font-display text-[1.02rem] font-bold text-white">
+                  {f.title}
+                </span>
+                <span className="mt-0.5 block font-mono text-[0.64rem] uppercase tracking-[0.1em] text-white/60">
+                  {f.note}
+                </span>
+              </span>
+              <span className="font-mono text-[0.62rem] uppercase tracking-[0.12em] text-white/45">
+                Fig. {String(i + 2).padStart(2, "0")}
+              </span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -587,10 +634,6 @@ function WhyUsSection() {
     <section className="band-navy grain grid-lines relative overflow-hidden">
       <Wave fill="white" swell="#2bd9ff" flip height={56} className="relative -mt-px" />
 
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="absolute -bottom-40 -left-32 size-[34rem] rounded-full bg-orange/12 blur-[130px]" />
-        <div className="absolute -right-32 top-0 size-[30rem] rounded-full bg-cyan/12 blur-[130px]" />
-      </div>
 
       <div className="shell relative py-14 md:py-20">
         {/* ------------------------------------------------- heading + seal */}
@@ -656,7 +699,25 @@ function WhyUsSection() {
             </div>
           </div>
 
-          <AssetSheet className="mx-auto w-full max-w-lg lg:mx-0 lg:max-w-none" />
+          <div className="mx-auto grid w-full max-w-lg gap-4 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:items-stretch lg:mx-0 lg:max-w-none">
+            {/* What "tagged" means, photographed: the label on this unit
+                reads AC UNIT-27. It sits beside the sheet, not over it. */}
+            <figure className="relative overflow-hidden rounded-card ring-1 ring-white/20">
+              <img
+                src="/brand/photo-unit-tagged-640.webp"
+                alt="A rooftop condenser on a stand, labelled AC UNIT-27"
+                width={640}
+                height={853}
+                loading="lazy"
+                className="h-44 w-full object-cover object-[50%_28%] sm:h-full"
+              />
+              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgb(5_15_38/0.92)] to-transparent px-3 pb-2.5 pt-10 font-mono text-[0.62rem] font-semibold uppercase leading-relaxed tracking-[0.1em] text-white/85">
+                Tagged on site
+                <span className="block font-normal text-white/55">AC Unit-27</span>
+              </figcaption>
+            </figure>
+            <AssetSheet />
+          </div>
         </div>
 
         {/* ------------------------------------------------------- the four */}
@@ -707,10 +768,6 @@ function WhyUsSection() {
 function FaqSection() {
   return (
     <section className="grid-lines-light relative overflow-hidden bg-white py-16 md:py-24">
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="absolute -right-40 top-10 size-[32rem] rounded-full bg-cyan/12 blur-[130px]" />
-        <div className="absolute -bottom-40 -left-32 size-[28rem] rounded-full bg-orange/10 blur-[130px]" />
-      </div>
 
       <div className="shell relative grid gap-12 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-16">
         <div className="lg:sticky lg:top-32 lg:self-start">
@@ -794,10 +851,6 @@ function HowItWorks() {
 
   return (
     <section className="band-navy grain grid-lines relative overflow-hidden py-16 md:py-24">
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="absolute -left-32 top-1/3 size-[34rem] rounded-full bg-orange/14 blur-[130px]" />
-        <div className="absolute -right-32 top-1/4 size-[34rem] rounded-full bg-cyan/14 blur-[130px]" />
-      </div>
 
       <div className="shell relative">
         <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-5">
